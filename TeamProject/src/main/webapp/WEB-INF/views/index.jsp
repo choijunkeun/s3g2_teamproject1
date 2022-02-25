@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div>
-	안녕
+	안녕히 가세요
 	</div>
 </body>
 </html>
