@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div>
-	안녕히 가세요
+	최준근 첫번째 깃 연습
 	</div>
 </body>
 </html>
