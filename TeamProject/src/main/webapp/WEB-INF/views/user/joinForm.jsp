@@ -97,7 +97,7 @@
     <title>일인분</title>
 </head>
 <body>
-   <form action="<c:url value="/register/save"/>" method="POST" onsubmit="return formCheck(this)">
+   <form action="<c:url value="/joinSuccess"/>" method="POST" onsubmit="return formCheck(this)">
    	
     <div class="title">
     	<div>
@@ -116,7 +116,7 @@
    	<div>
     <label for="nickname">닉네임</label>
     <input class="input-field" type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
-    <button class="check-btn">중복확인</button>
+    <button type="button" class="check-btn">중복확인</button>
     </div>
    	<div>
    		<span class="nickname_ok">사용 가능한 닉네임입니다.</span>
@@ -126,7 +126,7 @@
     <div><p class="annotation"> * 2-10자 이내, 공백 불가능, 한글 가능</div>
     <label for="email">이메일</label>
     <input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요.">
-     <button class="check-btn" onclick="onDisplay()">인증메일발송</button>
+     <button type="button" class="check-btn" onclick="onDisplay()">인증메일발송</button>
     </div>
     
     <div id="onDispaly" style="display: none;">
@@ -188,6 +188,11 @@
             
             if(frm.password.value.length<8 || frm.password.value.length>20) {
                 setMessage('비밀번호는 8-20자 사이어야 합니다.', frm.password);
+                return false;
+            }
+            
+            if(frm.password.value != frm.password2.value) {
+                setMessage('비밀번호와 비밀번호확인이 일치하지 않습니다.', frm.password);
                 return false;
             }
            return true;
