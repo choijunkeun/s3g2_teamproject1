@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!-- 목업 코드 -->
+<!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import = "com.ilinbun.mulcam.dto.User" %>
 <%!
 	User user = new User("mockup@mock.up", "목업", "", "#", 5, 1);
@@ -21,7 +21,7 @@
 </head>
 <body style="max-width: 1200px; margin: 0 auto;">
 	<div>
-		<div class="uppernav pt-5" style="display:inline;">
+		<div class="uppernav pt-5" style="display:inline;"> <!-- uppernav는 나중에라도 쓸 것 같아서 임의로 붙인 클래스 -->
 			<c:choose>
 				<c:when test="${empty user }">
 					<div class="btn">Login</div>
@@ -29,7 +29,7 @@
 				</c:when>
 				<c:otherwise>
 					<div class="btn bg-primary">Logout</div>
-					<div class="membersection p-2" style="white-space: nowrap; float:right; ">
+					<div class="membersection p-2" style="white-space: nowrap; float:right; "> <!-- membersection도 나중에 쓸 것 같아서 임의로 붙인 클래스 -->
 						<span class="badge bg-danger rounded-pill">Lv. ${user.user_honbabLevel }</span>
 						<div class="form-control" style="display: inline;">${user.user_nickname } 님</div>
 						<img style="border-radius: 50px; width: 30px; height: 30px;" src="http://placehold.co/100x100">
@@ -38,8 +38,8 @@
 			</c:choose>
 		</div>
 		<div class="header text-center p-4" style="font-size: 5rem;">
-			일인분
-		</div>
+			<a href="/" style="text-decoration: none;">일인분</a> 
+		</div> <!-- 임시로 넣은 헤더영역 -->
 		<nav class="nav justify-content-center rounded" style="background: #DDDDDD">
 			<a class="btn" href="/search">혼밥추천</a>
 			<a class="btn" href="/brag">혼밥자랑</a>
@@ -55,9 +55,7 @@
 	<script>
 	
 		$(function(){
-			$('.btn').click(function(){
-				alert("와 테스트에요");
-			})
+			
 		})
 	</script>
 </body>
