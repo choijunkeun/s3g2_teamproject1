@@ -9,4 +9,9 @@ public class MainController {
 	public String main() {
 		return "index";
 	}
+	
+	@GetMapping("/brag")
+	public String BragMain() {
+		return "brag/bragmain";
+	}
 }
