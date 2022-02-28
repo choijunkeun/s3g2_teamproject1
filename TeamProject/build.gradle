@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.apache.tiles:tiles-jsp:3.0.4'
 	
 	implementation 'org.json:json:20211205'
+	
+	//이메일 사용
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
