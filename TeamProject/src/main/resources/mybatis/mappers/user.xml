@@ -3,6 +3,11 @@
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.test.example.dao.userDAO">
+<mapper namespace="com.ilinbun.mulcam.dao.userDAO">	
+	<select id="nickCheck" resultType="int" parameterType="String">
+		<![CDATA[
+			select * from user where nickname=#{nickname}
+		]]>
+	</select>
 
 </mapper>

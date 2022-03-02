@@ -17,6 +17,7 @@
 		white-space: nowrap; 
 		float: right;
 	}
+	
 </style>
 </head>
 <body>
@@ -34,8 +35,13 @@
 						<span class="badge bg-danger rounded-pill">Lv.${user.user_honbabLevel }</span>
 						<div class="border pb-2 pt-1 rounded" style="display: inline;">${user.user_nickname }
 							님</div>
+							<a href="myPage">
 						<img style="border-radius: 50px; width: 30px; height: 30px;"
 							src="http://placehold.co/100x100">
+							</a>
+							
+					
+				
 					</div>
 				</c:otherwise>
 			</c:choose>

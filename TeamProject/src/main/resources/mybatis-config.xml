@@ -6,10 +6,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 	<mappers>
 	   <mapper resource="mybatis/mappers/user.xml"/>
-<<<<<<< HEAD
-=======
+
 	   <mapper resource="mybatis/mappers/community.xml"/>
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
+
 	</mappers>
 </configuration>
 

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.net.URLDecoder"%>
+<%-- <%@ page session="false" %> --%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +98,7 @@
     <title>일인분</title>
 </head>
 <body>
-   <form action="<c:url value="/loginSuccess"/>" method="POST" onsubmit="return formCheck(this)">
+   <form action="<c:url value="/login"/>" method="POST" onsubmit="return formCheck(this)">
    	
     <div class="title">
     	<div>
@@ -113,12 +114,22 @@
    	
     <div>
     <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요.">
+    <input class="input-field" type="email" id="email" name="email" value="${cookie.email.value}" placeholder="이메일을 입력해주세요.">
     </div>
    <div>
    	<label for="password">비밀번호</label>
     <input class="input-field" type="text" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
      </div>
+     
+     <div>
+     	<div>
+      		<label><input type="checkbox" name="rememberEmail" value="on" ${empty cookie.email.value ? "":"checked"}>로그인 저장</label> 
+     	</div>
+     	<div>
+     		<a href="searchPwd">비밀번호 찾기</a>
+     	</div>
+     </div>
+     
     <div id="msg" class="msg"> ${URLDecoder.decode(param.msg, "utf-8")}</div>
     <button type="submit" class="join-btn">로그인</button>
     <a href="/join">아직 계정이 없으신가요? 가입하기</a>

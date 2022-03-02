@@ -22,6 +22,7 @@
 				<li class="nav-item">
 					<a class="btn btn-outline-dark mt-auto mx-3" id="comm-nav" href="/comm">커뮤니티</a>
 				</li>
+				
 			</ul>
 		</div>
 	</nav>

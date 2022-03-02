@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
+
 @Controller
 @RequestMapping("/comm")
 public class CommunityController {
@@ -11,4 +13,9 @@ public class CommunityController {
 	public String Main() {
 		return "community/main";
 	}
+	
+//	@GetMapping("/test")
+//	public String Main() {
+//		return "/community/test";
+//	}
 }

@@ -92,15 +92,29 @@
         
 	   	.nickname_ok{color:#fff; display: none;}
 		.nickname_already{color:#6A82FB; display: none;}
+		
+		div{
+		/* background-color: green; */
+		/* border:1px solid black; */
+		width:500px;
+		}
+		
+		.agreeText {
+		height:100px;
+		overflow:auto;
+		}
 	        
     </style>
+   
     <title>일인분</title>
+    
+    
 </head>
 <body>
    <form action="<c:url value="/joinSuccess"/>" method="POST" onsubmit="return formCheck(this)">
    	
     <div class="title">
-    	<div>
+    	<div style="align-items:center">
     		<img src="https://placehold.co/30">일인분
     	</div>
     	<div class="title-text">
@@ -113,11 +127,14 @@
     <div>
    	<p class="annotation"> * 필수항목
    	</div>
+   	
+   	
    	<div>
     <label for="nickname">닉네임</label>
     <input class="input-field" type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
     <button type="button" class="check-btn">중복확인</button>
     </div>
+    
    	<div>
    		<span class="nickname_ok">사용 가능한 닉네임입니다.</span>
    		<span class="nickname_alreadey">이미 사용중인 닉네임입니다.</span>
@@ -146,39 +163,66 @@
     <div><p class="annotation"> * 2-10자 이내, 공백 불가능, 한글 가능</div>
     </div>
     
+    <hr style="width:700px">
     
+    <div>
+		<!-- 레벨 선택 -->
+		<!-- 클릭 시 색상 변경 -->
+		<div>
+			<div>혼밥레벨설정</div>
+			<input type="radio" name="level" id="lv1">
+			<label for="lv1">Lv.1</label>
+			<input type="radio" name="level" id="lv2"> 
+			<label for="lv2">Lv.2</label>
+			<input type="radio" name="level" id="lv3">
+			<label for="lv3">Lv.3</label>
+			<input type="radio" name="level" id="lv4"> 
+			<label for="lv4">Lv.4</label>
+			<input type="radio" name="level" id="lv5"> 
+			<label for="lv5">Lv.5</label>
+			
+		</div>
+			<!-- 클릭 시 팝오버 설명 -->
+		 혼밥 레벨이란?
+
+
+	</div>
+    
+    
+   <!-- 프로필 이미지 -->
+    
+    
+    <hr style="width:700px">
+    
+    
+	<!-- 약관 동의 -->
+	<div>
+	<div><input type="checkbox" id="agreeBtn"><label for="agreeBtn">약관 동의</label></div>
+	<div class="agreeText">
+		<h3>제 1조(목적)</h3>
+		<p>본 약관은 주식회사 일인용(이하"회사"라 합니다)에서 제공하는 인터넷 관련서비스(접속 가능한 유, 무선 단말기의 종류와 )관계없이 회사가 제공하는 모든 서비스를 의미하며, 이하 "서비스"라 합니다)를 이용함에 있어 회사와 회원의 권리와 의무, 책임사항을 규정함을 그 목적으로 합니다.
+	</div>
+	</div>
+	
+	
+	
+	    
+	<br>
+	<!-- 회원 가입 -->
+	<div id="msg" class="msg"> ${URLDecoder.decode(param.msg, "utf-8")}</div>  
     <button class="join-btn">회원가입하기</button>
-    <div id="msg" class="msg"> ${URLDecoder.decode(param.msg, "utf-8")}</div>  
+    
    </form> 
    
    
    
+   	
    	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-	<script type="text/javascript">
-        function checkId(){
-            var id = $('#id').val();
-        $.ajax({
-            url:'/user/idCheck',
-            type:'post',
-            data:{id:id},
-            success:function(cnt){ //컨트롤러에서 넘어온 cnt값을 받는다 
-                if(cnt != 1){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디 
-                    $('.id_ok').css("display","inline-block"); 
-                    $('.id_already').css("display", "none");
-                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
-                    $('.id_already').css("display","inline-block");
-                    $('.id_ok').css("display", "none");
-                }
-            },
-            error:function(){
-                alert("에러입니다");
-            }
-        });
-        };
-    </script>
-   
-   <script>
-       function formCheck(frm) {
+   	<script>
+   		
+	  
+
+       	function formCheck(frm) {
             var msg ='';
 
             if(frm.nickname.value.length<2) {
@@ -204,13 +248,6 @@
                 element.select();
             }
        }
-       
-       
-       
-       
-       
-       
-       
    </script>
 </body>
 </html>

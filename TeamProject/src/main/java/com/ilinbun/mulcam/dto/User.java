@@ -1,7 +1,7 @@
 package com.ilinbun.mulcam.dto;
 
 public class User {
-//	int user_PK;
+	int user_PK;
 	String user_email;
 	String user_nickname;
 	String user_password;
