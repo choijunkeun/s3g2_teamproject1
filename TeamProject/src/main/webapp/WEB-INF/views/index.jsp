@@ -44,7 +44,7 @@
 			<a class="btn" href="/search">혼밥추천</a>
 			<a class="btn" href="/brag">혼밥자랑</a>
 			<a class="btn" href="#">반찬공유</a>
-			<a class="btn" href="#">커뮤니티</a>
+			<a class="btn" href="/comm">커뮤니티</a>
 		</nav>
 	</div>
 	<div style="width: 100%; align-content: center;" >
