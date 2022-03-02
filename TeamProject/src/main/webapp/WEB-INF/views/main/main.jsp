@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>일인분 : 혼밥 정보가 필요할 땐, 일인분</title>
 </head>
 <body>
 	<div class="container mb-2">

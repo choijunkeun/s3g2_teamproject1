@@ -1,5 +1,6 @@
 package com.ilinbun.mulcam.dao;
 
+<<<<<<< HEAD
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -13,3 +14,8 @@ public interface UserDAO {
 	
 	
 }
+=======
+public interface UserDAO {
+
+}
+>>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
