@@ -30,6 +30,7 @@
 			<h1 class="display-4 fw-bolder">
 				<a href="/" id="headertitle" style="text-decoration: none; text-color:white;">일인분</a>
 			</h1>
+			<span>혼밥 정보가 필요할 땐, 일인분</span>
 		</div>
 	</div>
 </header>

@@ -192,16 +192,15 @@
 	color: #777;
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
 </head>
 <body>
-	<form onsubmit="searchPlaces(); return false;">
-		<div class="search_area justify-content-center p-2" style="display: inline-block; white-space: nowrap;">
-			<div class="btn-group-level" style="float:left;">
+	<form class="container" onsubmit="searchPlaces(); return false;" >
+		<input type="hidden" id="honbabLv" value="5">
+		<div class="search_area row justify-content-center p-2" style="width: 100%; flex-wrap: nowrap; ">
+			<div class="btn-group-level" style="width: fit-content;">
 				<button type="button" class="btn btn-danger dropdown-toggle"
-					id="honbabLevelDropdown" data-bs-toggle="dropdown"
-					aria-expanded="false">혼밥 레벨</button>
+					id="honbabLevelDropdown" data-bs-toggle="dropdown" aria-expanded="false">혼밥 레벨</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="honbabLevelDropdown">
 					<li><button class="dropdown-item" type="button"><span
 							class="badge rounded-pill" style="background: #F6CECE">Lv. 1</button></a></li>
@@ -215,17 +214,15 @@
 							class="badge rounded-pill" style="background: #FF0000">Lv. 5</button></a></li>
 				</ul>
 			</div>
-			<input type="hidden" id="honbabLv" value="5">
-			<div class="input-group border rounded" style="float:left;">
-				<input type="text" class="cssbform-control" id="keyword"
-					placeholder="검색할 혼밥 맛집을 입력하세요" aria-label="혼밥 맛집 추천" size="60">
+			<div class="input-group" style="flex-shrink:1;">
+				<input type="text" class="form-control" id="keyword"
+					placeholder="검색할 혼밥 맛집을 입력하세요" aria-label="혼밥 맛집 추천">
 				<button class="input-group-text btn bg-primary text-white" type="submit">검색하기</button>
 			</div>
 			
-			<div class="btn-group-sort" style="float:left;">
+			<div class="btn-group-sort" style="width: fit-content;">
 				<button type="button" class="btn btn-secondary dropdown-toggle"
-					id="sortDropdown" data-bs-toggle="dropdown"
-					aria-expanded="false">분류별 검색</button>
+					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별 검색</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 					<li><button class="dropdown-item" type="button">종합 평점 순</a></li>
 					<li><button class="dropdown-item" type="button">가격 순</a></li>
@@ -271,12 +268,12 @@
 		var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 		
 		// 키워드로 장소를 검색합니다
-		searchPlaces();
+		//searchPlaces();
 		
 		// 키워드 검색을 요청하는 함수입니다
 		function searchPlaces() {
 		
-		    var keyword = document.getElementById('keyword').value;
+		    var keyword = '용산구[' +document.getElementById('keyword').value+"]";
 		
 		    if (!keyword.replace(/^\s+|\s+$/g, '')) {
 		        alert('키워드를 입력해주세요!');
@@ -284,7 +281,7 @@
 		    }
 		
 		    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-		    ps.keywordSearch( keyword, placesSearchCB); 
+		    ps.keywordSearch( keyword, placesSearchCB, {category_group_code:'FD6, CE7'}); 
 		}
 		
 		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
@@ -314,6 +311,12 @@
 		
 		// 검색 결과 목록과 마커를 표출하는 함수입니다
 		function displayPlaces(places) {
+			
+			/*
+				여기에 혼밥 레벨별로 정렬하는 코드를 먼저 작성하자
+				
+			*/
+			
 		
 		    var listEl = document.getElementById('placesList'), 
 		    menuEl = document.getElementById('menu_wrap'),
@@ -374,7 +377,7 @@
 		function getListItem(index, places) {
 		
 		    var el = document.createElement('li'),
-		    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+		    itemStr = '<form action="./place/' + places.id + '" method="post"><span class="markerbg marker_' + (index+1) + '"></span>' +
 		                '<div class="info">' +
 		                '   <h5>' + places.place_name + '</h5>';
 		
@@ -386,8 +389,10 @@
 		    }
 		                 
 		      itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-		     '<a href="./place/' + places.id + '" style="text-decoration:none;">상세보기</a>' + 
-		                '</div>';           
+		     /* '<a href="./place/' + places.id + '" style="text-decoration:none;">상세보기</a>' +  */
+		     '<input type="hidden" name="place_name" value="' + places.place_name + '">' + 
+		     '<input type="submit" class="btn" value="상세보기">'+
+		                '</div></form>';           
 		
 		    el.innerHTML = itemStr;
 		    el.className = 'item';
