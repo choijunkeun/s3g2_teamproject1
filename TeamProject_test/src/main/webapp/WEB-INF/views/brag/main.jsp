@@ -15,7 +15,7 @@
 </head>
 <body>
 <!-- <a></a> BEST게시판 이동 링크 -->
-	<a href="/brag/best"><h2>이달의혼밥</h2></a>
+	<a href="/brag/best"><h2>${dinner}</h2></a>
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card p-4">
