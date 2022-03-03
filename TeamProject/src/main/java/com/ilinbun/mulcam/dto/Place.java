@@ -13,7 +13,7 @@ public class Place {
 	double y;
 	String place_url;
 	public Place(int id, String place_name, String category_name, String category_group_code,
-			String category_group_name, String phone, String address_name, String road_address_name2, double x, double y,
+			String category_group_name, String phone, String address_name, String road_address_name, double x, double y,
 			String place_url) {
 		super();
 		this.id = id;

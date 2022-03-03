@@ -93,34 +93,33 @@
 					여기서부터 리뷰가 뜨는 영역
 				</div>
 			</div>
-		</div>
-		<script>
-			//var str = JSON.stringify(${place});
-			
-			function writeReview(){
-				let f = document.createElement('form');
-			    
-			    let obj1;
-			    obj1 = document.createElement('input');
-			    obj1.setAttribute('type', 'hidden');
-			    obj1.setAttribute('name', 'id');
-			    obj1.setAttribute('value', ${id});
-			    f.appendChild(obj1);
-			    
-			    let obj2;
-			    obj2 = document.createElement('input');
-			    obj2.setAttribute('type', 'hidden');
-			    obj2.setAttribute('name', 'place_name');
-			    obj2.setAttribute('value', '${place.place_name}');
-			    f.appendChild(obj2);
-			    
-			    f.setAttribute('method', 'post');
-			    f.setAttribute('action', './review/'+${id});
-			    document.body.appendChild(f);
-			    f.submit();
-			}
-		</script>
-	</c:when>
+			<script>
+				//var str = JSON.stringify(${place});
+				
+				function writeReview(){
+					let f = document.createElement('form');
+				    
+				    let obj1;
+				    obj1 = document.createElement('input');
+				    obj1.setAttribute('type', 'hidden');
+				    obj1.setAttribute('name', 'id');
+				    obj1.setAttribute('value', ${id});
+				    f.appendChild(obj1);
+				    
+				    let obj2;
+				    obj2 = document.createElement('input');
+				    obj2.setAttribute('type', 'hidden');
+				    obj2.setAttribute('name', 'place_name');
+				    obj2.setAttribute('value', '${place.place_name}');
+				    f.appendChild(obj2);
+				    
+				    f.setAttribute('method', 'post');
+				    f.setAttribute('action', './review/'+${id});
+				    document.body.appendChild(f);
+				    f.submit();
+				}
+			</script>
+		</c:when>
 	<c:otherwise>
 		<span>결과를 가져오지 못했습니다. 다시 시도해주세요.</span>
 	</c:otherwise>

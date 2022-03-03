@@ -202,16 +202,16 @@
 				<button type="button" class="btn btn-danger dropdown-toggle"
 					id="honbabLevelDropdown" data-bs-toggle="dropdown" aria-expanded="false">혼밥 레벨</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="honbabLevelDropdown">
+					<li><button class="dropdown-item" type="button">
+					<span class="badge rounded-pill" style="background: #F6CECE">Lv. 1</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F6CECE">Lv. 1</button></a></li>
+							class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</button></a></li>
+							class="badge rounded-pill" style="background: #F78181">Lv. 3</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F78181">Lv. 3</button></a></li>
+							class="badge rounded-pill" style="background: #FA5858">Lv. 4</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #FA5858">Lv. 4</button></a></li>
-					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #FF0000">Lv. 5</button></a></li>
+							class="badge rounded-pill" style="background: #FF0000">Lv. 5</span></button></li>
 				</ul>
 			</div>
 			<div class="input-group" style="flex-shrink:1;">
@@ -224,11 +224,11 @@
 				<button type="button" class="btn btn-secondary dropdown-toggle"
 					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별 검색</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-					<li><button class="dropdown-item" type="button">종합 평점 순</a></li>
-					<li><button class="dropdown-item" type="button">가격 순</a></li>
-					<li><button class="dropdown-item" type="button">맛 평점 순</a></li>
-					<li><button class="dropdown-item" type="button">서비스 평점 순</a></li>
-					<li><button class="dropdown-item" type="button">인테리어 평점 순</a></li>
+					<li><button class="dropdown-item" type="button">종합 평점 순</button></li>
+					<li><button class="dropdown-item" type="button">가격 순</button></li>
+					<li><button class="dropdown-item" type="button">맛 평점 순</button></li>
+					<li><button class="dropdown-item" type="button">서비스 평점 순</button></li>
+					<li><button class="dropdown-item" type="button">인테리어 평점 순</button></li>
 				</ul>
 			</div>
 		</div>
