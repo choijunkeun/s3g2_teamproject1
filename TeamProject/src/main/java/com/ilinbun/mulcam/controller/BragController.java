@@ -34,5 +34,14 @@ public class BragController {
 	public String Best() {
 		return "brag/best";
 	}
+	@GetMapping("/brag")
+	public String brag() {
+		return "brag/brag";
+	}
+	@GetMapping("/writeform")
+	public String writeform() {
+		return "brag/writeform";
+	}
+	
 	
 }
