@@ -1,13 +1,21 @@
 package com.ilinbun.mulcam.dto;
 
 public class User {
-	int user_PK;
-	String user_email;
-	String user_nickname;
-	String user_password;
-	String user_profileImg;
-	int user_honbabLevel;
-	int user_group;
+	private int user_PK;
+	
+	private String user_email;
+	
+
+	private String user_nickname;
+	
+
+	private String user_password;
+	
+	private String user_profileImg;
+	
+	private int user_honbabLevel;
+	
+	private int user_group;
 	
 	public int getUser_PK() {
 		return user_PK;
@@ -66,16 +74,7 @@ public class User {
 		this.user_group = user_group;
 	}
 	
-	public User(int user_PK, String user_email, String user_nickname, String user_password, String user_profileImg, int user_honbabLevel, int user_group) {
-		super();
-		this.user_PK = user_PK;
-		this.user_email = user_email;
-		this.user_nickname = user_nickname;
-		this.user_password = user_password;
-		this.user_profileImg = user_profileImg;
-		this.user_honbabLevel = user_honbabLevel;
-		this.user_group = user_group;
-	}
+
 	
 	
 }
