@@ -11,4 +11,3 @@ import com.ilinbun.mulcam.dto.User;
 public interface UserDAO {
 	public User nickCheck(String nickname) throws Exception;
 }
-
