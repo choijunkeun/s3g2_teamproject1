@@ -111,7 +111,7 @@
     
 </head>
 <body>
-   <form action="<c:url value="/joinSuccess"/>" method="POST" onsubmit="return formCheck(this)">
+   <form action="<c:url value="/join"/>" method="POST" onsubmit="return formCheck(this)">
    	
     <div class="title">
     	<div style="align-items:center">
@@ -131,7 +131,7 @@
    	
    	<div>
     <label for="nickname">닉네임</label>
-    <input class="input-field" type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
+    <input class="input-field" type="text" id="nickname" name="user_nickname" placeholder="닉네임을 입력해주세요.">
     <button type="button" class="check-btn">중복확인</button>
     </div>
     
@@ -142,7 +142,7 @@
     <div>
     <div><p class="annotation"> * 2-10자 이내, 공백 불가능, 한글 가능</div>
     <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요.">
+    <input class="input-field" type="email" id="email" name="user_email" placeholder="이메일을 입력해주세요.">
      <button type="button" class="check-btn" onclick="onDisplay()">인증메일발송</button>
     </div>
     
@@ -154,7 +154,7 @@
      
    <div>
    	<label for="password">비밀번호</label>
-    <input class="input-field" type="text" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
+    <input class="input-field" type="text" id="password" name="user_password" placeholder="비밀번호를 입력해주세요.">
      <div><p class="annotation"> * 8-20자 이내, 공백 불가능, 한글 가능</div>
      </div>
      <div>
@@ -203,14 +203,11 @@
 		<p>본 약관은 주식회사 일인용(이하"회사"라 합니다)에서 제공하는 인터넷 관련서비스(접속 가능한 유, 무선 단말기의 종류와 )관계없이 회사가 제공하는 모든 서비스를 의미하며, 이하 "서비스"라 합니다)를 이용함에 있어 회사와 회원의 권리와 의무, 책임사항을 규정함을 그 목적으로 합니다.
 	</div>
 	</div>
-	
-	
-	
-	    
+	  
 	<br>
 	<!-- 회원 가입 -->
 	<div id="msg" class="msg"> ${URLDecoder.decode(param.msg, "utf-8")}</div>  
-    <button class="join-btn">회원가입하기</button>
+    <button type="submit" class="join-btn">회원가입하기</button>
     
    </form> 
    
