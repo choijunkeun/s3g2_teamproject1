@@ -48,7 +48,7 @@ public class MainController {
 	// 회원가입 완료 폼으로 가는 컨트롤러
 	@GetMapping("/loginSuccess")
 	public String loginSuccess() {
-		return "/user/joinSuccessForm";
+		return "user/joinSuccessForm";
 	}
 
 	// 로그인 폼으로 이동하는 컨트롤러
@@ -106,9 +106,9 @@ public class MainController {
 	// 이메일 인증 컨트롤러
 
 	// 마이 페이지 폼으로 이동하는 컨트롤러
-	@GetMapping("myPage")
+	@GetMapping("/myPage")
 	public String myPage() {
-		return "/user/myPageForm";
+		return "user/myPageForm";
 	}
 
 }
