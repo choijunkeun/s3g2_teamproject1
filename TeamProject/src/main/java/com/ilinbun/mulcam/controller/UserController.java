@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class JoinController {
+public class UserController {
 	
 	//회원가입 폼으로 이동하는 컨트롤러
 	@GetMapping("/join")
