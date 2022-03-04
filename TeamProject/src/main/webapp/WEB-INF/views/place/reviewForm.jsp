@@ -47,15 +47,15 @@
 		/*these two are set to not display at start*/
 		.imgupload.ok {
 		  display: none;
-		  color: green;
+		  color: #ff3f3f;
 		}
 		.imgupload.stop {
 		  display: none;
-		  color: red;
+		  color: #ff3f3f;
 		}
 		
 		/*this sets the actual file input to overlay our button*/
-		#fileup {
+		#file {
 		  opacity: 0;
 		  -moz-opacity: 0;
 		  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
@@ -129,7 +129,7 @@
 			font-family: FontAwesome;
 		}
 </style>
-	<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
 	<h2>
@@ -148,7 +148,10 @@
 				<img src="#">
 			</div> -->
 		</div>
-		<form>
+		<form action="../writeReview" method="post" enctype="multipart/form-data" id="prForm">
+		<!-- <form id="prForm"> -->
+			<input type="hidden" name="user_PK" id="user_PK" value="1"> <!-- 목업 유저정보 코드 -->
+			<input type="hidden" name="id" id="id" value="${id }"> <!-- 장소값 코드 -->
 			<div class="container p-2 ">
 				<div class="row p-1 text-center ">
 					<div class="col"> <!-- https://codepen.io/jexordexan/pen/yyYEJa -->
@@ -157,31 +160,31 @@
 								<td>혼밥레벨</td>
 								<td id="honbabLv" class="btn-group flex-wrap justify-content-center">
 									<!-- <div class="w-100"></div> -->
-									<input type="radio" name="level-group" class="btn-check" id="lv1">
-									<label class="btn btn-outline-danger btn-sm rounded-left" for="radioBtn1">레벨 1</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv2"> 
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn2">레벨 2</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv3"> 
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn3">레벨 3</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv4">
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn4">레벨 4</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv5"> 
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn5">레벨 5</label>
+									<input type="radio" name="honbabLv" class="btn-check" id="lv1" value="1">
+									<label class="btn btn-outline-danger btn-sm rounded-left" for="lv1">레벨 1</label>
+									<input type="radio" name="honbabLv" class="btn-check" id="lv2" value="2"> 
+									<label class="btn btn-outline-danger btn-sm" for="lv2">레벨 2</label>
+									<input type="radio" name="honbabLv" class="btn-check" id="lv3" value="3"> 
+									<label class="btn btn-outline-danger btn-sm" for="lv3">레벨 3</label>
+									<input type="radio" name="honbabLv" class="btn-check" id="lv4" value="4">
+									<label class="btn btn-outline-danger btn-sm" for="lv4">레벨 4</label>
+									<input type="radio" name="honbabLv" class="btn-check" id="lv5" value="5"> 
+									<label class="btn btn-outline-danger btn-sm" for="lv5">레벨 5</label>
 								</td>
 							</tr>
 							<tr>
 								<td>가격</td>
 								<td>
 									<div class="rating priceRate" style="display: inline-block;">
-										<input class="star star-5" id="price-5" type="radio" name="price" />
+										<input class="star star-5" id="price-5" type="radio" name="priceRate" value="5" />
 										<label class="star star-5" for="price-5"></label>
-										<input class="star star-4" id="price-4" type="radio" name="price" />
+										<input class="star star-4" id="price-4" type="radio" name="priceRate" value="4" />
 										<label class="star star-4" for="price-4"></label>
-										<input class="star star-3" id="price-3" type="radio" name="price" />
+										<input class="star star-3" id="price-3" type="radio" name="priceRate" value="3" />
 										<label class="star star-3" for="price-3"></label>
-										<input class="star star-2" id="price-2" type="radio" name="price" />
+										<input class="star star-2" id="price-2" type="radio" name="priceRate" value="2" />
 										<label class="star star-2" for="price-2"></label>
-										<input class="star star-1" id="price-1" type="radio" name="price" />
+										<input class="star star-1" id="price-1" type="radio" name="priceRate" value="1" />
 										<label class="star star-1" for="price-1"></label>
 									</div>
 								</td>
@@ -190,15 +193,15 @@
 								<td>맛</td>
 								<td>
 									<div class="rating tasteRate" style="display: inline-block;">
-										<input class="star star-5" id="taste-5" type="radio" name="taste" />
+										<input class="star star-5" id="taste-5" type="radio" name="tasteRate" value="5" />
 										<label class="star star-5" for="taste-5"></label>
-										<input class="star star-4" id="taste-4" type="radio" name="taste" />
+										<input class="star star-4" id="taste-4" type="radio" name="tasteRate" value="4" />
 										<label class="star star-4" for="taste-4"></label>
-										<input class="star star-3" id="taste-3" type="radio" name="taste" />
+										<input class="star star-3" id="taste-3" type="radio" name="tasteRate" value="3" />
 										<label class="star star-3" for="taste-3"></label>
-										<input class="star star-2" id="taste-2" type="radio" name="taste" />
+										<input class="star star-2" id="taste-2" type="radio" name="tasteRate" value="2" />
 										<label class="star star-2" for="taste-2"></label>
-										<input class="star star-1" id="taste-1" type="radio" name="taste" />
+										<input class="star star-1" id="taste-1" type="radio" name="tasteRate" value="1" />
 										<label class="star star-1" for="taste-1"></label>
 									</div>
 								</td>
@@ -207,15 +210,15 @@
 								<td>서비스</td>
 								<td>
 									<div class="rating serviceRate" style="display: inline-block;">
-										<input class="star star-5" id="service-5" type="radio" name="service" />
+										<input class="star star-5" id="service-5" type="radio" name="serviceRate" value="5" />
 										<label class="star star-5" for="service-5"></label>
-										<input class="star star-4" id="service-4" type="radio" name="service" />
+										<input class="star star-4" id="service-4" type="radio" name="serviceRate" value="4" />
 										<label class="star star-4" for="service-4"></label>
-										<input class="star star-3" id="service-3" type="radio" name="service" />
+										<input class="star star-3" id="service-3" type="radio" name="serviceRate" value="3" />
 										<label class="star star-3" for="service-3"></label>
-										<input class="star star-2" id="service-2" type="radio" name="service" />
+										<input class="star star-2" id="service-2" type="radio" name="serviceRate" value="2" />
 										<label class="star star-2" for="service-2"></label>
-										<input class="star star-1" id="service-1" type="radio" name="service" />
+										<input class="star star-1" id="service-1" type="radio" name="serviceRate" value="1" />
 										<label class="star star-1" for="service-1"></label>
 									</div>
 								</td>
@@ -224,15 +227,15 @@
 								<td>멋(인테리어)</td>
 								<td>
 									<div class="rating interiorRate" style="display: inline-block;">
-										<input class="star star-5" id="interior-5" type="radio" name="interior" />
+										<input class="star star-5" id="interior-5" type="radio" name="interiorRate" value="5" />
 										<label class="star star-5" for="interior-5"></label>
-										<input class="star star-4" id="interior-4" type="radio" name="interior" />
+										<input class="star star-4" id="interior-4" type="radio" name="interiorRate" value="4" />
 										<label class="star star-4" for="interior-4"></label>
-										<input class="star star-3" id="interior-3" type="radio" name="interior" />
+										<input class="star star-3" id="interior-3" type="radio" name="interiorRate" value="3" />
 										<label class="star star-3" for="interior-3"></label>
-										<input class="star star-2" id="interior-2" type="radio" name="interior" />
+										<input class="star star-2" id="interior-2" type="radio" name="interiorRate" value="2" />
 										<label class="star star-2" for="interior-2"></label>
-										<input class="star star-1" id="interior-1" type="radio" name="interior" />
+										<input class="star star-1" id="interior-1" type="radio" name="interiorRate" value="1" />
 										<label class="star star-1" for="interior-1"></label>
 									</div>
 								</td>
@@ -241,9 +244,9 @@
 
 					</div>
 					<div class="col">
-						<input type="checkbox" id="honbabAccept" name="honbabAccept" value="true">
-						<label for="honbabAccept">1인 출입 가능 업장</label>
-						<input type="text" name="honbabReason" style="width: 100%;"	placeholder="제목을 써주세요">
+						<input type="checkbox" id="rejectedCount" name="rejectedCount" value="true">
+						<label for="rejectedCount">1인 출입 가능 업장</label>
+						<input type="text" name="honbabReason" id="honbabReason" style="width: 100%;" placeholder="제목을 써주세요">
 					</div>
 				</div>
 				<div class="row p-1">
@@ -260,12 +263,12 @@
 								<p id="namefile">사진만 올려주세요!(jpg,jpeg,bmp,png)</p>
 								<!--our custom btn which which stays under the actual one-->
 								<button type="button" id="btnup" class="btn btn-primary btn-lg">파일 선택</button>
-								<input type="file" value="" name="fileup" id="fileup">
+								<input type="file" value="" name="file" id="file">
 							</div>
 						</div>
 					</div>
 					<div class="col">
-						<textarea name="reviewContent" style="width: 100%; height: 100%;"
+						<textarea name="reviewContent" id="reviewContent" style="width: 100%; height: 100%;"
 							placeholder="상세 내용을 입력해주세요"></textarea>
 					</div>
 				</div>
@@ -280,39 +283,79 @@
 	</div>
 
 	<script>
-	$('#fileup').change(function(){
+	$('#file').change(function(){
 		//here we take the file extension and set an array of valid extensions
-		    var res=$('#fileup').val();
-		    var arr = res.split("\\");
-		    var filename=arr.slice(-1)[0];
-		    filextension=filename.split(".");
-		    filext="."+filextension.slice(-1)[0];
-		    valid=[".jpg",".png",".jpeg",".bmp"];
+	    var res=$('#file').val();
+	    var arr = res.split("\\");
+	    var filename=arr.slice(-1)[0];
+	    filextension=filename.split(".");
+	    filext="."+filextension.slice(-1)[0];
+	    valid=[".jpg",".png",".jpeg",".bmp"];
 		//if file is not valid we show the error icon, the red alert, and hide the submit button
-		    if (valid.indexOf(filext.toLowerCase())==-1){
-		        $( ".imgupload" ).hide("slow");
-		        $( ".imgupload.ok" ).hide("slow");
-		        $( ".imgupload.stop" ).show("slow");
-		      
-		        $('#namefile').css({"color":"red","font-weight":700});
-		        $('#namefile').html("File "+filename+" is not  pic!");
-		        
-		        $( "#submitbtn" ).hide();
-		        $( "#fakebtn" ).show();
-		    }else{
-		        //if file is valid we show the green alert and show the valid submit
-		        $( ".imgupload" ).hide("slow");
-		        $( ".imgupload.stop" ).hide("slow");
-		        $( ".imgupload.ok" ).show("slow");
-		      
-		        $('#namefile').css({"color":"green","font-weight":700});
-		        $('#namefile').html(filename);
-		      
-		        $( "#submitbtn" ).show();
-		        $( "#fakebtn" ).hide();
-		    }
-		});
+	    if (valid.indexOf(filext.toLowerCase())==-1){
+	        $( ".imgupload" ).hide("slow");
+	        $( ".imgupload.ok" ).hide("slow");
+	        $( ".imgupload.stop" ).show("slow");
+	      
+	        $('#namefile').css({"color":"gray","font-weight":700});
+	        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
+	        
+	    } else{
+	        //if file is valid we show the green alert and show the valid submit
+	        $( ".imgupload" ).hide("slow");
+	        $( ".imgupload.stop" ).hide("slow");
+	        $( ".imgupload.ok" ).show("slow");
+	      
+	        $('#namefile').css({"color":"#ff3f3f","font-weight":700});
+	        $('#namefile').html(" 업로드한 파일 : " + filename);
+	      
+	    }
+	});
 	
+	</script>
+	<script>
+		$('#prForm').submit(function(){
+			console.log("ENTERED TO SUBMITTING");
+			var formData = new FormData();
+			var data = {
+		        "id":$('#id').val(),
+		        "user_PK":$('#user_PK').val(),
+		        "reviewContent":$('#reviewContent').val(),
+		        "rejectedCount":($('input[name="rejectedCount"]:checked').val() != null)? $('input[name="rejectedCount"]:checked').val() : "false",
+		        "honbabReason":$('#honbabReason').val(),
+		        "honbabLv":$('input[name="honbabLv"]:checked').val(),
+		        "interiorRate":$('input[name="interiorRate"]:checked').val(),
+		        "serviceRate":$('input[name="serviceRate"]:checked').val(),
+		        "priceRate":$('input[name="priceRate"]:checked').val(),
+		        "tasteRate":$('input[name="tasteRate"]:checked').val(),
+		        
+		    };
+
+		    formData.append("file",$('#file')[0].files[0]);
+		    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"}));
+			
+			$.ajax({
+				url:"../writeReview",
+				type:"post",
+				enctype: 'multipart/form-data',		
+				processData: false, 
+				contentType: false,
+				data: formData,
+				cache: false,           
+		        timeout: 600000,  
+				success:function(data, textStatus) {
+					
+					alert(data);
+					//location.window.href="/search";		
+				},
+				error: function(data, textStatus){
+					alert(data);
+					//return false;
+				}
+			});
+			
+			return false; 
+		});
 	</script>
 </body>
 </html>
