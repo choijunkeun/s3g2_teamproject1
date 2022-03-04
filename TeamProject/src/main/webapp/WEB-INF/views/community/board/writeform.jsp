@@ -12,7 +12,7 @@ h2 {
 
 table {
 	margin: auto;
-	width: 450px;
+	width: 600px;
 }
 
 .td_left {
@@ -34,7 +34,7 @@ table {
 	<!-- 게시판 등록 -->
 
 	<section id="./writeForm">
-		<h2>게시판 글쓰기</h2>
+		<h2>커뮤니티 글쓰기</h2>
 		<form action="./boardwrite" method="post"
 			enctype="multipart/form-data" name="boardform">
 			<table>
@@ -55,9 +55,9 @@ table {
 						id="board_subject" required="required" /></td>
 				</tr>
 				<tr>
-					<td class="td_left"><label for="board_content">내 용</label></td>
+					<td class="td_left" ><label for="board_content"></label></td>
 					<td><textarea id="board_content" name="board_content"
-							cols="40" rows="15" required="required"></textarea></td>
+							cols="60" rows="15" required="required" >사진에 대해 설명해주세요</textarea></td>
 				</tr>
 				<tr>
 					<td class="td_left"><label for="board_file"> 파일 첨부 </label></td>

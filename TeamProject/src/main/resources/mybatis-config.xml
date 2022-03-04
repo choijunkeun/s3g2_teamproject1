@@ -5,16 +5,13 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 
 <configuration>
 	<mappers>
-<<<<<<< HEAD
-	   <mapper resource="mybatis/mappers/user.xml"/>
-	   <mapper resource="mybatis/mappers/community.xml"/>
-	   <mapper resource="mybatis/mappers/board.xml"/>
-=======
+	
+	   <mapper resource="mybatis/mappers/User.xml"/>
+	   <mapper resource="mybatis/mappers/board.xml"/> 
+	   
 		<mapper resource="mybatis/mappers/brag.xml"/>
-	   	<mapper resource="mybatis/mappers/userMapper.xml"/>
 	   	<mapper resource="mybatis/mappers/placereview.xml"/>
 	   	<mapper resource="mybatis/mappers/community.xml"/>
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
 	</mappers>
 </configuration>
 
