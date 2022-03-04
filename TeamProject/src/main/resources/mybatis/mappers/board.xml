@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilinbun.mulcam.dao.BoardDAO">
+	<select id="selectMaxBoardNum" resultType="integer"><!-- 얘가 인티저로 했으니까 저쪽에도 
+			인티저 -->
+		<![CDATA[
+			select max(board_num) from board
+		]]>
+	</select>
+	<insert id="insertBoard" parameterType="Com_board">
+		<![CDATA[
+			insert into board
+			(board_num,board_name,board_pass,board_subject,board_content,board_filename,board_re_ref,board_re_lev,
+				board_re_seq,board_readcount,board_date) 
+			values (#{board_num},#{board_name},#{board_pass},#{board_subject},#{board_content},#{board_filename},
+				#{board_re_ref},#{board_re_lev},#{board_re_seq},#{board_readcount},now())
+		]]>
+
+	</insert>
+
+	<select id="selectBoardCount" resultType="int">
+		<![CDATA[
+			select count(*) from board
+		]]>
+	</select>
+	<select id="selectBoardList" resultType="Com_board" parameterType="int">
+		<![CDATA[
+			select BOARD_NUM,BOARD_NAME,BOARD_PASS,BOARD_SUBJECT,BOARD_CONTENT, BOARD_FILENAME, BOARD_RE_REF,BOARD_RE_LEV,BOARD_RE_SEQ,BOARD_READCOUNT,BOARD_DATE 
+				from (select @rownum:=@rownum+1 rnum, tot.* 
+					from (select * from board order by BOARD_RE_REF desc,BOARD_RE_SEQ asc) tot, 
+					(select @rownum:=0) temp) sub
+			where rnum between #{startrow} and #{startrow}+9
+		]]>
+	</select>
+
+	<select id="selectBoard" resultType="Com_board" parameterType="int">
+		<![CDATA[
+			select * from board where BOARD_NUM=#{boardNum}
+		]]>
+	</select>
+	<update id="updateReadCount" parameterType="int">
+		<![CDATA[
+			update board set board_readcount=board_readcount+1 where board_num=#{boardNum}
+		]]>
+	</update>
+	<update id="updateBoardReSeq" parameterType="Com_board">
+		<![CDATA[
+			update board set board_re_seq=board_re_seq+1
+			where board_re_ref=#{board_re_ref} and board_re_seq>#{board_re_seq}
+		]]>
+	</update>
+	<select id="selectPassword" resultType="string" parameterType="int">
+		<![CDATA[
+			select board_pass from board where board_num=#{boardNum}
+		]]>
+	</select>
+	<update id="updateBoard" parameterType="Com_board">
+		<![CDATA[
+			update board set board_subject=#{board_subject},board_content=#{board_content}
+			where board_num=#{board_num}
+		]]>
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		<![CDATA[
+			delete from board where board_num=#{boardNum}
+		]]>
+	</delete>
+</mapper>

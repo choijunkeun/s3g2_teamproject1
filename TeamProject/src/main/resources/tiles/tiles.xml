@@ -5,7 +5,6 @@
 <tiles-definitions>
 	<definition name="baseLayout" template="/WEB-INF/views/main/layout/baseLayout.jsp">
 		<put-attribute name="upnav" value="/WEB-INF/views/common/layout/upnav.jsp" />
-		<put-attribute name="title" value="" />
 		<put-attribute name="header" value="/WEB-INF/views/common/layout/header.jsp" />
 		<put-attribute name="navbar" value="/WEB-INF/views/common/layout/navbar.jsp" />
 		<put-attribute name="body" value="" />
@@ -18,8 +17,15 @@
 	</definition>
 
 	<definition name="*/*" extends="baseLayout">
-		<put-attribute name="title" value="커뮤니티 페이지" />
 		<put-attribute name="body"
 			value="/WEB-INF/views/{1}/{2}.jsp" />
+	</definition>
+	<definition name="*/*/*" extends="baseLayout"><!-- 긴 경로로 인해 3개까지 확장 - 종현 -->
+		<put-attribute name="body"
+			value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+	</definition>
+	<definition name="*/*/*/*" extends="baseLayout"><!-- 긴 경로로 인해 4개까지 확장 - 종현 -->
+		<put-attribute name="body"
+			value="/WEB-INF/views/{1}/{2}/{3}/{4}.jsp" />
 	</definition>
 </tiles-definitions>
