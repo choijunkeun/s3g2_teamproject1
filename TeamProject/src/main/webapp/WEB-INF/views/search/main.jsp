@@ -232,7 +232,7 @@
 				</ul>
 			</div>
 		</div>
-	</form>
+	</form> 
 
 
 	<div class="map_wrap">

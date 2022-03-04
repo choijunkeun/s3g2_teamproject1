@@ -72,9 +72,5 @@ public class User {
 		this.user_profileImg = user_profileImg;
 		this.user_honbabLevel = user_honbabLevel;
 		this.user_group = user_group;
-	}
-	
-
-	
-	
+	}	
 }
