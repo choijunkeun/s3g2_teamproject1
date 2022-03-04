@@ -140,8 +140,8 @@
 
 	<div class="container pb-3 bg-light">
 
-
-		<form>
+	<h5 class="fw-bolder" style="margin-left: 23%;">혼밥자랑</h5>
+		<form id="form" action="/bragwrite" method="post" enctype="multipart/form-data">
 			<div class="container p-2 ">
 				<div class="row p-1 text-center ">
 					<div class="col">
@@ -150,9 +150,7 @@
 							<tr>
 								<td>
 									<div class="btn-group-sort" style="width: fit-content;">
-										<button type="button"
-											class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-											data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
+										<button type="button" class="btn btn-secondary dropdown-toggle" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
 										<ul class="dropdown-menu text-center"
 											aria-labelledby="sortDropdown">
 											<li><button class="dropdown-item" type="button">사먹파</button></li>
@@ -244,33 +242,79 @@
 </script> -->
 
 	<script>
-	$('#fileup').change(function(){
+	$('#file').change(function(){
 		//here we take the file extension and set an array of valid extensions
-		    var res=$('#fileup').val();
-		    var arr = res.split("\\");
-		    var filename=arr.slice(-1)[0];
-		    filextension=filename.split(".");
-		    filext="."+filextension.slice(-1)[0];
-		    valid=[".jpg",".png",".jpeg",".bmp"];
+	    var res=$('#file').val();
+	    var arr = res.split("\\");
+	    var filename=arr.slice(-1)[0];
+	    filextension=filename.split(".");
+	    filext="."+filextension.slice(-1)[0];
+	    valid=[".jpg",".png",".jpeg",".bmp"];
 		//if file is not valid we show the error icon, the red alert, and hide the submit button
-		    if (valid.indexOf(filext.toLowerCase())==-1){
-		        $( ".imgupload" ).hide("slow");
-		        $( ".imgupload.ok" ).hide("slow");
-		        $( ".imgupload.stop" ).show("slow");
-		      
-		        $('#namefile').css({"color":"red","font-weight":700});
-		        $('#namefile').html("File "+filename+" is not  pic!");
-		    }else{
-		        //if file is valid we show the green alert and show the valid submit
-		        $( ".imgupload" ).hide("slow");
-		        $( ".imgupload.stop" ).hide("slow");
-		        $( ".imgupload.ok" ).show("slow");
-		      
-		        $('#namefile').css({"color":"green","font-weight":700});
-		        $('#namefile').html(filename);
-		    }
-		});
+	    if (valid.indexOf(filext.toLowerCase())==-1){
+	        $( ".imgupload" ).hide("slow");
+	        $( ".imgupload.ok" ).hide("slow");
+	        $( ".imgupload.stop" ).show("slow");
+	      
+	        $('#namefile').css({"color":"gray","font-weight":700});
+	        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
+	        
+	    } else{
+	        //if file is valid we show the green alert and show the valid submit
+	        $( ".imgupload" ).hide("slow");
+	        $( ".imgupload.stop" ).hide("slow");
+	        $( ".imgupload.ok" ).show("slow");
+	      
+	        $('#namefile').css({"color":"#ff3f3f","font-weight":700});
+	        $('#namefile').html(" 업로드한 파일 : " + filename);
+	      
+	    }
+	});
 	
+	</script>
+	<script>
+		$('#prForm').submit(function(){
+			console.log("ENTERED TO SUBMITTING");
+			var formData = new FormData();
+			var data = {
+		        "id":$('#id').val(),
+		        "user_PK":$('#user_PK').val(),
+		        "reviewContent":$('#reviewContent').val(),
+		        "rejectedCount":($('input[name="rejectedCount"]:checked').val() != null)? $('input[name="rejectedCount"]:checked').val() : "false",
+		        "honbabReason":$('#honbabReason').val(),
+		        "honbabLv":$('input[name="honbabLv"]:checked').val(),
+		        "interiorRate":$('input[name="interiorRate"]:checked').val(),
+		        "serviceRate":$('input[name="serviceRate"]:checked').val(),
+		        "priceRate":$('input[name="priceRate"]:checked').val(),
+		        "tasteRate":$('input[name="tasteRate"]:checked').val(),
+		        
+		    };
+
+		    formData.append("file",$('#file')[0].files[0]);
+		    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"}));
+			
+			$.ajax({
+				url:"../writeReview",
+				type:"post",
+				enctype: 'multipart/form-data',		
+				processData: false, 
+				contentType: false,
+				data: formData,
+				cache: false,           
+		        timeout: 600000,  
+				success:function(data, textStatus) {
+					
+					alert(data);
+					//location.window.href="/search";		
+				},
+				error: function(data, textStatus){
+					alert(data);
+					//return false;
+				}
+			});
+			
+			return false; 
+		});
 	</script>
 </body>
 </html>

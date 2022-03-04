@@ -138,57 +138,10 @@
 </style>
 <body>
 
-<section id = "writeForm">
-<h2>게시판글수정</h2>
-<form action="boardmodify" method="post" name = "modifyform">
-<input type = "hidden" name = "board_num" value = "${article.board_num}"/>
-<table>
-	<tr>
-		<td class="td_left">
-			<label for = "board_name">글쓴이</label>
-		</td>
-		<td class="td_right">
-			<input type = "text" name="board_name" id = "board_name" value = "${article.board_name}"/>
-		</td>
-	</tr>
-	<tr>
-		<td class="td_left">
-			<label for = "board_pass">비밀번호</label>
-		</td>
-		<td class="td_right">
-			<input name="board_pass" type="password" id = "board_pass"/>
-		</td>
-	</tr>
-	<tr>
-		<td class="td_left">
-			<label for = "board_subject">제 목</label>
-		</td>
-		<td class="td_right">
-			<input name="board_subject" type="text" id = "board_subject" value = "${article.board_subject}"/>
-		</td>
-	</tr>
-	<tr>
-		<td class="td_left">
-			<label for = "board_content">내 용</label>
-		</td>
-		<td>
-			<textarea id = "board_content" name="board_content" cols="40" rows="15">${article.board_content}</textarea>
-		</td>
-	</tr>
-</table>
-	<section id = "commandCell">
-			<a href="javascript:modifyboard()">[수정]</a>&nbsp;&nbsp;
-			<a href="javascript:history.go(-1)">[뒤로]</a>
-	</section>
-</form>
-</section>
-
-<!-- 여기까지 modify form -->
-
 	<div class="container pb-3 bg-light">
 
-
-		<form>
+	<h5 class="fw-bolder" style="margin-left: 23%;">게시글 수정하기</h5>
+		<form action="/bragmodify" method="post" name = "modifyform">
 			<div class="container p-2 ">
 				<div class="row p-1 text-center ">
 					<div class="col">
@@ -197,9 +150,7 @@
 							<tr>
 								<td>
 									<div class="btn-group-sort" style="width: fit-content;">
-										<button type="button"
-											class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-											data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
+										<button type="button" class="btn btn-secondary dropdown-toggle" id="sortDropdown"data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
 										<ul class="dropdown-menu text-center"
 											aria-labelledby="sortDropdown">
 											<li><button class="dropdown-item" type="button">사먹파</button></li>
@@ -291,39 +242,79 @@
 </script> -->
 
 	<script>
-	$('#fileup').change(function(){
+	$('#file').change(function(){
 		//here we take the file extension and set an array of valid extensions
-		    var res=$('#fileup').val();
-		    var arr = res.split("\\");
-		    var filename=arr.slice(-1)[0];
-		    filextension=filename.split(".");
-		    filext="."+filextension.slice(-1)[0];
-		    valid=[".jpg",".png",".jpeg",".bmp"];
+	    var res=$('#file').val();
+	    var arr = res.split("\\");
+	    var filename=arr.slice(-1)[0];
+	    filextension=filename.split(".");
+	    filext="."+filextension.slice(-1)[0];
+	    valid=[".jpg",".png",".jpeg",".bmp"];
 		//if file is not valid we show the error icon, the red alert, and hide the submit button
-		    if (valid.indexOf(filext.toLowerCase())==-1){
-		        $( ".imgupload" ).hide("slow");
-		        $( ".imgupload.ok" ).hide("slow");
-		        $( ".imgupload.stop" ).show("slow");
-		      
-		        $('#namefile').css({"color":"red","font-weight":700});
-		        $('#namefile').html("File "+filename+" is not  pic!");
-		        
-		        $( "#submitbtn" ).hide();
-		        $( "#fakebtn" ).show();
-		    }else{
-		        //if file is valid we show the green alert and show the valid submit
-		        $( ".imgupload" ).hide("slow");
-		        $( ".imgupload.stop" ).hide("slow");
-		        $( ".imgupload.ok" ).show("slow");
-		      
-		        $('#namefile').css({"color":"green","font-weight":700});
-		        $('#namefile').html(filename);
-		      
-		        $( "#submitbtn" ).show();
-		        $( "#fakebtn" ).hide();
-		    }
-		});
+	    if (valid.indexOf(filext.toLowerCase())==-1){
+	        $( ".imgupload" ).hide("slow");
+	        $( ".imgupload.ok" ).hide("slow");
+	        $( ".imgupload.stop" ).show("slow");
+	      
+	        $('#namefile').css({"color":"gray","font-weight":700});
+	        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
+	        
+	    } else{
+	        //if file is valid we show the green alert and show the valid submit
+	        $( ".imgupload" ).hide("slow");
+	        $( ".imgupload.stop" ).hide("slow");
+	        $( ".imgupload.ok" ).show("slow");
+	      
+	        $('#namefile').css({"color":"#ff3f3f","font-weight":700});
+	        $('#namefile').html(" 업로드한 파일 : " + filename);
+	      
+	    }
+	});
 	
+	</script>
+	<script>
+		$('#prForm').submit(function(){
+			console.log("ENTERED TO SUBMITTING");
+			var formData = new FormData();
+			var data = {
+		        "id":$('#id').val(),
+		        "user_PK":$('#user_PK').val(),
+		        "reviewContent":$('#reviewContent').val(),
+		        "rejectedCount":($('input[name="rejectedCount"]:checked').val() != null)? $('input[name="rejectedCount"]:checked').val() : "false",
+		        "honbabReason":$('#honbabReason').val(),
+		        "honbabLv":$('input[name="honbabLv"]:checked').val(),
+		        "interiorRate":$('input[name="interiorRate"]:checked').val(),
+		        "serviceRate":$('input[name="serviceRate"]:checked').val(),
+		        "priceRate":$('input[name="priceRate"]:checked').val(),
+		        "tasteRate":$('input[name="tasteRate"]:checked').val(),
+		        
+		    };
+
+		    formData.append("file",$('#file')[0].files[0]);
+		    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"}));
+			
+			$.ajax({
+				url:"../writeReview",
+				type:"post",
+				enctype: 'multipart/form-data',		
+				processData: false, 
+				contentType: false,
+				data: formData,
+				cache: false,           
+		        timeout: 600000,  
+				success:function(data, textStatus) {
+					
+					alert(data);
+					//location.window.href="/search";		
+				},
+				error: function(data, textStatus){
+					alert(data);
+					//return false;
+				}
+			});
+			
+			return false; 
+		});
 	</script>
 </body>
 </html>

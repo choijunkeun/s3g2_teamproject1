@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.Bragboard;
@@ -121,46 +123,46 @@ public class BragController {
 //		return mav;
 //	}
 	
-//	//이건 왜 했더라..? 어제 훈이 코드 따라한거 내 글 보기 인가?
-//	@PostMapping("/{id}")
-//	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
-//		ModelAndView mv = new ModelAndView("brag/brag/view");
-//		bragboard = bragService.bragBoardQueryByID(id);
-//		mv.addObject("bragboard", bragboard);
-//		
-//		return mv;
-//	}
+	//글보기?? 훈이꺼 reviewForm controller
+	@PostMapping("/{id}")
+	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
+		ModelAndView mv = new ModelAndView("brag/brag/view");
+		bragboard = bragService.bragBoardQueryByID(id);
+		mv.addObject("bragboard", bragboard);
+		
+		return mv;
+	}
 	
-//	//글수정 (내 글일경우가능)
-//		@GetMapping(value="/modifyform")
-//		public ModelAndView bragmodifyform(@RequestParam(value="articleNo")int articleNo) {
-//			ModelAndView mav=new ModelAndView();
-//			try {
-//				Bragboard Bragboard = bragService.getArticleNo(articleNo);
-//				mav.addObject("article", Bragboard);
-//				mav.setViewName("brag/modifyForm");
-//			} catch(Exception e) {
-//				e.printStackTrace();
-//				mav.addObject("err", e.getMessage());
-//				mav.setViewName("/brag/err");
-//			}
-//			return mav;
-//		}
-//		
-//		@PostMapping(value="/bragmodify")
-//		public ModelAndView bragmodify(@ModelAttribute Bragboard board) {
-//			ModelAndView mav=new ModelAndView();
-//			try {
-//				bragService.modifyBoard(board);
-//				mav.addObject("articleNo", board.getArticleNo());
-//				mav.setViewName("redirect:brag/viewDetail");
-//			} catch(Exception e) {
-//				e.printStackTrace();
-//				mav.addObject("err", e.getMessage());
-//				mav.setViewName("brag/err");
-//			}
-//			return mav;
-//		}
+	//글수정 (내 글일경우가능)
+		@GetMapping(value="/modifyform")
+		public ModelAndView bragmodifyform(@RequestParam(value="articleNo")int articleNo) {
+			ModelAndView mav=new ModelAndView();
+			try {
+				Bragboard Bragboard = bragService.getArticleNo(articleNo);
+				mav.addObject("article", Bragboard);
+				mav.setViewName("brag/modifyForm");
+			} catch(Exception e) {
+				e.printStackTrace();
+				mav.addObject("err", e.getMessage());
+				mav.setViewName("/brag/err");
+			}
+			return mav;
+		}
+		
+		@PostMapping(value="/bragmodify")
+		public ModelAndView bragmodify(@ModelAttribute Bragboard bragboard) {
+			ModelAndView mav=new ModelAndView();
+			try {
+				bragService.modifyBragBoard(bragboard);
+				mav.addObject("articleNo", bragboard.getArticleNo());
+				mav.setViewName("redirect:/brag/viewDetail");
+			} catch(Exception e) {
+				e.printStackTrace();
+				mav.addObject("err", e.getMessage());
+				mav.setViewName("brag/err");
+			}
+			return mav;
+		}
 		
 		//글삭제 (내 글일경우가능)	
 //		@PostMapping(value="bragdelete")

@@ -135,145 +135,26 @@
 	<h2>
 		<strong>게시물 보기</strong>
 	</h2>
-	<div class="container pb-3 bg-light">
-		<div class="row p-2">
-			<div class="placeInfoSection p-2">
-				<h2>
-					<a href="javascript:window.history.back();" style="text-decoration: none; color: black;">
-						<i class="fa fa-angle-left"></i> <strong>${location }</strong></a>
-				</h2>
-			</div>
-		</div>
-		<form>
-			<div class="container p-2 ">
-				<div class="row p-1 text-center ">
-					<div class="col"> <!-- https://codepen.io/jexordexan/pen/yyYEJa -->
-						<table style="width: fit-content; margin: 0 auto;">
-							<tr>
-								<td>혼밥레벨</td>
-								<td id="honbabLv" class="btn-group flex-wrap justify-content-center">
-									<!-- <div class="w-100"></div> -->
-									<input type="radio" name="level-group" class="btn-check" id="lv1">
-									<label class="btn btn-outline-danger btn-sm rounded-left" for="radioBtn1">레벨 1</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv2"> 
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn2">레벨 2</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv3"> 
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn3">레벨 3</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv4">
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn4">레벨 4</label>
-									<input type="radio" name="level-group" class="btn-check" id="lv5"> 
-									<label class="btn btn-outline-danger btn-sm" for="radioBtn5">레벨 5</label>
-								</td>
-							</tr>
-							<tr>
-								<td>가격</td>
-								<td>
-									<div class="rating priceRate" style="display: inline-block;">
-										<input class="star star-5" id="price-5" type="radio" name="price" />
-										<label class="star star-5" for="price-5"></label>
-										<input class="star star-4" id="price-4" type="radio" name="price" />
-										<label class="star star-4" for="price-4"></label>
-										<input class="star star-3" id="price-3" type="radio" name="price" />
-										<label class="star star-3" for="price-3"></label>
-										<input class="star star-2" id="price-2" type="radio" name="price" />
-										<label class="star star-2" for="price-2"></label>
-										<input class="star star-1" id="price-1" type="radio" name="price" />
-										<label class="star star-1" for="price-1"></label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>맛</td>
-								<td>
-									<div class="rating tasteRate" style="display: inline-block;">
-										<input class="star star-5" id="taste-5" type="radio" name="taste" />
-										<label class="star star-5" for="taste-5"></label>
-										<input class="star star-4" id="taste-4" type="radio" name="taste" />
-										<label class="star star-4" for="taste-4"></label>
-										<input class="star star-3" id="taste-3" type="radio" name="taste" />
-										<label class="star star-3" for="taste-3"></label>
-										<input class="star star-2" id="taste-2" type="radio" name="taste" />
-										<label class="star star-2" for="taste-2"></label>
-										<input class="star star-1" id="taste-1" type="radio" name="taste" />
-										<label class="star star-1" for="taste-1"></label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>서비스</td>
-								<td>
-									<div class="rating serviceRate" style="display: inline-block;">
-										<input class="star star-5" id="service-5" type="radio" name="service" />
-										<label class="star star-5" for="service-5"></label>
-										<input class="star star-4" id="service-4" type="radio" name="service" />
-										<label class="star star-4" for="service-4"></label>
-										<input class="star star-3" id="service-3" type="radio" name="service" />
-										<label class="star star-3" for="service-3"></label>
-										<input class="star star-2" id="service-2" type="radio" name="service" />
-										<label class="star star-2" for="service-2"></label>
-										<input class="star star-1" id="service-1" type="radio" name="service" />
-										<label class="star star-1" for="service-1"></label>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>멋(인테리어)</td>
-								<td>
-									<div class="rating interiorRate" style="display: inline-block;">
-										<input class="star star-5" id="interior-5" type="radio" name="interior" />
-										<label class="star star-5" for="interior-5"></label>
-										<input class="star star-4" id="interior-4" type="radio" name="interior" />
-										<label class="star star-4" for="interior-4"></label>
-										<input class="star star-3" id="interior-3" type="radio" name="interior" />
-										<label class="star star-3" for="interior-3"></label>
-										<input class="star star-2" id="interior-2" type="radio" name="interior" />
-										<label class="star star-2" for="interior-2"></label>
-										<input class="star star-1" id="interior-1" type="radio" name="interior" />
-										<label class="star star-1" for="interior-1"></label>
-									</div>
-								</td>
-							</tr>
-						</table>
-
-					</div>
-					<div class="col">
-						<input type="checkbox" id="honbabAccept" name="honbabAccept" value="true">
-						<label for="honbabAccept">1인 출입 가능 업장</label>
-						<input type="text" name="honbabReason" style="width: 100%;"	placeholder="제목을 써주세요">
-					</div>
-				</div>
-				<div class="row p-1">
-					<div class="col">
-						<!-- https://codepen.io/emiemi/pen/zxNXWR -->
-						<div class="card border rounded text-center justify-content-center">
-							<!-- <input type="file" name="revImgFile" style="width: 100%;" placeholder="사진을 이 곳에 업로드 해주세요"> -->
-							<div class="btn-container">
-								<!--the three icons: default, ok file (img), error file (not an img)-->
-								<h1 class="imgupload"><i class="fa fa-file-image-o"></i></h1>
-								<h1 class="imgupload ok"><i class="fa fa-check"></i></h1>
-								<h1 class="imgupload stop"><i class="fa fa-times"></i></h1>
-								<!--this field changes dinamically displaying the filename we are trying to upload-->
-								<p id="namefile">사진만 올려주세요!(jpg,jpeg,bmp,png)</p>
-								<!--our custom btn which which stays under the actual one-->
-								<button type="button" id="btnup" class="btn btn-primary btn-lg">파일 선택</button>
-								<input type="file" value="" name="fileup" id="fileup">
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<textarea name="reviewContent" style="width: 100%; height: 100%;"
-							placeholder="상세 내용을 입력해주세요"></textarea>
-					</div>
-				</div>
-			</div>
-			<div class="row py-3">
-				<div class="col text-center">
-					<button class="btn border bd-secondary">취소</button>
-					<input type="submit" class="btn border bd-secondary" value="등록"/>
-				</div>
-			</div>
-		</form>
-	</div>
+<!-- 게시판 수정 -->
+	<section id="articleForm">
+		<h2>글 내용 상세보기</h2>
+		<section id="basicInfoArea">
+			제 목 : ${article.board_subject }
+			첨부파일 :
+			<c:if test="${article.board_filename!=null }">
+				<a href="file_down?downFile=${article.board_filename}"> ${article.board_filename} </a>
+			</c:if>
+	</section>
+	<section id="articleContentArea">
+		${article.board_content }
+	</section>
+	</section>
+	<section id="commandList">
+		<a href="replyform?board_num=${article.board_num}&page=${page}"> [답변] </a> 
+		<a href="modifyform?board_num=${article.board_num}"> [수정] </a> 
+		<a href="deleteform?board_num=${article.board_num}&page=${page}"> [삭제] </a>
+		<a href="./boardlist?page=${page}"> [목록]</a>&nbsp;&nbsp;
+	</section>
 
 	<script>
 	$('#fileup').change(function(){
