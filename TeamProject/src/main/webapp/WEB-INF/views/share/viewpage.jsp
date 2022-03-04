@@ -72,7 +72,7 @@
         </section>
         <section>
             <div>
-                <<input type="textarea" class="comment area">
+                <input type="textarea" class="comment area">
                 <button type="button" value="comment reply">댓글입력</button>
             </div>
         </section>
