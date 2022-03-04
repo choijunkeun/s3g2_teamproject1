@@ -14,6 +14,10 @@ public class SearchController {
 	public String searchMain() {
 		return "search/main";
 	}
+	@GetMapping({"/test"})
+	public String searchtest() {
+		return "search/test";
+	}
 	
 	@PostMapping({"", "/"})
 	public String searchWithOptionFromMain(@RequestParam(value="keyword", required=false) String keyword,
