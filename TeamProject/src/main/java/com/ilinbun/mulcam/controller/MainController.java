@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.UserService;
@@ -27,7 +28,7 @@ public class MainController {
 	@Autowired
 	HttpSession session;
 
-	@GetMapping({ "", "/index" })
+	@GetMapping({"", "/index"})
 	public String Main() {
 		return "main";
 	}
@@ -37,10 +38,24 @@ public class MainController {
 	public String getJoin() {
 		return "/user/joinForm";
 	}
+	
+	// 닉네임 중복 확인 컨트롤러
+	@ResponseBody
+	@PostMapping(value="/nickoverlap")
+	public String userOverlap(@RequestParam(value="nickname", required=true)String nickname) {
+		boolean overlap=false;
+		try {
+			overlap=userService.userOverlap(nickname);
+		} catch(Exception e) {
+		}
+		return String.valueOf(overlap);
+	}
 
 	// 회원가입 기능 컨트롤러
 	@PostMapping("/join")
 	public String postJoin(User user) throws Exception {
+		
+		System.out.println(user.getHonbabLevel());
 		userService.makeUser(user);
 		return "redirect:/loginSuccess"; 
 	}
@@ -48,7 +63,7 @@ public class MainController {
 	// 회원가입 완료 폼으로 가는 컨트롤러
 	@GetMapping("/loginSuccess")
 	public String loginSuccess() {
-		return "user/joinSuccessForm";
+		return "/user/joinSuccessForm";
 	}
 
 	// 로그인 폼으로 이동하는 컨트롤러
@@ -59,26 +74,26 @@ public class MainController {
 
 	// 로그인 기능 컨트롤러
 	@PostMapping("/login")
-	public String login(@RequestParam(value="user_email")String user_email,
-			@RequestParam(value="user_password") String user_password, Model model, HttpServletResponse response, boolean rememberEmail) throws Exception {
+	public String login(@RequestParam(value="email")String email,
+			@RequestParam(value="password") String password, Model model, HttpServletResponse response, boolean rememberEmail) throws Exception {
 		System.out.println("1");
 		try {
-			userService.loginUser(user_email, user_password);
+			userService.loginUser(email, password);
 			System.out.println("2");
-			session.setAttribute("user_email", user_email);
+			session.setAttribute("email", email);
 			System.out.println("3");
 			// 쿠키기능(로그인저장)
 			if (rememberEmail) {
 				// 1. 쿠키를 생성
 				System.out.println("4");
-				Cookie cookie = new Cookie("user_email", user_email);
+				Cookie cookie = new Cookie("email", email);
 				// 2. 응답에 저장
 				response.addCookie(cookie);
 				System.out.println("5");
 			} else {
 				// 1. 쿠키를 생성
 				System.out.println("6");
-				Cookie cookie = new Cookie("user_email", user_email);
+				Cookie cookie = new Cookie("email", email);
 				// 쿠키의 유효기간 0으로 설정
 				System.out.println("7");
 				cookie.setMaxAge(0);
@@ -109,6 +124,12 @@ public class MainController {
 	@GetMapping("/myPage")
 	public String myPage() {
 		return "user/myPageForm";
+	}
+	
+	//정보 수정 페이지로 이동하는 컨트롤러
+	@GetMapping("/editInfo")
+	public String editInfo() {
+		return "user/editInfoForm";
 	}
 
 }
