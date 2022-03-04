@@ -202,16 +202,16 @@
 				<button type="button" class="btn btn-danger dropdown-toggle"
 					id="honbabLevelDropdown" data-bs-toggle="dropdown" aria-expanded="false">혼밥 레벨</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="honbabLevelDropdown">
+					<li><button class="dropdown-item" type="button">
+					<span class="badge rounded-pill" style="background: #F6CECE">Lv. 1</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F6CECE">Lv. 1</button></a></li>
+							class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</button></a></li>
+							class="badge rounded-pill" style="background: #F78181">Lv. 3</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F78181">Lv. 3</button></a></li>
+							class="badge rounded-pill" style="background: #FA5858">Lv. 4</span></button></li>
 					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #FA5858">Lv. 4</button></a></li>
-					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #FF0000">Lv. 5</button></a></li>
+							class="badge rounded-pill" style="background: #FF0000">Lv. 5</span></button></li>
 				</ul>
 			</div>
 			<div class="input-group" style="flex-shrink:1;">
@@ -224,11 +224,11 @@
 				<button type="button" class="btn btn-secondary dropdown-toggle"
 					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별 검색</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-					<li><button class="dropdown-item" type="button">종합 평점 순</a></li>
-					<li><button class="dropdown-item" type="button">가격 순</a></li>
-					<li><button class="dropdown-item" type="button">맛 평점 순</a></li>
-					<li><button class="dropdown-item" type="button">서비스 평점 순</a></li>
-					<li><button class="dropdown-item" type="button">인테리어 평점 순</a></li>
+					<li><button class="dropdown-item" type="button">종합 평점 순</button></li>
+					<li><button class="dropdown-item" type="button">가격 순</button></li>
+					<li><button class="dropdown-item" type="button">맛 평점 순</button></li>
+					<li><button class="dropdown-item" type="button">서비스 평점 순</button></li>
+					<li><button class="dropdown-item" type="button">인테리어 평점 순</button></li>
 				</ul>
 			</div>
 		</div>
@@ -377,28 +377,122 @@
 		function getListItem(index, places) {
 		
 		    var el = document.createElement('li'),
-		    itemStr = '<form action="./place/' + places.id + '" method="post"><span class="markerbg marker_' + (index+1) + '"></span>' +
-		                '<div class="info">' +
-		                '   <h5>' + places.place_name + '</h5>';
+		    //itemStr = '<form action="./place/' + places.id + '" method="post"><span class="markerbg marker_' + (index+1) + '"></span>';
+			//itemStr += '<div class="info">' +
+		    //            '   <h5>' + places.place_name + '</h5>';
 		
-		    if (places.road_address_name) {
-		        itemStr += '    <span>' + places.road_address_name + '</span>' +
-		                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
-		    } else {
-		        itemStr += '    <span>' +  places.address_name  + '</span>'; 
-		    }
-		                 
-		      itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-		     /* '<a href="./place/' + places.id + '" style="text-decoration:none;">상세보기</a>' +  */
-		     '<input type="hidden" name="place_name" value="' + places.place_name + '">' + 
-		     '<input type="submit" class="btn" value="상세보기">'+
-		                '</div></form>';           
+		    //if (places.road_address_name) {
+		    //    itemStr += '    <span>' + places.road_address_name + '</span>' +
+		    //                '   <span class="jibun gray">' +  places.address_name  + '</span>';
+		    //} else {
+		    //    itemStr += '    <span>' +  places.address_name  + '</span>'; 
+		    //}
+		    //             
+		    //  itemStr += '  <span class="tel">' + places.phone  + '</span>';
+		    // /* '<a href="./place/' + places.id + '" style="text-decoration:none;">상세보기</a>' +  */
+		    // itemStr += '<input type="hidden" name="place_name" value="' + places.place_name + '">' + 
+		    // '<input type="submit" class="btn" value="상세보기">';
+		    //            itemStr +='</div></form>';
+			    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>';
+			    itemStr += '<div class="info"><h5>' + places.place_name + '</h5>';
+			    if (places.road_address_name) {
+			        itemStr += '    <span>' + places.road_address_name + '</span>' +
+			                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+			    } else {
+			        itemStr += '    <span>' +  places.address_name  + '</span>'; 
+			    }
+				itemStr += '  <span class="tel">' + places.phone  + '</span>';
+				//itemStr += makePlaceHiddenForm(places);
+				itemStr += '</div>';
 		
 		    el.innerHTML = itemStr;
 		    el.className = 'item';
+		    el.children[1].appendChild(makePlaceHiddenForm(places));
 		
 		    return el;
 		}
+		
+		function makePlaceHiddenForm(places){
+			var f = document.createElement('form');
+			
+			let objid = document.createElement('input');
+			objid.setAttribute('type', 'hidden');
+			objid.setAttribute('name', 'id');
+			objid.setAttribute('value', places.id);
+			f.appendChild(objid);
+			
+			let objplace_name = document.createElement('input');
+			objplace_name.setAttribute('type', 'hidden');
+			objplace_name.setAttribute('name', 'place_name');
+			objplace_name.setAttribute('value', places.place_name);
+			f.appendChild(objplace_name);
+			
+			let objcategory_name = document.createElement('input');
+			objcategory_name.setAttribute('type', 'hidden');
+			objcategory_name.setAttribute('name', 'category_name');
+			objcategory_name.setAttribute('value', places.category_name);
+			f.appendChild(objcategory_name);
+			
+			let objcategory_group_code = document.createElement('input');
+			objcategory_group_code.setAttribute('type', 'hidden');
+			objcategory_group_code.setAttribute('name', 'category_group_code');
+			objcategory_group_code.setAttribute('value', places.category_group_code);
+			f.appendChild(objcategory_group_code);
+			
+			let objcategory_group_name = document.createElement('input');
+			objcategory_group_name.setAttribute('type', 'hidden');
+			objcategory_group_name.setAttribute('name', 'category_group_name');
+			objcategory_group_name.setAttribute('value', places.category_group_name);
+			f.appendChild(objcategory_group_name);
+			
+			let objphone = document.createElement('input');
+			objphone.setAttribute('type', 'hidden');
+			objphone.setAttribute('name', 'phone');
+			objphone.setAttribute('value', places.phone);
+			f.appendChild(objphone);
+			
+			let objaddress_name = document.createElement('input');
+			objaddress_name.setAttribute('type', 'hidden');
+			objaddress_name.setAttribute('name', 'address_name');
+			objaddress_name.setAttribute('value', places.address_name);
+			f.appendChild(objaddress_name);
+			
+			let objroad_address_name = document.createElement('input');
+			objroad_address_name.setAttribute('type', 'hidden');
+			objroad_address_name.setAttribute('name', 'road_address_name');
+			objroad_address_name.setAttribute('value', places.road_address_name);
+			f.appendChild(objroad_address_name);
+			
+			let objx = document.createElement('input');
+			objx.setAttribute('type', 'hidden');
+			objx.setAttribute('name', 'x');
+			objx.setAttribute('value', places.x);
+			f.appendChild(objx);
+			
+			let objy = document.createElement('input');
+			objy.setAttribute('type', 'hidden');
+			objy.setAttribute('name', 'y');
+			objy.setAttribute('value', places.y);
+			f.appendChild(objy);
+			
+			let objplace_url = document.createElement('input');
+			objplace_url.setAttribute('type', 'hidden');
+			objplace_url.setAttribute('name', 'place_url');
+			objplace_url.setAttribute('value', places.place_url);
+			f.appendChild(objplace_url);
+			
+			let objsubmit = document.createElement('input');
+			objsubmit.setAttribute('type', 'submit');
+			objsubmit.className = 'btn';
+			objsubmit.setAttribute('value', "상세보기");
+			f.appendChild(objsubmit);
+			
+			f.setAttribute('method', 'post');
+			f.setAttribute('action', './place/'+places.id);
+			//f.setAttribute('enctype', 'application/json');
+			return f;
+		}
+		
 		
 		// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 		function addMarker(position, idx, title) {
