@@ -9,7 +9,7 @@
 #articleForm {
 	width: 700px;
 	height: 500px;
-	border: 1px solid red;
+	/* border: 1px solid red; */
 	margin: auto;
 }
 
@@ -17,15 +17,21 @@ h2 {
 	text-align: center;
 }
 
+a {
+	text-decoration-line: none;
+	color: black;
+
+}
+
 #basicInfoArea {
 	height: 40px;
-	text-align: center;
+	text-align: left;
 }
 
 #articleContentArea {
 	background:  #f6f3f3;
-	margin-top: 20px;
-	height: 350px;
+	margin-top: 10px;
+	height: 410px;
 	text-align: center;
 	overflow: auto;
 }
@@ -41,15 +47,19 @@ h2 {
 <body>
 	<!-- 게시판 수정 -->
 	<section id="articleForm">
-		<h2>글 내용 상세보기</h2>
-		<section id="basicInfoArea">
-			제 목 : ${article.board_subject }
+		<h2>커뮤니티</h2>
+		
+	<section id="articleContentArea">
+	<section id="basicInfoArea">
+			제 목 : ${article.board_subject }<br>
 			첨부파일 :
 			<c:if test="${article.board_filename!=null }">
 				<a href="file_down?downFile=${article.board_filename}"> ${article.board_filename} </a>
 			</c:if>
-	</section>
-	<section id="articleContentArea">
+			<br>
+			<a href="./boardlist?page=${page}" style="text-align: left"> ${article.board_name }</a>
+			 조회수 ${article.board_readcount }  작성일 ${article.board_date }
+	</section><br><br>
 		${article.board_content }
 	</section>
 	</section>

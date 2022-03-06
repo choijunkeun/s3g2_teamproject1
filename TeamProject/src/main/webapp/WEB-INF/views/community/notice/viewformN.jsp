@@ -41,7 +41,7 @@ h2 {
 <body>
 	<!-- 게시판 수정 -->
 	<section id="articleForm">
-		<h2>글 내용 상세보기</h2>
+		<h2>공지사항</h2>
 		<section id="basicInfoArea">
 			제 목 : ${article.board_subject }
 			첨부파일 :
