@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
-<%!User user = new User("mockup@mock.up", "목업", "", "#", 5, 1);%>
+<%!User user = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);%>
 <c:set var="user" value='<%=user%>' />
 <!-- 목업 코드 -->
 
@@ -141,8 +141,9 @@
 				<!-- <div>용궁반점 여기에 대충 위치 표시하는 용도</div> -->
 				<h2>
 					<a href="javascript:window.history.back();" style="text-decoration: none; color: black;">
-						<i class="fa fa-angle-left"></i> <strong>${place_name }</strong></a>
+						<i class="fa fa-angle-left"></i> <strong>${pr.place_name }</strong></a>
 				</h2>
+				<p>${pr.address_name}</p>
 			</div>
 			<!-- <div class="placeImgSection">
 				<img src="#">
@@ -150,8 +151,8 @@
 		</div>
 		<form action="../writeReview" method="post" enctype="multipart/form-data" id="prForm">
 		<!-- <form id="prForm"> -->
-			<input type="hidden" name="user_PK" id="user_PK" value="1"> <!-- 목업 유저정보 코드 -->
-			<input type="hidden" name="id" id="id" value="${id }"> <!-- 장소값 코드 -->
+			<input type="hidden" name="user_PK" id="user_PK" value="${user.idx }"> <!-- 목업 유저정보 코드 -->
+			<input type="hidden" name="id" id="id" value="${pr.id }"> <!-- 장소값 코드 -->
 			<div class="container p-2 ">
 				<div class="row p-1 text-center ">
 					<div class="col"> <!-- https://codepen.io/jexordexan/pen/yyYEJa -->

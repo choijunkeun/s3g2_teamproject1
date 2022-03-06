@@ -1,9 +1,9 @@
 package com.ilinbun.mulcam.controller;
 
 import java.io.File;
-import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.Place;
 import com.ilinbun.mulcam.dto.PlaceReview;
+import com.ilinbun.mulcam.dto.PlaceReviewExtended;
 import com.ilinbun.mulcam.service.PlaceReviewService;
 
 @RestController
@@ -45,9 +48,10 @@ public class PlaceController {
 			@RequestParam("road_address_name") String road_address_name,
 			@RequestParam("x") String x,
 			@RequestParam("y") String y,
-			@RequestParam("place_url") String place_url
+			@RequestParam("place_url") String place_url,
+			@RequestParam(value="page", required=false, defaultValue="1") int page
 			) {
-		ModelAndView mv = new ModelAndView("place/place");
+		ModelAndView mv = new ModelAndView();
 		mv.addObject("id", id);
 		
 		Place place = new Place(Integer.parseInt(id), 
@@ -62,16 +66,40 @@ public class PlaceController {
 				Double.parseDouble(y),
 				place_url);
 		
-		mv.addObject("place", place);
+		PageInfo pageInfo = new PageInfo();
+		try {
+			List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(page, pageInfo, place.getId());
+			mv.addObject("pageInfo", pageInfo);
+			mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
+			mv.addObject("prList", reviewList);
+			mv.addObject("place", place);
+			mv.setViewName("place/place");
+		}catch (Exception e) {
+			e.printStackTrace();
+			mv.addObject("err", e.getMessage());
+			mv.setViewName("/main/err");
+		}
+		
 		
 		return mv;
 	}
 	
+//	@PostMapping("/review/{id}")
+//	public ModelAndView reviewForm(@PathVariable String id, @RequestParam("place_name") String place_name) {
+//		ModelAndView mv = new ModelAndView("place/reviewForm");
+//		mv.addObject("id", id);
+//		mv.addObject("place_name", place_name);
+//		
+//		return mv;
+//	}
+	
 	@PostMapping("/review/{id}")
-	public ModelAndView reviewForm(@PathVariable String id, @RequestParam("place_name") String place_name) {
+	public ModelAndView reviewForm(@PathVariable String id, @ModelAttribute Place place) {
 		ModelAndView mv = new ModelAndView("place/reviewForm");
 		mv.addObject("id", id);
-		mv.addObject("place_name", place_name);
+		mv.addObject("pr", place);
+		
+		System.out.println(place.getId());
 		
 		return mv;
 	}

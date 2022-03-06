@@ -53,8 +53,11 @@ public class User {
 	
 	public User() {};
 	
-	public User(String email, String nickname, String password, String profileImg, int honbabLevel, int group) {
+	
+	
+	public User(int idx, String email, String nickname, String password, String profileImg, int honbabLevel, int group) {
 		super();
+		this.idx= idx;
 		this.email = email;
 		this.nickname = nickname;
 		this.password = password;
