@@ -32,8 +32,8 @@
 					<div class="btn">Logout</div>
 					<div class="membersection py-1">
 						<!-- membersection도 나중에 쓸 것 같아서 임의로 붙인 클래스 -->
-						<span class="badge bg-danger rounded-pill">Lv.${user.user_honbabLevel }</span>
-						<div class="border pb-2 pt-1 rounded" style="display: inline;">${user.user_nickname }
+						<span class="badge bg-danger rounded-pill">Lv.${user.honbabLevel }</span>
+						<div class="border pb-2 pt-1 rounded" style="display: inline;">${user.nickname }
 							님</div>
 							<a href="myPage">
 						<img style="border-radius: 50px; width: 30px; height: 30px;"

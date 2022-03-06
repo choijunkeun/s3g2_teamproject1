@@ -23,7 +23,7 @@
             top:50%;
             left:50%;
             transform: translate(-50%, -50%) ;
-            border: 1px solid rgb(89,117,196);
+            border: 1px solid #d3d3d3;
             border-radius: 10px;
              
             
@@ -114,11 +114,11 @@
    	
     <div>
     <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="user_email" value="${cookie.email.value}" placeholder="이메일을 입력해주세요.">
+    <input class="input-field" type="email" id="email" name="email" value="${cookie.email.value}" placeholder="이메일을 입력해주세요.">
     </div>
    <div>
    	<label for="password">비밀번호</label>
-    <input class="input-field" type="text" id="password" name="user_password" placeholder="비밀번호를 입력해주세요.">
+    <input class="input-field" type="text" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
      </div>
      
      <div>
