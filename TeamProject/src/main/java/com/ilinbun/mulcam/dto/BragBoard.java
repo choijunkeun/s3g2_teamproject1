@@ -4,13 +4,13 @@ import java.sql.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Bragboard { // 자랑
+public class BragBoard { // 자랑
 
 	
 	int articleNo; 
-	int user_PK;
+	int idx;
 
-	int inRestaurant;
+	boolean inRestaurant;
 	
 	String title; 
 	String location;
@@ -20,28 +20,15 @@ public class Bragboard { // 자랑
 	String imgfilename; 
 	String content; 
 	
-	MultipartFile file;
-
-	
-	public MultipartFile getFile() {
-		return file;
-	}
-
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
-
-	public  Bragboard() {
+	public  BragBoard() {
 		
 	}
 
-	
-
-	public Bragboard(int articleNo, int user_PK, int inRestaurant, String title, String location, int readCount,
-			Date date, String imgfilename, String content, MultipartFile file) {
+	public BragBoard(int articleNo, int idx, boolean inRestaurant, String title, String location, int readCount,
+			Date date, String imgfilename, String content) {
 		super();
 		this.articleNo = articleNo;
-		this.user_PK = user_PK;
+		this.idx = idx;
 		this.inRestaurant = inRestaurant;
 		this.title = title;
 		this.location = location;
@@ -49,7 +36,18 @@ public class Bragboard { // 자랑
 		this.date = date;
 		this.imgfilename = imgfilename;
 		this.content = content;
-		this.file = file;
+	}
+
+	public BragBoard(int idx, boolean inRestaurant, String title, String location, int readCount, String imgfilename,
+			String content) {
+		super();
+		this.idx = idx;
+		this.inRestaurant = inRestaurant;
+		this.title = title;
+		this.location = location;
+		this.readCount = readCount;
+		this.imgfilename = imgfilename;
+		this.content = content;
 	}
 
 	public int getArticleNo() {
@@ -60,19 +58,19 @@ public class Bragboard { // 자랑
 		this.articleNo = articleNo;
 	}
 
-	public int getUser_PK() {
-		return user_PK;
+	public int getIdx() {
+		return idx;
 	}
 
-	public void setUser_PK(int user_PK) {
-		this.user_PK = user_PK;
+	public void setIdx(int idx) {
+		this.idx = idx;
 	}
 
-	public int getInRestaurant() {
+	public boolean isInRestaurant() {
 		return inRestaurant;
 	}
 
-	public void setInRestaurant(int inRestaurant) {
+	public void setInRestaurant(boolean inRestaurant) {
 		this.inRestaurant = inRestaurant;
 	}
 
@@ -123,7 +121,6 @@ public class Bragboard { // 자랑
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 
 	
 	

@@ -14,7 +14,7 @@
 	
 </head>
 <body>
-<!-- <a></a> BEST게시판 이동 링크 --> ${BragBest1.user_PK } ${BragBest1.content } ${BragBest1.location }
+<!-- <a></a> BEST게시판 이동 링크 --> ${BragBest1.idx } ${BragBest1.content } ${BragBest1.location }
 	
 	<div class="row justify-content-center">
 		<div class="col mt-5">

@@ -1,10 +1,15 @@
 package com.ilinbun.mulcam.controller;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,22 +18,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilinbun.mulcam.dto.Bragboard;
+import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.service.BragService;
+import com.ilinbun.mulcam.service.UserService;
 
 @Controller
 @RequestMapping("/brag")
 public class BragController {
 	@Autowired
-	BragService bragService;
+	private BragService bragService;
 	
 	@Autowired
 	private ServletContext servletContext;
 	
-	@Autowired(required=false)
-	Bragboard bragboard;
+	@Autowired(required=false) //이건 왜 한거지?
+	BragBoard bragboard;
 	
 	//이달의 혼밥 사진 나타내는 컨트롤러
 	@GetMapping("")
@@ -57,32 +66,94 @@ public class BragController {
 	
 	//글쓰기
 	@GetMapping("/writeform")
-	public String bragwriteform() {
+	public String bragwriteform(Model model) {
+		// HttpSession session = null;
+		//이거는 가라데이터. 로그인 되면 session에서 받아 올거야!!!!!!!!
+		String test = "th@th.com";
+		model.addAttribute("email", test);
 		return "brag/writeForm";
 	}
-	@PostMapping("bragwrite")
-	public ModelAndView bragWrite(@ModelAttribute Bragboard bragboard) {
-		ModelAndView mav=new ModelAndView();
-		//예외처리 시 응답으로 보여줄 jsp 화면이 다르기 때문에 생성자에 viewName을 담지 않았다.
+//	@PostMapping("bragwrite")
+//	public ModelAndView bragWrite(@ModelAttribute Bragboard bragboard) {
+//		ModelAndView mav=new ModelAndView();
+//		System.out.println("문제");
+//		//예외처리 시 응답으로 보여줄 jsp 화면이 다르기 때문에 생성자에 viewName을 담지 않았다.
+//		try {
+//			if(!bragboard.getFile().isEmpty()) { //file input태그는 required 형태가 아니므로
+//				//넘어온 데이터가 있을 경우에만 파일 처리를 한다.
+//				String path=servletContext.getRealPath("/bragupload/"); //webapp에 만들어줌. 근데 boardupload(다른 사람들)도 있는데 갠찮나?
+//				File destFile=new File(path+bragboard.getFile().getOriginalFilename());
+//				bragboard.setImgfilename(bragboard.getFile().getOriginalFilename());
+//				//Board 객체의 멤버변수값 초기화하는 작업
+//				bragboard.getFile().transferTo(destFile);
+//				//서버 저장 경로(destFile)에 매개변수로 가져온 파일 객체(board.getFile())를 복사하여 저장(transferTo)
+//			}
+//			bragService.regBragBoard(bragboard); //bragboard를 DB에 저장함
+//			mav.setViewName("redirect:/brag/brag");
+//			//foward방식으로 넘겨주는것이 아니라 redirect로 다시 일반게시판 컨트롤러로 요청한다.
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			mav.addObject("err", "새글 등록 실패");
+//			mav.setViewName("/main/err");
+//		}
+//		return mav;
+//	}
+	
+	@ResponseBody
+	@PostMapping("/bragwrite")
+	public ResponseEntity<String> bragwrite(@RequestPart("key") Map<String, String> param,
+			@RequestPart(value="file", required=true) MultipartFile file) {
+		ResponseEntity<String> result = null;
+
+		//Map<String, Object> result = new HashMap<String, Object>();
+		
+		System.out.println(file.getOriginalFilename());
+		System.out.println(param.get("content"));	
+		System.out.println(param.get("email"));	
+		System.out.println(param.get("moonpa"));	
+		
+
+		
 		try {
-			if(!bragboard.getFile().isEmpty()) { //file input태그는 required 형태가 아니므로
-				//넘어온 데이터가 있을 경우에만 파일 처리를 한다.
-				String path=servletContext.getRealPath("/bragupload/");
-				File destFile=new File(path+bragboard.getFile().getOriginalFilename());
-				bragboard.setImgfilename(bragboard.getFile().getOriginalFilename());
-				//Board 객체의 멤버변수값 초기화하는 작업
-				bragboard.getFile().transferTo(destFile);
-				//서버 저장 경로(destFile)에 매개변수로 가져온 파일 객체(board.getFile())를 복사하여 저장(transferTo)
-			}
-			bragService.regBragBoard(bragboard);
-			mav.setViewName("redirect:/brag/brag");
-			//foward방식으로 넘겨주는것이 아니라 redirect로 다시 일반게시판 컨트롤러로 요청한다.
+			// 이미지 파일의 이름을 바꿔봅시다
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+			Date now = new Date(); 
+			String nowTime = sdf.format(now);
+			
+			System.out.println("파일 업로드 시도");
+			String path=servletContext.getRealPath("/bragupload/");
+			System.out.println(path);
+
+			
+			File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
+			System.out.println("1");
+			System.out.println(destFile.getAbsolutePath());
+			file.transferTo(destFile);
+			System.out.println("SUCCESS");
+			
+			BragBoard bb = new BragBoard( 
+					/* param.get("reviewContent"), */
+					Integer.parseInt("2"),
+					Boolean.parseBoolean(param.get("moonpa")), 
+					param.get("title"), 
+					param.get("location"),
+					0,
+					nowTime + "_" + file.getOriginalFilename(),
+					param.get("content")
+				);
+			
+			bragService.regBragBoard(bb);
+			result = new ResponseEntity<String>("success", HttpStatus.OK);
+			//boardService.regBoard(board);
+			//mv.setViewName("redirect:/board/boardlist");
 		} catch(Exception e) {
 			e.printStackTrace();
-			mav.addObject("err", "새글 등록 실패");
-			mav.setViewName("brag/err");
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+			//mv.addObject("err", "새 글 등록 실패");
+			//mv.addObject("/board/err");
 		}
-		return mav;
+		
+		return result;	
 	}
 	
 	
@@ -138,7 +209,7 @@ public class BragController {
 		public ModelAndView bragmodifyform(@RequestParam(value="articleNo")int articleNo) {
 			ModelAndView mav=new ModelAndView();
 			try {
-				Bragboard Bragboard = bragService.getArticleNo(articleNo);
+				BragBoard Bragboard = bragService.getArticleNo(articleNo);
 				mav.addObject("article", Bragboard);
 				mav.setViewName("brag/modifyForm");
 			} catch(Exception e) {
@@ -150,7 +221,7 @@ public class BragController {
 		}
 		
 		@PostMapping(value="/bragmodify")
-		public ModelAndView bragmodify(@ModelAttribute Bragboard bragboard) {
+		public ModelAndView bragmodify(@ModelAttribute BragBoard bragboard) {
 			ModelAndView mav=new ModelAndView();
 			try {
 				bragService.modifyBragBoard(bragboard);

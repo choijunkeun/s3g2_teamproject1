@@ -53,17 +53,10 @@ public class User {
 	
 	public User() {};
 	
-	public User(String email, String nickname, String password, String profileImg, int honbabLevel, int group) {
+	public User(int idx, String email, String nickname, String password, String profileImg, int honbabLevel, int group) {
 		super();
-<<<<<<< HEAD
-		this.user_email = user_email;
-		this.user_nickname = user_nickname;
-		this.user_password = user_password;
-		this.user_profileImg = user_profileImg;
-		this.user_honbabLevel = user_honbabLevel;
-		this.user_group = user_group;
-	}	
-=======
+
+		this.idx = idx;
 		this.email = email;
 		this.nickname = nickname;
 		this.password = password;
@@ -75,6 +68,4 @@ public class User {
 	
 
 	
-	
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
 }

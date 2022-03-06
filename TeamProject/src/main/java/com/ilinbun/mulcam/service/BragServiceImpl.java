@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
-import com.ilinbun.mulcam.dto.Bragboard;
+import com.ilinbun.mulcam.dto.BragBoard;
 
 @Service
 public class BragServiceImpl implements BragService {
@@ -16,21 +16,21 @@ public class BragServiceImpl implements BragService {
 	BragDAO bragDAO;
 	
 	@Override
-	public Bragboard bragBest1() throws Exception {
+	public BragBoard bragBest1() throws Exception {
 		// bragDAO에서 DB를 통해 gragBest1가져오기
-		Bragboard best = bragDAO.bragBest1();
+		BragBoard best = bragDAO.bragBest1();
 		return best;
 	}
 
 	@Override
-	public Bragboard bragBoardQueryByID(String id) throws Exception {
+	public BragBoard bragBoardQueryByID(String id) throws Exception {
 		//articleNo 가져와서 그 글을 보여주는 쿼리
-		Bragboard reviewform = bragDAO.bragBoardQueryByID(id);
+		BragBoard reviewform = bragDAO.bragBoardQueryByID(id);
 		return reviewform;
 	}
 
 	@Override
-	public void regBragBoard(Bragboard bragboard) throws Exception {
+	public void regBragBoard(BragBoard bragboard) throws Exception {
 		//처음 글쓰기 등록하는 서비스 (완성!)
 				Integer articleNo = bragDAO.selectMaxArticleNo ();
 				if(articleNo==null) articleNo = 1;
@@ -42,7 +42,7 @@ public class BragServiceImpl implements BragService {
 			}
 	
 	@Override
-	public List<Bragboard> getBragboardList(int articleNo) throws Exception {
+	public List<BragBoard> getBragboardList(int articleNo) throws Exception {
 		int listCount=bragDAO.selectBragBoardCount();
 		//table에 있는 모든 row 개수
 		
@@ -65,7 +65,7 @@ public class BragServiceImpl implements BragService {
 	} 
 
 	@Override
-	public Bragboard getArticleNo(int articleNo) throws Exception {
+	public BragBoard getArticleNo(int articleNo) throws Exception {
 		bragDAO.updateReadCount(articleNo);
 		//사용자가 게시판 목록에서 글 상세보기를 눌렀기 때문에 조회수를 1 늘려주는 쿼리문을 수행한 후에
 		//해당 글의 DB정보를 select 해온다.
@@ -103,7 +103,7 @@ public class BragServiceImpl implements BragService {
 //	}
 
 	@Override
-	public void modifyBragBoard(Bragboard bragboard) throws Exception {
+	public void modifyBragBoard(BragBoard bragboard) throws Exception {
 	
 	}
 // 글삭제 나중에

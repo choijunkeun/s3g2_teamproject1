@@ -7,7 +7,7 @@
 	<!-- 조회수 높은 순으로 1위(이달의 혼밥) 출력 쿼리. 사실 좋아요 순인데 나중에 바꾸기 -->	
 	<select id="bragBest1" resultType="Bragboard">
 		<![CDATA[
-			SELECT * FROM honbab order by readCount desc LIMIT 1 ;
+			SELECT * FROM honbab order by readCount desc LIMIT 1
 		]]>
 	</select>
 	
@@ -23,12 +23,9 @@
 	
  	<insert id="insertBragBoard" parameterType="Bragboard">
  		<![CDATA[
- 			insert into team2.honbab
- 			(articleNo, user_PK, inRestaurant, title, location, readCount, date,
- 			imgfilename, content)
+ 			insert into team2.honbab (idx, inRestaurant, title, location, readCount, imgfilename, content)
  			
- 			values (#{articleNo}, #{user_PK}, #{inRestaurant}, #{title}, #{location},
- 			#{readCount}, #{date}, #{imgfilename}, #{content}
+ 			values (#{idx}, #{inRestaurant}, #{title}, #{location}, #{readCount}, #{imgfilename}, #{content})
  		]]>
  		
  	</insert>
