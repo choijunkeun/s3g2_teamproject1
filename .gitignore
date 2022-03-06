@@ -4,10 +4,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-src/main/webapp/boardupload/
-src/main/webapp/revimgupload/
+src/main/webapp/boardupload/*
+src/main/webapp/revimgupload/*
 
-src/main/webapp/revimgupload
 
 ### STS ###
 .apt_generated
