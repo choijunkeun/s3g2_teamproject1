@@ -8,6 +8,8 @@ public interface UserService {
 	void makeUser(User user) throws Exception;
 	
 	//로그인
-	boolean loginUser(String user_email, String user_password) throws Exception;
+	boolean loginUser(String email, String password) throws Exception;
+
+	boolean userOverlap(String nickname) throws Exception;
 	
 }
