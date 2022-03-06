@@ -1,17 +1,39 @@
 package com.ilinbun.mulcam.controller;
 
-import org.springframework.stereotype.Controller;
+import java.io.File;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.Place;
+import com.ilinbun.mulcam.dto.PlaceReview;
+import com.ilinbun.mulcam.service.PlaceReviewService;
 
-@Controller
+@RestController
 @RequestMapping("/place")
-public class PlaceController {	
+public class PlaceController {
+	@Autowired
+	private PlaceReviewService placeReviewService;
+	
+	@Autowired
+	private ServletContext servletContext;
+	
 	@PostMapping("/{id}")
 	public ModelAndView placeInfo(@PathVariable String id, 
 			@RequestParam("place_name") String place_name,
@@ -46,11 +68,116 @@ public class PlaceController {
 	}
 	
 	@PostMapping("/review/{id}")
-	public ModelAndView writeReview(@PathVariable String id, @RequestParam("place_name") String place_name) {
+	public ModelAndView reviewForm(@PathVariable String id, @RequestParam("place_name") String place_name) {
 		ModelAndView mv = new ModelAndView("place/reviewForm");
 		mv.addObject("id", id);
 		mv.addObject("place_name", place_name);
 		
 		return mv;
+	}
+	
+//	@ResponseBody
+//	@PostMapping("/writeReview")
+//	public ResponseEntity<String> writeReview(@ModelAttribute PlaceReview pr) {
+//		System.out.println(pr);
+//		ResponseEntity<String> result = null;
+//		
+//		System.out.println("THREE");
+//		System.out.println(pr.getId());
+//		System.out.println(pr.getHonbabLv());
+//		System.out.println(pr.getReviewContent());
+//		System.out.println(pr.getRejectedCount());
+//		System.out.println(pr.getTasteRate());
+//		System.out.println(pr.getUser_PK());
+//				
+//		try {
+//			if(pr.getFile() != null) { // 파일 첨부시 파일 업로드
+//				System.out.println("파일 업로드 시도");
+//				String path=servletContext.getRealPath("/revimgupload/");
+//				System.out.println(path);
+//				
+//				// 이미지 파일의 이름을 바꿔봅시다
+//				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+//				Date now = new Date(); 
+//				String nowTime = sdf.format(now);
+//				
+//				File destFile = new File(path + nowTime + "_" + pr.getFile().getOriginalFilename());
+//				System.out.println("1");
+//				pr.setRevImgFilepath(nowTime + "_" + pr.getFile().getOriginalFilename());
+//				System.out.println(destFile.getAbsolutePath());
+//				pr.getFile().transferTo(destFile);
+//				System.out.println("SUCCESS");
+//				System.out.println(pr.getRevImgFilepath());
+//			}
+//			placeReviewService.writeBoard(pr);
+//			result = new ResponseEntity<String>("success", HttpStatus.OK);
+//			//boardService.regBoard(board);
+//			//mv.setViewName("redirect:/board/boardlist");
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+//			//mv.addObject("err", "새 글 등록 실패");
+//			//mv.addObject("/board/err");
+//		}
+//			
+//		return result;
+//	}
+	
+	@ResponseBody
+	@PostMapping("/writeReview")
+	public ResponseEntity<String> writeReview(@RequestPart("key") Map<String, String> param,
+			@RequestPart(value="file", required=false) MultipartFile file) {
+		ResponseEntity<String> result = null;
+
+		//Map<String, Object> result = new HashMap<String, Object>();
+		
+		System.out.println(file.getOriginalFilename());
+		System.out.println(param.get("reviewContent"));	
+
+		
+		try {
+			PlaceReview pr = new PlaceReview( 
+	                Integer.parseInt(param.get("id")), 
+					Integer.parseInt(param.get("user_PK")), 
+					param.get("reviewContent"), 
+					Boolean.parseBoolean(param.get("rejectedCount")), 
+					Integer.parseInt(param.get("honbabLv")), 
+					param.get("honbabReason"), 
+					Double.parseDouble(param.get("interiorRate")), 
+					Double.parseDouble(param.get("serviceRate")),
+					Double.parseDouble(param.get("priceRate")), 
+					Double.parseDouble(param.get("tasteRate"))
+				);
+			if(file != null) { // 파일 첨부시 파일 업로드
+				System.out.println("파일 업로드 시도");
+				String path=servletContext.getRealPath("/revimgupload/");
+				System.out.println(path);
+				
+				// 이미지 파일의 이름을 바꿔봅시다
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+				Date now = new Date(); 
+				String nowTime = sdf.format(now);
+				
+				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
+				System.out.println("1");
+				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
+				System.out.println(destFile.getAbsolutePath());
+				file.transferTo(destFile);
+				System.out.println("SUCCESS");
+				System.out.println(pr.getRevImgFilepath());
+			}
+			
+			placeReviewService.writeBoard(pr);
+			result = new ResponseEntity<String>("success", HttpStatus.OK);
+			//boardService.regBoard(board);
+			//mv.setViewName("redirect:/board/boardlist");
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+			//mv.addObject("err", "새 글 등록 실패");
+			//mv.addObject("/board/err");
+		}
+		
+		return result;	
 	}
 }

@@ -6,23 +6,15 @@
 <mapper namespace="com.ilinbun.mulcam.dao.UserDAO">
 	<insert id="join" parameterType="User">
 		<![CDATA[
-	    INSERT INTO user(email, nickname, password, honbabLevel)
-	                  VALUES(#{email}, #{nickname}, #{password}, #{honbabLevel})
+	    INSERT INTO user(user_email, user_nickname, user_password)
+	                  VALUES(#{user_email}, #{user_nickname}, #{user_password})
 	    ]]>
     </insert>
     
     <select id="login" resultType="user" parameterType="String">
     	<![CDATA[
-    	SELECT * FROM user WHERE email=#{email}      	
+    	SELECT * FROM user WHERE user_email=#{user_email}      	
     	]]>
     </select>
-    
-    <select id="nickCheck" resultType="user" parameterType="String">
-    	<![CDATA[
-    	SELECT * FROM user WHERE nickname=#{nickname}      	
-    	]]>
-    </select>
-    
-    
 
 </mapper>

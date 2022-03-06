@@ -4,10 +4,68 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.PlaceReviewDAO">	
-	<!-- <select id="nickCheck" resultType="int" parameterType="String">
+	<select id="selectMaxPRBoardNum" resultType="Integer">
 		<![CDATA[
-			select * from user where nickname=#{nickname}
+			select max(reviewNo) from reviewdb
+		]]>
+	</select>
+	
+	<select id="selectPRBoardList" resultType="placereview" parameterType="int"> <!-- -->
+		<![CDATA[ 
+			select user_PK, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv,  interiorRate, serviceRate, priceRate, tasteRate 
+				from (select @rownum:=@rownum+1 rnum, tot.* 
+					from (select * from reviewdb order by writeTime desc) tot, 
+					(select @rownum:=0) temp) sub
+			where rnum between #{startrow} and #{startrow}+9
+		]]>
+	</select>
+	<select id="selectPRBoardCount" resultType="int">
+		<![CDATA[
+			select count(*) from reviewdb
+		]]>
+	</select>
+	<insert id="insertReview" parameterType="placereview">
+		<![CDATA[
+			insert into reviewdb(
+			id,user_PK,reviewContent,revImgFilepath,
+			rejectedCount,honbabLv,honbabReason,
+			interiorRate,serviceRate,priceRate,tasteRate) 
+			values (#{id},#{user_PK},#{reviewContent},#{revImgFilepath},#{rejectedCount},#{honbabLv},
+				#{honbabReason},#{interiorRate},#{serviceRate},#{priceRate},#{tasteRate})
+		]]>
+		
+	</insert>
+	
+	<select id="selectReview" resultType="placereview" parameterType="int">
+		<![CDATA[
+			select * from reviewdb where reviewNo=#{reviewNo}
+		]]>
+	</select>
+	
+	<!-- <update id="updateReadCount" parameterType="int">
+		<![CDATA[
+			update reviewdb set board_readcount = board_readcount + 1 where BOARD_NUM=#{boardNum}
+		]]>
+	</update> -->
+	
+	<!-- <select id="selectPassword" parameterType="int" resultType="string">
+		<![CDATA[
+			select BOARD_PASS from reviewdb where BOARD_NUM=#{boardNum}
 		]]>
 	</select> -->
+	
+	<update id="updateReview" parameterType="placereview">
+		<![CDATA[
+			update reviewdb set reviewContent = #{reviewContent}, honbabReason=#{honbabReason},
+			interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP
+			where reviewNo=#{reviewNo}
+		]]>
+	</update>
+	
+	<delete id="deleteReview" parameterType="int">
+		<![CDATA[
+			delete from reviewdb where reviewNo=#{reviewNo}
+		]]>
+	</delete>
 
 </mapper>
