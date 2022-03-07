@@ -6,8 +6,18 @@
 <mapper namespace="com.ilinbun.mulcam.dao.ShareDAO">	
 	<select id="shareBoard" resultType="Shareboard">
 		<![CDATA[
-			SELECT * FROM shareboard ORDER BY sharebaord_articleno DESC LIMIT 1 
+			SELECT * FROM shareboard ORDER BY articleNo DESC LIMIT 1 
 		]]>
 	</select>
-
+	<!-- shareboard리스트 -->
+	<select id="selectShareBoardList" resultType="Shareboard" parameterType="int">
+ 		<![CDATA[
+ 			select *
+				from (select @rownum:=@rownum+1 rnum, tot.* 
+					from (select * from team2.shareboard order by articleNo) tot, 
+					(select @rownum:=0) temp) sub
+			where rnum between #{startrow} and #{startrow}+9		
+ 		]]>
+ 	</select>
+ 	
 </mapper>
