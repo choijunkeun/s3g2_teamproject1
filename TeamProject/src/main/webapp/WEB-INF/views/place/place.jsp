@@ -140,8 +140,6 @@
 				</section>
 			</div>
 			<script>
-				//var str = JSON.stringify(${place});
-				
 				function writeReview(){
 					let f = document.createElement('form');
 					
