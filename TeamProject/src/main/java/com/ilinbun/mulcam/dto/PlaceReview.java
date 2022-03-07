@@ -18,7 +18,7 @@ public class PlaceReview {
 	double priceRate; // reviewForm에서 작성됨
 	double tasteRate; // reviewForm에서 작성됨
 	Date writeTime;
-	MultipartFile file; // reviewForm에서 writeForm으로 넘어갈 때에 파일 담아주는 객체
+	//MultipartFile file; // reviewForm에서 writeForm으로 넘어갈 때에 파일 담아주는 객체
 		
 	public int getReviewNo() {
 		return reviewNo;
@@ -26,13 +26,13 @@ public class PlaceReview {
 	public void setReviewNo(int reviewNo) {
 		this.reviewNo = reviewNo;
 	}
-	public MultipartFile getFile() {
-		return file;
-	}
-
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
+//	public MultipartFile getFile() {
+//		return file;
+//	}
+//
+//	public void setFile(MultipartFile file) {
+//		this.file = file;
+//	}
 
 	public int getId() {
 		return id;
@@ -107,25 +107,27 @@ public class PlaceReview {
 		this.writeTime = writeTime;
 	}
 	
-	public PlaceReview(int reviewNo, int id, int user_PK, String reviewContent, String revImgFilepath,
-			boolean rejectedCount, int honbabLv, String honbabReason, double interiorRate, double serviceRate,
-			double priceRate, double tasteRate, Date writeTime, MultipartFile file) {
-		super();
-		this.reviewNo = reviewNo;
-		this.id = id;
-		this.user_PK = user_PK;
-		this.reviewContent = reviewContent;
-		this.revImgFilepath = revImgFilepath;
-		this.rejectedCount = rejectedCount;
-		this.honbabLv = honbabLv;
-		this.honbabReason = honbabReason;
-		this.interiorRate = interiorRate;
-		this.serviceRate = serviceRate;
-		this.priceRate = priceRate;
-		this.tasteRate = tasteRate;
-		this.writeTime = writeTime;
-		this.file = file;
-	}
+//	public PlaceReview(int reviewNo, int id, int user_PK, String reviewContent, String revImgFilepath,
+//			boolean rejectedCount, int honbabLv, String honbabReason, double interiorRate, double serviceRate,
+//			double priceRate, double tasteRate, Date writeTime, MultipartFile file) {
+//		super();
+//		this.reviewNo = reviewNo;
+//		this.id = id;
+//		this.user_PK = user_PK;
+//		this.reviewContent = reviewContent;
+//		this.revImgFilepath = revImgFilepath;
+//		this.rejectedCount = rejectedCount;
+//		this.honbabLv = honbabLv;
+//		this.honbabReason = honbabReason;
+//		this.interiorRate = interiorRate;
+//		this.serviceRate = serviceRate;
+//		this.priceRate = priceRate;
+//		this.tasteRate = tasteRate;
+//		this.writeTime = writeTime;
+//		this.file = file;
+//	}
+	
+	public PlaceReview() {}
 	
 	public PlaceReview(int reviewNo, int id, int user_PK, String reviewContent, String revImgFilepath,
 			boolean rejectedCount, int honbabLv, String honbabReason, double interiorRate, double serviceRate,

@@ -4,24 +4,35 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.PlaceReviewDAO">	
-	<select id="selectMaxPRBoardNum" resultType="Integer">
+	<select id="selectMaxPRNum" resultType="Integer">
 		<![CDATA[
 			select max(reviewNo) from reviewdb
 		]]>
 	</select>
 	
-	<select id="selectPRBoardList" resultType="placereview" parameterType="int"> <!-- -->
+	<!-- <select id="selectPRBoardList" resultType="placereview" parameterType="HashMap">
 		<![CDATA[ 
 			select user_PK, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv,  interiorRate, serviceRate, priceRate, tasteRate 
 				from (select @rownum:=@rownum+1 rnum, tot.* 
-					from (select * from reviewdb order by writeTime desc) tot, 
+					from (select * from reviewdb where id=#{id} order by writeTime desc ) tot, 
 					(select @rownum:=0) temp) sub
 			where rnum between #{startrow} and #{startrow}+9
 		]]>
+	</select> -->
+	
+	<select id="selectPRReviewList" resultType="PlaceReviewExtended" parameterType="HashMap"> <!-- -->
+		<![CDATA[ 
+			select user_PK, nickname, profileimg, honbabLevel, user.group as `group`, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
+				from (select @rownum:=@rownum+1 rnum, tot.* 
+					from (select * from reviewdb where id=#{id} order by writeTime desc ) tot, 
+					(select @rownum:=0) temp) sub, user
+			where rnum between #{startrow} and #{startrow}+9 and (user.idx = user_PK)
+		]]>
 	</select>
-	<select id="selectPRBoardCount" resultType="int">
+	
+	<select id="selectPRBoardCount" resultType="int" parameterType="int">
 		<![CDATA[
-			select count(*) from reviewdb
+			select count(*) from reviewdb where id = #{id}
 		]]>
 	</select>
 	<insert id="insertReview" parameterType="placereview">

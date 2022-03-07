@@ -83,40 +83,94 @@
 				<div class="row my-2 d-flex align-bottom" style="flex-wrap: nowrap;">
 					<div class="col">
 						<h2 style="width: fit-content; float:left;"><strong>혼밥 맛집 리뷰</strong></h2>
-						<div class="align-self-end" style="display: flex; vertical-align: bottom;">전체 3</div>
 					</div>
 					<div class="col">
+						<div class="align-self-end d-flex">리뷰 ${reviewAmount}개</div>
 						<button class="btn border border-secondary" onclick="writeReview()" style="width: fit-content; float: right;">리뷰 작성</button>
 					</div>
 				</div>
 				<div class="row p-2">
-					여기서부터 리뷰가 뜨는 영역
+					<c:choose>
+					<c:when test="${empty prList }">
+						<p>해당 맛집에 대한 리뷰가 없습니다.</p>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="pr" items="${prList }">
+							<div class="row bg-white m-2">
+								<div class="justify-content-center" style="width:150px;">
+									<img style="border-radius: 50px; width: 30px; height: 30px; margin: 0 auto;" src='/profile/${pr.profileImg }'>
+									<span class="badge bg-danger rounded-pill">Lv .${pr.honbabLevel }</span>
+									<div class="border pb-2 pt-1 rounded" style="display: inline;">${pr.nickname } 님</div>
+								</div>
+								<div class="col" >
+									<h5><strong>${pr.honbabReason }</strong></h5>
+									<p>${pr.reviewContent }</p>
+									<span>작성 시간 : ${pr.writeTime }</span>
+								</div>
+							</div>
+						</c:forEach>
+					</c:otherwise>
+					</c:choose>
 				</div>
+				<section id="pageList">
+					<c:choose>
+						<c:when test="${pageInfo.page<=1}">
+							[이전]&nbsp;
+						</c:when>
+						<c:otherwise>
+							<a href="boardlist?page=${pageInfo.page-1}">[이전]</a>&nbsp;
+						</c:otherwise>
+					</c:choose>
+					<c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
+						<c:choose>
+							<c:when test="${pageInfo.page==i }">[${i }]</c:when>
+							<c:otherwise>
+								<a href="boardlist?page=${i}">[${i }]</a>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+					<c:choose>
+						<c:when test="${pageInfo.page>=pageInfo.maxPage }">
+							[다음]
+						</c:when>
+						<c:otherwise>
+							<a href="boardlist?page=${pageInfo.page+1}">[다음]</a>
+						</c:otherwise>
+					</c:choose>
+				</section>
 			</div>
 			<script>
 				//var str = JSON.stringify(${place});
 				
 				function writeReview(){
 					let f = document.createElement('form');
+					
+				    f.appendChild(makeInputHiddenObj('id','${place.id}'));
+				    f.appendChild(makeInputHiddenObj('place_name','${place.place_name}'));
+				    f.appendChild(makeInputHiddenObj('category_name','${place.category_name}'));
+				    f.appendChild(makeInputHiddenObj('category_group_code','${place.category_group_code}'));
+				    f.appendChild(makeInputHiddenObj('category_group_name','${place.category_group_name}'));
+				    f.appendChild(makeInputHiddenObj('phone','${place.phone}'));
+				    f.appendChild(makeInputHiddenObj('address_name','${place.address_name}'));
+				    f.appendChild(makeInputHiddenObj('road_address_name','${place.road_address_name}'));
+				    f.appendChild(makeInputHiddenObj('x','${place.x}'));
+				    f.appendChild(makeInputHiddenObj('y','${place.y}'));
+				    f.appendChild(makeInputHiddenObj('place_url','${place.place_url}'));
 				    
-				    let obj1;
-				    obj1 = document.createElement('input');
-				    obj1.setAttribute('type', 'hidden');
-				    obj1.setAttribute('name', 'id');
-				    obj1.setAttribute('value', ${id});
-				    f.appendChild(obj1);
 				    
-				    let obj2;
-				    obj2 = document.createElement('input');
-				    obj2.setAttribute('type', 'hidden');
-				    obj2.setAttribute('name', 'place_name');
-				    obj2.setAttribute('value', '${place.place_name}');
-				    f.appendChild(obj2);
-				    
+				    //f.setAttribute('enctype','application/json');
 				    f.setAttribute('method', 'post');
 				    f.setAttribute('action', './review/'+${id});
 				    document.body.appendChild(f);
 				    f.submit();
+				}
+				
+				function makeInputHiddenObj(key, value){
+					let obj = document.createElement('input');
+					obj.setAttribute('type', 'hidden');
+				    obj.setAttribute('name', key);
+				    obj.setAttribute('value', value);
+				    return obj;
 				}
 			</script>
 		</c:when>
