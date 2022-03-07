@@ -35,8 +35,12 @@
 	<script>
 		//$('#'+window.location.pathname.split("/")[1]+'-nav').addClass('btn-dark text-white');
 		//$('#'+window.location.pathname.split("/")[1]+'-nav').addClass('btn-dark text-white');
-		document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add( 'btn-dark');
-		document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('text-white');
+		if(window.location.pathname !== ""){
+			if(window.location.pathname.split("/")[1] != 'place'){
+				document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('btn-dark');
+				document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('text-white');
+			}
+		}
 	</script>
 </body>
 </html>
