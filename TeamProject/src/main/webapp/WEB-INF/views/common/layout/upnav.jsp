@@ -37,7 +37,7 @@
 							님</div>
 							<a href="myPage">
 						<img style="border-radius: 50px; width: 30px; height: 30px;"
-							src="http://placehold.co/100x100">
+							src="/profile/${user.profileImg }">
 							</a>
 							
 					
