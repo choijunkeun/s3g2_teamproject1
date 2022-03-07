@@ -215,7 +215,7 @@ label.star:before {
 									<!-- ckEditor -->
 									<h3>Classic editor</h3>
 									<div id="classic">
-										<p>This is some sample content.</p>
+										<p>여기에 내용을 입력햊쉐요.</p>
 									</div>
 								</div>
 
