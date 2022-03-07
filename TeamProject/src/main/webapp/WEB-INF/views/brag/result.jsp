@@ -15,8 +15,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<!-- 클래식 에디터 -->
-<script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
 
 
@@ -180,7 +178,7 @@ label.star:before {
 			<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
 
 			<form action="./bragwrite" method="post"
-				name="bragform" id="bwForm">
+				 name="bragform" id="bwForm">
 				<div>
 					<input type="hidden" id="email" value=${email }>
 					<div class="container p-2 ">
@@ -215,7 +213,7 @@ label.star:before {
 								<div>
 									
 									<div>
-									<input name="title" id="title" size="55%" placeholder="제목을 입력해주세요!" required="required">
+									<input name="title" id="title" size="55%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
 									</div>
 									
 									<%-- <div>	
@@ -231,7 +229,7 @@ label.star:before {
 										<p>여기에 내용을 입력해주세요!</p>
 									</div> -->
 									
-									<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
+									<div style="dis">
 								</div>
 
 							</div>
@@ -242,7 +240,7 @@ label.star:before {
 						<div class="col text-center">
 							<!-- <input type="reset" value="다시쓰기" /> -->
 							<button class="btn border bd-secondary">취소</button>
-							<input type="submit" class="btn border bd-secondary" value="전송" />
+							<div id="editor"></div>
 						</div>
 					</div>
 
@@ -271,24 +269,22 @@ label.star:before {
 
 
 	<!-- ckEditor -->
-	<script>
+	<!-- 클래식 에디터 -->
+<script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
+<script>
 	$(function(){
-        ClassicEditor
-        	.create(document.querySelector("#editor"), {
-        		ckfinder : {
-        			uploadUrl : "/brag/upload"
-        		}
-        	}).then(editor=> {
-        		window.editor=editor;
-        	})
-        	.catch((error) => {
-        		console.error(error);
-        	});
-		});
-	</script>
-<!-- 
-	<script>
-$('#file').change(function(){
+        ClassicEditor.create(document.querySelector("#editor"))
+        .then(editor=>{
+        	editor.setData('${content}');
+        })
+        .catch((error) => {
+        	console.error(error);
+        });
+	});
+</script>
+
+	<!-- <script>
+	$('#file').change(function(){
 		//here we take the file extension and set an array of valid extensions
 	    var res=$('#file').val();
 	    var arr = res.split("\\");
@@ -315,8 +311,9 @@ $('#file').change(function(){
 	        $('#namefile').html(" 업로드한 파일 : " + filename);
 	      
 	    }
-	});  
-	$('#bwForm').submit(function(e){
+	});
+
+		$('#bwForm').submit(function(e){
 			e.preventDefault();
 			console.log("ENTERED TO SUBMITTING");
 			console.log($('#fileup')[0]);
@@ -354,7 +351,7 @@ $('#file').change(function(){
 			});
 			
 			return false; 
-		}); 
-	</script>  -->
+		});
+	</script> -->
 </body>
 </html>

@@ -9,7 +9,7 @@ public class BragBoard { // 자랑
 	int articleNo;
 	int idx;
 
-	boolean inRestaurant;
+	boolean moonpa;
 
 	String title;
 	String location;
@@ -23,12 +23,12 @@ public class BragBoard { // 자랑
 
 	}
 
-	public BragBoard(int articleNo, int idx, boolean inRestaurant, String title, String location, int readCount,
+	public BragBoard(int articleNo, int idx, boolean moonpa, String title, String location, int readCount,
 			Date date, String imgfilename, String content) {
 		super();
 		this.articleNo = articleNo;
 		this.idx = idx;
-		this.inRestaurant = inRestaurant;
+		this.moonpa = moonpa;
 		this.title = title;
 		this.location = location;
 		this.readCount = readCount;
@@ -37,11 +37,11 @@ public class BragBoard { // 자랑
 		this.content = content;
 	}
 
-	public BragBoard(int idx, boolean inRestaurant, String title, String location, int readCount, String imgfilename,
+	public BragBoard(int idx, boolean moonpa, String title, String location, int readCount, String imgfilename,
 			String content) {
 		super();
 		this.idx = idx;
-		this.inRestaurant = inRestaurant;
+		this.moonpa = moonpa;
 		this.title = title;
 		this.location = location;
 		this.readCount = readCount;
@@ -65,12 +65,12 @@ public class BragBoard { // 자랑
 		this.idx = idx;
 	}
 
-	public boolean isInRestaurant() {
-		return inRestaurant;
+	public boolean ismoonpa() {
+		return moonpa;
 	}
 
-	public void setInRestaurant(boolean inRestaurant) {
-		this.inRestaurant = inRestaurant;
+	public void setMoonpa(boolean moonpa) {
+		this.moonpa = moonpa;
 	}
 
 	public String getTitle() {

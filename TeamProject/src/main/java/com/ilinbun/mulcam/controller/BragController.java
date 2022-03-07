@@ -135,7 +135,7 @@ public class BragController {
 		System.out.println(content.trim()); // DB저장, 반드시 trim()
 		model.addAttribute("title", title);
 		model.addAttribute("content", content.trim());
-		return "brag/best"; //resultForm다시
+		return "result"; //resultForm다시
 	}
 
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111CKEditor끝!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
