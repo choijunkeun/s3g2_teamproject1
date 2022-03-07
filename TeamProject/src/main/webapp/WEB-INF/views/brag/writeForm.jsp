@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
@@ -12,12 +11,31 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<!-- ckEditor -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- 클래식 에디터 -->
+<script
+	src="https://cdn.ckeditor.com/ckeditor5/29.1.0/classic/ckeditor.js"></script>
+
+
 <title>게시글 작성</title>
 <!-- <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"> -->
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- ckEditor 넓이 높이 조절 -->
+<style>
+.ck.ck-editor {
+	max-width: 500px;
+}
+
+.ck-editor__editable {
+	min-height: 300px;
+}
+</style>
 
 <style>
 #top {
@@ -142,22 +160,26 @@ label.star:before {
 	content: '\f006';
 	font-family: FontAwesome;
 }
+.outer {
+  text-align: center;
+}
 </style>
 <body>
 	<section id="./writeForm">
 		<!--  ./는 localhost:8090/brag임 -->
-		<div class="container pb-3 bg-light">
+		<div class="container pb-3 bg-light" class="outer">
 			<h5 class="fw-bolder" style="margin-left: 23%;">혼밥자랑</h5>
 
-			<form action="./bragwrite" method="post" enctype="multipart/form-data" name="bragform" id="bwForm">
-				<input type="hidden" id="email" value=${email }>
-				<div class="container p-2 ">
-					<div class="row p-1 text-center ">
-						<div class="col">
-							<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
-							<table style="width: fit-content; margin: 0 auto;">
-								<tr>
-									<td>
+			<form action="./bragwrite" method="post"
+				enctype="multipart/form-data" name="bragform" id="bwForm">
+				<div>
+					<input type="hidden" id="email" value=${email }>
+					<div class="container p-2 ">
+						<div class="row p-1 text-center ">
+							<div class="col">
+								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
+								<div>
+									<div>
 										<input type="hidden" name="moonpa" id="moonpa">
 										<div class="btn-group-sort" style="width: fit-content;">
 											<button type="button"
@@ -165,74 +187,52 @@ label.star:before {
 												data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
 											<ul class="dropdown-menu text-center"
 												aria-labelledby="sortDropdown">
-												<li><button class="dropdown-item" type="button" onclick="document.getElementById('moonpa').value='true'; document.getElementById('sortDropdown').innerText='사먹파'">사먹파</button></li>
-												<li><button class="dropdown-item" type="button" onclick="document.getElementById('moonpa').value='false'; document.getElementById('sortDropdown').innerText='해먹파'">해먹파</button></li>
+												<li><button class="dropdown-item" type="button"
+														onclick="document.getElementById('moonpa').value='true'; document.getElementById('sortDropdown').innerText='사먹파'">사먹파</button></li>
+												<li><button class="dropdown-item" type="button"
+														onclick="document.getElementById('moonpa').value='false'; document.getElementById('sortDropdown').innerText='해먹파'">해먹파</button></li>
 											</ul>
 										</div>
-									</td>
-									<td>
-										<div class="input-group" style="flex-shrink: 1;">
-											<input type="text" class="form-control" id="location" placeholder="위치검색" aria-label="위치">
-											<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-										</div>
-									</td>
-									<td colspan="2"></td>
-								</tr>
-								<tr>
-									<td colspan="2"></td>
-									<td colspan="2">
-										<div class="col">
-											<textarea id="title" name="brag_name" style="width: 100%; height: 100%;" placeholder="제목을 입력해주세요" required="required"></textarea>
-										</div>
-									</td>
-								</tr>
-								<tr rowspan="2">
-									<td colspan="2">
+									</div>
 
-										<div class="col">
-											<!-- https://codepen.io/emiemi/pen/zxNXWR -->
-											<div class="card border rounded text-center justify-content-center">
-												<!-- <input type="file" name="revImgFile" style="width: 100%;" placeholder="사진을 이 곳에 업로드 해주세요"> -->
-												<div class="btn-container">
-													<!--the three icons: default, ok file (img), error file (not an img)-->
-													<h1 class="imgupload">
-														<i class="fa fa-file-image-o"></i>
-													</h1>
-													<h1 class="imgupload ok">
-														<i class="fa fa-check"></i>
-													</h1>
-													<h1 class="imgupload stop">
-														<i class="fa fa-times"></i>
-													</h1>
-													<!--this field changes dinamically displaying the filename we are trying to upload-->
-													<p id="namefile">사진만 올려주세요!(jpg,jpeg,bmp,png)</p>
-													<!--our custom btn which which stays under the actual one-->
-													<!--  내장버튼인가 <button type="button" id="btnup" class="btn btn-primary btn-lg">파일 선택2</button>-->
-													<input type="file" value="" name="fileup" id="fileup" required="required">
-												</div>
-											</div>
-										</div>
-									</td>
-									<td colspan="2">
+									<div class="input-group" style="flex-shrink: 1; width: 50%;">
+										<input type="text" class="form-control" id="location" 
+											placeholder="위치를 검색해 보세요!" aria-label="위치">
+										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+									</div>
+								</div>
 
-										<div class="col">
-											<textarea id="content" name="brag_content" style="width: 265px; height: 260px;" placeholder="사진에 대해 설명해 주세요" required="required"></textarea>
-										</div>
-									</td>
-								</tr>
-							</table>
+
+								<div>
+									<div class="col">
+										<textarea id="title" name="brag_name"
+											style="width: 50%; height: 100%;" placeholder="제목을 입력해주세요!"
+											required="required"></textarea>
+									</div>
+								</div>
+
+								<div>
+									<!-- ckEditor -->
+									<h3>Classic editor</h3>
+									<div id="classic">
+										<p>This is some sample content.</p>
+									</div>
+								</div>
+
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="row py-3">
-					<div class="col text-center">
-						<!-- <input type="reset" value="다시쓰기" /> -->
-						<button class="btn border bd-secondary">취소</button>
-						<input type="submit" class="btn border bd-secondary" value="등록" />
+					<div class="row py-3">
+						<div class="col text-center">
+							<!-- <input type="reset" value="다시쓰기" /> -->
+							<button class="btn border bd-secondary">취소</button>
+							<input type="submit" class="btn border bd-secondary" value="등록" />
+						</div>
 					</div>
-				</div>
 
+
+				</div>
 			</form>
 
 
@@ -252,6 +252,16 @@ label.star:before {
         }
     }
 </script> -->
+
+
+	<!-- ckEditor -->
+	<script>
+        ClassicEditor
+            .create( document.querySelector( '#classic' ))
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
 
 	<script>
 	$('#file').change(function(){
