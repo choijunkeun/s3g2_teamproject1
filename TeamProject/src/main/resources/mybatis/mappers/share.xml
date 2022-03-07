@@ -6,7 +6,7 @@
 <mapper namespace="com.ilinbun.mulcam.dao.ShareDAO">	
 	<select id="shareBoard" resultType="Shareboard">
 		<![CDATA[
-			SELECT * FROM shareboard ORDER BY sharebaord_articleno DESC LIMIT 1 
+			SELECT * FROM shareboard ORDER BY articleno DESC LIMIT 1 
 		]]>
 	</select>
 

@@ -7,16 +7,16 @@
 <title>일인분 : 혼밥 정보가 필요할 땐, 일인분</title>
 </head>
 <body>
-	<div class="container mb-2">
+	<!-- <div class="container mb-2">
 		<form class="row" method="post" action="/search">
 			<div class="col-4 text-center">
-				<!-- 클릭 시 팝오버 설명 -->
-				<a class="btn-outline-dark" style="margin: 0 auto;">혼밥 레벨이란?</a> <br>
+				클릭 시 팝오버 설명
+				<a class="btn-outline-dark" style="margin: 0 auto;">혼밥 레벨이란?</a> <br> -->
 
 				<!-- 레벨 선택 -->
 				<!-- 클릭 시 색상 변경 -->
-				<div id="level" class="btn-group flex-wrap justify-content-center">
-					<!-- <div class="w-100"></div> -->
+				<!-- <div id="level" class="btn-group flex-wrap justify-content-center">
+					<div class="w-100"></div>
 					<input type="radio" name="level-group" class="btn-check" id="lv1" value="1">
 					<label class="btn btn-outline-danger btn-sm" for="lv1">레벨 1</label>
 					<input type="radio" name="level-group" class="btn-check" id="lv2" value="2"> 
@@ -34,8 +34,22 @@
 				<input type="submit" class="btn btn-danger" type="button" value="검색">
 			</div>
 		</form>
-	</div>
-	<img src="https://dummyimage.com/1200x300/000/ffffff.jpg&text=explain" style="max-width: 100%; height: auto;">
+	</div> -->
+	
+	<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" style="max-width: 100%; height: 300px;">
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img src="https://dummyimage.com/1200x300/777/ff99ff.jpg&text=explain" class="d-block w-100" alt="...">
+			</div>
+			<div class="carousel-item">
+				<img src="https://dummyimage.com/1200x300/555/99ffff.jpg&text=explain" class="d-block w-100" alt="...">
+			</div>
+			<div class="carousel-item">
+				<img src="https://dummyimage.com/1200x300/999/ffff99.jpg&text=explain" class="d-block w-100" alt="...">
+		  </div>
+		</div>
+	</div> <!-- https://getbootstrap.com/docs/5.1/components/carousel/ -->
+	
 	
 	<div class="row justify-content-center">
 		<div class="col mt-5">

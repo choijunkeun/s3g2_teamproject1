@@ -1,13 +1,15 @@
 package com.ilinbun.mulcam.controller;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.UserService;
@@ -33,6 +37,9 @@ public class MainController {
 	
 	@Autowired
 	HttpSession session;
+	
+	@Autowired
+	private ServletContext servletContext;
 
 	@GetMapping({"", "/index"})
 	public String Main() {
@@ -73,7 +80,7 @@ public class MainController {
 				System.out.println("for 문");
 				model.addAttribute(key, validatorResult.get(key));
 			}
-		return "user/joinForm";
+		return "/user/joinForm";
 		}
 		
 //		// 회원가입 기능 컨트롤러
@@ -155,5 +162,5 @@ public class MainController {
 	public String editInfo() {
 		return "user/editInfoForm";
 	}
-
+	
 }
