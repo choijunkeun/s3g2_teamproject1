@@ -22,11 +22,9 @@
 	
 } */
 
-/* 
-a:link { color: white; text-decoration: none; !important}
-a:visited { color: grey; text-decoration: none; !important}
-a:hover { color: grey; text-decoration: none; !important} */
-.nav-item>a{
+
+a:link, a:visited, a:hover, a:active { color: grey; text-decoration: none; !important}
+
 	
 }
 </style>
@@ -59,7 +57,7 @@ a:hover { color: grey; text-decoration: none; !important} */
 				document.getElementById(window.location.pathname.split("/")[1]
 						+ '-nav').classList.add('font-weight-bold');
 				document.getElementById(window.location.pathname.split("/")[1]
-						+ '-nav').classList.add('text-secondary');
+						+ '-nav').classList.add('text-white');
 			}
 		}
 	</script>

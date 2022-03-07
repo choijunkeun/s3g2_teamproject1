@@ -22,7 +22,7 @@
         ClassicEditor
         	.create(document.querySelector("#editor"), {
         		ckfinder : {
-        			uploadUrl : "/upload"
+        			uploadUrl : "/brag/upload"
         		}
         	}).then(editor=> {
         		window.editor=editor;
@@ -185,18 +185,24 @@ label.star:before {
   text-align: center;
 }
 </style>
+<style>
+.ck-editor__editable {
+	min-height: 550px;
+	min-width: 550px;
+	max-width: 100%;
+}
+</style>
 <body>
-<script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script>
+<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script> --%>
 	<section id="./writeForm">
 		<!--  ./는 localhost:8090/brag임 -->
 	<div class="position-absolute top-10 start-65 ">
 		<div class="container pb-3 bg-light" class="outer" >
 			<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
 
-			<form action="./bragwrite" method="post"
-				enctype="multipart/form-data" name="bragform" id="bwForm">
+			<form action="./bragwrite" method="post" enctype="multipart/form-data" name="bragform" id="bwForm">
 				<div>
-					<input type="hidden" id="email" value=${email }>
+					<input type="hidden" id="idx" name="idx" value=${user.idx }>
 					<div class="container p-2 ">
 						<div class="row p-1 text-center ">
 							<div class="col">
@@ -211,15 +217,15 @@ label.star:before {
 											<ul class="dropdown-menu text-center"
 												aria-labelledby="sortDropdown">
 												<li><button class="dropdown-item" type="button"
-														onclick="document.getElementById('moonpa').value='true'; document.getElementById('sortDropdown').innerText='사먹파'">사먹파</button></li>
+														onclick="moonpaChange('true')">사먹파</button></li>
 												<li><button class="dropdown-item" type="button"
-														onclick="document.getElementById('moonpa').value='false'; document.getElementById('sortDropdown').innerText='해먹파'">해먹파</button></li>
+														onclick="moonpaChange('false')">해먹파</button></li>
 											</ul>
 										</div>
 									</div>
 
 									<div class="input-group" style="flex-shrink: 0; width: 50%;">
-										<input type="text" class="form-control" id="location" 
+										<input type="text" class="form-control" id="location" name="location"
 											placeholder="위치를 검색해 보세요!" aria-label="위치">
 										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
 									</div>
@@ -269,92 +275,16 @@ label.star:before {
 	</div>
 	</section>
 
-	<!-- 
-<script>
-    function dp_menu(){
-        let click = document.getElementById("drop-content");
-        if(click.style.display === "none"){
-            click.style.display = "block";
-
-        }else{
-            click.style.display = "none";
-
-        }
-    }
-</script> -->
-
-
-	<!-- ckEditor -->
-
 	<script>
-	$('#file').change(function(){
-		//here we take the file extension and set an array of valid extensions
-	    var res=$('#file').val();
-	    var arr = res.split("\\");
-	    var filename=arr.slice(-1)[0];
-	    filextension=filename.split(".");
-	    filext="."+filextension.slice(-1)[0];
-	    valid=[".jpg",".png",".jpeg",".bmp"];
-		//if file is not valid we show the error icon, the red alert, and hide the submit button
-	    if (valid.indexOf(filext.toLowerCase())==-1){
-	        $( ".imgupload" ).hide("slow");
-	        $( ".imgupload.ok" ).hide("slow");
-	        $( ".imgupload.stop" ).show("slow");
-	      
-	        $('#namefile').css({"color":"gray","font-weight":700});
-	        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
-	        
-	    } else{
-	        //if file is valid we show the green alert and show the valid submit
-	        $( ".imgupload" ).hide("slow");
-	        $( ".imgupload.stop" ).hide("slow");
-	        $( ".imgupload.ok" ).show("slow");
-	      
-	        $('#namefile').css({"color":"#ff3f3f","font-weight":700});
-	        $('#namefile').html(" 업로드한 파일 : " + filename);
-	      
-	    }
-	});
-
-		$('#bwForm').submit(function(e){
-			e.preventDefault();
-			console.log("ENTERED TO SUBMITTING");
-			console.log($('#fileup')[0]);
-			var formData = new FormData();
-			var data = {
-		        "email":$('#email').val(),
-		        "moonpa":$('#moonpa').val(),
-		        "location":$('#location').val(),
-		        "title":$('#title').val(),
-		        "content":$('#content').val(),
-		    };
-
-		    formData.append("file",$('#fileup')[0].files[0]);
-		    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"}));
+	
+		function moonpaChange(arg) {
+			document.getElementById('moonpa').value=arg; 
 			
-			$.ajax({
-				url:"./bragwrite",
-				type:"post",
-				enctype: 'multipart/form-data',		
-				processData: false, 
-				contentType: false,
-				data: formData,
-				cache: false,           
-		        timeout: 600000,  
-				success:function(data, textStatus) {
-					
-					alert(data);
-					return false;
-					//location.window.href="/search";		
-				},
-				error: function(data, textStatus){
-					alert(data);
-					return false;
-				}
-			});
-			
-			return false; 
-		});
+			if(arg == 'true')
+				document.getElementById('sortDropdown').innerText='사먹파';
+			else
+				document.getElementById('sortDropdown').innerText='해먹파';
+		}
 	</script>
 </body>
 </html>

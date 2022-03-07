@@ -6,18 +6,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -27,12 +24,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.JsonObject;
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.service.BragService;
 
@@ -71,19 +66,23 @@ public class BragController {
 	@PostMapping("/upload")
 	public void fileupload(@RequestParam(value = "upload") MultipartFile file, HttpServletRequest request,
 			HttpServletResponse resp) {
-		String path = servletContext.getRealPath("/upload/");
-		String filename = file.getOriginalFilename();
+		String path = servletContext.getRealPath("/bragupload/");
+		String filename = UUID.randomUUID().toString() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.')+1);
 		File destFile = new File(path + filename);
 		PrintWriter writer = null;
-		JsonObject json = new JsonObject();
+		//JsonObject json = new JsonObject();
+		JSONObject json = new JSONObject();
 		try {
 			file.transferTo(destFile);
 			writer = resp.getWriter();
 			resp.setContentType("text/html;charset=utf-8");
 			resp.setCharacterEncoding("utf-8");
-			json.addProperty("uploaded", 1);
-			json.addProperty("fileName", filename);
-			json.addProperty("url", "/fileview/" + filename);
+			json.append("uploaded", 1);
+			json.append("fileName", filename);
+			json.append("url", "/brag/fileview/" + filename);
+//			json.addProperty("uploaded", 1);
+//			json.addProperty("fileName", filename);
+//			json.addProperty("url", "/fileview/" + filename);
 
 			System.out.println(json);
 			writer.println(json);
@@ -127,12 +126,25 @@ public class BragController {
 		}
 	}
 
-	@PostMapping("bragwrite")
-	public String bragwriteform(@RequestParam("title") String title, @RequestParam("content") String content, Model model) {
-		
+	@PostMapping("/bragwrite")
+	public String bragwriteform(@RequestParam String title, 
+			@RequestParam String content,
+			@RequestParam String moonpa, 
+			@RequestParam String location, 
+			@RequestParam int idx, 
+			Model model) {
 		
 		System.out.println(title); // DB저장
 		System.out.println(content.trim()); // DB저장, 반드시 trim()
+		
+		try {
+			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, idx, content);
+			bragService.regBragBoard(bragboard);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		model.addAttribute("title", title);
 		model.addAttribute("content", content.trim());
 		return "brag/best"; //resultForm다시
