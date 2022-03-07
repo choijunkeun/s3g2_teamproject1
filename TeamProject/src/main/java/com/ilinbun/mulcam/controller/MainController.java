@@ -1,15 +1,20 @@
 package com.ilinbun.mulcam.controller;
 
 import java.net.URLEncoder;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +40,7 @@ public class MainController {
 
 	// 회원가입 폼으로 이동하는 컨트롤러
 	@GetMapping("/join")
-	public String getJoin() {
+	public String getJoin(@ModelAttribute User user) {
 		return "/user/joinForm";
 	}
 	
@@ -52,12 +57,30 @@ public class MainController {
 	}
 
 	// 회원가입 기능 컨트롤러
+	@ExceptionHandler
 	@PostMapping("/join")
-	public String postJoin(User user) throws Exception {
+	public String postJoin(@Valid User user, BindingResult errors, Model model) throws Exception {
+		System.out.println("postJoin()");
+		if (errors.hasErrors()) {
+			System.out.println("if문 ");
+			// 회원가입 실패시, 입력 데이터 유지
+			model.addAttribute("user", user);
+			
+			// 유효성 통과 못한 필드, 메시지를 핸들링
+			Map<String, String> validatorResult = userService.validateHandling(errors);
+			for (String key : validatorResult.keySet()) {
+				System.out.println("for 문");
+				model.addAttribute(key, validatorResult.get(key));
+			}
+		return "user/joinForm";
+		}
 		
-		System.out.println(user.getHonbabLevel());
+//		// 회원가입 기능 컨트롤러
+//		@PostMapping("/join")
+//		public String postJoin(User user) throws Exception {
+
 		userService.makeUser(user);
-		return "redirect:/loginSuccess"; 
+		return "redirect:/loginSuccess";
 	}
 	
 	// 회원가입 완료 폼으로 가는 컨트롤러

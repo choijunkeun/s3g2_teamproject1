@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
-<%!User user = new User("mockup@mock.up", "목업", "", "#", 5, 1);%>
+<%!User user = new User(1,"mockup@mock.up", "목업", "", "#", 5, 1);%>
 <c:set var="user" value='<%=user%>' />
 <!-- 목업 코드 -->
 
