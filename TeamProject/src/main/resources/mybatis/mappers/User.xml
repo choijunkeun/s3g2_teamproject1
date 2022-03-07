@@ -11,7 +11,14 @@
 	    ]]>
     </insert>
     
-    <select id="login" resultType="user" parameterType="String">
+    <select id="nickCheck" resultType="User" parameterType="String">
+		<![CDATA[
+			SELECT * FROM user
+			WHERE nickname = #{nickname}
+		]]>
+	</select>
+	
+	<select id="login" resultType="user" parameterType="String">
     	<![CDATA[
     	SELECT * FROM user WHERE user=#{email}      	
     	]]>

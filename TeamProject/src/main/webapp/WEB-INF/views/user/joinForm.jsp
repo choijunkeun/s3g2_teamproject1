@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page import="java.net.URLDecoder"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,9 +44,6 @@ hr {
 
 .p input { box-sizing:border-box; padding:10px 0 0; width:100%; height:100%; border:0 none; color:#595f63; outline:none; }
 .p label { color: #9e9e9e; position:absolute; left:0%; bottom:0; width:100%; height:100%; border-bottom:1px solid #000; text-align:left; pointer-events:none; }
-
-#p input { box-sizing:border-box; padding:10px 0 0; width:70%; height:100%; border:0 none; color:#595f63; outline:none; }
-#p label { color: #9e9e9e; position:absolute; left:0%; bottom:0; width:70%; height:100%; border-bottom:1px solid #000; text-align:left; pointer-events:none; }
 
 .p label:after { content:""; position:absolute; left:0; bottom:-1px; width:0; height:100%; border-bottom:3px solid #5fa8d3; transition:all .3s ease; } /* 파란색 가로줄 */
 .p label span { position:absolute; left:0; bottom:5px; transition:all .3s ease; }
@@ -174,16 +170,7 @@ button {
 
 </head>
 <body>
-	<%-- <form action="<c:url value="/join"/>" method="POST" name="joinform"	onsubmit="return formCheck(this)"> --%>
-	<form:form modelAttribute="user" method="POST" action="${request.getContextPath()}/join">
-	<div>
-	<form:errors path="email" />
-	<form:errors path="nickname" />
-	<form:errors path="password" />
-	
-	
-	
-	</div>
+	<form action="<c:url value="/join"/>" method="POST" name="joinform"	onsubmit="return formCheck(this)">
 	<div class="title-top">
 		<div class="title">
 			<div align="center">
@@ -197,40 +184,40 @@ button {
 
 		<hr style="width: 500px">
 		<div>
-			<div class="div-text">
-				<p class="p" id="p">
+			<div>
+				<p class="p">
 				<input class="input-field" type="text" id="nickname" name="nickname" autocomplete="off" required>
 				<label for="nickname"><span>닉네임</span></label>
-				<button type="button" class="check-btn" id="nickoverlap" style="float:right">중복확인</button>
-				</p>
-				
+				</p>			
 			</div>
-			<div class="div-text">
-				<p class="p" id="p">
+			<div id="nick_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			
+			<div>
+				<p class="p">
 				<input class="input-field" type="email" id="email" name="email" autocomplete="off">
-				<label for="email"><span>이메일</span></label> 
-				<button type="button" class="check-btn" style="float:right;">인증메일발송</button>
-				</p>
-				
-				
-				
+				<label for="id"><span>이메일</span></label> 
+				</p>				
 			</div>
+			<div id="email_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			
 			<div>
 				<p class="p">
 				<input class="input-field" type="password" id="password" name="password" autocomplete="off">
 				<label for="password"><span>비밀번호</span></label>
 				</p>
 			</div>
+			<div id="pass_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			
 			<div>
 				<p class="p">
 				<input class="input-field" type="password" id="password2" autocomplete="off">
 				<label for="password2"><span>비밀번호 확인</span></label>
 				</p>			
 			</div>
+			<div id="pass2_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			
 		</div>
 		
-		
-
 		<hr style="width: 500px">
 
 		
@@ -270,31 +257,35 @@ button {
 		</div>
 		</div>
 		<!-- 회원 가입 -->
-		<%-- <div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div> --%>
+		<div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
 		<button type="submit" class="join-btn">회원가입하기</button>
-	</form:form>
+	</form>
 
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script>		
-			$('#nickoverlap').click(function () {
-	    		if($('#nickname').val()==""){
-					nickCheck();
-					$('#submit').attr("disabled", true);
+	
+	
+	
+
+		
+			$('#nickCheck').click(function () {
+	    		if($('#nickname').val()=="" || $('#nickname').val().length<2){
 					return false;
 				}
 	    		$.ajax({
 					type:"post",
 					dataType:"text",
 					async:false,
-					url:"http://localhost:8090/nickoverlap",
+					url:"http://localhost:8090/nickCheck",
 					data:{nickname:$('#nickname').val()},
 					success: function(data, textStatus){
+						console.log(data)
 						if(data=="true"){
-							alert("사용 불가능합니다.");
-							$('#submit').attr("disabled", true);
+							alert("이미 존재하는 닉네임 입니다.");
+							$('#nickCheck').attr("disabled", false);
 						} else {
-							alert("사용 가능합니다.");
-							$('#submit').attr("disabled", false);
+							alert("사용 가능한 닉네임입니다.");
+							$('input[name=nickCheck]').attr('value',"사용가능");
 						}
 					}
 				});
@@ -305,43 +296,65 @@ button {
                 setMessage('닉네임은 2글자 이상이어야 합니다.', $('#nickname').val());
                 return false;
             }
-		}
+		} */
        	function formCheck(frm) {
+       		let submitOk = true;
             var msg ='';
       
             if(frm.nickname.value.length<2) {
                 setMessage('닉네임은 2글자 이상이어야 합니다.', frm.nickname);
-                return false;
+                submitOk=false;
+            } else{
+            	document.getElementById("nick_msg").innerHTML = "";
             }
             
             if(frm.email.value.length<1) {
-                setMessage('이메일을 입력해주세요', frm.email);
-                return false;
+                setMessage('아이디를 입력해주세요', frm.email);
+                submitOk=false;
+            } else{
+            	document.getElementById("email_msg").innerHTML = "";
             }
-            
             if(frm.password.value.length<6 || frm.password.value.length>12) {
                 setMessage('비밀번호는 6-12자 사이어야 합니다.', frm.password);
-                return false;
+                submitOk=false;
+            } else{
+            	document.getElementById("pass_msg").innerHTML = "";
             }
             
             if(frm.password.value != frm.password2.value) {
                 setMessage('비밀번호와 비밀번호확인이 일치하지 않습니다.', frm.password2);
-                return false;
+                submitOk=false;
+            } else{
+            	document.getElementById("pass2_msg").innerHTML = "";
             }
             if(!frm.agree.checked) {
-            	setMessage('약관에 동의하셔야 합니다.');
-            	return false;
+            	setMessage('약관에 동의하셔야 합니다.', frm.agree);
+            	submitOk=false;
+            } else{
+            	document.getElementById("msg").innerHTML = "";
             }
-                        
-           return true;
+               
+           return submitOk;
        }
 
        function setMessage(msg, element){
-            document.getElementById("msg").innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
+    	   if(element.id=='nickname') {
+    		   document.getElementById("nick_msg").innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
+    	   } else if (element.id=='email') {
+    		   document.getElementById("email_msg").innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
+    	   } else if (element.id=='password') {
+    		   $('#pass_msg').innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
+    	   } else if (element.id=='password2') {
+    		   $('#pass2_msg').innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
+    	   } else {
+    		   document.getElementById("msg").innerHTML = `<i class="fa fa-exclamation-circle"> ${'${msg}'}</i>`;
+    	   }
+    	   
+    	   
             if(element) {
                 element.select();
             }
-       }  */
+       }  
    </script>
 </body>
-</html>
+</html> 

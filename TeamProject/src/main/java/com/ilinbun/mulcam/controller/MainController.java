@@ -1,9 +1,9 @@
 package com.ilinbun.mulcam.controller;
 
 import java.net.URLEncoder;
-import java.util.Map;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -41,44 +41,41 @@ public class MainController {
 	// 회원가입 폼으로 이동하는 컨트롤러
 	@GetMapping("/join")
 	public String getJoin(@ModelAttribute User user) {
-		return "/user/joinForm";
+		return "default/user/joinForm";
 	}
 	
-	// 닉네임 중복 확인 컨트롤러
+//	// 닉네임 중복 확인 컨트롤러
+//	@ResponseBody
+//	@PostMapping(value="/nickoverlap")
+//	public String userOverlap(@RequestParam(value="nickname", required=true)String nickname) {
+//		boolean overlap=false;
+//		try {
+//			overlap=userService.userOverlap(nickname);
+//		} catch(Exception e) {
+//		}
+//		return String.valueOf(overlap);
+//	}
+	
+	
+	// 닉네임 중복 체크 컨트롤러
 	@ResponseBody
-	@PostMapping(value="/nickoverlap")
-	public String userOverlap(@RequestParam(value="nickname", required=true)String nickname) {
+	@PostMapping(value="/nickCheck")
+	public String memberOverlap(@RequestParam(value="nickname", required=true)String nickname) {
+		System.out.println("incoming value"+nickname);
 		boolean overlap=false;
 		try {
-			overlap=userService.userOverlap(nickname);
+			overlap=userService.nickCheck(nickname);
 		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		return String.valueOf(overlap);
 	}
+	
 
 	// 회원가입 기능 컨트롤러
-	@ExceptionHandler
 	@PostMapping("/join")
 	public String postJoin(@Valid User user, BindingResult errors, Model model) throws Exception {
 		System.out.println("postJoin()");
-		if (errors.hasErrors()) {
-			System.out.println("if문 ");
-			// 회원가입 실패시, 입력 데이터 유지
-			model.addAttribute("user", user);
-			
-			// 유효성 통과 못한 필드, 메시지를 핸들링
-			Map<String, String> validatorResult = userService.validateHandling(errors);
-			for (String key : validatorResult.keySet()) {
-				System.out.println("for 문");
-				model.addAttribute(key, validatorResult.get(key));
-			}
-		return "user/joinForm";
-		}
-		
-//		// 회원가입 기능 컨트롤러
-//		@PostMapping("/join")
-//		public String postJoin(User user) throws Exception {
-
 		userService.makeUser(user);
 		return "redirect:/loginSuccess";
 	}
@@ -86,15 +83,16 @@ public class MainController {
 	// 회원가입 완료 폼으로 가는 컨트롤러
 	@GetMapping("/loginSuccess")
 	public String loginSuccess() {
-		return "/user/joinSuccessForm";
+		return "user/joinSuccessForm";
 	}
 
 	// 로그인 폼으로 이동하는 컨트롤러
 	@GetMapping("/login")
 	public String loginForm() {
-		return "/user/loginForm";
+		return "default/user/loginForm";
 	}
 
+	
 	// 로그인 기능 컨트롤러
 	@PostMapping("/login")
 	public String login(@RequestParam(value="email")String email,
@@ -136,10 +134,8 @@ public class MainController {
 	// 비밀번호 찾기 폼으로 이동하는 컨트롤러
 	@GetMapping("/searchPwd")
 	public String searchPwd() {
-		return "/user/searchPwdForm";
+		return "default/user/searchPwdForm";
 	}
-
-	// 닉네임 중복확인 컨트롤러
 
 	// 이메일 인증 컨트롤러
 
