@@ -1,9 +1,19 @@
 package com.ilinbun.mulcam.dto;
 
+
+import javax.validation.constraints.Pattern;
+
 public class User {
 	private int idx;
+	
+
+	@Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$" , message = "올바른 이메일 형식이 아닙니다")
 	private String email;
+	
+	@Pattern(regexp = "^[가-힣|a-z|A-Z|0-9|]+$", message = "닉네임은 한글, 영어, 숫자만 4~10자리로 입력 가능합니다")
 	private String nickname;
+	
+	@Pattern(regexp = "^[가-힣|a-z|A-Z|0-9|]+$", message = "비밀번호는 한글, 영어, 숫자만 4~10자리로 입력 가능합니다")
 	private String password;
 	private String profileImg;
 	private int honbabLevel;

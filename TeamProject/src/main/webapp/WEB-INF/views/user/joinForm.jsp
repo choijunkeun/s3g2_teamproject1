@@ -170,7 +170,7 @@ button {
 
 </head>
 <body>
-	<form action="<c:url value="/join"/>" method="POST" name="joinform"	onsubmit="return formCheck(this)">
+	<form action="<c:url value="/join"/>" method="POST" name="joinform">
 	<div class="title-top">
 		<div class="title">
 			<div align="center">
@@ -186,11 +186,11 @@ button {
 		<div>
 			<div>
 				<p class="p">
-				<input class="input-field" type="text" id="nickname" name="nickname" autocomplete="off" required>
+				<input class="input-field" type="text" id="nickname" name="nickname" autocomplete="off"  >
 				<label for="nickname"><span>닉네임</span></label>
 				</p>			
 			</div>
-			<div id="nick_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			<div id="nick_msg" class="msg">${errorMsg.nickname}</div>
 			
 			<div>
 				<p class="p">
@@ -198,23 +198,23 @@ button {
 				<label for="id"><span>이메일</span></label> 
 				</p>				
 			</div>
-			<div id="email_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			<div id="email_msg" class="msg">${errorMsg.email}</div>
 			
 			<div>
 				<p class="p">
-				<input class="input-field" type="password" id="password" name="password" autocomplete="off">
+				<input class="input-field" type="password" id="password" name="password" autocomplete="off" >
 				<label for="password"><span>비밀번호</span></label>
 				</p>
 			</div>
-			<div id="pass_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			<div id="pass_msg" class="msg">${errorMsg.password}</div>
 			
 			<div>
 				<p class="p">
-				<input class="input-field" type="password" id="password2" autocomplete="off">
+				<input class="input-field" type="password" id="password2" autocomplete="off" >
 				<label for="password2"><span>비밀번호 확인</span></label>
 				</p>			
 			</div>
-			<div id="pass2_msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+			<div id="pass2_msg" class="msg">${errorMsg.password2}</div>
 			
 		</div>
 		
@@ -261,7 +261,7 @@ button {
 		<button type="submit" class="join-btn">회원가입하기</button>
 	</form>
 
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script>		
 	
 	
@@ -291,12 +291,7 @@ button {
 				});
 			});
 	
-		/* function nickCheck() {
-			if($('#nickname').val().length<2) {
-                setMessage('닉네임은 2글자 이상이어야 합니다.', $('#nickname').val());
-                return false;
-            }
-		} */
+		
        	function formCheck(frm) {
        		let submitOk = true;
             var msg ='';
@@ -355,6 +350,6 @@ button {
                 element.select();
             }
        }  
-   </script>
+   </script> -->
 </body>
 </html> 

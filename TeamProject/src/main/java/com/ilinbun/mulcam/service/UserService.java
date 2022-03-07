@@ -8,7 +8,7 @@ public interface UserService {
 	void makeUser(User user) throws Exception;
 	
 	//로그인
-	boolean loginUser(String email, String password) throws Exception;
+	User loginUser(String email, String password) throws Exception;
 
 	
 	//닉네임 체크

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,8 +30,11 @@
 				<div class="card-body p-4">
 					<div class="text-center">
 						<h5 class="fw-bolder">프로필부분</h5>
+						
 						<img style="border-radius: 100px; width: 125px; height: 125px;"
 							src="http://placehold.co/100x100">
+							<div>${user.nickname}</div>
+							<div>${user.honbabLevel}</div>
 					</div>
 				</div>
 				

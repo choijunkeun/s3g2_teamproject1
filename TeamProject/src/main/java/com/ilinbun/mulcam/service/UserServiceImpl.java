@@ -27,16 +27,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean loginUser(String email, String password) throws Exception {
+	public User loginUser(String email, String password) throws Exception {
 		User user = userDAO.login(email);
 		if(user==null) {
 			throw new Exception("존재하지 않는 이메일입니다");
 		}
 		if(email.equals(user.getEmail())&&password.equals(user.getPassword())) {
-			return true;
+			return user;
 		} else if(email.equals(user.getEmail())&&!password.equals(user.getPassword())) {
 			throw new Exception("비밀번호가 일치하지 않습니다");
-		} else return false;
+		} else return null;
 	}
 
 }
