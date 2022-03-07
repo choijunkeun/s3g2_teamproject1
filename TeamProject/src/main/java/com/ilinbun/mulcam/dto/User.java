@@ -77,19 +77,11 @@ public class User {
 	}
 
 	public User() {};
-<<<<<<< HEAD
-	
-	public User(int idx, String email, String nickname, String password, String profileImg, int honbabLevel, int group) {
-=======
+
 
 	public User(int idx, String email, String nickname, String password, String profileImg, int honbabLevel,
 			int group) {
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
 		super();
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
 		this.idx = idx;
 		this.email = email;
 		this.nickname = nickname;
@@ -99,8 +91,4 @@ public class User {
 		this.group = group;
 	}
 
-<<<<<<< HEAD
-	
-=======
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
 }
