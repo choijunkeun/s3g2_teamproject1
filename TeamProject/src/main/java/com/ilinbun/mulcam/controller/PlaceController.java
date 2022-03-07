@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -203,6 +204,43 @@ public class PlaceController {
 			//mv.addObject("err", "새 글 등록 실패");
 			//mv.addObject("/board/err");
 		}
+		
+		return result;	
+	}
+	
+	@ResponseBody
+	@GetMapping("/getRating")
+	public ResponseEntity<String> getRating(@RequestParam int id, @RequestParam int searchOption) {
+		ResponseEntity<String> result = null;
+		
+//		try {
+//			switch(searchOption) {
+//			case 1:
+//				placeReviewService.writeBoard(pr);
+//				break;
+//			case 2:
+//				placeReviewService.writeBoard(pr);
+//				break;
+//			case 3:
+//				placeReviewService.writeBoard(pr);
+//				break;
+//			case 4: 
+//				placeReviewService.writeBoard(pr);
+//				break;
+//			case 5:
+//				placeReviewService.writeBoard(pr);
+//				break;
+//			}
+//			
+//			result = new ResponseEntity<String>("success", HttpStatus.OK);
+//			//boardService.regBoard(board);
+//			//mv.setViewName("redirect:/board/boardlist");
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+//			//mv.addObject("err", "새 글 등록 실패");
+//			//mv.addObject("/board/err");
+//		}
 		
 		return result;	
 	}

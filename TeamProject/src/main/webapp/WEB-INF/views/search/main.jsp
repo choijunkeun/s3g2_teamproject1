@@ -196,9 +196,9 @@
 </head>
 <body>
 	<form class="container" onsubmit="searchPlaces(); return false;" >
-		<input type="hidden" id="honbabLv" value="5">
 		<div class="search_area row justify-content-center p-2" style="width: 100%; flex-wrap: nowrap; ">
 			<div class="btn-group-level" style="width: fit-content;">
+				<input type="hidden" id="honbabLv" name="honbabLv" value="5">
 				<button type="button" class="btn btn-danger dropdown-toggle"
 					id="honbabLevelDropdown" data-bs-toggle="dropdown" aria-expanded="false">혼밥 레벨</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="honbabLevelDropdown">
@@ -213,6 +213,7 @@
 					<li><button class="dropdown-item" type="button"><span
 							class="badge rounded-pill" style="background: #FF0000">Lv. 5</span></button></li>
 				</ul>
+				
 			</div>
 			<div class="input-group" style="flex-shrink:1;">
 				<input type="text" class="form-control" id="keyword"
@@ -221,14 +222,15 @@
 			</div>
 			
 			<div class="btn-group-sort" style="width: fit-content;">
+				<input type="hidden" id="searchOption" name="searchOption" value="1">
 				<button type="button" class="btn btn-secondary dropdown-toggle"
 					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별 검색</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-					<li><button class="dropdown-item" type="button">종합 평점 순</button></li>
-					<li><button class="dropdown-item" type="button">가격 순</button></li>
-					<li><button class="dropdown-item" type="button">맛 평점 순</button></li>
-					<li><button class="dropdown-item" type="button">서비스 평점 순</button></li>
-					<li><button class="dropdown-item" type="button">인테리어 평점 순</button></li>
+					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=1;">종합 평점 순</button></li>
+					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=2;">가격 순</button></li>
+					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=3;">맛 평점 순</button></li>
+					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=4;">서비스 평점 순</button></li>
+					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=5;">인테리어 평점 순</button></li>
 				</ul>
 			</div>
 		</div>

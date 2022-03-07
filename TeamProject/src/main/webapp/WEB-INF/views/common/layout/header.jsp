@@ -12,13 +12,13 @@
 		  color : black;
 		}
 		#headertitle:visited {
-		  color : white;
+		  color : black;
 		}
 		#headertitle:hover {
 		  color : black;
 		}
 		#headertitle:active {
-		  color : white;
+		  color : black;
 		}
 	</style>
 </head>

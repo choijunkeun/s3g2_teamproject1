@@ -4,7 +4,7 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.ShareDAO">	
-	<select id="shareBoard" resultType="Shareboard">
+	<select id="selectShareboard" resultType="Shareboard">
 		<![CDATA[
 			SELECT * FROM shareboard ORDER BY articleno DESC LIMIT 1 
 		]]>

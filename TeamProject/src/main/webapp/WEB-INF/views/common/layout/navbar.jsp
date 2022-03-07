@@ -22,13 +22,13 @@
 	
 } */
 
-
+/* 
 a:link { color: white; text-decoration: none; !important}
 a:visited { color: grey; text-decoration: none; !important}
-a:hover { color: grey; text-decoration: none; !important}
-
-
-출처: https://it77.tistory.com/126 [시원한물냉의 사람사는 이야기]
+a:hover { color: grey; text-decoration: none; !important} */
+.nav-item>a{
+	
+}
 </style>
 <body>
 	<div class="container">
