@@ -25,8 +25,8 @@ public class SearchController {
 			Model model) {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("honbablv", honbablv);
-		if(honbablv != null) System.out.println(honbablv);
-		else System.out.println("honbablv not set");
+		//if(honbablv != null) System.out.println(honbablv);
+		//else System.out.println("honbablv not set");
 		
 		
 		return "search/main";

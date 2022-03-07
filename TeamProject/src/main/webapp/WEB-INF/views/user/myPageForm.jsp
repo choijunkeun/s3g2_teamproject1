@@ -41,6 +41,10 @@
 					</div>
 				</div>
 				
+				<div>
+					<a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a>
+				</div>
+				
 				<div class="card-body p-4">
 				<div class="text-center" style="height:300px">
 						<h5 class="fw-bolder">[ooo]님의 혼밥이 [oo]만큼 사랑받고 있어요 부분</h5>

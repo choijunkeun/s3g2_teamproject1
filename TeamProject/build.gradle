@@ -32,8 +32,7 @@ dependencies {
 	//이메일 사용
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
-	//롬복
-	implementation 'org.projectlombok:lombok'
+	
 	
 	/* 유효성 검증에 대한의존성 추가(원래는 spring-boot-starter-web 의존성 내부에 validation이 있었지만 
 	스프링부트 2.3 이상부터는 모듈로 빠져 따로 의존성 추가해줘야한다 */

@@ -1,78 +1,71 @@
 package com.ilinbun.mulcam.dto;
 
 public class User {
-	private int user_PK;
-	
-	private String user_email;
-	
-
-	private String user_nickname;
-	
-
-	private String user_password;
-	
-	private String user_profileImg;
-	
-	private int user_honbabLevel;
-	
-	private int user_group;
-	
-	public int getUser_PK() {
-		return user_PK;
+	private int idx;
+	private String email;
+	private String nickname;
+	private String password;
+	private String profileImg;
+	private int honbabLevel;
+	private int group;
+	public int getIdx() {
+		return idx;
 	}
-	public void setUser_PK(int user_PK) {
-		this.user_PK = user_PK;
+	public void setIdx(int idx) {
+		this.idx = idx;
 	}
-	public String getUser_email() {
-		return user_email;
+	public String getEmail() {
+		return email;
 	}
-	public String getUser_nickname() {
-		return user_nickname;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public void setUser_nickname(String user_nickname) {
-		this.user_nickname = user_nickname;
+	public String getNickname() {
+		return nickname;
 	}
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
-	public String getUser_password() {
-		return user_password;
+	public String getPassword() {
+		return password;
 	}
-	public void setUser_password(String user_password) {
-		this.user_password = user_password;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public String getUser_profileImg() {
-		return user_profileImg;
+	public String getProfileImg() {
+		return profileImg;
 	}
-	public void setUser_profileImg(String user_profileImg) {
-		this.user_profileImg = user_profileImg;
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
 	}
-	public int getUser_honbabLevel() {
-		return user_honbabLevel;
+	public int getHonbabLevel() {
+		return honbabLevel;
 	}
-	public void setUser_honbabLevel(int user_honbabLevel) {
-		this.user_honbabLevel = user_honbabLevel;
+	public void setHonbabLevel(int honbabLevel) {
+		this.honbabLevel = honbabLevel;
 	}
-	public int getUser_group() {
-		return user_group;
+	public int getGroup() {
+		return group;
 	}
-	public void setUser_group(int user_group) {
-		this.user_group = user_group;
+	public void setGroup(int group) {
+		this.group = group;
 	}
 	
-	public User() {
-		
-	}
+	public User() {};
 	
-	public User(String user_email, String user_nickname, String user_password, String user_profileImg, int user_honbabLevel, int user_group) {
+	
+	
+	public User(int idx, String email, String nickname, String password, String profileImg, int honbabLevel, int group) {
 		super();
-		this.user_email = user_email;
-		this.user_nickname = user_nickname;
-		this.user_password = user_password;
-		this.user_profileImg = user_profileImg;
-		this.user_honbabLevel = user_honbabLevel;
-		this.user_group = user_group;
+		this.idx= idx;
+		this.email = email;
+		this.nickname = nickname;
+		this.password = password;
+		this.profileImg = profileImg;
+		this.honbabLevel = honbabLevel;
+		this.group = group;
 	}
+	
 	
 
 	
