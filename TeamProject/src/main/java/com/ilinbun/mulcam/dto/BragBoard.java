@@ -6,22 +6,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class BragBoard { // 자랑
 
-	
-	int articleNo; 
+	int articleNo;
 	int idx;
 
 	boolean inRestaurant;
-	
-	String title; 
+
+	String title;
 	String location;
-	 
+
 	int readCount;
 	Date date;
-	String imgfilename; 
-	String content; 
-	
-	public  BragBoard() {
-		
+//	String imgfilename; 
+	String content;
+
+	public BragBoard() {
+
 	}
 
 	public BragBoard(int articleNo, int idx, boolean inRestaurant, String title, String location, int readCount,
@@ -34,7 +33,7 @@ public class BragBoard { // 자랑
 		this.location = location;
 		this.readCount = readCount;
 		this.date = date;
-		this.imgfilename = imgfilename;
+//		this.imgfilename = imgfilename;
 		this.content = content;
 	}
 
@@ -46,7 +45,7 @@ public class BragBoard { // 자랑
 		this.title = title;
 		this.location = location;
 		this.readCount = readCount;
-		this.imgfilename = imgfilename;
+//		this.imgfilename = imgfilename;
 		this.content = content;
 	}
 
@@ -105,14 +104,14 @@ public class BragBoard { // 자랑
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
-	public String getImgfilename() {
-		return imgfilename;
-	}
-
-	public void setImgfilename(String imgfilename) {
-		this.imgfilename = imgfilename;
-	}
+//
+//	public String getImgfilename() {
+//		return imgfilename;
+//	}
+//
+//	public void setImgfilename(String imgfilename) {
+//		this.imgfilename = imgfilename;
+//	}
 
 	public String getContent() {
 		return content;
@@ -122,12 +121,9 @@ public class BragBoard { // 자랑
 		this.content = content;
 	}
 
-	
-	
 //	public int getArticleNo() {
 //	return articleNo;
 //
 //}
 
-	
 }

@@ -23,9 +23,9 @@
 	
  	<insert id="insertBragBoard" parameterType="Bragboard">
  		<![CDATA[
- 			insert into team2.honbab (idx, inRestaurant, title, location, readCount, imgfilename, content)
+ 			insert into team2.honbab (idx, inRestaurant, title, location, readCount, content)
  			
- 			values (#{idx}, #{inRestaurant}, #{title}, #{location}, #{readCount}, #{imgfilename}, #{content})
+ 			values (#{idx}, #{inRestaurant}, #{title}, #{location}, #{readCount}, #{content})
  		]]>
  		
  	</insert>
