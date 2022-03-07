@@ -14,7 +14,7 @@ public class ShareServiceImpl implements ShareService {
 	
 	@Override
 	public Shareboard shareboard() throws Exception {
-		Shareboard share = shareDAO.shareboard();
+		Shareboard share = shareDAO.selectshareboard();
 		return share;
 	}
 }

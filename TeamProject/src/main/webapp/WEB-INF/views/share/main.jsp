@@ -84,7 +84,7 @@ a {
         </div>
         
        
-       <a href="/share/board/writeform">
+       <a href="${pageContext.request.contextPath}/share/board/writeform">
        <div style="float:right;">
        <button type="button" value="글쓰기">글쓰기</button>
        </div>

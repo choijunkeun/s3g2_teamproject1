@@ -30,8 +30,8 @@ public class ShareController {
 		return "share/main";
 	}
 	
-	@GetMapping("/writeform")
+	@GetMapping("/board/writeform")
 	public String writeform() {
-		return "share/writeform";
+		return "share/board/writeform";
 	}
 }

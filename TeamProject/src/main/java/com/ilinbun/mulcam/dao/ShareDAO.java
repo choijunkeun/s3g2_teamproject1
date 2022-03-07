@@ -8,5 +8,5 @@ import com.ilinbun.mulcam.dto.Shareboard;
 @Mapper
 @Repository
 public interface ShareDAO {
-	public Shareboard shareboard() throws Exception;
+	public Shareboard selectshareboard() throws Exception;
 }
