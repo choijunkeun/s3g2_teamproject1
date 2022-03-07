@@ -15,7 +15,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</mappers>
 </configuration>
 
-<!--
+<!-- MYSQL DB모음
+
+//사용자 데이블
 CREATE TABLE `user` (
   `idx` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(50) NOT NULL,
@@ -25,25 +27,68 @@ CREATE TABLE `user` (
   `honbabLevel` int(11) DEFAULT '1',
   `group` int(11) DEFAULT '1',
   PRIMARY KEY (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `user` (`idx`,`email`,`nickname`,`password`,`profileImg`,`honbabLevel`,`group`) VALUES (1,'484342@gmail.com','inkyu091','1234','DEFAULT.jpg',1,1);
 
+//사용자-팔로우 테이블
+CREATE TABLE `user_follow` (
+	`idx` int,
+    `follow` int,
+    foreign key (`idx`) references `user`(`idx`)
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+//혼밥검색 - 리뷰 DB 테이블
+CREATE TABLE `reviewDB` (
+ `reviewNo` INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+ `id` INT NOT NULL,
+ `user_PK` INT NOT NULL,
+ `reviewContent` VARCHAR(3000) NULL,
+ `revImgFilepath` VARCHAR(100) NULL,
+ `rejectedCount` TINYINT(1) NULL,
+ `honbabLv` INT NULL,
+ `honbabReason` VARCHAR(500) NULL,
+ `interiorRate` DECIMAL(2,1) NULL,
+ `serviceRate` DECIMAL(2,1) NULL,
+ `priceRate` DECIMAL(2,1) NULL,
+ `tasteRate` DECIMAL(2,1) NULL,
+ `writeTime` DATETIME DEFAULT current_timestamp NOT NULL
+) AUTO_INCREMENT = 1, DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+//혼밥자랑테이블
 CREATE TABLE `honbab` (
   `articleNo` int(11) NOT NULL AUTO_INCREMENT,
-  `user_PK` int(11) NOT NULL,
+  `idx` int(11) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `inRestaurant` tinyint(1) NOT NULL,
+  `inRestaurant` BOOLEAN NOT NULL,
   `location` varchar(40) NOT NULL,
   `content` varchar(4000) NOT NULL,
   `imgfilename` varchar(50) NOT NULL,
   `readCount` int(11) DEFAULT '0',
   PRIMARY KEY (`articleNo`),
-  KEY `user_PK` (`user_PK`),
-  CONSTRAINT `honbab_ibfk_1` FOREIGN KEY (`user_PK`) REFERENCES `user` (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `idx` (`idx`),
+  FOREIGN KEY (`idx`) REFERENCES `user` (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `honbab` (`articleNo`,`user_PK`,`date`,`inRestaurant`,`location`,`content`,`imgfilename`,`readCount`) VALUES (1,1,'2022-03-03 22:54:40',0,'집','햇반','rice.jpg',0);
-INSERT INTO `honbab` (`articleNo`,`user_PK`,`date`,`inRestaurant`,`location`,`content`,`imgfilename`,`readCount`) VALUES (2,1,'2022-03-03 22:56:00',1,'졶맛커피','콜드브루','coffee.jpg',0);
 
--->
+//혼밥자랑-좋아요 테이블
+CREATE TABLE `honbabLikes` (
+	`articleNo` int ,
+	`idx` int,
+    foreign key (`articleNo`) references `honbab`(`articleNo`),
+    foreign key (`idx`) references `user`(`idx`)
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+//혼밥자랑-댓글 테이블
+CREATE TABLE `honbabComment` (
+    `commentNo` int AUTO_INCREMENT primary key,
+    `articleNo` int ,
+	`idx` int,
+    `date`	DATETIME DEFAULT current_timestamp NOT NULL	NULL,
+	`comment`	VARCHAR(500) NOT NULL,
+    foreign key (`articleNo`) references `honbab`(`articleNo`),
+    foreign key (`idx`) references `user`(`idx`)
+)DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ -->
