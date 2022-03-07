@@ -40,19 +40,19 @@ a {
 		<div class="container">
 			<div class="column notiboard">
 			
-			<a href="/comm/boardlistN/1" >
+			<a href="/share/notice/viewformN" >
 				<div class="row">1.  ★★★반찬공유 게시판 이용 가이드 1.1★★★
 					<div class="col" style="text-align: right;">2022-02-22 18:20</div>
 				</div>
 			</a>
 			
-			<a href="/comm/boardlistN/2" >
+			<a href="/share/boardlistN/2" >
 				<div class="row">2. [INFO] 용산구 전통시장 할인 정보
 					<div class="col" style="text-align: right;">2022-02-22 18:30</div>
 				</div>
 			</a>
 			
-			<a href="/comm/boardlistN/3" >
+			<a href="/share/boardlistN/3" >
 				<div class="row">3. [꿀팁] 음식물 깔끔하게 소분하는 법!!!
 					<div class="col" style="text-align: right;">2022-02-22 19:28</div>
 				</div>
@@ -84,7 +84,7 @@ a {
         </div>
         
        
-       <a href="/share/writeform">
+       <a href="/share/board/writeform">
        <div style="float:right;">
        <button type="button" value="글쓰기">글쓰기</button>
        </div>
@@ -111,7 +111,7 @@ a {
 			</div>
 			
 			<!-- 임시 게시물 -->
-			<a href="/share/boardlist/1" >
+			<a href="/share/board/viewform" >
 				<div class="row shareboard" style="text-align: center;">
 					<div class="col">1</div>
 					<div class="col-5" style="text-align: left; ">[공유완료] 콩나물 너무 많이 사버렸어요~~</div>

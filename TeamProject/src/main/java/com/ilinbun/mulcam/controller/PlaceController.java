@@ -156,8 +156,6 @@ public class PlaceController {
 	public ResponseEntity<String> writeReview(@RequestPart("key") Map<String, String> param,
 			@RequestPart(value="file", required=false) MultipartFile file) {
 		ResponseEntity<String> result = null;
-
-		//Map<String, Object> result = new HashMap<String, Object>();
 		
 		System.out.println(file.getOriginalFilename());
 		System.out.println(param.get("reviewContent"));	
