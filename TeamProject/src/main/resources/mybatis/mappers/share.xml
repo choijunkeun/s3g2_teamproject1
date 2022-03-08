@@ -4,10 +4,29 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.ShareDAO">	
-	<select id="selectshareboard" resultType="Shareboard">
+	<select id="selectShareboard" resultType="Shareboard">
 		<![CDATA[
-			SELECT * FROM shareBOARD ORDER BY articleNo DESC LIMIT 1 
+			SELECT * FROM shareboard ORDER BY articleno DESC LIMIT 1 
 		]]>
 	</select>
+	<insert id="insertShareBoard" parameterType="Shareboard">
+ 		<![CDATA[
+ 			insert into team2.shareBOARD (idx, subway, title, content)
+ 			
+ 			values (#{idx}, #{subway}, #{title}, #{content})
+ 		]]>
+ 		
+ 	</insert>
+	<update id="updateShareBoard" parameterType="Shareboard">
+ 		<![CDATA[
+ 			update team2.shareBOARD set title=#{board_subject}, content=#{content}
+ 			where articleNo=#{articleNo}
+ 		]]>
+ 	</update>
+ 	<update id="updateReadCount" parameterType="int">
+ 		<![CDATA[
+ 			update team2.shareBOARD set readCount=readCount+1 where articleNo=#{articleNo} 
+ 		]]>
+ 	</update>
 
 </mapper>

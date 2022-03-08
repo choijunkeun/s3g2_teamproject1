@@ -27,15 +27,12 @@ h2 {
 		<form action="./boardwrite" method="post"
 			enctype="multipart/form-data" name="boardform">
 			<div class="container pb-3 bg-light">
-
-
 				<form>
 					<div class="container p-2 ">
 						<div class="row p-1 text-center ">
 							<div class="col">
 								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
 								<table style="width: fit-content; margin: 0 auto;">
-								
 									<tr>
 										<td colspan="2"></td>
 										<td colspan="2">

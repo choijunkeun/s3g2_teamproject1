@@ -14,7 +14,34 @@ public class ShareServiceImpl implements ShareService {
 	
 	@Override
 	public Shareboard shareboard() throws Exception {
-		Shareboard share = shareDAO.selectshareboard();
+		Shareboard share = shareDAO.selectShareboard();
 		return share;
+	}
+
+	@Override
+	public void regShareBoard(Shareboard shareboard) throws Exception {
+		Integer articleNo = shareDAO.selectMaxArticleNo();
+		if(articleNo==null) articleNo = 1;
+		else articleNo+=1;
+		shareboard.setArticleNo(articleNo);
+		shareDAO.insertShareBoard(shareboard);
+	}
+
+	@Override
+	public Shareboard shareBoardQueryByID(String id) throws Exception {
+//		Shareboard listform = shareDAO.shareBoardQueryByID(id);
+//		return listform;
+		return null; //shareboardquery오류로 임시수정
+	}
+
+	@Override
+	public Shareboard getArticleNo(int articleNo) throws Exception {
+		shareDAO.updateReadCount(articleNo);
+		return shareDAO.selectShareboard();
+	}
+
+	@Override
+	public void modifyShareBoard(Shareboard shareboard) throws Exception {
+		
 	}
 }

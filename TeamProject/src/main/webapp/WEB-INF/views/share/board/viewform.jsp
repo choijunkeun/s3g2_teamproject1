@@ -46,7 +46,7 @@ a {
 <body>
 <!-- 게시판 수정 -->
 	<section id="articleForm">
-		<h2>커뮤니티</h2>
+		<h2>반찬공유 게시판</h2>
 		
 	<section id="articleContentArea">
 	<section id="basicInfoArea">

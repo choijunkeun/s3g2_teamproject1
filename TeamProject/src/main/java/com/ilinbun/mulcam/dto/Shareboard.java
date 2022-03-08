@@ -5,30 +5,36 @@ import java.sql.Date;
 public class Shareboard {
 	int articleNo;
 	int idx;
-	String location;
+	String subway;
 	String title;
 	String content;
-	String filename;
+	
 	Date datetime;
 	int headerTag;
-	int views;
+	int readcount;
 	
 	public Shareboard() {
 		
 	}
-
-	public Shareboard(int articleNo, int idx, String location, String title, String content, String filename,
-			Date datetime, int headerTag, int views) {
+	
+	public Shareboard(String title, String subway, String content, int idx) {
+		super();
+		this.title = title;
+		this.subway = subway;
+		this.content = content;
+		this.idx = idx;
+	}
+	
+	public Shareboard(int articleNo, int idx, String subway, String title, String content, Date datetime, int headerTag, int readcount) {
 		super();
 		this.articleNo = articleNo;
 		this.idx = idx;
-		this.location = location;
+		this.subway = subway;
 		this.title = title;
 		this.content = content;
-		this.filename = filename;
 		this.datetime = datetime;
 		this.headerTag = headerTag;
-		this.views = views;
+		this.readcount = readcount;
 	}
 
 	public int getArticleNo() {
@@ -47,12 +53,12 @@ public class Shareboard {
 		this.idx = idx;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getSubway() {
+		return subway;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setSubway(String subway) {
+		this.subway = subway;
 	}
 
 	public String getTitle() {
@@ -71,14 +77,6 @@ public class Shareboard {
 		this.content = content;
 	}
 
-	public String getFilename() {
-		return filename;
-	}
-
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
-
 	public Date getDatetime() {
 		return datetime;
 	}
@@ -95,13 +93,14 @@ public class Shareboard {
 		this.headerTag = headerTag;
 	}
 
-	public int getViews() {
-		return views;
+	public int getReadcount() {
+		return readcount;
 	}
 
-	public void setViews(int views) {
-		this.views = views;
+	public void setReadcount(int readcount) {
+		this.readcount = readcount;
 	}
+
 	
 	
 }

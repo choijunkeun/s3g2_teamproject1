@@ -23,12 +23,10 @@
 } */
 
 
-a:link { color: white; text-decoration: none; !important}
-a:visited { color: grey; text-decoration: none; !important}
-a:hover { color: grey; text-decoration: none; !important}
+a:link, a:visited, a:hover, a:active { color: grey; text-decoration: none; !important}
 
-
-출처: https://it77.tistory.com/126 [시원한물냉의 사람사는 이야기]
+	
+}
 </style>
 <body>
 	<div class="container">
@@ -59,7 +57,7 @@ a:hover { color: grey; text-decoration: none; !important}
 				document.getElementById(window.location.pathname.split("/")[1]
 						+ '-nav').classList.add('font-weight-bold');
 				document.getElementById(window.location.pathname.split("/")[1]
-						+ '-nav').classList.add('text-secondary');
+						+ '-nav').classList.add('text-white');
 			}
 		}
 	</script>
