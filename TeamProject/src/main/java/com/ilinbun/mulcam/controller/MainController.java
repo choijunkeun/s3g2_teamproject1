@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,27 +61,51 @@ public class MainController {
 //	}
 	
 	
-	// 닉네임 중복 체크 컨트롤러
-	@ResponseBody
-	@PostMapping(value="/nickCheck")
-	public String memberOverlap(@RequestParam(value="nickname", required=true)String nickname) {
-		System.out.println("incoming value"+nickname);
-		boolean overlap=false;
-		try {
-			overlap=userService.nickCheck(nickname);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return String.valueOf(overlap);
-	}
+//	// 닉네임 중복 체크 컨트롤러
+//	@ResponseBody
+//	@PostMapping(value="/nickCheck")
+//	public String memberOverlap(@RequestParam(value="nickname", required=true)String nickname) {
+//		System.out.println("incoming value"+nickname);
+//		boolean overlap=false;
+//		try {
+//			overlap=userService.nickCheck(nickname);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		return String.valueOf(overlap);
+//	}
+	
+	// 아이디 체크
+    @PostMapping("/nickCheck")
+    @ResponseBody
+    public String nickCheck(@RequestParam("nickname") String nickname) throws Exception{
+        System.out.println("nickCheck 진입");
+        System.out.println("전달받은 nickname:"+nickname);
+        String msg = userService.nickCheck(nickname);
+        System.out.println("확인 결과:"+msg);
+        return msg;
+    }
+    
+ // 이메일 체크
+    @PostMapping("/emailCheck")
+    @ResponseBody
+    public String emailCheck(@RequestParam("email") String email) throws Exception{
+        System.out.println("emailCheck 진입");
+        System.out.println("전달받은 email:"+email);
+        String msg = userService.emailCheck(email);
+        System.out.println("확인 결과:"+msg);
+        return msg;
+    }
+	
+	
 	
 
 	// 회원가입 기능 컨트롤러
 	@PostMapping("/join")
 	public String postJoin(@Valid User user, BindingResult bindingResult, Model model) throws Exception {
-		System.out.println("postJoin()");
+//		System.out.println("postJoin()");
 		if(bindingResult.hasErrors()) {
-			System.out.println("에러");
+//			System.out.println("에러");
 			
 			List<FieldError> list = bindingResult.getFieldErrors();
 			Map<String, String> errorMsg = new HashMap<>();
@@ -89,8 +114,8 @@ public class MainController {
 				String field = list.get(i).getField(); 
 				String message = list.get(i).getDefaultMessage(); 
 						
-				System.out.println("field = " + field);
-				System.out.println("message = " + message);
+//				System.out.println("field = " + field);
+//				System.out.println("message = " + message);
 				
 				errorMsg.put(field, message);
 			}
@@ -147,6 +172,13 @@ public class MainController {
 		System.out.println(password);
 		return "redirect:/";
 	}
+	
+	// 로그아웃 컨트롤러
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
+	}
 
 	// 비밀번호 찾기 폼으로 이동하는 컨트롤러
 	@GetMapping("/searchPwd")
@@ -158,10 +190,7 @@ public class MainController {
 	@GetMapping("/myPage")
 	public String myPage(HttpSession session, Model model) throws Exception {
 		
-		Object email = session.getAttribute("email");
-		
-		
-		
+		session.getAttribute("email");
 		return "user/myPageForm";
 	}
 	

@@ -10,12 +10,17 @@
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	
-	<!-- <style>
-		div{
-		background-color: #c3e8fc;
-		border : 1px solid; 
-		} 
-	</style> -->
+	<style>
+	#user_info {
+		font-size: 40px;
+		font-weight: bold;
+	}
+	#user_level {
+		font-size: 30px;
+		font-weight: bold;
+	}
+	
+	</style>
 <title>일인분(마이페이지)</title>
 </head>
 <body>
@@ -27,31 +32,31 @@
 	<div class="row justify-content-center">
 		<div class="col mt-5" style="height:700px">
 			<div class="card">
-				<div class="card-body p-4">
+				<div class="card-body p-4" style="height:275px">
 					<div class="text-center">
-						<h5 class="fw-bolder">프로필부분</h5>
+						
 						
 						<img style="border-radius: 100px; width: 125px; height: 125px;"
 							src="http://placehold.co/100x100">
-							<div>${user.nickname}</div>
-							<div>${user.honbabLevel}</div>
+							<div id="user_info">${user.nickname}</div>
+							<div id="user_level">LV. ${user.honbabLevel}</div>
 					</div>
 				</div>
 				
 				
 				<div class="card-body p-4">
 					<div class="text-center">
-						<h5 class="fw-bolder">팔로워 / 팔로잉 부분</h5>
+						<h5 class="fw-bolder">팔로워 0 &emsp;&emsp;&emsp; 팔로잉 0</h5>
 					</div>
 				</div>
 				
 				<div>
-					<a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a>
+					<div style="text-align:center;"><a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a></div>
 				</div>
 				
-				<div class="card-body p-4">
-				<div class="text-center" style="height:300px">
-						<h5 class="fw-bolder">[ooo]님의 혼밥이 [oo]만큼 사랑받고 있어요 부분</h5>
+				<div class="card-body p-4" style="height:250px">
+				<div class="text-center">
+						<h5 class="fw-bolder" style="padding:40px" >${user.nickname}님의 혼밥이 [oo]만큼 사랑받고 있어요</h5>
 				</div>
 				</div>
 				
@@ -68,7 +73,7 @@
 			<div class="card"   style="height:670px;" >
 				<div class="card-body p-4" >
 					<div class="text-center" >
-						<h5 class="fw-bolder">ooo님이 리뷰한 혼밥집</h5>
+						<h5 class="fw-bolder">내가 리뷰한 혼밥집</h5>
 					</div>
 				</div>
 				

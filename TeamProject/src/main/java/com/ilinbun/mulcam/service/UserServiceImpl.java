@@ -17,14 +17,35 @@ public class UserServiceImpl implements UserService {
 	public void makeUser(User user) throws Exception {
 		userDAO.join(user);
 	}
-
+	
 	// 닉네임 중복확인
 	@Override
-	public boolean nickCheck(String nickname) throws Exception {
-			User user = userDAO.nickCheck(nickname);
-			if(user==null) return false;
-			return true;
+	public String nickCheck(String nickname) throws Exception {
+		String msg = "사용가능한 닉네임입니다.";
+		if(nickname.length()>=2) {
+			if(userDAO.nickCheck(nickname) == 1) {
+				msg = "이미 사용중인 닉네임입니다.";
+			}
+		} else {
+			msg = "닉네임은 2 ~ 6글자만 가능합니다.";
+		}
+		return msg;
 	}
+
+	//이메일 중복확인
+	@Override
+	public String emailCheck(String email) throws Exception {
+		String msg = "사용가능한 이메일입니다.";
+		if(email.length()>=2) {
+			if(userDAO.emailCheck(email) == 1) {
+				msg = "이미 사용중인 이메일입니다.";
+			}
+		} else {
+			msg = "2글자 이상을 입력하세요";
+		}
+		return msg;
+	}
+
 
 	@Override
 	public User loginUser(String email, String password) throws Exception {

@@ -161,6 +161,24 @@ button {
 	display: flex;
 }	
 
+.nickname_msg {
+ 	font-size:12px;
+ 	color : #ff3232;
+ }
+ 
+ .email_msg {
+ 	font-size:12px;
+ 	color : #ff3232;
+ }
+
+
+
+#joinBtn:disabled {
+	background-color:#bdbebd;
+	color : 
+}
+
+
 
 
 </style>
@@ -184,37 +202,40 @@ button {
 
 		<hr style="width: 500px">
 		<div>
-			<div>
+			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="text" id="nickname" name="nickname" autocomplete="off"  >
+				<input class="input-field" type="text" id="nickname" name="nickname" autocomplete="nickname"  required/>
 				<label for="nickname"><span>닉네임</span></label>
-				</p>			
-			</div>
-			<div id="nick_msg" class="msg">${errorMsg.nickname}</div>
+				<span class="nickname_msg"></span>
+				</p>
 			
-			<div>
+							
+			</div>
+			
+			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="email" id="email" name="email" autocomplete="off">
+				<input class="input-field" type="email" id="email" name="email" autocomplete="email" required/>
 				<label for="id"><span>이메일</span></label> 
+				<span class="email_msg "></span>
 				</p>				
 			</div>
-			<div id="email_msg" class="msg">${errorMsg.email}</div>
+
 			
-			<div>
+			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="password" id="password" name="password" autocomplete="off" >
+				<input class="input-field" type="password" id="password" name="password" autocomplete="off" required >
 				<label for="password"><span>비밀번호</span></label>
 				</p>
 			</div>
-			<div id="pass_msg" class="msg">${errorMsg.password}</div>
 			
-			<div>
+			
+			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="password" id="password2" autocomplete="off" >
+				<input class="input-field" type="password" id="password2" autocomplete="off" required>
 				<label for="password2"><span>비밀번호 확인</span></label>
 				</p>			
 			</div>
-			<div id="pass2_msg" class="msg">${errorMsg.password2}</div>
+			
 			
 		</div>
 		
@@ -258,10 +279,96 @@ button {
 		</div>
 		<!-- 회원 가입 -->
 		<div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
-		<button type="submit" class="join-btn">회원가입하기</button>
+		<button type="submit" id="joinBtn" class="join-btn" disabled="disabled">회원가입하기</button>
 	</form>
+		
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
 
+//닉네임 체크
+$('#nickname').focusout(function(){
+	$("#joinBtn").attr("disabled",true)
+	var nickname = $('#nickname').val(); //id값이 "nickname"인 입력란의 값을 저장
+        if (nickname != "" || nickname != null) {
+	        $.ajax({
+	            url:'/nickCheck', //Controller에서 인식할 주소
+	            type:'POST', //POST 방식으로 전달
+	            data:{nickname:nickname},
+	            success:function(data){ //컨트롤러에서 넘어온 cnt 값을 받는다.
+	                if (data != "사용가능한 닉네임입니다.") {
+	                	$("#joinBtn").attr("disabled",true)
+	                }
+	                else{
+		            	$("#joinBtn").attr("disabled",false)
+	                }
+	                $('.nickname_msg').text(data);
+	            },
+	            error:function(){
+	                alert("에러입니다");
+	            }
+	        });
+        } else {
+        	console.log(nickname)
+        	$('.nickname_msg').text("aaaaaaa");
+        }
+});
+
+
+//이메일 체크
+$('#email').focusout(function(){
+	$("#joinBtn").attr("disabled",true)
+	var email = $('#email').val(); //id값이 "email"인 입력란의 값을 저장
+        if (email != "" || email != null) {
+	        $.ajax({
+	            url:'/emailCheck', //Controller에서 인식할 주소
+	            type:'POST', //POST 방식으로 전달
+	            data:{email:email},
+	            success:function(data){ //컨트롤러에서 넘어온 cnt 값을 받는다.
+	                if (data != "사용가능한 이메일입니다.") {
+	                	$("#joinBtn").attr("disabled",true)
+	                }
+	                else{
+		            	$("#joinBtn").attr("disabled",false)
+	                }
+	                $('.email_msg').text(data);
+	            },
+	            error:function(){
+	                alert("에러입니다");
+	            }
+	        });
+        } else {
+        	console.log(email)
+        	$('.email_msg').text("aaaaaaa");
+        }
+});
+
+    
+    
+    /* function checkEmail(){
+        var email = $('#email').val(); //id값이 "nickname"인 입력란의 값을 저장
+        $.ajax({
+            url:'/emailCheck', //Controller에서 인식할 주소
+            type:'POST', //POST 방식으로 전달
+            data:{email:email},
+            success:function(cnt){ //컨트롤러에서 넘어온 cnt 값을 받는다.
+            	 if(cnt != 1){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+                     $('.email_ok').css("display","inline-block"); 
+                     $('.email_already').css("display", "none");
+            	 } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
+            		 $('.email_already').css("display","inline-block");
+                     $('.email_ok').css("display", "none");
+            	 }
+            },
+            error:function(){
+                alert("에러입니다");
+            }
+        });
+    }; */
+</script>
+		
 	<!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	
+	
 	<script>		
 	
 	

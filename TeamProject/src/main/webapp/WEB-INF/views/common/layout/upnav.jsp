@@ -30,7 +30,7 @@
 					<a href="/join"><div class="btn">Join</div></a>
 				</c:when>
 				<c:otherwise>
-					<div class="btn">Logout</div>
+					<a href="/logout"><div class="btn">Logout</div></a>
 					<div class="membersection py-1">
 						<!-- membersection도 나중에 쓸 것 같아서 임의로 붙인 클래스 -->
 						<span class="badge bg-danger rounded-pill">Lv.${user.honbabLevel }</span>

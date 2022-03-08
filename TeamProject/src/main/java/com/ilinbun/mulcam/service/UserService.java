@@ -12,5 +12,11 @@ public interface UserService {
 
 	
 	//닉네임 체크
-	boolean nickCheck(String nickname) throws Exception;
+	String nickCheck(String nickname) throws Exception;
+
+	
+	//이메일 체크
+	String emailCheck(String email) throws Exception;
+
+	
 }

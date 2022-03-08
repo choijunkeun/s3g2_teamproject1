@@ -11,10 +11,21 @@
 	    ]]>
     </insert>
     
-    <select id="nickCheck" resultType="User" parameterType="String">
+    <!-- 닉네임 중복확인 쿼리 -->
+    
+    <select id="nickCheck" resultType="int" parameterType="String">
 		<![CDATA[
-			SELECT * FROM user
+			SELECT COUNT(nickname) FROM user
 			WHERE nickname = #{nickname}
+		]]>
+	</select>
+	
+	<!-- 이메일 중복확인 쿼리 -->
+	
+	 <select id="emailCheck" resultType="int" parameterType="String">
+		<![CDATA[
+			SELECT COUNT(email) FROM user
+			WHERE email = #{email}
 		]]>
 	</select>
 	
