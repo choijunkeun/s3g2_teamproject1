@@ -1,5 +1,8 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,20 +34,47 @@ public class UserServiceImpl implements UserService {
 		}
 		return msg;
 	}
-
+	// 이메일 정규표현식 체크(이메일 형식 체크)
+	public boolean isValidEmail(String email) {
+		boolean emailcheck = false;
+		String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(email);
+		if(m.matches()) {
+			emailcheck = true;
+		}
+		return emailcheck;	
+	}
+	
 	//이메일 중복확인
 	@Override
 	public String emailCheck(String email) throws Exception {
 		String msg = "사용가능한 이메일입니다.";
-		if(email.length()>=2) {
+		if(isValidEmail(email)) {
 			if(userDAO.emailCheck(email) == 1) {
 				msg = "이미 사용중인 이메일입니다.";
 			}
 		} else {
-			msg = "2글자 이상을 입력하세요";
+			msg = "이메일 형식을 확인하세요.";
 		}
 		return msg;
 	}
+	
+	
+	
+//	//이메일 중복확인
+//		@Override
+//		public String emailCheck(String email) throws Exception {
+//			String msg = "사용가능한 이메일입니다.";
+//			if(email.length()>=2) {
+//				if(userDAO.emailCheck(email) == 1) {
+//					msg = "이미 사용중인 이메일입니다.";
+//				}
+//			} else {
+//				msg = "2글자 이상을 입력하세요";
+//			}
+//			return msg;
+//		}
 
 
 	@Override

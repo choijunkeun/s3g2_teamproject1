@@ -170,6 +170,11 @@ button {
  	font-size:12px;
  	color : #ff3232;
  }
+ 
+ .password_msg{
+ 	font-size:12px;
+ 	color : #ff3232;
+ }
 
 
 
@@ -214,16 +219,16 @@ button {
 			
 			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="email" id="email" name="email" autocomplete="email" required/>
+				<input class="input-field" type="text" id="email" name="email" autocomplete="email" required/>
 				<label for="id"><span>이메일</span></label> 
-				<span class="email_msg "></span>
+				<span class="email_msg"></span>
 				</p>				
 			</div>
 
 			
 			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="password" id="password" name="password" autocomplete="off" required >
+				<input class="input-field" type="password" id="password" name="password" autocomplete="password" required >
 				<label for="password"><span>비밀번호</span></label>
 				</p>
 			</div>
@@ -231,8 +236,9 @@ button {
 			
 			<div style="height:60px">
 				<p class="p">
-				<input class="input-field" type="password" id="password2" autocomplete="off" required>
+				<input class="input-field" type="password" id="password2" autocomplete="password" required>
 				<label for="password2"><span>비밀번호 확인</span></label>
+				<span class="password_msg"></span>
 				</p>			
 			</div>
 			
@@ -342,7 +348,30 @@ $('#email').focusout(function(){
         }
 });
 
-    
+//비밀번호 유효성 체크
+$(function(){
+	$('#password2').focusout(function(){
+	   if($('#password').val() != $('#password2').val()){
+	    	if($('#password2').val()!=''){
+		    	$('.password_msg').text("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+	    	    $('#password2').val('');
+	          	$('#password2').focus();
+	      	}
+	    } else if($('#password').val().length < 1) {
+	    	$('.password_msg').text("비밀번호를 입력해주세요");
+	    } else if($('#password').val() == $('#password2').val()) {
+	    	$('.password_msg').text("비밀번호가 일치합니다.");
+	    } 
+	   
+	})  	   
+});   
+
+
+// 약관 동의 체크
+
+
+
+
     
     /* function checkEmail(){
         var email = $('#email').val(); //id값이 "nickname"인 입력란의 값을 저장
