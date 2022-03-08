@@ -29,9 +29,9 @@ public class ShareServiceImpl implements ShareService {
 
 	@Override
 	public Shareboard shareBoardQueryByID(String id) throws Exception {
-//		Shareboard listform = shareDAO.shareBoardQueryByID(id);
-//		return listform;
-		return null; //shareboardquery오류로 임시수정
+		Shareboard listform = shareDAO.shareBoardQueryByID(id);
+		return listform;
+//		return null; //shareboardquery오류로 임시수정
 	}
 
 	@Override

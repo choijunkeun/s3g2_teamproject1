@@ -249,7 +249,7 @@ label.star:before {
 		<div class="row py-3">
 			<div class="col text-center">
 				<!-- <input type="reset" value="다시쓰기" /> -->
-				<button class="btn border bd-secondary">취소</button>
+				<button class="btn border bd-secondary" onclick="cancleboard()">취소</button>
 				<input type="submit" class="btn border bd-secondary" value="등록" onclick="registerboard()" />
 			</div>
          </div>
@@ -296,20 +296,20 @@ label.star:before {
 				document.getElementById('sortDropdownSub').innerText='지역을 골라주세요!';
 			}
 		}
-	</script>
-    <script>
-
-    $('registerboard').onClick(function() {
-        alert("반찬 및 식재료를 공유 시 발생되는 법적인 문제는 개인에게 달려있습니다. 개발진들은 이를 책임지지 않습니다.")
-        alert("게시글이 작성되었습니다")
-    })
-    $('cancelboard').onClick(function() {
-         if (confirm('게시글 작성을 취소하시겠습니까?')) {
-            console.log('delete info')
-        } else {
-            console.log('go back to writeform')
-        }
-    })
+		
+    	function registerboard() {
+    		 alert("반찬 및 식재료를 공유 시 발생되는 법적인 문제는 개인에게 달려있습니다. 개발진들은 이를 책임지지 않습니다.")
+        	 alert("게시글이 작성되었습니다")
+    	}
+    	
+   	 	function cancleboard() {
+   	 		if(confirm('게시글 작성을 취소하시겠습니까?')) {
+   	 			console.log('delete info')
+   	 		} else {
+   	 			console.log('go back to writeform')
+   	 		}
+   	 	}	
+ 
     </script>
 </body>
 </html>

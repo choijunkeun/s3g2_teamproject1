@@ -150,7 +150,7 @@ public class ShareController {
 	@GetMapping("/board/writeform")
 	public String writeform(Model model) {
 		HttpSession session = null; //로그인
-		String test = "admin@ilin.bun";
+		String test = "km@ilin.bun";
 		model.addAttribute("email", test);
 		return "share/board/writeform";
 	}
