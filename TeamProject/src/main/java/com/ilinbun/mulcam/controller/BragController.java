@@ -267,23 +267,21 @@ public class BragController {
 //		return mav;
 //	}
 //	
-//	//글보기
-//	@GetMapping(value="viewdetail")
-//	public ModelAndView boardDeatail(@RequestParam(value="board_num")int boardNum,
-//			@RequestParam(value="page", required=false, defaultValue="1")int page) {
-//		ModelAndView mav=new ModelAndView();
-//		try {
-//			Board board=boardService.getBoard(boardNum);
-//			mav.addObject("article", board);
-//			mav.addObject("page", page);
-//			mav.setViewName("brag/viewDetail");
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			mav.addObject("err", e.getMessage());
-//			mav.setViewName("brag/err");
-//		}
-//		return mav;
-//	}
+	//글보기
+	@GetMapping(value="viewdDtail")
+	public ModelAndView boardDeatail(@RequestParam(value="articleNo")int articleNo) {
+		ModelAndView mav=new ModelAndView();
+		try {
+			BragBoard bragboard = new BragBoard();
+			mav.addObject("articleNo", bragboard);
+			mav.setViewName("brag/viewDetail");
+		} catch(Exception e) {
+			e.printStackTrace();
+			mav.addObject("err", e.getMessage());
+			mav.setViewName("brag/err");
+		}
+		return mav;
+	}
 
 	// 글보기?? 훈이꺼 reviewForm controller
 	@PostMapping("/{id}")
