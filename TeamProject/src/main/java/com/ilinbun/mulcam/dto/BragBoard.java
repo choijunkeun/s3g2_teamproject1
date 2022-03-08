@@ -63,7 +63,7 @@ public class BragBoard { // 자랑
 		this.idx = idx;
 	}
 
-	public boolean isMoonpa() {
+	public boolean getMoonpa() {
 		return moonpa;
 	}
 

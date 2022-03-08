@@ -138,7 +138,7 @@ public class BragController {
 		System.out.println(content.trim()); // DB저장, 반드시 trim()
 		
 		try {
-			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, idx, content);
+			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);
 			bragService.regBragBoard(bragboard);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

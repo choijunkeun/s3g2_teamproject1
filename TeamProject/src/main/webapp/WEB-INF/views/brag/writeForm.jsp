@@ -25,7 +25,8 @@
         			uploadUrl : "/brag/upload"
         		}
         	}).then(editor=> {
-        		window.editor=editor;
+        		//window.editor=editor;
+        		editor.setData('${content}');
         	})
         	.catch((error) => {
         		console.error(error);
@@ -200,7 +201,7 @@ label.star:before {
 		<div class="container pb-3 bg-light" class="outer" >
 			<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
 
-			<form action="./bragwrite" method="post" enctype="multipart/form-data" name="bragform" id="bwForm">
+			<form action="./bragwrite" method="post" name="bragform" id="bwForm">
 				<div>
 					<input type="hidden" id="idx" name="idx" value=${user.idx }>
 					<div class="container p-2 ">

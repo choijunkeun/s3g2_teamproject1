@@ -19,14 +19,16 @@
 <script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 <script>
 	$(function(){
-        ClassicEditor.create(document.querySelector("#editor"))
-        .then(editor=>{
-        	editor.setData('${content}');
-        })
-        .catch((error) => {
-        	console.error(error);
-        });
-	});
+	      ClassicEditor.create(document.querySelector("#editor"), {
+	    	  initialData : '${todayselect.content}'
+	      }).then(editor=> {
+    		window.editor=editor;
+    		})
+		   .catch((error) => {
+		   	console.error(error);
+		    });
+		})
+
 </script>
 
 
@@ -289,13 +291,17 @@ label.star:before {
 	</section>
 	</section>
 	<section id="commandList">
-		<a href="replyform?board_num=${article.board_num}&page=${page}"> [답변] </a> 
-		<a href="modifyform?board_num=${article.board_num}"> [수정] </a> 
-		<a href="deleteform?board_num=${article.board_num}&page=${page}"> [삭제] </a>
+<%-- 		<a href="replyform?board_num=${article.board_num}&page=${page}"> [답변] </a> --%> 
+<%-- 		<a href="modifyform?board_num=${article.board_num}"> [수정] </a> 
+		<a href="deleteform?board_num=${article.board_num}&page=${page}"> [삭제] </a> --%>
 		<a href="./boardlist?page=${page}"> [목록]</a>&nbsp;&nbsp;
 	</section>
+	<!-- BOARD 에서 가져온 게시판 수정 끝-->
+	
+	
+	
 
-	<script>
+<!-- 	<script>
 	
 		function moonpaChange(arg) {
 			document.getElementById('moonpa').value=arg; 
@@ -305,6 +311,6 @@ label.star:before {
 			else
 				document.getElementById('sortDropdown').innerText='해먹파';
 		}
-	</script>
+	</script> -->
 </body>
 </html>
