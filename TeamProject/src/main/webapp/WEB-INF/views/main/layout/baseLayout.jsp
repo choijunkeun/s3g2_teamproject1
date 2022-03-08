@@ -6,7 +6,7 @@
    
 <%-- <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
-<%!User user = new User("mockup@mock.up", "목업", "", "#", 5, 1);%>
+<%!User user = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);%>
 <c:set var="user" value='<%=user%>' />
 <!-- 목업 코드 --> --%>
 
@@ -22,6 +22,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 	<style>
 		#headertitle:link {
 		  color : white;

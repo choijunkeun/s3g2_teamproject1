@@ -42,6 +42,8 @@ dependencies {
 	// inject 에너테이션
 	implementation group: 'javax.inject', name: 'javax.inject', version: '1'
 	
+
+	
 	
 }
 

@@ -59,7 +59,7 @@
 		  opacity: 0;
 		  -moz-opacity: 0;
 		  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
-		  width: 200px;
+		  /* width: 200px; */
 		  cursor: pointer;
 		  position: absolute;
 		  left: 50%;
@@ -149,13 +149,13 @@
 				<img src="#">
 			</div> -->
 		</div>
-		<form action="../writeReview" method="post" enctype="multipart/form-data" id="prForm">
+		<form class="container" action="../writeReview" method="post" enctype="multipart/form-data" id="prForm">
 		<!-- <form id="prForm"> -->
 			<input type="hidden" name="user_PK" id="user_PK" value="${user.idx }"> <!-- 목업 유저정보 코드 -->
 			<input type="hidden" name="id" id="id" value="${pr.id }"> <!-- 장소값 코드 -->
-			<div class="container p-2 ">
-				<div class="row p-1 text-center ">
-					<div class="col"> <!-- https://codepen.io/jexordexan/pen/yyYEJa -->
+			<div class="row p-2 ">
+				<div class="col p-1 text-center ">
+					<div class="row"> <!-- https://codepen.io/jexordexan/pen/yyYEJa -->
 						<table style="width: fit-content; margin: 0 auto;">
 							<tr>
 								<td>혼밥레벨</td>
@@ -244,17 +244,9 @@
 						</table>
 
 					</div>
-					<div class="col">
-						<input type="checkbox" id="rejectedCount" name="rejectedCount" value="true">
-						<label for="rejectedCount">1인 출입 가능 업장</label>
-						<input type="text" name="honbabReason" id="honbabReason" style="width: 100%;" placeholder="제목을 써주세요">
-					</div>
-				</div>
-				<div class="row p-1">
-					<div class="col">
+					<div class="row text-truncate" >
 						<!-- https://codepen.io/emiemi/pen/zxNXWR -->
-						<div class="card border rounded text-center justify-content-center">
-							<!-- <input type="file" name="revImgFile" style="width: 100%;" placeholder="사진을 이 곳에 업로드 해주세요"> -->
+						<div class="card border rounded" style="max-width: 100%">
 							<div class="btn-container">
 								<!--the three icons: default, ok file (img), error file (not an img)-->
 								<h1 class="imgupload"><i class="fa fa-file-image-o"></i></h1>
@@ -268,10 +260,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="col">
-						<textarea name="reviewContent" id="reviewContent" style="width: 100%; height: 100%;"
-							placeholder="상세 내용을 입력해주세요"></textarea>
-					</div>
+				</div>
+				<div class="col p-1">
+					<input type="checkbox" id="rejectedCount" name="rejectedCount" value="true">
+					<label for="rejectedCount">1인 출입 가능 업장</label>
+					<input type="text" name="honbabReason" id="honbabReason" style="width: 100%;" placeholder="제목을 써주세요">
+					<textarea name="reviewContent" id="reviewContent" placeholder="상세 내용을 입력해주세요"
+						style="width: 100%; height: auto; margin: 10px 0"></textarea>
 				</div>
 			</div>
 			<div class="row py-3">
@@ -298,7 +293,7 @@
 	        $( ".imgupload.ok" ).hide("slow");
 	        $( ".imgupload.stop" ).show("slow");
 	      
-	        $('#namefile').css({"color":"gray","font-weight":700});
+	        $('#namefile').css({"color":"gray","font-weight":700, "text-overflow": "ellipsis", "overflow": "hidden"});
 	        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
 	        
 	    } else{

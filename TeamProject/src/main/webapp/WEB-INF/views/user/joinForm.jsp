@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page import="java.net.URLDecoder"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -173,7 +174,16 @@ button {
 
 </head>
 <body>
-	<form action="<c:url value="/join"/>" method="POST" name="joinform"	onsubmit="return formCheck(this)">
+	<%-- <form action="<c:url value="/join"/>" method="POST" name="joinform"	onsubmit="return formCheck(this)"> --%>
+	<form:form modelAttribute="user" method="POST" action="${request.getContextPath()}/join">
+	<div>
+	<form:errors path="email" />
+	<form:errors path="nickname" />
+	<form:errors path="password" />
+	
+	
+	
+	</div>
 	<div class="title-top">
 		<div class="title">
 			<div align="center">
@@ -197,9 +207,9 @@ button {
 			</div>
 			<div class="div-text">
 				<p class="p" id="p">
-				<input class="input-field" type="email" id="email" name="email" autocomplete="off" required>
+				<input class="input-field" type="email" id="email" name="email" autocomplete="off">
 				<label for="email"><span>이메일</span></label> 
-				<button type="button" class="check-btn" onclick="onDisplay()" style="float:right;">인증메일발송</button>
+				<button type="button" class="check-btn" style="float:right;">인증메일발송</button>
 				</p>
 				
 				
@@ -207,13 +217,13 @@ button {
 			</div>
 			<div>
 				<p class="p">
-				<input class="input-field" type="password" id="password" name="password" autocomplete="off" required>
+				<input class="input-field" type="password" id="password" name="password" autocomplete="off">
 				<label for="password"><span>비밀번호</span></label>
 				</p>
 			</div>
 			<div>
 				<p class="p">
-				<input class="input-field" type="password" id="password2" autocomplete="off" required>
+				<input class="input-field" type="password" id="password2" autocomplete="off">
 				<label for="password2"><span>비밀번호 확인</span></label>
 				</p>			
 			</div>
@@ -260,9 +270,9 @@ button {
 		</div>
 		</div>
 		<!-- 회원 가입 -->
-		<div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+		<%-- <div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div> --%>
 		<button type="submit" class="join-btn">회원가입하기</button>
-	</form>
+	</form:form>
 
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script>		
@@ -290,7 +300,7 @@ button {
 				});
 			});
 	
-		function nickCheck() {
+		/* function nickCheck() {
 			if($('#nickname').val().length<2) {
                 setMessage('닉네임은 2글자 이상이어야 합니다.', $('#nickname').val());
                 return false;
@@ -331,7 +341,7 @@ button {
             if(element) {
                 element.select();
             }
-       }
+       }  */
    </script>
 </body>
 </html>

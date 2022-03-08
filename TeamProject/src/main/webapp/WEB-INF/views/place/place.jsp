@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="com.ilinbun.mulcam.dto.Place"%>
 <%-- <%!User user = new User("mockup@mock.up", "목업", "", "#", 5, 1);%>
@@ -79,40 +80,51 @@
 					</script>
 				</div>
 			</div>
-			<div class="container bg-light p-2 ">
-				<div class="row my-2 d-flex align-bottom" style="flex-wrap: nowrap;">
+			<div class="container bg-light p-3">
+				<div class="row my-2 px-2 d-flex align-bottom" style="flex-wrap: nowrap;">
 					<div class="col">
-						<h2 style="width: fit-content; float:left;"><strong>혼밥 맛집 리뷰</strong></h2>
+						<h2 style="width: fit-content; float:left;"><strong>혼밥 맛집 리뷰<c:if test="${not empty reviewAmount }">(${reviewAmount })</c:if></strong></h2>
 					</div>
-					<div class="col">
-						<div class="align-self-end d-flex">리뷰 ${reviewAmount}개</div>
+					<div class="col text-right" style="vertical-align: center">
 						<button class="btn border border-secondary" onclick="writeReview()" style="width: fit-content; float: right;">리뷰 작성</button>
 					</div>
 				</div>
-				<div class="row p-2">
+				<div class="row px-2 d-flex justify-content-center" style="margin: 0 auto;">
 					<c:choose>
 					<c:when test="${empty prList }">
 						<p>해당 맛집에 대한 리뷰가 없습니다.</p>
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="pr" items="${prList }">
-							<div class="row bg-white m-2">
-								<div class="justify-content-center" style="width:150px;">
-									<img style="border-radius: 50px; width: 30px; height: 30px; margin: 0 auto;" src='/profile/${pr.profileImg }'>
-									<span class="badge bg-danger rounded-pill">Lv .${pr.honbabLevel }</span>
-									<div class="border pb-2 pt-1 rounded" style="display: inline;">${pr.nickname } 님</div>
+							<div class="row bg-white my-1 p-3 border ">
+								<div class="justify-content-center text-center border-right" style="width:120px;">
+									<img style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;" src='/profile/${pr.profileImg }'><br>
+									<span class="badge bg-danger rounded-pill mb-2">Lv .${pr.honbabLevel }</span>
+									<div class="border pb-2 pt-1 m-2 rounded" style="display: inline; text-overflow: ellipsis; overflow:hidden; white-space: nowrap;">${pr.nickname } 님</div>
 								</div>
 								<div class="col" >
-									<h5><strong>${pr.honbabReason }</strong></h5>
-									<p>${pr.reviewContent }</p>
-									<span>작성 시간 : ${pr.writeTime }</span>
+									<section>
+										<div class="justify-content-between d-flex flex-wrap">
+											<h5><strong>${pr.honbabReason }</strong></h5>
+											<div class="if-thisArticle-mine text-end">
+												<div class="btn border-dark">수정</div>
+												<div class="btn border-dark">삭제</div>
+											</div>
+										</div>
+										<p>${pr.reviewContent }</p>
+									</section>
+									<div class="d-flex flex-wrap" style="float: bottom; font-size: 0.9rem;">
+										<span class="badge bg-danger rounded-pill">Lv .${pr.honbabLevel }</span>&nbsp;
+										<span><i class="bi bi-star-fill"></i> 종합평점 : <fmt:formatNumber value="${(pr.serviceRate + pr.interiorRate + pr.priceRate + pr.tasteRate)/4 }" pattern=".00"/>&nbsp;</span>
+										<span style="font-size: 0.9rem;"><i class="bi bi-pencil-square"></i> ${pr.writeTime }</span>
+									</div>
 								</div>
 							</div>
 						</c:forEach>
 					</c:otherwise>
 					</c:choose>
 				</div>
-				<section id="pageList">
+				<section class="text-center" id="pageList">
 					<c:choose>
 						<c:when test="${pageInfo.page<=1}">
 							[이전]&nbsp;
@@ -140,8 +152,6 @@
 				</section>
 			</div>
 			<script>
-				//var str = JSON.stringify(${place});
-				
 				function writeReview(){
 					let f = document.createElement('form');
 					

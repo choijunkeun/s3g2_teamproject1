@@ -4,11 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>에러 발생</title>
+<title>Insert title here</title>
 </head>
 <body>
-	<h1>에러 발생</h1>
+	<h2>에러 발생</h2>
 	<p>${err}</p>
-	<a href="history:back()"> 
 </body>
 </html>
