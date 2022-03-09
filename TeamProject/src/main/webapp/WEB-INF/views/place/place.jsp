@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="com.ilinbun.mulcam.dto.Place"%>
 <%-- <%!User user = new User("mockup@mock.up", "목업", "", "#", 5, 1);%>
@@ -24,7 +23,7 @@
 					<div id="placeInfoSection"
 						style="width: 100%; float: left; flex-shrink: 1;">
 						<h1>
-							<a href="javascript:window.history.back();"
+							<a href="../../search;"
 								style="text-decoration: none;"><i class="fa fa-angle-left"></i></a>
 						</h1>
 						<h1>
@@ -40,17 +39,27 @@
 							<div class="py-2">
 								<div style="display: inline; flex-wrap: nowrap;">
 									<label>혼밥레벨</label>
-									<span class="badge bg-danger rounded-pill">Lv. 5</span>
+									<span class="badge bg-danger rounded-pill">Lv. ${honbabLv}</span>
 								</div>
 								<div class="mt-1 d-flex justify-content-between align-items-center">
 									<label class="review-stat">종합평점</label>
-									<div class="small-ratings">
-										<i class="fa fa-star rating-color"></i>
-										<i class="fa fa-star rating-color"></i>
-										<i class="fa fa-star rating-color"></i>
-										<i class="fa fa-star rating-color"></i>
-										<i class="fa fa-star"></i>
-									</div>
+									<span> : <strong>${totalRate }</strong></span>
+								</div>
+								<div class="mt-1 d-flex justify-content-between align-items-center">
+									<label class="review-stat">가격평점</label>
+									<span> : <strong>${priceRate }</strong></span>
+								</div>
+								<div class="mt-1 d-flex justify-content-between align-items-center">
+									<label class="review-stat">맛 평점</label>
+									<span> : <strong>${tasteRate }</strong></span>
+								</div>
+								<div class="mt-1 d-flex justify-content-between align-items-center">
+									<label class="review-stat">서비스 평점</label>
+									<span> : <strong>${serviceRate }</strong></span>
+								</div>
+								<div class="mt-1 d-flex justify-content-between align-items-center">
+									<label class="review-stat">멋(인테리어) 평점</label>
+									<span> : <strong>${interiorRate }</strong></span>
 								</div>
 							</div>
 						</div>
