@@ -265,8 +265,7 @@ public class BragController {
 		
 		
 		try {
-			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);
-			
+			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 			Document doc=Jsoup.parse(bragboard.getContent());
 			
 			Elements img= doc.select("img");

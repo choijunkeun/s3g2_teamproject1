@@ -182,7 +182,7 @@ label.star:before {
 <%-- <script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script> --%>
 	<section id="./writeForm">
 		<!--  ./는 localhost:8090/brag임 -->
-	<div class="position-absolute top-10 start-65 ">
+	<div >
 		<div class="container pb-3 bg-light" class="outer" >
 			<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
 
@@ -193,15 +193,13 @@ label.star:before {
 						<div class="row p-1 text-center ">
 							<div class="col">
 								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
-								<div >
+								<div class="d-flex flex-wrap">
 									<div>
 										<input type="hidden" name="moonpa" id="moonpa">
 										<div class="btn-group-sort" style="width: fit-content;">
-											<button type="button"
-												class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+											<button type="button" class="btn btn-secondary dropdown-toggle" id="sortDropdown"
 												data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
-											<ul class="dropdown-menu text-center"
-												aria-labelledby="sortDropdown">
+											<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 												<li><button class="dropdown-item" type="button"
 														onclick="moonpaChange('true')">사먹파</button></li>
 												<li><button class="dropdown-item" type="button"
@@ -210,7 +208,7 @@ label.star:before {
 										</div>
 									</div>
 
-									<div class="input-group" style="flex-shrink: 0; width: 50%;">
+									<div class="input-group" style="flex-shrink: 0;">
 										<input type="text" class="form-control" id="location" name="location"
 											placeholder="위치를 검색해 보세요!" aria-label="위치">
 										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
@@ -251,12 +249,8 @@ label.star:before {
 							<input type="submit" class="btn border bd-secondary" id="write_post" name="write_post" value="전송" />
 						</div>
 					</div>
-
-
 				</div>
 			</form>
-
-
 		</div>
 	</div>
 	</section>
@@ -266,10 +260,13 @@ label.star:before {
 		function moonpaChange(arg) {
 			document.getElementById('moonpa').value=arg; 
 			
-			if(arg == 'true')
+			if(arg == 'true'){
 				document.getElementById('sortDropdown').innerText='사먹파';
-			else
+				/* document.getElementById('location'). */
+			}
+			else{
 				document.getElementById('sortDropdown').innerText='해먹파';
+			}
 		}
 
 		

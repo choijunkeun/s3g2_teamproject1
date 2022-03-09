@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.PlaceReviewDAO;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.PlaceRating;
 import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.PlaceReviewExtended;
 @Service
@@ -60,5 +61,80 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 	public int getReviewAmount(int id) throws Exception {
 		return placeReviewDAO.selectPRBoardCount(id);
 	}
-	
+
+	@Override
+	public Double getInteriorRating(int id) throws Exception {
+		Double result;
+		try {
+			result = placeReviewDAO.selectPlaceInteriorRating(id);
+			result = (double) Math.round((result * 10))/10;
+		} catch(NullPointerException e) {
+			result = 0.0;
+		}
+		return result != null? result : 0.0;
+	}
+
+	@Override
+	public Double getPriceRating(int id) throws Exception {
+		// TODO Auto-generated method stub
+		Double result;
+		try {
+			result = placeReviewDAO.selectPlacePriceRating(id);
+			result = (double) Math.round((result * 10))/10;
+		} catch(NullPointerException e) {
+			result = 0.0;
+		}
+		return result != null? result : 0.0;
+	}
+
+	@Override
+	public Double getServiceRating(int id) throws Exception {
+		// TODO Auto-generated method stub
+		Double result;
+		try {
+			result = placeReviewDAO.selectPlaceServiceRating(id);
+			result = (double) Math.round((result * 10))/10;
+		} catch(NullPointerException e) {
+			result = 0.0;
+		}
+		return result != null? result : 0.0;
+	}
+
+	@Override
+	public Double getTasteRating(int id) throws Exception {
+		// TODO Auto-generated method stub
+		Double result;
+		try {
+			result = placeReviewDAO.selectPlaceTasteRating(id);
+			result = (double) Math.round((result * 10))/10;
+		} catch(NullPointerException e) {
+			result = 0.0;
+		}
+		return result != null? result : 0.0;
+	}
+
+	@Override
+	public Double getTotalRating(int id) throws Exception {
+		// TODO Auto-generated method stub
+		Double result;
+		try {
+			result =placeReviewDAO.selectPlaceTotalRating(id);
+			result = (double) Math.round((result * 10))/10;
+		} catch(NullPointerException e) {
+			result = 0.0;
+		}
+		
+		return result != null? result : 1.0;
+	}
+
+	@Override
+	public PlaceRating getAllRating(int id) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.selectPlaceAllRating(id);
+	}
+	@Override
+	public Double getHonbabLv(int id) throws Exception {
+		Double result = placeReviewDAO.selectPlaceHonbabLv(id) ;
+		return result != null? result : 5.0;
+	}
 }

@@ -22,7 +22,7 @@
 	
 	<select id="selectPRReviewList" resultType="PlaceReviewExtended" parameterType="HashMap"> <!-- -->
 		<![CDATA[ 
-			select user_PK, nickname, profileimg, honbabLevel, user.group as `group`, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
+			select user_PK, nickname, profileimg, honbabLevel, grp, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
 				from (select @rownum:=@rownum+1 rnum, tot.* 
 					from (select * from reviewdb where id=#{id} order by writeTime desc ) tot, 
 					(select @rownum:=0) temp) sub, user
@@ -81,29 +81,40 @@
 	
 	
 	<!-- 개별항목 평점 구하기 -->
-	<select id="selectPlaceInteriorRating" resultType="double" parameterType="int">
+	<select id="selectPlaceInteriorRating" resultType="Double" parameterType="int">
 		<![CDATA[
 			select avg(interiorRate) from reviewdb where id=#{id}
 		]]>
 	</select>
-	<select id="selectPlacePriceRating" resultType="double" parameterType="int">
+	<select id="selectPlacePriceRating" resultType="Double" parameterType="int">
 		<![CDATA[
 			select avg(priceRate) from reviewdb where id=#{id}
 		]]>
 	</select>
-	<select id="selectPlaceServiceRating" resultType="double" parameterType="int">
+	<select id="selectPlaceServiceRating" resultType="Double" parameterType="int">
 		<![CDATA[
 			select avg(serviceRate) from reviewdb where id=#{id}
 		]]>
 	</select>
-	<select id="selectPlaceTasteRating" resultType="double" parameterType="int">
+	<select id="selectPlaceTasteRating" resultType="Double" parameterType="int">
 		<![CDATA[
 			select avg(tasteRate) from reviewdb where id=#{id}
 		]]>
 	</select>
-	<select id="selectPlaceTotalRating" resultType="double" parameterType="int">
+	<select id="selectPlaceTotalRating" resultType="Double" parameterType="int">
 		<![CDATA[
 			select avg(interiorRate+priceRate+serviceRate+tasteRate)/4 from reviewdb where id=#{id}
+		]]>
+	</select>
+	<select id="selectPlaceAllRating" resultType="PlaceRating" parameterType="int">
+		<![CDATA[
+			select avg(interiorRate), avg(priceRate), avg(serviceRate), avg(tasteRate), avg((interiorRate+priceRate+serviceRate+tasteRate)/4) from reviewdb where id=#{id}
+		]]>
+	</select>
+	
+	<select id="selectPlaceHonbabLv" resultType="Double" parameterType="int">
+		<![CDATA[
+			select avg(Honbablv) from reviewdb where id=#{id}
 		]]>
 	</select>
 

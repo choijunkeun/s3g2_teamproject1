@@ -1,6 +1,12 @@
 package com.ilinbun.mulcam.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +14,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +46,84 @@ public class PlaceController {
 	@Autowired
 	private ServletContext servletContext;
 	
+	@GetMapping("/{id}")
+	public ModelAndView placeInfo(@PathVariable String id,@RequestParam("place_name") String place_name) {
+		ModelAndView mv = new ModelAndView();
+		HttpURLConnection conn = null;
+		StringBuffer response = new StringBuffer();
+		try {
+			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?" + "query=" + URLEncoder.encode(place_name, "UTF-8"));
+			
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("X-Requested-With", "curl");
+	        conn.setRequestProperty("Authorization", "KakaoAK ec3f88c0be25b53b799db6b9849751aa");
+	        conn.setDoOutput(true);
+	        
+	        int responseCode = conn.getResponseCode();
+	        if (responseCode == 400) {
+	            System.out.println("400:: 해당 장소를 가져올 수 없음");
+	        } else if (responseCode == 401) {
+	            System.out.println("401:: 인증 오류");
+	        } else if (responseCode == 500) {
+	            System.out.println("500:: 카카오 서버 에러");
+	        } else { // 성공 후 응답 JSON 데이터받기
+				Charset charset = Charset.forName("UTF-8");
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
+				String inputLine;
+				while ((inputLine = br.readLine()) != null) {
+					response.append(inputLine); 
+				} 
+				br.close();
+	        }
+	        System.out.println(response.toString());
+	        JSONObject object = new JSONObject(response.toString());
+	        JSONArray obj = (JSONArray) object.get("documents");
+	        JSONObject target = (JSONObject)obj.get(0);
+	        System.out.println(target.get("id"));
+	        System.out.println(id);
+	        
+	        if(target.get("id").equals(id)) {
+	        	Place place = new Place(
+		        		Integer.parseInt((String)target.get("id")),
+		        		(String)target.get("place_name"),
+		        		(String)target.get("category_name"),
+		        		(String)target.get("category_group_code"),
+		        		(String)target.get("category_group_name"),
+		        		(String)target.get("phone"),
+		        		(String)target.get("address_name"),
+		        		(String)target.get("road_address_name"),
+		        		Double.parseDouble((String)target.get("x")),
+		        		Double.parseDouble((String)target.get("y")),
+		        		(String)target.get("place_url")
+	        		);
+		        mv.addObject("id", id);
+		        mv.addObject("place", place);
+		        
+		        
+		        PageInfo pageInfo = new PageInfo();
+		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(1, pageInfo, place.getId());
+				mv.addObject("pageInfo", pageInfo);
+				mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
+				mv.addObject("prList", reviewList);
+				mv.addObject("place", place);
+				mv.addObject("totalRate", String.format("%.1f", placeReviewService.getTotalRating(place.getId())));
+				mv.addObject("serviceRate", String.format("%.1f", placeReviewService.getServiceRating(place.getId())));
+				mv.addObject("priceRate", String.format("%.1f", placeReviewService.getPriceRating(place.getId())));
+				mv.addObject("interiorRate", String.format("%.1f", placeReviewService.getInteriorRating(place.getId())));
+				mv.addObject("tasteRate", String.format("%.1f", placeReviewService.getTasteRating(place.getId())));
+				mv.addObject("honbabLv", Math.round(placeReviewService.getHonbabLv(place.getId())));
+		        
+		        mv.setViewName("place/place");
+	        } else throw new Exception("장소값 다름");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			mv.setViewName("main/err");
+		}
+		
+		return mv;
+	}
 	@PostMapping("/{id}")
 	public ModelAndView placeInfo(@PathVariable String id, 
 			@RequestParam("place_name") String place_name,
@@ -74,6 +160,12 @@ public class PlaceController {
 			mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 			mv.addObject("prList", reviewList);
 			mv.addObject("place", place);
+			mv.addObject("totalRate", String.format("%.1f", placeReviewService.getTotalRating(place.getId())));
+			mv.addObject("serviceRate", String.format("%.1f", placeReviewService.getServiceRating(place.getId())));
+			mv.addObject("priceRate", String.format("%.1f", placeReviewService.getPriceRating(place.getId())));
+			mv.addObject("interiorRate", String.format("%.1f", placeReviewService.getInteriorRating(place.getId())));
+			mv.addObject("tasteRate", String.format("%.1f", placeReviewService.getTasteRating(place.getId())));
+			mv.addObject("honbabLv", Math.round(placeReviewService.getHonbabLv(place.getId())));
 			mv.setViewName("place/place");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -81,18 +173,9 @@ public class PlaceController {
 			mv.setViewName("/main/err");
 		}
 		
-		
 		return mv;
 	}
 	
-//	@PostMapping("/review/{id}")
-//	public ModelAndView reviewForm(@PathVariable String id, @RequestParam("place_name") String place_name) {
-//		ModelAndView mv = new ModelAndView("place/reviewForm");
-//		mv.addObject("id", id);
-//		mv.addObject("place_name", place_name);
-//		
-//		return mv;
-//	}
 	
 	@PostMapping("/review/{id}")
 	public ModelAndView reviewForm(@PathVariable String id, @ModelAttribute Place place) {
@@ -100,67 +183,15 @@ public class PlaceController {
 		mv.addObject("id", id);
 		mv.addObject("pr", place);
 		
-		System.out.println(place.getId());
-		
 		return mv;
 	}
 	
-//	@ResponseBody
-//	@PostMapping("/writeReview")
-//	public ResponseEntity<String> writeReview(@ModelAttribute PlaceReview pr) {
-//		System.out.println(pr);
-//		ResponseEntity<String> result = null;
-//		
-//		System.out.println("THREE");
-//		System.out.println(pr.getId());
-//		System.out.println(pr.getHonbabLv());
-//		System.out.println(pr.getReviewContent());
-//		System.out.println(pr.getRejectedCount());
-//		System.out.println(pr.getTasteRate());
-//		System.out.println(pr.getUser_PK());
-//				
-//		try {
-//			if(pr.getFile() != null) { // 파일 첨부시 파일 업로드
-//				System.out.println("파일 업로드 시도");
-//				String path=servletContext.getRealPath("/revimgupload/");
-//				System.out.println(path);
-//				
-//				// 이미지 파일의 이름을 바꿔봅시다
-//				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
-//				Date now = new Date(); 
-//				String nowTime = sdf.format(now);
-//				
-//				File destFile = new File(path + nowTime + "_" + pr.getFile().getOriginalFilename());
-//				System.out.println("1");
-//				pr.setRevImgFilepath(nowTime + "_" + pr.getFile().getOriginalFilename());
-//				System.out.println(destFile.getAbsolutePath());
-//				pr.getFile().transferTo(destFile);
-//				System.out.println("SUCCESS");
-//				System.out.println(pr.getRevImgFilepath());
-//			}
-//			placeReviewService.writeBoard(pr);
-//			result = new ResponseEntity<String>("success", HttpStatus.OK);
-//			//boardService.regBoard(board);
-//			//mv.setViewName("redirect:/board/boardlist");
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
-//			//mv.addObject("err", "새 글 등록 실패");
-//			//mv.addObject("/board/err");
-//		}
-//			
-//		return result;
-//	}
-	
+
 	@ResponseBody
 	@PostMapping("/writeReview")
 	public ResponseEntity<String> writeReview(@RequestPart("key") Map<String, String> param,
 			@RequestPart(value="file", required=false) MultipartFile file) {
 		ResponseEntity<String> result = null;
-		
-		System.out.println(file.getOriginalFilename());
-		System.out.println(param.get("reviewContent"));	
-
 		
 		try {
 			PlaceReview pr = new PlaceReview( 
@@ -212,36 +243,132 @@ public class PlaceController {
 	@GetMapping("/getRating")
 	public ResponseEntity<String> getRating(@RequestParam int id, @RequestParam int searchOption) {
 		ResponseEntity<String> result = null;
-		
-//		try {
-//			switch(searchOption) {
-//			case 1:
-//				placeReviewService.writeBoard(pr);
-//				break;
-//			case 2:
-//				placeReviewService.writeBoard(pr);
-//				break;
-//			case 3:
-//				placeReviewService.writeBoard(pr);
-//				break;
-//			case 4: 
-//				placeReviewService.writeBoard(pr);
-//				break;
-//			case 5:
-//				placeReviewService.writeBoard(pr);
-//				break;
-//			}
-//			
-//			result = new ResponseEntity<String>("success", HttpStatus.OK);
-//			//boardService.regBoard(board);
-//			//mv.setViewName("redirect:/board/boardlist");
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
-//			//mv.addObject("err", "새 글 등록 실패");
-//			//mv.addObject("/board/err");
-//		}
+		double v = 0.0;
+		try {
+			switch(searchOption) {
+			case 1:
+				v = placeReviewService.getTotalRating(id);
+				break;
+			case 2:
+				v = placeReviewService.getPriceRating(id);
+				break;
+			case 3:
+				v = placeReviewService.getTasteRating(id);
+				break;
+			case 4: 
+				v = placeReviewService.getServiceRating(id);
+				break;
+			case 5:
+				v = placeReviewService.getInteriorRating(id);
+				break;
+			}
+			
+			result = new ResponseEntity<String>(String.format("%.2f", v), HttpStatus.OK);
+			//boardService.regBoard(board);
+			//mv.setViewName("redirect:/board/boardlist");
+		} catch(Exception e) {
+			//e.printStackTrace();
+			result = new ResponseEntity<String>("0.0", HttpStatus.OK);
+			//mv.addObject("err", "새 글 등록 실패");
+			//mv.addObject("/board/err");
+		}
 		
 		return result;	
 	}
+	
+	
+	
+	
+	
+	
+	@ResponseBody
+	@GetMapping("/test")
+	public ResponseEntity<String> test() {
+		ResponseEntity<String> result = null;
+		HttpURLConnection conn = null;
+		StringBuffer response = new StringBuffer();
+		try {
+			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?" + "query=" + URLEncoder.encode("카카오프렌즈", "UTF-8"));
+			
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("X-Requested-With", "curl");
+	        conn.setRequestProperty("Authorization", "KakaoAK ec3f88c0be25b53b799db6b9849751aa");
+	        conn.setDoOutput(true);
+	        
+	        int responseCode = conn.getResponseCode();
+	        if (responseCode == 400) {
+	            System.out.println("400:: 해당 장소를 가져올 수 없음");
+	        } else if (responseCode == 401) {
+	            System.out.println("401:: 인증 오류");
+	        } else if (responseCode == 500) {
+	            System.out.println("500:: 카카오 서버 에러");
+	        } else { // 성공 후 응답 JSON 데이터받기
+				Charset charset = Charset.forName("UTF-8");
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
+				String inputLine;
+				while ((inputLine = br.readLine()) != null) {
+					response.append(inputLine); 
+				} 
+				br.close();
+	        }
+	        System.out.println(response.toString());
+	        result = new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+	        
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;
+	}
+	
+//	public String getPlacesFromKakaoAPI(String keyword) {
+//		HttpURLConnection conn = null;
+//		JSONObject library = new JSONObject();
+//		String keyword = "카카오프렌즈";
+//		
+//		for(int i=1; i<=45; i++){
+//			JSONObject res = new JSONObject(getPlacesRAWResultFromKakao(keyword, i));
+//			((JSONObject)res.get("meta")).get(")
+//		}
+//		return response.toString();
+//		
+//	}
+//	
+////	public String getPlacesRAWResultFromKakao(String keyword, int page) {
+//		HttpURLConnection conn = null;
+//		StringBuffer response = new StringBuffer();
+//		try {
+//			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?page=" + page + "&query=" + URLEncoder.encode(keyword, "UTF-8"));
+//			
+//			conn = (HttpURLConnection) url.openConnection();
+//			conn.setRequestMethod("GET");
+//			conn.setRequestProperty("X-Requested-With", "curl");
+//	        conn.setRequestProperty("Authorization", "KakaoAK ec3f88c0be25b53b799db6b9849751aa");
+//	        conn.setDoOutput(true);
+//	        
+//	        int responseCode = conn.getResponseCode();
+//	        if (responseCode == 400) {
+//	            System.out.println("400:: 해당 장소를 가져올 수 없음");
+//	        } else if (responseCode == 401) {
+//	            System.out.println("401:: 인증 오류");
+//	        } else if (responseCode == 500) {
+//	            System.out.println("500:: 카카오 서버 에러");
+//	        } else { // 성공 후 응답 JSON 데이터받기
+//				Charset charset = Charset.forName("UTF-8");
+//				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
+//				String inputLine;
+//				while ((inputLine = br.readLine()) != null) {
+//					response.append(inputLine); 
+//				} 
+//				br.close();
+//	        }
+//	        System.out.println(response.toString());
+//	        
+//	        
+//		} catch(Exception e) {}
+//		return response.toString();
+//	}
 }
