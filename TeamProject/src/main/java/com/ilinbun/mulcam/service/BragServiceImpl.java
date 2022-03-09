@@ -99,6 +99,13 @@ public class BragServiceImpl implements BragService {
 		
 	}
 
+	@Override
+	public BragBoard getBragBoard(int articleNo) throws Exception {
+		// TODO Auto-generated method stub
+		
+		return bragDAO.selectBragBoard(articleNo);
+	}
+
 
 	
 	

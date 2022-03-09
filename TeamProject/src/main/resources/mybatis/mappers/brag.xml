@@ -25,7 +25,7 @@
 	</select>
 
 	<!-- 하나의 게시물 정보 조회 -->
-	<select id="selectBrag" resultType="Bragboard" parameterType="int">
+	<select id="selectBragBoard" resultType="Bragboard" parameterType="int">
     	<![CDATA[
 			select * from honbab where articleNo=#{articleNo}
     	]]>

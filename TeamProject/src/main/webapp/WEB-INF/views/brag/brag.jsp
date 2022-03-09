@@ -40,7 +40,7 @@
 									<!-- 	<div class="border mycard" > -->
 										
 										<c:if test = "${status.index<4}">
-										<td><a href="brag/veiwDetail">
+										<td><a href="brag/viewdetail/${bboard.articleNo }">
 										<!--타이틀, 사진-->
 										${bboard.title } <br>
 										<img src="${bboard.content}" name="brag_content"  width="200px" height="200px" class="card-img-top" /></a></td>

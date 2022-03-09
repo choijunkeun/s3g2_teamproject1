@@ -34,11 +34,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 
 @Controller
 @RequestMapping("/brag")
 public class BragController {
+	@Autowired
+	HttpSession session;
+	
 	@Autowired
 	private BragService bragService;
 
@@ -52,6 +56,7 @@ public class BragController {
 	@GetMapping("")
 	public String Main(Model model) {
 		try {
+			
 			bragboard = bragService.bragBest1();
 			model.addAttribute("BragBest1", bragboard);
 		} catch (Exception e) {
@@ -87,6 +92,7 @@ public class BragController {
 //	// 1. (일반) 자랑게시판 brag list 출력(사진 형태로), brag_list
 		@GetMapping("/brag")
 		public ModelAndView brag_list(@RequestParam(value="page", required=false, defaultValue="1") int page) {
+			// User userInfo = (User) session.getAttribute("user");
 			ModelAndView mav=new ModelAndView();
 			PageInfo pageInfo=new PageInfo();
 			pageInfo.setPage(page);
@@ -100,6 +106,7 @@ public class BragController {
 				}
 
 				pageInfo=bragService.getPageInfo(pageInfo);
+				// mav.addObject("userInfo", userInfo);
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("bragList", bragList);
 				mav.setViewName("brag/brag");
@@ -149,30 +156,26 @@ public class BragController {
 //		}
 
 		//게시글 보기 viewDetail
-		@GetMapping("/viewdetail/{articleNo}")
+		@GetMapping("/brag/viewdetail/{articleNo}")
 		public ModelAndView boardDetail(@PathVariable int articleNo) {
+			// User userinfo = (User) session.getAttribute("user");
+			User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);
 			ModelAndView mav=new ModelAndView();
-			try {bragboard=bragService.getArticleNo(articleNo);
-				mav.addObject("articleNo", articleNo);
+			try {
+				bragboard=bragService.getBragBoard(articleNo);
+				mav.addObject("user", userinfo);
+				mav.addObject("bboard", bragboard);
+				
+				Document doc=Jsoup.parse(bragboard.getContent());
+				Elements img= doc.select("img");
+				String src = img.attr("src");
+				
+				mav.addObject("imgSrc", src);
 				mav.setViewName("brag/viewDetail");
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
 				mav.setViewName("err");
-			}
-			return mav;
-		}
-		@PostMapping("/viewdetail")
-		public ModelAndView veiwdetail(@RequestParam(value="articleNo")int articleNo){
-			ModelAndView mav=new ModelAndView();
-			try {
-				BragBoard bragboard=bragService.getArticleNo(articleNo);
-				mav.addObject("bragboard", bragboard);
-				mav.setViewName("/brag/viewDetail");
-			} catch(Exception e) {
-				e.printStackTrace();
-				mav.addObject("err", e.getMessage());
-				mav.setViewName("/err");
 			}
 			return mav;
 		}

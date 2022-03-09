@@ -2,11 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
-<%@ page import="com.ilinbun.mulcam.dto.User"%>
-<%!User user = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);%>
-<c:set var="user" value='<%=user%>' />
-<!-- 목업 코드 -->
 
 <!DOCTYPE html>
 <html>
@@ -181,110 +176,18 @@ label.star:before {
 <body>
 <%-- <script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script> --%>
 
-<section id="./writeForm">
-		<!--  ./는 localhost:8090/brag임 -->
-	<div class="position-absolute top-10 start-65 ">
-		<div class="container pb-3 bg-light" class="outer" >
-			<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
-
-			<form action="./bragwrite" method="post" enctype="multipart/form-data" name="bragform" id="bwForm">
-				<div>
-					<input type="hidden" id="idx" name="idx" value=${user.idx }>
-					<div class="container p-2 ">
-						<div class="row p-1 text-center ">
-							<div class="col">
-								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
-
-								
-								<div >
-								<!-- moonpa -->
-									<div>
-										<input type="hidden" name="moonpa" id="moonpa">
-										<div class="btn-group-sort" style="width: fit-content;">
-											<button type="button"
-												class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-												data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
-											<ul class="dropdown-menu text-center"
-												aria-labelledby="sortDropdown">
-												<li><button class="dropdown-item" type="button"
-														onclick="moonpaChange('true')">사먹파</button></li>
-												<li><button class="dropdown-item" type="button"
-														onclick="moonpaChange('false')">해먹파</button></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-
-
-								<div>
-									
-									<!-- title -->
-									<div>	
-										<textarea id="title" name="brag_name"
-											style="width: 50%; height: 50%;" placeholder="제목을 입력해주세요!"
-											value="${writeselect.title }" ></textarea>
-									</div>
-								</div>
-
-								<!-- delete button -->
-
-								<!-- 프사 -->
-								<!-- 닉네임 -->
-								<!-- 혼밥레벨 -->
-								<!-- 팔로우 -->
-
-								<!-- 조회수 -->
-
-								<!-- 작성일 -->
-								<div>
-									<div>${todayselect.date}작성일</div>
-								</div>
-
-								<!-- location -->
-								<div class="input-group" style="flex-shrink: 0; width: 50%;">
-										<input type="text" class="form-control" id="location" name="location"
-											placeholder="위치를 검색해 보세요!" aria-label="위치">
-										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-								</div>
-								
-								<!-- content 중에 사진 -->
-
-								<!-- content 중에 내용 -->
-								<div>
-									<!-- ckEditor -->
-									<!-- <div id="editor">
-										<p>여기에 내용을 입력해주세요!</p>
-									</div> -->
-									
-									<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
-								</div>
-								<!-- 좋아요 -->
-								<!-- 댓글 -->
-
-								<!-- 댓글 -->
-								<!-- 댓글 쓰기 창-->
-
-							</div>
-						</div>
-					</div>
-
-					<div class="row py-3">
-						<div class="col text-center">
-							<!-- <input type="reset" value="다시쓰기" /> -->
-							<button class="btn border bd-secondary">취소</button>
-							<input type="submit" class="btn border bd-secondary" value="전송" />
-						</div>
-					</div>
-
-
-				</div>
-			</form>
-
-
-		</div>
-	</div>
-	</section>
+	로그인한 유저 번호 : ${user.idx } <br>
+	로그인한 유저 이메일 : ${user.email }<br>
+	로그인한 유저 별명 : ${user.nickname }<br>
 	
+	지금 보려는 글 정보 <br>
+	글 제목 : ${bboard.title } <br>
+	글 내용 : ${bboard.content } <br>
+	글 이미지 파일명: ${imgSrc }
+	글 작성자 번호 : ${bboard.idx } <br>
+	
+	${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
+
 
 	<script>
 	$(function(){

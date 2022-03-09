@@ -31,6 +31,7 @@ public interface BragService {
 	void regBragBoard(BragBoard bragboard) throws Exception;
 	void modifyBragBoard(BragBoard bragboard) throws Exception;
 	void removeBragBoard(int articleNo) throws Exception;
+	BragBoard getBragBoard(int articleNo)throws Exception;
 
 
 	//댓글달기
