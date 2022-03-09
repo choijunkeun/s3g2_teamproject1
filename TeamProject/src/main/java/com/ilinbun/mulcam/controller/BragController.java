@@ -37,6 +37,7 @@ import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 
+
 @Controller
 @RequestMapping("/brag") //여기서 조종하는 모든 페이지는 localhost://8090/brag~로 시작
 public class BragController {
