@@ -16,33 +16,49 @@ public class BragServiceImpl implements BragService {
 	@Autowired
 	BragDAO bragDAO;
 
+	//[글쓰기Service]
+	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
+		@Override
+		public void regBragBoard(BragBoard bragboard) throws Exception {
+			Integer articleNo = bragDAO.selectMaxArticleNo();
+			if(articleNo==null) articleNo = 1;
+			else articleNo+=1;
+			bragboard.setArticleNo(articleNo);
+			//bragboard.setDate(Date); 지울까 말까
+		
+			bragDAO.insertBragBoard(bragboard);		
+		}
+
+		
+	//[글 보기Service]
+	//글보기(viewDetail)에서 id를 받아와 내 글인지 남의 글인지 판별
+	@Override
+	public BragBoard bragBoardQueryByID(String id) throws Exception {
+		BragBoard viewDetail = bragDAO.bragBoardQueryByID(id);
+		return viewDetail;
+	}
+	//글보기 시 조회수 올리는 기능
 	@Override
 	public BragBoard getArticleNo(int articleNo) throws Exception {
 		bragDAO.updateReadCount(articleNo);
 		return bragDAO.selectBragBoard(articleNo);
 	}
 
-	@Override
-	public BragBoard bragBoardQueryByID(String id) throws Exception {
-		BragBoard viewDetail = bragDAO.bragBoardQueryByID(id);
-		return viewDetail;
-	}
 
-
+	//[글 목록Service]
+	//게시글 리스트에 작성된 게시글을 넣는 쿼리
 	@Override
 	public void setInputList(BragBoard bragboard) throws Exception {
 		// bragboard에 작성된 제목과 내용을 가지고 dB에 넣기 
 		bragDAO.insertBragBoard(bragboard);	
-		
 	}
-
+	//게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
 	@Override
 	public List<BragBoard> getBragboardList(int page) throws Exception {
 		int startrow=(int) ((page-1)*16+1);
-		
 		return bragDAO.selectBragBoardList(startrow);
 	}
-
+	//게시글 목록 아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)
 	@Override
 	public PageInfo getPageInfo(PageInfo pageInfo) throws Exception {
 		int listCount=bragDAO.selectBragBoardCount();
@@ -64,78 +80,39 @@ public class BragServiceImpl implements BragService {
 		pageInfo.setMaxPage(maxPage);
 		pageInfo.setEndPage(endPage);
 		pageInfo.setStartPage(startPage);
-		
 		return pageInfo;
-		
 	}
-
+	//BEST 게시판 글 목록이 조회수 순으로 정렬 쿼리(수정요. 나중에는 좋아요 순으로)
 	@Override
 	public BragBoard bragBest1() throws Exception {
 		BragBoard best = bragDAO.bragBest1();
 		return best;
 	}
 
-	//글쓰기
-	@Override
-	public void regBragBoard(BragBoard bragboard) throws Exception {
-		Integer articleNo = bragDAO.selectMaxArticleNo();
-		if(articleNo==null) articleNo = 1;
-		else articleNo+=1;
-		bragboard.setArticleNo(articleNo);
-		//bragboard.setDate(Date); 지울까 말까
 	
-		bragDAO.insertBragBoard(bragboard);		
-	}
+	
+	
 
+	//여기서 부터는 구현 전 
+	//글수정
 	@Override
 	public void modifyBragBoard(BragBoard bragboard) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
-
+	//글수정(modifyForm) 시 하나의 글 정보를 select하는 쿼리문	
+	@Override
+	public BragBoard getBragBoard(int articleNo) throws Exception {
+		// TODO Auto-generated method stub
+		return bragDAO.selectBragBoard(articleNo);
+	}
+	//글삭제
 	@Override
 	public void removeBragBoard(int articleNo) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public BragBoard getBragBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
-		
-		return bragDAO.selectBragBoard(articleNo);
-	}
-
-
-	
-	
-//	@Override
-//	public List<BragBoard> getBragboardList(int page, PageInfo pageInfo) throws Exception {
-//		//table에 있는 모든 row 개수
-//		int listCount=bragDAO.selectTBoardCount();
-//		
-//		//그 개수를 5으로 나누고 올림처리하여 페이지 수 계산
-//		int maxPage=(int)Math.ceil((double)listCount/5);
-//		
-//		//아래 2개의 알고리즘은 현재 하나의 페이지에 글 목록을 6개 보여주고
-//		//아래에 페이지 이동 버튼도 5개로 구성하고자 하기 위함이다.
-//		int startPage=(((int) ((double)page/6+0.9))-1)*6+1;
-//		int endPage=startPage+5-1;
-//		
-//		
-//		if(endPage>maxPage) endPage=maxPage;
-//		pageInfo.setStartPage(startPage);
-//		pageInfo.setEndPage(endPage);
-//		pageInfo.setMaxPage(maxPage);
-//		pageInfo.setPage(page);
-//		pageInfo.setListCount(listCount);
-//		
-//		int startrow=(page-1)*5+1;
-//		
-//		return bragDAO.selectTBragBoardList(startrow);
-//	}
-
-	
+//아마 댓글	
 //	@Override
 //	public void regBragReply(Bragboard bragboard) throws Exception {
 //		//1. borad_num으로 원글 조회(ref,lev,seq 참조하기 위함)
@@ -168,8 +145,7 @@ public class BragServiceImpl implements BragService {
 
 	
 	
-	
-	
+
 	
 	
 }
