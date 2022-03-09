@@ -17,22 +17,7 @@
 	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- 클래식 에디터 -->
 <script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
-<script>
-	$(function(){
-        ClassicEditor
-        	.create(document.querySelector("#editor"), {
-        		ckfinder : {
-        			uploadUrl : "/brag/upload"
-        		}
-        	}).then(editor=> {
-        		//window.editor=editor;
-        		editor.setData('${content}');
-        	})
-        	.catch((error) => {
-        		console.error(error);
-        	});
-	});
-</script>
+
 
 
 <title>게시글 작성</title>
@@ -262,8 +247,8 @@ label.star:before {
 					<div class="row py-3">
 						<div class="col text-center">
 							<!-- <input type="reset" value="다시쓰기" /> -->
-							<button class="btn border bd-secondary">취소</button>
-							<input type="submit" class="btn border bd-secondary" value="전송" />
+							<button type="button" class="btn border bd-secondary" id="write_cancel" name="write_cancel" >취소</button>
+							<input type="submit" class="btn border bd-secondary" id="write_post" name="write_post" value="전송" />
 						</div>
 					</div>
 
@@ -286,6 +271,22 @@ label.star:before {
 			else
 				document.getElementById('sortDropdown').innerText='해먹파';
 		}
-	</script>
+
+		
+	$(function(){
+        ClassicEditor
+        	.create(document.querySelector("#editor"), {
+        		ckfinder : {
+        			uploadUrl : "/brag/upload"
+        		}
+        	}).then(editor=> {
+        		//window.editor=editor;
+        		editor.setData('${content}');
+        	})
+        	.catch((error) => {
+        		console.error(error);
+        	});
+	});
+</script>
 </body>
 </html>

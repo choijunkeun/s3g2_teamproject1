@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
 <%!User user = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);%>
@@ -17,19 +18,7 @@
 	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <!-- 클래식 에디터 -->
 <script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
-<script>
-	$(function(){
-	      ClassicEditor.create(document.querySelector("#editor"), {
-	    	  initialData : '${todayselect.content}'
-	      }).then(editor=> {
-    		window.editor=editor;
-    		})
-		   .catch((error) => {
-		   	console.error(error);
-		    });
-		})
 
-</script>
 
 
 <title>게시글 보기</title>
@@ -191,7 +180,8 @@ label.star:before {
 </style>
 <body>
 <%-- <script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script> --%>
-	<%-- <section id="./writeForm">
+
+<section id="./writeForm">
 		<!--  ./는 localhost:8090/brag임 -->
 	<div class="position-absolute top-10 start-65 ">
 		<div class="container pb-3 bg-light" class="outer" >
@@ -204,7 +194,10 @@ label.star:before {
 						<div class="row p-1 text-center ">
 							<div class="col">
 								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
+
+								
 								<div >
+								<!-- moonpa -->
 									<div>
 										<input type="hidden" name="moonpa" id="moonpa">
 										<div class="btn-group-sort" style="width: fit-content;">
@@ -220,30 +213,43 @@ label.star:before {
 											</ul>
 										</div>
 									</div>
-
-									<div class="input-group" style="flex-shrink: 0; width: 50%;">
-										<input type="text" class="form-control" id="location" name="location"
-											placeholder="위치를 검색해 보세요!" aria-label="위치">
-										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-									</div>
 								</div>
 
 
 								<div>
 									
-									<div>
-									<input name="title" id="title" size="55%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
-									</div>
-									
-									
-									
+									<!-- title -->
 									<div>	
 										<textarea id="title" name="brag_name"
 											style="width: 50%; height: 50%;" placeholder="제목을 입력해주세요!"
-											required="required" value="${title }" ></textarea>
+											value="${writeselect.title }" ></textarea>
 									</div>
 								</div>
 
+								<!-- delete button -->
+
+								<!-- 프사 -->
+								<!-- 닉네임 -->
+								<!-- 혼밥레벨 -->
+								<!-- 팔로우 -->
+
+								<!-- 조회수 -->
+
+								<!-- 작성일 -->
+								<div>
+									<div>${todayselect.date}작성일</div>
+								</div>
+
+								<!-- location -->
+								<div class="input-group" style="flex-shrink: 0; width: 50%;">
+										<input type="text" class="form-control" id="location" name="location"
+											placeholder="위치를 검색해 보세요!" aria-label="위치">
+										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+								</div>
+								
+								<!-- content 중에 사진 -->
+
+								<!-- content 중에 내용 -->
 								<div>
 									<!-- ckEditor -->
 									<!-- <div id="editor">
@@ -252,6 +258,11 @@ label.star:before {
 									
 									<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 								</div>
+								<!-- 좋아요 -->
+								<!-- 댓글 -->
+
+								<!-- 댓글 -->
+								<!-- 댓글 쓰기 창-->
 
 							</div>
 						</div>
@@ -273,34 +284,23 @@ label.star:before {
 		</div>
 	</div>
 	</section>
-	 --%>
-	
-	
-	<!-- BOARD 에서 가져온 게시판 수정 -->
-	<section id="articleForm">
-		<h2>글 내용 상세보기</h2>
-		<section id="basicInfoArea">
-			제 목 : ${article.board_subject }
-			첨부파일 :
-			<c:if test="${article.board_filename!=null }">
-				<a href="file_down?downFile=${article.board_filename}"> ${article.board_filename} </a>
-			</c:if>
-	</section>
-	<section id="articleContentArea">
-		${article.board_content }
-	</section>
-	</section>
-	<section id="commandList">
-<%-- 		<a href="replyform?board_num=${article.board_num}&page=${page}"> [답변] </a> --%> 
-<%-- 		<a href="modifyform?board_num=${article.board_num}"> [수정] </a> 
-		<a href="deleteform?board_num=${article.board_num}&page=${page}"> [삭제] </a> --%>
-		<a href="./boardlist?page=${page}"> [목록]</a>&nbsp;&nbsp;
-	</section>
-	<!-- BOARD 에서 가져온 게시판 수정 끝-->
-	
-	
 	
 
+	<script>
+	$(function(){
+	      ClassicEditor.create(document.querySelector("#editor"), {
+	    	  initialData : '${viewdetail.content}'
+	      }).then(editor=> {
+    		window.editor=editor;
+    		})
+		   .catch((error) => {
+		   	console.error(error);
+		    });
+		})
+
+</script>
+	
+	
 <!-- 	<script>
 	
 		function moonpaChange(arg) {
