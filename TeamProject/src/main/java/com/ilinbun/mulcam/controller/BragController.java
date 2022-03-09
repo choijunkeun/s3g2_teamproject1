@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -14,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,11 +33,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 
 @Controller
 @RequestMapping("/brag")
 public class BragController {
+	@Autowired
+	HttpSession session;
+	
 	@Autowired
 	private BragService bragService;
 
@@ -47,6 +56,7 @@ public class BragController {
 	@GetMapping("")
 	public String Main(Model model) {
 		try {
+			
 			bragboard = bragService.bragBest1();
 			model.addAttribute("BragBest1", bragboard);
 		} catch (Exception e) {
@@ -55,12 +65,135 @@ public class BragController {
 
 		return "brag/main";
 	}
+	
+//	@RequestMapping(value="boardlist", method= {RequestMethod.GET, RequestMethod.POST})
+//	public ModelAndView boardList(@RequestParam(value="page", required=false, defaultValue="1") int page) {
+//		ModelAndView mav=new ModelAndView();
+//		PageInfo pageInfo=new PageInfo();
+//		try {
+//			List<Board> articleList=boardService.getBoardList(page, pageInfo);
+//			mav.addObject("pageInfo", pageInfo);
+//			System.out.println(pageInfo);
+//			mav.addObject("articleList", articleList);
+//			System.out.println(articleList);
+//			mav.setViewName("/board/listform");
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			mav.addObject("err", e.getMessage());
+//			mav.setViewName("/board/err");
+//		}
+//		return mav;
+//	}
+//	// 혼밥자랑 게시판
+//	@GetMapping("/brag")
+//	public String brag() {
+//		return "brag/brag";
+//	}
+//	// 1. (일반) 자랑게시판 brag list 출력(사진 형태로), brag_list
+		@GetMapping("/brag")
+		public ModelAndView brag_list(@RequestParam(value="page", required=false, defaultValue="1") int page) {
+			// User userInfo = (User) session.getAttribute("user");
+			ModelAndView mav=new ModelAndView();
+			PageInfo pageInfo=new PageInfo();
+			pageInfo.setPage(page);
+			try {
+				List<BragBoard> bragList=bragService.getBragboardList(page);
+				for(BragBoard brag : bragList) {
+					Document doc=Jsoup.parse(brag.getContent());
+					Elements img= doc.select("img");
+					String src = img.attr("src");
+					brag.setContent(src);
+				}
+
+				pageInfo=bragService.getPageInfo(pageInfo);
+				// mav.addObject("userInfo", userInfo);
+				mav.addObject("pageInfo", pageInfo);
+				mav.addObject("bragList", bragList);
+				mav.setViewName("brag/brag");
+			} catch(Exception e) {
+				e.printStackTrace();
+				mav.addObject("err", e.getMessage());
+				mav.setViewName("err");
+			}
+			return mav;
+		}
+		
+		
+//		@GetMapping("/today_select/{today_articleNo}")
+//		public ModelAndView today_select(@PathVariable int today_articleNo, @RequestParam(value="page", required=false, defaultValue="1")int page) {
+//			ModelAndView mav =new ModelAndView("today_select");						
+//			PageInfo pageInfo = new PageInfo();
+//			System.out.println(today_articleNo);
+//			System.out.println(pageInfo);
+//			
+//			
+//			// 로그인한 유저 아이디 가져오기 (세션)
+//			String user_id = "testUser";
+//			// 지금 들어온 게시물의 no를 통해 작성자 아이디 가져오기
+//			//String writerid ="{today_user_id}"
+//			String writerid="testUser";
+//			Boolean modiAndDel = false;
+//			
+//			if (user_id.equals(writerid)) {
+//				modiAndDel = true;
+//			} 
+//			mav.addObject("modiAndDel", modiAndDel);
+//			
+//			try {
+//				System.out.println("try 들어옴");
+//				
+//				Today todayselect = todayService.getTBoard(today_articleNo);
+//				mav.addObject("pageInfo", pageInfo);
+//			    mav.addObject("todayselect", todayselect);
+//				System.out.println(page);
+//				
+//				} catch(Exception e) {
+//					e.printStackTrace();
+//					mav.addObject("err", e.getMessage());
+//					mav.setViewName("/err");
+//				}
+//			return mav;
+//		}
+
+		//게시글 보기 viewDetail
+		@GetMapping("/brag/viewdetail/{articleNo}")
+		public ModelAndView boardDetail(@PathVariable int articleNo) {
+			// User userinfo = (User) session.getAttribute("user");
+			User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);
+			ModelAndView mav=new ModelAndView();
+			try {
+				bragboard=bragService.getBragBoard(articleNo);
+				mav.addObject("user", userinfo);
+				mav.addObject("bboard", bragboard);
+				
+				Document doc=Jsoup.parse(bragboard.getContent());
+				Elements img= doc.select("img");
+				String src = img.attr("src");
+				
+				mav.addObject("imgSrc", src);
+				mav.setViewName("brag/viewDetail");
+			} catch(Exception e) {
+				e.printStackTrace();
+				mav.addObject("err", e.getMessage());
+				mav.setViewName("err");
+			}
+			return mav;
+		}
+
+		// 글보기?? 훈이꺼 reviewForm controller
+		@PostMapping("/{id}")
+		public ModelAndView placeInfo(@PathVariable String id) throws Exception {
+			ModelAndView mv = new ModelAndView("brag/brag/view");
+			bragboard = bragService.bragBoardQueryByID(id);
+			mv.addObject("bragboard", bragboard);
+
+			return mv;
+		}
+
+		
+		
 
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기서부터 CKEditor부분!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	@GetMapping("/")
-	public String home() {
-		return "ckeditor";
-	}
 
 	@ResponseBody
 	@PostMapping("/upload")
@@ -84,7 +217,6 @@ public class BragController {
 //			json.addProperty("fileName", filename);
 //			json.addProperty("url", "/fileview/" + filename);
 
-			System.out.println(json);
 			writer.println(json);
 
 		} catch (IOException e) {
@@ -134,11 +266,17 @@ public class BragController {
 			@RequestParam int idx, 
 			Model model) {
 		
-		System.out.println(title); // DB저장
-		System.out.println(content.trim()); // DB저장, 반드시 trim()
 		
 		try {
-			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);
+			BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
+			Document doc=Jsoup.parse(bragboard.getContent());
+			
+			Elements img= doc.select("img");
+			String src = img.attr("src");
+			String newSrc =src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
+			doc.select("img").attr("src", "/bragupload/"+newSrc);
+			bragboard.setContent(doc.select("body > p").toString());
+			
 			bragService.regBragBoard(bragboard);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -147,7 +285,7 @@ public class BragController {
 		
 		model.addAttribute("title", title);
 		model.addAttribute("content", content.trim());
-		return "brag/best"; //resultForm다시
+		return "result"; //resultForm다시
 	}
 
 	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111CKEditor끝!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
@@ -158,11 +296,7 @@ public class BragController {
 		return "brag/best";
 	}
 
-	// 혼밥자랑 게시판
-	@GetMapping("/brag")
-	public String brag() {
-		return "brag/brag";
-	}
+
 
 
 	//글쓰기 --> CKEditor와 결합 해봄
@@ -248,52 +382,80 @@ public class BragController {
 //		return result;
 //	}
 
-//	@RequestMapping(value="boardlist", method= {RequestMethod.GET, RequestMethod.POST})
-//	public ModelAndView boardList(@RequestParam(value="page", required=false, defaultValue="1") int page) {
-//		ModelAndView mav=new ModelAndView();
-//		PageInfo pageInfo=new PageInfo();
+
+
+
+	//CKEditor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!글보기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//	@GetMapping("/today_select/{today_articleNo}")
+//	public ModelAndView today_select(@PathVariable int today_articleNo, @RequestParam(value="page", required=false, defaultValue="1")int page) {
+//		ModelAndView mav =new ModelAndView("today_select");						
+//		PageInfo pageInfo = new PageInfo();
+//		System.out.println(today_articleNo);
+//		System.out.println(pageInfo);
+//		
+//		
+//		// 로그인한 유저 아이디 가져오기 (세션)
+//		String user_id = "testUser";
+//		// 지금 들어온 게시물의 no를 통해 작성자 아이디 가져오기
+//		//String writerid ="{today_user_id}"
+//		String writerid="testUser";
+//		Boolean modiAndDel = false;
+//		
+//		if (user_id.equals(writerid)) {
+//			modiAndDel = true;
+//		} 
+//		mav.addObject("modiAndDel", modiAndDel);
+//		
 //		try {
-//			List<Board> articleList=boardService.getBoardList(page, pageInfo);
-//			mav.addObject("pageInfo", pageInfo);
-//			System.out.println(pageInfo);
-//			mav.addObject("articleList", articleList);
-//			System.out.println(articleList);
-//			mav.setViewName("/board/listform");
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			mav.addObject("err", e.getMessage());
-//			mav.setViewName("/board/err");
-//		}
+//			System.out.println("try 들어옴");
+//			
+//			Today writeselect = BragService.getArticleNo(articleNo);
+//			//mav.addObject("pageInfo", pageInfo);
+//		    mav.addObject("writeselect", writeselect);
+//			System.out.println(page);
+//			
+//			} catch(Exception e) {
+//				e.printStackTrace();
+//				mav.addObject("err", e.getMessage());
+//				mav.setViewName("/err");
+//			}
 //		return mav;
 //	}
-//	
-//	//글보기
-//	@GetMapping(value="viewdetail")
-//	public ModelAndView boardDeatail(@RequestParam(value="board_num")int boardNum,
-//			@RequestParam(value="page", required=false, defaultValue="1")int page) {
-//		ModelAndView mav=new ModelAndView();
-//		try {
-//			Board board=boardService.getBoard(boardNum);
-//			mav.addObject("article", board);
-//			mav.addObject("page", page);
-//			mav.setViewName("brag/viewDetail");
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			mav.addObject("err", e.getMessage());
-//			mav.setViewName("brag/err");
-//		}
-//		return mav;
-//	}
+	
 
-	// 글보기?? 훈이꺼 reviewForm controller
-	@PostMapping("/{id}")
-	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
-		ModelAndView mv = new ModelAndView("brag/brag/view");
-		bragboard = bragService.bragBoardQueryByID(id);
-		mv.addObject("bragboard", bragboard);
+	// // 5.취소요청
+	// @PostMapping("/today_postcancle")
+	// public String todayPostcancle() {
+	// 	return "today";
+	// }
 
-		return mv;
-	}
+
+	// // 7.좋아요요청 ajax
+	// @PostMapping("/today_likes")
+	// public boolean todayLikes() {
+	// 	return false;
+	// }
+
+	// // 9.수정요청
+	// @PostMapping("/today_modify")
+	// public ModelAndView todayModify() {
+	// 	ModelAndView mav = new ModelAndView();
+	// 	return mav;
+	// }
+
+	// // 10.삭제요청
+	// @PostMapping("/today_delete")
+	// public ModelAndView todayDelete() {
+	// 	ModelAndView mav = new ModelAndView();
+	// 	return mav;
+	// }
+
+	// // 7. 목록누르면 today로 돌아가기
+	// @GetMapping("/today_list")
+	// public String today_list() {
+	// 	return "today";
+	// }
+//CKEditor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!여기까지!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 	// 글수정 (내 글일경우가능)
 	@GetMapping(value = "/modifyform")
@@ -359,7 +521,6 @@ public class BragController {
 //				response.setCharacterEncoding("UTF-8");
 //				response.setContentType("application/octet-stream; charest=UTF-8");
 //				response.setHeader("Content-Disposition", "attachment; filename="+sfilename);
-//				OutputStream out=response.getOutputStream();
 //				fis=new FileInputStream(file);
 //				FileCopyUtils.copy(fis, out);
 //				out.flush(); 

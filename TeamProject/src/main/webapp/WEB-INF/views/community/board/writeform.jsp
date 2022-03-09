@@ -4,95 +4,99 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>MVC 게시판</title>
+<!-- ckEditor -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- 클래식 에디터 -->
+<script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
+<script>
+	$(function(){
+        ClassicEditor
+        	.create(document.querySelector("#editor"), {
+        		ckfinder : {
+        			uploadUrl : "/comm/upload"
+        		}
+        	}).then(editor=> {
+        		window.editor=editor;
+        	})
+        	.catch((error) => {
+        		console.error(error);
+        	});
+	});
+</script>
+
+<title>커뮤니티</title>
+
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-latest.min.js"></script>
+	
 <style type="text/css">
-h2 {
-	text-align: center;
+h5 {
+	/* text-align: center; */
+	font-size: 30px;
+	margin-left: 0%
 }
 
 #commandCell {
 	text-align: center;
 }
+
+
+/* @@@@@@  ck에디터   @@@@@@@ */
+.ck-editor__editable {
+	min-height: 550px;
+
+	max-width: 100%;
+}
+
+
+
+
+
+
+
 </style>
 
 </head>
 <body>
 	<!-- 게시판 등록 -->
 
-	<section id="./writeForm">
-		<h2>커뮤니티 글쓰기</h2>
-		<form action="./boardwrite" method="post"
-			enctype="multipart/form-data" name="boardform">
-			<div class="container pb-3 bg-light">
-				<form>
+<section id="./writeForm">
+
+	<div >
+		<div class="container pb-3 bg-light" class="outer" >
+			<h5 class="fw-bolder" >커뮤니티</h5>
+
+			<form action="./boardwrite" method="post" enctype="multipart/form-data" name="boardform" >
+				<div>
+					<input type="hidden" id="idx" name="idx" value=${user.idx }>
 					<div class="container p-2 ">
 						<div class="row p-1 text-center ">
 							<div class="col">
-								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
-								<table style="width: fit-content; margin: 0 auto;">
-									<tr>
-										<td colspan="2"></td>
-										<td colspan="2">
-											<div class="col">
-												<input type="text" name="honbabReason" id="honbabReason"
-													style="width: 100%;" placeholder="제목을 써주세요">
-											</div>
-										</td>
-									</tr>
-									<tr rowspan="2">
-										<td colspan="2">
-
-											<div class="col">
-												<!-- https://codepen.io/emiemi/pen/zxNXWR -->
-												<div
-													class="card border rounded text-center justify-content-center">
-													<!-- <input type="file" name="revImgFile" style="width: 100%;" placeholder="사진을 이 곳에 업로드 해주세요"> -->
-													<div class="btn-container">
-														<!--the three icons: default, ok file (img), error file (not an img)-->
-														<h1 class="imgupload"><i class="fa fa-file-image-o"></i></h1>
-														<h1 class="imgupload ok"><i class="fa fa-check"></i></h1>
-														<h1 class="imgupload stop"><i class="fa fa-times"></i></h1>
-														<!--this field changes dinamically displaying the filename we are trying to upload-->
-														<p id="namefile">사진만 올려주세요!(jpg,jpeg,bmp,png)</p>
-														<!--our custom btn which which stays under the actual one-->
-														<!-- 내장버튼인가 <button type="button" id="btnup" class="btn btn-primary">파일 선택2</button> -->
-														<button type="button" id="btnup" class="btn btn-primary btn-lg">파일 선택</button>
-														<input type="file" value="" name="file" id="file">
-													</div>
-												</div>
-											</div>
-										</td> &nbsp;
-										<td colspan="2">
-											<div class="col">
-												<textarea name="reviewContent"
-													style="width: 265px; height: 260px;"
-													placeholder="사진에 대해 설명해 주세요"></textarea>
-											</div>
-										</td>
-									</tr>
-								</table>
+								<input name="title" id="title" style="display: inline-block;width:100%;" value='${title }' placeholder="제목을 입력해주세요!" required="required">
+									<!-- ckEditor -->	
+									<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							</div>
 						</div>
 					</div>
 
 					<div class="row py-3">
 						<div class="col text-center">
-							<section id="commandCell">
-								<button class="btn border bd-secondary">취소</button>
-								<input type="submit" class="btn border bd-secondary" value="등록" />
-							</section>
+							<!-- <input type="reset" value="다시쓰기" /> -->
+							<button class="btn border bd-secondary">취소</button>
+							<input type="submit" class="btn border bd-secondary" value="전송" />
 						</div>
 					</div>
-
-				</form>
-
-
-			</div>
-			</table>
-
-		</form>
+				</div>
+			</form>
+		</div>
+	</div>
 	</section>
 
+
+
+	
 
 	<!-- 게시판 등록 -->
 	<script>

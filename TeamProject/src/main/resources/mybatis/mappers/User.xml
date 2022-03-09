@@ -13,7 +13,7 @@
     
     <select id="login" resultType="user" parameterType="String">
     	<![CDATA[
-    	SELECT * FROM user WHERE user=#{email}      	
+    	SELECT * FROM user WHERE email=#{email}      	
     	]]>
     </select>
 
