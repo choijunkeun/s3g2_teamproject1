@@ -119,7 +119,7 @@ public class MainController {
 		System.out.println("login() join");
 		try {
 			User user = userService.loginUser(email, password);
-
+			user.setPassword(null);
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
 
