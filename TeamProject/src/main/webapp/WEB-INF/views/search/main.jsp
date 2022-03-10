@@ -318,7 +318,9 @@
 		    }
 		
 		    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-		    ps.keywordSearch( keyword, placesSearchCB, {category_group_code:'FD6, CE7'}); 
+		    // 카카오맵 순정 api는 이거지만
+		    ps.keywordSearch( keyword, placesSearchCB, {category_group_code:'FD6, CE7'});
+		    // 자체 구현한 restapi가 담긴 searchcontroller의 query를 통해 이를 가져오도록 대체합니다
 		}
 		
 		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
