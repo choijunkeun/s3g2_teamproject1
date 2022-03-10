@@ -9,5 +9,46 @@
 			SELECT * FROM shareboard ORDER BY articleno DESC LIMIT 1 
 		]]>
 	</select>
+	<insert id="insertShareBoard" parameterType="Shareboard">
+ 		<![CDATA[
+ 			insert into team2.shareBOARD (idx, subway, title, content)
+ 			
+ 			values (#{idx}, #{subway}, #{title}, #{content})
+ 		]]>
+ 		
+ 	</insert>
+	<update id="updateShareBoard" parameterType="Shareboard">
+ 		<![CDATA[
+ 			update team2.shareBOARD set title=#{board_subject}, content=#{content}
+ 			where articleNo=#{articleNo}
+ 		]]>
+ 	</update>
+ 	<update id="updateReadCount" parameterType="int">
+ 		<![CDATA[
+ 			update team2.shareBOARD set readCount=readCount+1 where articleNo=#{articleNo} 
+ 		]]>
+ 	</update>
+ 	<select id="selectMaxArticleNo" resultType="integer">
+	<!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자.
+	PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다.-->
+	<!--null일 경우 값을 가져오기 위해서(null로) 래퍼클래스인 integer로 반환한다.-->
+		<![CDATA[
+			select max(articleNo) from team2.shareBOARD
+		]]>
+	</select>
+	<select id="selectShareBoardCount" resultType="int">
+ 		<![CDATA[
+ 			select count(*) from team2.shareBOARD
+ 		]]>
+ 	</select>
+ 	<select id="selectShareBoardList" resultType="Shareboard" parameterType="int">
+ 		<![CDATA[
+ 			select *
+				from (select @rownum:=@rownum+1 rnum, tot.* 
+					from (select * from team2.shareBOARD order by articleNo) tot, 
+					(select @rownum:=0) temp) sub
+			where rnum between #{startrow} and #{startrow}+9		
+ 		]]>
+ 	</select>
 
 </mapper>

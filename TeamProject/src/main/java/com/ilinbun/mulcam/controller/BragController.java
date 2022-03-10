@@ -75,8 +75,7 @@ public class BragController {
 			try {
 				List<BragBoard> bragList=bragService.getBragboardList(page);
 				for(BragBoard brag : bragList) {
-					System.out.println(brag.getContent());
-					Document doc=Jsoup.parse("<p>"+brag.getContent()+"<p>");
+					Document doc=Jsoup.parse(brag.getContent());
 					Elements img= doc.select("img");
 					String src = img.attr("src");
 					brag.setContent(src);

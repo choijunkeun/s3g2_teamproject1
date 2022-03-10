@@ -1,9 +1,42 @@
 package com.ilinbun.mulcam.dto;
 
+import java.sql.Date;
+
 public class Shareboard {
-	int articleNo, user_PK, readCount = 0;
-	String location_sub, content, imgfilename = null;
+	int articleNo;
+	int idx;
+	String subway;
+	String title;
+	String content;
 	
+	Date datetime;
+	int headerTag;
+	int readcount;
+	
+	public Shareboard() {
+		
+	}
+	
+	public Shareboard(String title, String subway, String content, int idx) {
+		super();
+		this.title = title;
+		this.subway = subway;
+		this.content = content;
+		this.idx = idx;
+	}
+	
+	public Shareboard(int articleNo, int idx, String subway, String title, String content, Date datetime, int headerTag, int readcount) {
+		super();
+		this.articleNo = articleNo;
+		this.idx = idx;
+		this.subway = subway;
+		this.title = title;
+		this.content = content;
+		this.datetime = datetime;
+		this.headerTag = headerTag;
+		this.readcount = readcount;
+	}
+
 	public int getArticleNo() {
 		return articleNo;
 	}
@@ -11,46 +44,63 @@ public class Shareboard {
 	public void setArticleNo(int articleNo) {
 		this.articleNo = articleNo;
 	}
-	public int getUser_PK() {
-		return user_PK;
+
+	public int getIdx() {
+		return idx;
 	}
-	public void setUser_PK(int user_PK) {
-		this.user_PK = user_PK;
+
+	public void setIdx(int idx) {
+		this.idx = idx;
 	}
-	public int getReadCount() {
-		return readCount;
+
+	public String getSubway() {
+		return subway;
 	}
-	public void setReadCount(int readCount) {
-		this.readCount = readCount;
+
+	public void setSubway(String subway) {
+		this.subway = subway;
 	}
-	public String getLocation_sub() {
-		return location_sub;
+
+	public String getTitle() {
+		return title;
 	}
-	public void setLocation_sub(String location_sub) {
-		this.location_sub = location_sub;
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getImgfilename() {
-		return imgfilename;
+
+	public Date getDatetime() {
+		return datetime;
 	}
-	public void setImgfilename(String imgfilename) {
-		this.imgfilename = imgfilename;
+
+	public void setDatetime(Date datetime) {
+		this.datetime = datetime;
 	}
-	public Shareboard() {
-		super();
+
+	public int getHeaderTag() {
+		return headerTag;
 	}
-	public Shareboard(int articleNo, int user_PK, int readCount, String location_sub, String content, String imgfilename) {
-		super();
-		this.articleNo = articleNo;
-		this.user_PK = user_PK;
-		this.readCount = readCount;
-		this.location_sub = location_sub;
-		this.content = content;
-		this.imgfilename = imgfilename;
+
+	public void setHeaderTag(int headerTag) {
+		this.headerTag = headerTag;
 	}
+
+	public int getReadcount() {
+		return readcount;
+	}
+
+	public void setReadcount(int readcount) {
+		this.readcount = readcount;
+	}
+
+	
+	
 }
