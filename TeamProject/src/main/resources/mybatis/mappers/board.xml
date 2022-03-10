@@ -11,9 +11,9 @@
 	<insert id="insertBoard" parameterType="Com_board">
 		<![CDATA[
 			insert into board
-			(board_num,board_name,board_pass,board_subject,board_content,board_filename,board_re_ref,board_re_lev,
+			(board_num,board_name,board_pass,board_subject,board_content,board_re_ref,board_re_lev,
 				board_re_seq,board_readcount,board_date) 
-			values (#{board_num},#{board_name},#{board_pass},#{board_subject},#{board_content},#{board_filename},
+			values (#{board_num},#{board_name},#{board_pass},#{board_subject},#{board_content},
 				#{board_re_ref},#{board_re_lev},#{board_re_seq},#{board_readcount},now())
 		]]>
 
@@ -26,7 +26,7 @@
 	</select>
 	<select id="selectBoardList" resultType="Com_board" parameterType="int">
 		<![CDATA[
-			select BOARD_NUM,BOARD_NAME,BOARD_PASS,BOARD_SUBJECT,BOARD_CONTENT, BOARD_FILENAME, BOARD_RE_REF,BOARD_RE_LEV,BOARD_RE_SEQ,BOARD_READCOUNT,BOARD_DATE 
+			select BOARD_NUM,BOARD_NAME,BOARD_PASS,BOARD_SUBJECT,BOARD_CONTENT,BOARD_RE_REF,BOARD_RE_LEV,BOARD_RE_SEQ,BOARD_READCOUNT,BOARD_DATE 
 				from (select @rownum:=@rownum+1 rnum, tot.* 
 					from (select * from board order by BOARD_RE_REF desc,BOARD_RE_SEQ asc) tot, 
 					(select @rownum:=0) temp) sub
