@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
 .map_wrap, .map_wrap * {
 	margin: 0;
@@ -254,6 +255,8 @@
 		// 마커를 담을 배열입니다
 		var markers = [];
 		
+		var ListPlace = [];
+		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		    mapOption = {
 		        center: new kakao.maps.LatLng(37.529521, 126.964540), // 지도의 중심좌표
@@ -289,7 +292,7 @@
 		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 		function placesSearchCB(data, status, pagination) {
 		    if (status === kakao.maps.services.Status.OK) {
-		
+				//var placesData = data;
 		        // 정상적으로 검색이 완료됐으면
 		        // 검색 목록과 마커를 표출합니다
 		        document.getElementById('menu_wrap').style.visibility = "visible";
@@ -314,12 +317,33 @@
 		// 검색 결과 목록과 마커를 표출하는 함수입니다
 		function displayPlaces(places) {
 			
-			/*
-				여기에 혼밥 레벨별로 정렬하는 코드를 먼저 작성하자
-				
-			*/
 			
-		
+			// 혼밥 레벨 관련코드 ##########################################################
+			// 1. 결과값들에 점수 붙이기
+			for(let i = 0; i<places.length; i++){
+				$.ajax({
+					type:"GET",
+					url:"/place/getRating",
+					data: {"id": places[i].id, "searchOption":$('#searchOption').val()},
+					async:false,
+					success: function(data){
+						places[i].rating=data;
+						places[i].ratingType=$('#searchOption').val();
+					}
+				})
+			} 
+			
+			for(let i=0; i<places.length; i++){
+				let swap;
+				for(let j=0; j<places.length-1-i; j++){
+					if(places[j].rating < places[j+1].rating){
+						swap = places[j];
+						places[j] = places[j+1];
+						places[j+1] = swap;
+					}
+				}
+			}
+			
 		    var listEl = document.getElementById('placesList'), 
 		    menuEl = document.getElementById('menu_wrap'),
 		    fragment = document.createDocumentFragment(), 
@@ -332,13 +356,11 @@
 		    // 지도에 표시되고 있는 마커를 제거합니다
 		    removeMarker();
 		    
-		    for ( var i=0; i<places.length; i++ ) {
-		
+			for ( var i=0; i<places.length; i++ ) {
 		        // 마커를 생성하고 지도에 표시합니다
 		        var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
 		            marker = addMarker(placePosition, i), 
 		            itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
-		
 		        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
 		        // LatLngBounds 객체에 좌표를 추가합니다
 		        bounds.extend(placePosition);
@@ -366,7 +388,7 @@
 		
 		        fragment.appendChild(itemEl);
 		    }
-		
+			
 		    // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
 		    listEl.appendChild(fragment);
 		    menuEl.scrollTop = 0;
@@ -377,35 +399,20 @@
 		
 		// 검색결과 항목을 Element로 반환하는 함수입니다
 		function getListItem(index, places) {
-		
-		    var el = document.createElement('li'),
-		    //itemStr = '<form action="./place/' + places.id + '" method="post"><span class="markerbg marker_' + (index+1) + '"></span>';
-			//itemStr += '<div class="info">' +
-		    //            '   <h5>' + places.place_name + '</h5>';
-		
-		    //if (places.road_address_name) {
-		    //    itemStr += '    <span>' + places.road_address_name + '</span>' +
-		    //                '   <span class="jibun gray">' +  places.address_name  + '</span>';
-		    //} else {
-		    //    itemStr += '    <span>' +  places.address_name  + '</span>'; 
-		    //}
-		    //             
-		    //  itemStr += '  <span class="tel">' + places.phone  + '</span>';
-		    // /* '<a href="./place/' + places.id + '" style="text-decoration:none;">상세보기</a>' +  */
-		    // itemStr += '<input type="hidden" name="place_name" value="' + places.place_name + '">' + 
-		    // '<input type="submit" class="btn" value="상세보기">';
-		    //            itemStr +='</div></form>';
-			    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>';
-			    itemStr += '<div class="info"><h5>' + places.place_name + '</h5>';
-			    if (places.road_address_name) {
-			        itemStr += '    <span>' + places.road_address_name + '</span>' +
-			                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
-			    } else {
-			        itemStr += '    <span>' +  places.address_name  + '</span>'; 
-			    }
-				itemStr += '  <span class="tel">' + places.phone  + '</span>';
-				//itemStr += makePlaceHiddenForm(places);
-				itemStr += '</div>';
+		    var el = document.createElement('li'),		    
+		    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>';
+		    itemStr += '<div class="info"><h5>' + places.place_name + '</h5>';
+		    if (places.road_address_name) {
+		        itemStr += '    <span>' + places.road_address_name + '</span>' +
+		                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+		    } else {
+		        itemStr += '    <span>' +  places.address_name  + '</span>'; 
+		    }
+			itemStr += '  <span class="tel">' + places.phone  + '</span>';
+			
+			itemStr += '  <span>'+ rTypeToString(places.ratingType) +'&nbsp;: ' + places.rating  + '</span>';
+			
+			itemStr += '</div>';
 		
 		    el.innerHTML = itemStr;
 		    el.className = 'item';
@@ -570,6 +577,27 @@
 		    while (el.hasChildNodes()) {
 		        el.removeChild (el.lastChild);
 		    }
+		}
+		 
+		function rTypeToString(data){
+			switch(data){
+			case '1':
+				rType = "종합 평점";
+				break;
+			case '2':
+				rType = "가격 평점";
+				break;
+			case '3':
+				rType = "맛 평점";
+				break;
+			case '4':
+				rType = "서비스 평점";
+				break;
+			case '5':
+				rType = "멋(인테리어) 평점";
+				break;	
+			}
+			return rType;
 		}
 	</script>
 </body>

@@ -20,7 +20,7 @@ public class User {
 	private String password;
 	private String profileImg;
 	private int honbabLevel;
-	private int group;
+	private int grp;
 
 	public int getIdx() {
 		return idx;
@@ -70,19 +70,19 @@ public class User {
 		this.honbabLevel = honbabLevel;
 	}
 
-	public int getGroup() {
-		return group;
+	public int getGrp() {
+		return grp;
 	}
 
-	public void setGroup(int group) {
-		this.group = group;
+	public void setGrp(int grp) {
+		this.grp = grp;
 	}
 
 	public User() {};
 
 
 	public User(int idx, String email, String nickname, String password, String profileImg, int honbabLevel,
-			int group) {
+			int grp) {
 		super();
 		this.idx = idx;
 		this.email = email;
@@ -90,7 +90,7 @@ public class User {
 		this.password = password;
 		this.profileImg = profileImg;
 		this.honbabLevel = honbabLevel;
-		this.group = group;
+		this.grp = grp;
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.PageInfo;
 
 @Service
 public class BragServiceImpl implements BragService {
@@ -14,64 +15,104 @@ public class BragServiceImpl implements BragService {
 	
 	@Autowired
 	BragDAO bragDAO;
-	
-	@Override
-	public BragBoard bragBest1() throws Exception {
-		// bragDAO에서 DB를 통해 gragBest1가져오기
-		BragBoard best = bragDAO.bragBest1();
-		return best;
-	}
 
+	//[글쓰기Service]
+	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
+		@Override
+		public void regBragBoard(BragBoard bragboard) throws Exception {
+			Integer articleNo = bragDAO.selectMaxArticleNo();
+			if(articleNo==null) articleNo = 1;
+			else articleNo+=1;
+			bragboard.setArticleNo(articleNo);
+			//bragboard.setDate(Date); 지울까 말까
+		
+			bragDAO.insertBragBoard(bragboard);		
+		}
+
+		
+	//[글 보기Service]
+	//글보기(viewDetail)에서 id를 받아와 내 글인지 남의 글인지 판별
 	@Override
 	public BragBoard bragBoardQueryByID(String id) throws Exception {
-		//articleNo 가져와서 그 글을 보여주는 쿼리
-		BragBoard reviewform = bragDAO.bragBoardQueryByID(id);
-		return reviewform;
+		BragBoard viewDetail = bragDAO.bragBoardQueryByID(id);
+		return viewDetail;
+	}
+	//글보기 시 조회수 올리는 기능
+	@Override
+	public BragBoard getArticleNo(int articleNo) throws Exception {
+		bragDAO.updateReadCount(articleNo);
+		return bragDAO.selectBragBoard(articleNo);
 	}
 
+
+	//[글 목록Service]
+	//게시글 리스트에 작성된 게시글을 넣는 쿼리
 	@Override
-	public void regBragBoard(BragBoard bragboard) throws Exception {
-		//처음 글쓰기 등록하는 서비스 (완성!)
-		Integer articleNo = bragDAO.selectMaxArticleNo();
-		if(articleNo==null) articleNo = 1;
-		else articleNo+=1;
-		bragboard.setArticleNo(articleNo);
-		//bragboard.setDate(Date); 지울까 말까
-	
-		bragDAO.insertBragBoard(bragboard);
+	public void setInputList(BragBoard bragboard) throws Exception {
+		// bragboard에 작성된 제목과 내용을 가지고 dB에 넣기 
+		bragDAO.insertBragBoard(bragboard);	
 	}
-	
+	//게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
 	@Override
-	public List<BragBoard> getBragboardList(int articleNo) throws Exception {
+	public List<BragBoard> getBragboardList(int page) throws Exception {
+		int startrow=(int) ((page-1)*16+1);
+		return bragDAO.selectBragBoardList(startrow);
+	}
+	//게시글 목록 아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)
+	@Override
+	public PageInfo getPageInfo(PageInfo pageInfo) throws Exception {
 		int listCount=bragDAO.selectBragBoardCount();
+		System.out.println("리스트카운트 :"+listCount);
+		int maxPage=(int)Math.ceil((double)listCount/16);
+		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
 		//table에 있는 모든 row 개수
-		
-		int maxPage=(int)Math.ceil((double)listCount/10);
-		//그 개수를 10으로 나누고 올림처리하여 페이지 수 계산
-		
-		double page = 0; //? 새로 추가 
-		//아래 2개의 알고리즘은 현재 하나의 페이지에 글 목록을 10개 보여주고
+		double pagenation = pageInfo.getPage(); //? 새로 추가 
 		//아래에 페이지 이동 버튼도 10개로 구성하고자 하기 위함이다.
-		int startPage=(((int) ((double)page/10+0.9))-1)*10+1;
+		int startPage=(((int) ((double)pagenation/10+0.9))-1)*10+1;
 		//현재 페이지에 보여줄 시작 페이지 수(1, 11, 21, ...)
 		
 		int endPage=startPage+10-1;
 		//현재 페이지에 보여줄 마지막 페이지 수(10, 20, 30, ...)
-		
-		
-		int startrow=(int) ((page-1)*10+1);
-		
-		return bragDAO.selectBragBoardList(startrow);
-	} 
-
+		if(maxPage<endPage) {
+			endPage=maxPage;
+		}
+		pageInfo.setListCount(listCount);
+		pageInfo.setMaxPage(maxPage);
+		pageInfo.setEndPage(endPage);
+		pageInfo.setStartPage(startPage);
+		return pageInfo;
+	}
+	//BEST 게시판 글 목록이 조회수 순으로 정렬 쿼리(수정요. 나중에는 좋아요 순으로)
 	@Override
-	public BragBoard getArticleNo(int articleNo) throws Exception {
-		bragDAO.updateReadCount(articleNo);
-		//사용자가 게시판 목록에서 글 상세보기를 눌렀기 때문에 조회수를 1 늘려주는 쿼리문을 수행한 후에
-		//해당 글의 DB정보를 select 해온다.
-		return bragDAO.selectBragBoard(articleNo);
+	public BragBoard bragBest1() throws Exception {
+		BragBoard best = bragDAO.bragBest1();
+		return best;
 	}
 
+	
+	
+	
+
+	//여기서 부터는 구현 전 
+	//글수정
+	@Override
+	public void modifyBragBoard(BragBoard bragboard) throws Exception {
+		// TODO Auto-generated method stub
+	}
+	//글수정(modifyForm) 시 하나의 글 정보를 select하는 쿼리문	
+	@Override
+	public BragBoard getBragBoard(int articleNo) throws Exception {
+		// TODO Auto-generated method stub
+		return bragDAO.selectBragBoard(articleNo);
+	}
+	//글삭제
+	@Override
+	public void removeBragBoard(int articleNo) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+//아마 댓글	
 //	@Override
 //	public void regBragReply(Bragboard bragboard) throws Exception {
 //		//1. borad_num으로 원글 조회(ref,lev,seq 참조하기 위함)
@@ -102,34 +143,9 @@ public class BragServiceImpl implements BragService {
 //		bragDAO.insertBragBoard(bragboard);
 //	}
 
-	@Override
-	public void modifyBragBoard(BragBoard bragboard) throws Exception {
 	
-	}
-// 글삭제 나중에
-//	@Override
-//	public void removeBragBoard(int articleNo) throws Exception {
-//		//1. 사용자가 입력한 비밀번호 유효성 검사
-//		String password=bragDAO.selectPassword(articleNo);
-//		Bragboard bragboard=bragDAO.selectBragBoard(articleNo);
-//		
-//		//2. 유효성 검사 통과 시 내용 삭제(delete 쿼리)
-//		if(password.equals(boardPass)) {
-//			String rmMessage="삭제된 글입니다.";
-//			board.setBoard_view(0);
-//			board.setBoard_subject(rmMessage);
-//			boardDAO.updateDeletedBoard(board);
-//		}
-//		
-//		//3. 유효성 검사 실패 시 예외 발생(권한없음)
-//		else {
-//			throw new Exception("삭제 권한 없음");
-//		}
-//	}
+	
 
-
-	
-	
 	
 	
 }
