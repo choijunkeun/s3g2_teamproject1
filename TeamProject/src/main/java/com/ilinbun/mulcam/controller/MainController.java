@@ -109,7 +109,7 @@ public class MainController {
 	// 로그인 폼
 	@GetMapping("/login")
 	public String loginForm() {
-		return "default/user/loginForm";
+		return "default/user/loginForm"; 
 	}
 
 	// 로그인 기능 컨트롤러
