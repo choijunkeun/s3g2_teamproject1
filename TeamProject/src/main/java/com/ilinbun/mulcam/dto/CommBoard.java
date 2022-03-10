@@ -4,7 +4,92 @@ import java.sql.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class Com_board {
+
+public class CommBoard {
+	int articleNo;
+	int idx;
+	String title;
+	String content;
+	int views;
+	Date date;
+	
+	public CommBoard() {
+		
+	}
+
+	public CommBoard(int articleNo, int idx, String title, String content, int views, Date date) {
+		super();
+		this.articleNo = articleNo;
+		this.idx = idx;
+		this.title = title;
+		this.content = content;
+		this.views = views;
+		this.date = date;
+	}
+	
+	public CommBoard(int idx, String title, int views,String content) {
+		super();
+		this.idx = idx;
+		this.title = title;
+		this.views = views;
+		this.content = content;
+	}
+
+	
+
+	public int getArticleNo() {
+		return articleNo;
+	}
+
+	public void setArticleNo(int articleNo) {
+		this.articleNo = articleNo;
+	}
+
+	public int getIdx() {
+		return idx;
+	}
+
+	public void setIdx(int idx) {
+		this.idx = idx;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public int getViews() {
+		return views;
+	}
+
+	public void setViews(int views) {
+		this.views = views;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	
+
+
+
+/*public class Comm_board {
 	private int board_num;
 	private String board_name;
 	private String board_pass;
@@ -89,7 +174,7 @@ public class Com_board {
 	public void setFile(MultipartFile file) {
 		this.file = file;
 	}
-	
+	*/
 	
 	
 }
