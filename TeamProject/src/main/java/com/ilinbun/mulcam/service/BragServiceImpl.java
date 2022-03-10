@@ -32,14 +32,14 @@ public class BragServiceImpl implements BragService {
 	@Override
 	public void regBragBoard(BragBoard bragboard) throws Exception {
 		//처음 글쓰기 등록하는 서비스 (완성!)
-				Integer articleNo = bragDAO.selectMaxArticleNo ();
-				if(articleNo==null) articleNo = 1;
-				else articleNo+=1;
-				bragboard.setArticleNo(articleNo);
-				//bragboard.setDate(Date); 지울까 말까
-			
-				bragDAO.insertBragBoard(bragboard);
-			}
+		Integer articleNo = bragDAO.selectMaxArticleNo();
+		if(articleNo==null) articleNo = 1;
+		else articleNo+=1;
+		bragboard.setArticleNo(articleNo);
+		//bragboard.setDate(Date); 지울까 말까
+	
+		bragDAO.insertBragBoard(bragboard);
+	}
 	
 	@Override
 	public List<BragBoard> getBragboardList(int articleNo) throws Exception {

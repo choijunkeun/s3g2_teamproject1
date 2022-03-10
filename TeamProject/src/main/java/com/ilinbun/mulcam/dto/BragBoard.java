@@ -6,47 +6,44 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class BragBoard { // 자랑
 
-	
-	int articleNo; 
+	int articleNo;
 	int idx;
 
-	boolean inRestaurant;
-	
-	String title; 
+	boolean moonpa;
+
+	String title;
 	String location;
-	 
+
 	int readCount;
 	Date date;
-	String imgfilename; 
-	String content; 
-	
-	public  BragBoard() {
-		
+//	String imgfilename; 
+	String content;
+
+	public BragBoard() {
+
 	}
 
-	public BragBoard(int articleNo, int idx, boolean inRestaurant, String title, String location, int readCount,
-			Date date, String imgfilename, String content) {
+	public BragBoard(int articleNo, int idx, boolean moonpa, String title, String location, 
+			int readCount, Date date, String content) {
 		super();
 		this.articleNo = articleNo;
 		this.idx = idx;
-		this.inRestaurant = inRestaurant;
+		this.moonpa = moonpa;
 		this.title = title;
 		this.location = location;
 		this.readCount = readCount;
 		this.date = date;
-		this.imgfilename = imgfilename;
 		this.content = content;
 	}
 
-	public BragBoard(int idx, boolean inRestaurant, String title, String location, int readCount, String imgfilename,
+	public BragBoard(int idx, boolean moonpa, String title, String location, int readCount, 
 			String content) {
 		super();
 		this.idx = idx;
-		this.inRestaurant = inRestaurant;
+		this.moonpa = moonpa;
 		this.title = title;
 		this.location = location;
 		this.readCount = readCount;
-		this.imgfilename = imgfilename;
 		this.content = content;
 	}
 
@@ -66,12 +63,12 @@ public class BragBoard { // 자랑
 		this.idx = idx;
 	}
 
-	public boolean isInRestaurant() {
-		return inRestaurant;
+	public boolean isMoonpa() {
+		return moonpa;
 	}
 
-	public void setInRestaurant(boolean inRestaurant) {
-		this.inRestaurant = inRestaurant;
+	public void setMoonpa(boolean moonpa) {
+		this.moonpa = moonpa;
 	}
 
 	public String getTitle() {
@@ -105,14 +102,14 @@ public class BragBoard { // 자랑
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
-	public String getImgfilename() {
-		return imgfilename;
-	}
-
-	public void setImgfilename(String imgfilename) {
-		this.imgfilename = imgfilename;
-	}
+//
+//	public String getImgfilename() {
+//		return imgfilename;
+//	}
+//
+//	public void setImgfilename(String imgfilename) {
+//		this.imgfilename = imgfilename;
+//	}
 
 	public String getContent() {
 		return content;
@@ -122,12 +119,9 @@ public class BragBoard { // 자랑
 		this.content = content;
 	}
 
-	
-	
 //	public int getArticleNo() {
 //	return articleNo;
 //
 //}
 
-	
 }

@@ -78,5 +78,33 @@
 			delete from reviewdb where reviewNo=#{reviewNo}
 		]]>
 	</delete>
+	
+	
+	<!-- 개별항목 평점 구하기 -->
+	<select id="selectPlaceInteriorRating" resultType="double" parameterType="int">
+		<![CDATA[
+			select avg(interiorRate) from reviewdb where id=#{id}
+		]]>
+	</select>
+	<select id="selectPlacePriceRating" resultType="double" parameterType="int">
+		<![CDATA[
+			select avg(priceRate) from reviewdb where id=#{id}
+		]]>
+	</select>
+	<select id="selectPlaceServiceRating" resultType="double" parameterType="int">
+		<![CDATA[
+			select avg(serviceRate) from reviewdb where id=#{id}
+		]]>
+	</select>
+	<select id="selectPlaceTasteRating" resultType="double" parameterType="int">
+		<![CDATA[
+			select avg(tasteRate) from reviewdb where id=#{id}
+		]]>
+	</select>
+	<select id="selectPlaceTotalRating" resultType="double" parameterType="int">
+		<![CDATA[
+			select avg(interiorRate+priceRate+serviceRate+tasteRate)/4 from reviewdb where id=#{id}
+		]]>
+	</select>
 
 </mapper>
