@@ -6,8 +6,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,32 +53,72 @@ public class SearchController {
 	
 	
 	@ResponseBody
-	@PostMapping("/query")
+	@GetMapping("/query")
 	public ResponseEntity<String> queryAndSort(
-			@RequestParam int honbabLv,
+			@RequestParam(required=false, defaultValue="5") int honbabLv,
 			@RequestParam String keyword,
-			@RequestParam(required=false, defaultValue="37.529521") double x,
-			@RequestParam(required=false, defaultValue="126.964540") double y,
+			@RequestParam(required=false, defaultValue="126.964540") double x,
+			@RequestParam(required=false, defaultValue="37.529521") double y,
 			@RequestParam int searchOption) {
 		ResponseEntity<String> result = null;
-		StringBuffer response = new StringBuffer();
+		//StringBuffer response = new StringBuffer();
 		
 		try {
+			// 일단 혼밥레벨과 평점이 추가된 jsonobject들의 jsonarray를 가져옵니다
+			JSONArray temp = getPlacesFromKakaoAPI(keyword, x,y, searchOption);
+			// 그리고 honbabLv가 위에 파라미터로 받은 honbabLv보다 작거나 같은 플레이스들만 모읍니다 
+			JSONArray jarr = new JSONArray();
 			
-			//response = new StringBuffer(getPlacesFromKakaoAPI("치킨"));
-	        
-	        result = new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+			for(int i=0; i<temp.length(); i++) {
+				JSONObject target = temp.getJSONObject(i);
+				if(target.getString("category_group_code").equals("FD6") && target.getString("category_group_name").equals("음식점") && target.getInt("honbabLv") <= honbabLv)
+					jarr.put(target);
+			}
+			
+			// 이제부터 정렬을 시작합니다
+			List<JSONObject> jsonForSort = new ArrayList<JSONObject>();
+			for(int i=0; i<jarr.length(); i++) {
+				jsonForSort.add(jarr.getJSONObject(i));
+			}
+			
+			Collections.sort(jsonForSort, new Comparator<JSONObject>() {
+				@Override
+				public int compare(JSONObject a, JSONObject b) throws JSONException {
+					double va = a.getDouble("rating");
+					double vb = b.getDouble("rating");
+					return Double.compare(vb, va);// 내림차순 정렬을 할겁니다
+				}
+			});
+			
+			JSONArray sortedJarr = new JSONArray();
+			for(int i=0; i<jarr.length(); i++) {
+				sortedJarr.put(jsonForSort.get(i));
+			}
+			System.out.println(sortedJarr);
+			
+			// 이제 전달해주기만 하면 되는데 서버 안정성을 위해 15개만 전달할겁니다
+			JSONArray finaljarr = new JSONArray();
+			int limit = 15;
+			if(sortedJarr.length() < 15) limit = sortedJarr.length();
+			for(int i=0; i<limit; i++) {
+				finaljarr.put(sortedJarr.getJSONObject(i));
+			}
+			
+			// 정렬이 끝난 sortedJarr를 jsonobject에 담아 전송합니다.
+			//System.out.println(response.toString());
+			JSONObject resultobj = new JSONObject();
+			resultobj.put("documents", finaljarr);
+	        result = new ResponseEntity<String>(resultobj.toString(), HttpStatus.OK);
 	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
 		}
-		
 		return result;
 	}
 	
-	public JSONArray getPlacesFromKakaoAPI(String keyword, double x, double y) {
+	public JSONArray getPlacesFromKakaoAPI(String keyword, double x, double y, int searchOption) throws NumberFormatException, JSONException, Exception {
 		HttpURLConnection conn = null;
 		JSONArray library = new JSONArray();
 		
@@ -81,9 +126,31 @@ public class SearchController {
 			JSONObject res = new JSONObject(getPlacesRAWResultFromKakao(keyword, i, x, y));
 			JSONArray jarr = (JSONArray) res.get("documents");
 			for(int j =0; j<jarr.length(); j++) {
-				library.put(jarr.get(j));
+				JSONObject temp = jarr.getJSONObject(j);
+				Double honbabLevel = placeReviewService.getHonbabLv(Integer.parseInt(temp.getString("id")));
+				Double rating=0.0;
+				switch(searchOption) {
+				case 1:
+					rating = placeReviewService.getTotalRating(Integer.parseInt(temp.getString("id")));
+					break;
+				case 2:
+					rating = placeReviewService.getPriceRating(Integer.parseInt(temp.getString("id")));
+					break;
+				case 3:
+					rating = placeReviewService.getTasteRating(Integer.parseInt(temp.getString("id")));
+					break;
+				case 4:
+					rating = placeReviewService.getServiceRating(Integer.parseInt(temp.getString("id")));
+					break;
+				case 5:
+					rating = placeReviewService.getInteriorRating(Integer.parseInt(temp.getString("id")));
+					break;
+				}
+				temp.put("rating", rating);
+				temp.put("honbabLv", honbabLevel);
+				library.put(jarr.getJSONObject(j));
 			}
-			if((boolean)((JSONObject)res.get("meta")).get("is_end")) break;
+			if((res.getJSONObject("meta")).getBoolean("is_end")) break;
 		}
 		return library;
 		
@@ -93,7 +160,7 @@ public class SearchController {
 		HttpURLConnection conn = null;
 		StringBuffer response = new StringBuffer();
 		try {
-			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?category\\_group\\_code=FD6&page=" + page + "&query=" + URLEncoder.encode(keyword, "UTF-8"));
+			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?category\\_group\\_code=FD6&x=" + x + "&y=" + y + "&page=" + page + "&query=" + URLEncoder.encode(keyword, "UTF-8"));
 			
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -117,7 +184,7 @@ public class SearchController {
 				} 
 				br.close();
 	        }
-	        System.out.println(response.toString());
+	        //System.out.println(response.toString());
 	        
 	        
 		} catch(Exception e) {}

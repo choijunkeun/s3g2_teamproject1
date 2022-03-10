@@ -124,7 +124,7 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 			result = 0.0;
 		}
 		
-		return result != null? result : 1.0;
+		return result != null? result : 0.0;
 	}
 
 	@Override
@@ -135,6 +135,6 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 	@Override
 	public Double getHonbabLv(int id) throws Exception {
 		Double result = placeReviewDAO.selectPlaceHonbabLv(id) ;
-		return result != null? result : 5.0;
+		return result != null? result : 1.0;
 	}
 }

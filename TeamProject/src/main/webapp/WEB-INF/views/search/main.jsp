@@ -228,10 +228,10 @@
 			</div>
 			<div class="input-group" style="flex-shrink: 1;">
 				<button type="button" class="btn btn-white border" id="currentLocation"
-					onClick="toggleCurrLocation();"
+					onClick="getCurrentPosBtn();"
 					data-bs-container="body" data-bs-trigger="hover"
 					data-bs-toggle="popover" data-bs-placement="top"
-					data-bs-content="현재 지도의 위치 기반으로 검색합니다. 이 옵션을 선택하지 않은 경우 '서울시 용산구'를 기준으로 검색을 실시합니다.">
+					data-bs-content="현재 지도를 사용자의 위치로 설정합니다. 지도는 현재 보여지는 곳의 중심좌표로 부터 5km 이내의 맛집을 소개하므로 좌표 설정에 유의해주세요.">
 					<i class="fa fa-crosshairs" aria-hidden="true"></i>
 				</button>
 				<input type="text" class="form-control" id="keyword"
@@ -310,21 +310,44 @@
 		// 키워드 검색을 요청하는 함수입니다
 		function searchPlaces() {
 		
-		    var keyword = '용산구[' +document.getElementById('keyword').value+"]";
+		    var keyword = document.getElementById('keyword').value;
 		
 		    if (!keyword.replace(/^\s+|\s+$/g, '')) {
 		        alert('키워드를 입력해주세요!');
 		        return false;
 		    }
+		    
+		    var center = map.getCenter();
 		
 		    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+		    
 		    // 카카오맵 순정 api는 이거지만
-		    ps.keywordSearch( keyword, placesSearchCB, {category_group_code:'FD6, CE7'});
+		    // ps.keywordSearch( keyword, placesSearchCB, {category_group_code:'FD6, CE7'});
+		    
 		    // 자체 구현한 restapi가 담긴 searchcontroller의 query를 통해 이를 가져오도록 대체합니다
+		    // 물론 하려면 할 수는 있지만 서버가 고통받을까봐 15개만 가져옵니다...
+		    var option = "?keyword=" + keyword + "&searchOption=" + document.getElementById('searchOption').value + "&x=" + center.getLng() + "&y=" + center.getLat();
+		    if(document.getElementById('honbabLv').value != null) {
+		    	option += "&honbabLv=" + document.getElementById('honbabLv').value;
+		    }
+		    //if(document.getElementById())
+		    $.ajax({
+		    	type:"GET",
+		    	async:false,
+		    	url:"/search/query" + option,
+		    	success: function(data){
+		    		console.log(JSON.parse(data));
+		    		placesSearchCB(JSON.parse(data).documents);
+		    	},
+		    	error: function(){
+		    		alert("에러가 발생했습니다. 나중에 다시 시도해주세요.");
+		    	}
+		    	
+		    });
 		}
 		
-		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
-		function placesSearchCB(data, status, pagination) {
+		// 원래 카카오맵 API에서 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+		/* function placesSearchCB(data, status, pagination) {
 		    if (status === kakao.maps.services.Status.OK) {
 				//var placesData = data;
 		        // 정상적으로 검색이 완료됐으면
@@ -346,14 +369,33 @@
 		        return;
 		
 		    }
+		} */
+		
+		//약간 응용해서 이렇게 수정했습니다
+		function placesSearchCB(data) {
+		    //if (status === kakao.maps.services.Status.OK) {
+		    if(data.length == 0){
+		    	alert('검색 결과가 존재하지 않습니다.');
+	        	return;
+		    } 
+
+	    	//var placesData = data;
+	        // 정상적으로 검색이 완료됐으면
+	        // 검색 목록과 마커를 표출합니다
+	        document.getElementById('menu_wrap').style.visibility = "visible";
+	        // 여기서 data를 먹으면 카카오맵 레퍼런스 data 그대로를 가져오겠지만,
+	        // 따로 REST API를 통해서 가져온 목록을 쓸 수도 있음
+	        displayPlaces(data);
+		
+		    
 		}
 		
-		// 검색 결과 목록과 마커를 표출하는 함수입니다
+		// 원래 카카오맵 API를 활용하여 검색 결과 목록과 마커를 표출하는 함수입니다
 		function displayPlaces(places) {
 			
-			// 혼밥 레벨 관련코드 ##########################################################
+			// 카카오맵 API를 그대로 활용하는 경우 혼밥 레벨 관련코드 ##########################################################
 			// 1. 결과값들에 점수 붙이기
-			for(let i = 0; i<places.length; i++){
+			/* for(let i = 0; i<places.length; i++){
 				$.ajax({
 					type:"GET",
 					url:"/place/getRating",
@@ -362,7 +404,8 @@
 					success: function(data){
 						places[i].rating=data;
 						places[i].ratingType=$('#searchOption').val();
-					}
+						return false;
+					},
 				})
 			} 
 			// 2. 큰것이 먼저 오도록 정렬하기
@@ -375,7 +418,7 @@
 						places[j+1] = swap;
 					}
 				}
-			}
+			} */
 			
 		    var listEl = document.getElementById('placesList'), 
 		    menuEl = document.getElementById('menu_wrap'),
@@ -443,7 +486,7 @@
 		    }
 			itemStr += '  <span class="tel">' + places.phone  + '</span>';
 			
-			itemStr += '  <span>'+ rTypeToString(places.ratingType) +'&nbsp;: ' + places.rating  + '</span>';
+			itemStr += '  <span>'+ rTypeToString(document.getElementById('searchOption').value) +'&nbsp;: ' + places.rating  + '</span>';
 			
 			itemStr += '</div>';
 		
@@ -566,7 +609,7 @@
 		}
 		
 		// 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
-		function displayPagination(pagination) {
+		/* function displayPagination(pagination) {
 		    var paginationEl = document.getElementById('pagination'),
 		        fragment = document.createDocumentFragment(),
 		        i; 
@@ -594,7 +637,7 @@
 		        fragment.appendChild(el);
 		    }
 		    paginationEl.appendChild(fragment);
-		}
+		} */
 		
 		// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
 		// 인포윈도우에 장소명을 표시합니다
@@ -611,6 +654,32 @@
 				el.removeChild(el.lastChild);
 			}
 		}
+		
+		function locationLoadSuccess(pos){
+		    // 현재 위치 받아오기
+		    var currentPos = new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+
+		    // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+		    map.panTo(currentPos);
+
+		    // 마커 생성
+		    var marker = new kakao.maps.Marker({
+		        position: currentPos
+		    });
+
+		    // 기존에 마커가 있다면 제거
+		    marker.setMap(null);
+		    marker.setMap(map);
+		};
+
+		function locationLoadError(pos){
+		    alert('위치 정보를 가져오는데 실패했습니다.');
+		};
+
+		// 위치 가져오기 버튼 클릭시
+		function getCurrentPosBtn(){
+		    navigator.geolocation.getCurrentPosition(locationLoadSuccess,locationLoadError);
+		};
 	</script>
 	<script>
 		var popoverTriggerList = [].slice.call(document
@@ -641,8 +710,9 @@
 		}
 		
 		function toggleCurrLocation(){
-			document.getElementById('currentLocation').classList.toggle('btn-info');
-			document.getElementById('currentLocation').classList.toggle('btn-white');
+			//document.getElementById('currentLocation').classList.toggle('btn-info');
+			//document.getElementById('currentLocation').classList.toggle('btn-white');
+			
 		}
 	</script>
 </body>

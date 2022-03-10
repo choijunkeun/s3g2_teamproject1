@@ -4,86 +4,92 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.BragDAO">
-	<!-- 조회수 높은 순으로 1위(이달의 혼밥) 출력 쿼리. 사실 좋아요 순인데 나중에 바꾸기 -->	
+
+		<!-- 글쓰기 시 : 현재 articleNo가 어디까지(Max)인지 알려주는 쿼리문 -->
+	<select id="selectMaxArticleNo" resultType="integer">
+		<!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자. PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다. -->
+		<!--null일 경우 값을 가져오기 위해서(null로) 래퍼클래스인 integer로 반환한다. -->
+		<![CDATA[
+			select max(articleNo) from honbab
+		]]>
+	</select>
+		<!-- 글쓰기, 글목록 -->
+	<insert id="insertBragBoard" parameterType="Bragboard">
+ 		<![CDATA[
+ 			insert into honbab (idx, moonpa, title, location, content)
+ 			values (#{idx}, #{moonpa}, #{title}, #{location}, #{content})
+ 		]]>
+	</insert>
+	
+		<!-- 글보기 : articleNo를 가지고 게시글을 조회 -->
+	<select id="selectBragBoard" resultType="Bragboard"
+		parameterType="int">
+    	<![CDATA[
+			select * from honbab where articleNo=#{articleNo}
+    	]]>
+	</select>
+	<!-- 글보기 : 게시글 조회수(+1) -->
+	<update id="updateReadCount" parameterType="int">
+ 		<![CDATA[
+ 			update honbab set readCount=readCount+1 where articleNo=#{articleNo} 
+ 		]]>
+	</update>
+	
+	
+	<!-- 글목록 : 게시판 글 목록에 16개 출력 쿼리문 -->
+	<select id="selectBragBoardList" resultType="Bragboard"
+		parameterType="int">
+ 		<![CDATA[
+ 			select * from honbab where articleNo between #{startrow} and #{startrow}+15	
+ 		]]>
+	</select>
+	<!-- 글목록 : 전체게시물 조회하기 -->
+	<select id="selectBragBoardCount" resultType="int">
+ 		<![CDATA[
+ 			select count(*) from honbab
+ 		]]>
+	</select>
+	<!-- 글목록 : BEST : 조회수 순으로 1위(이달의혼밥) 출력.좋아요 순인데 나중에 바꾸기 -->
 	<select id="bragBest1" resultType="Bragboard">
 		<![CDATA[
 			SELECT * FROM honbab order by readCount desc LIMIT 1
 		]]>
 	</select>
-	
+	<!-- 글목록 : BEST : 조회수 순으로 2,3위 출력 || 메인메인 에는 조회수2~5위. 하나의 쿼리로 해야 할까? -->
 
-	<select id="selectMaxArticleNo" resultType="integer">
-	<!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자.
-	PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다.-->
-	<!--null일 경우 값을 가져오기 위해서(null로) 래퍼클래스인 integer로 반환한다.-->
+
+
+
+
+
+	<!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
+	<update id="updateBragBoard" parameterType="Bragboard">
 		<![CDATA[
-			select max(articleNo) from team2.honbab
-		]]>
-	</select>
-	
- 	<insert id="insertBragBoard" parameterType="Bragboard">
- 		<![CDATA[
- 			insert into team2.honbab (idx, moonpa, title, location, content)
- 			
- 			values (#{idx}, #{moonpa}, #{title}, #{location}, #{content})
- 		]]>
- 		
- 	</insert>
- 	<select id="selectBragBoardCount" resultType="int">
- 		<![CDATA[
- 			select count(*) from team2.honbab
- 		]]>
- 	</select>
- 	<select id="selectBragBoardList" resultType="Bragboard" parameterType="int">
- 		<![CDATA[
- 			select *
-				from (select @rownum:=@rownum+1 rnum, tot.* 
-					from (select * from team2.honbab order by articleNo) tot, 
-					(select @rownum:=0) temp) sub
-			where rnum between #{startrow} and #{startrow}+9		
- 		]]>
- 	</select>
- <!-- 	<select id="selectBragBoard" resultType="Bragboard" parameterType="int">
- 		<![CDATA[
- 			select * from team2.honbab where articleNo=#{articleNo}
- 		]]>
- 	</select> -->
- 	<update id="updateReadCount" parameterType="int">
- 		<![CDATA[
- 			update team2.honbab set readCount=readCount+1 where articleNo=#{articleNo} 
- 		]]>
- 	</update>
- 	
- 	<!--아래는 답변 기능 구현시 기존 글들의 seq번호를 추가해주는 작업을 하는 쿼리문에 해당한다.
- 	이는 최신에 답변된 글이 원글 바로 밑에 위치하도록 하기 위함이다.
- 	: 이거랑 위에랑.. 댓글로 변경.. -->
- 	<!-- <update id="updateBragBoardReSeq" parameterType="Bragboard">
- 		<![CDATA[
- 			update team2.honbab set articleNo=articleNo+1
- 			where articleNo=#{articleNo} and articleNo>#{articleNo}
- 		]]>
- 	</update>
- 	원글과 ref는 같고 원글의 seq보다 큰 글들의 seq를 +1 시켜준다.
- 	즉, 위의 조건은 원글의 기존 답변글들의 목록에 해당한다.
- 	
- -->
- 	<update id="updateBragBoard" parameterType="Bragboard">
- 		<![CDATA[
- 			update team2.honbab set title=#{board_subject}, content=#{content}
- 			where articleNo=#{articleNo}
- 		]]>
- 	</update>
- 	
-<!--  	<delete id="deleteBragBoard" parameterType="int">
- 		<![CDATA[
- 			delete from team2.honbab where articleNo=#{articleNo}
- 		]]>
- 	</delete> -->
- 	
- <!-- 	<update id="updateDeletedBragBoard" parameterType="Bragboard">
- 		<![CDATA[
- 			update team2.honbab set title=#{title}
- 			where articleNo=#{articleNo}
- 		]]>
- 	</update> -->
+		update honbab set moonpa = #{moonpa}, title = #{title}, location = #{location}, content=#{content}, where articleNo = #{articleNo}; 
+		 ]]>
+	</update>
+	<!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
+		할 것인가 -->
+	<delete id="deleteBragBoard" parameterType="int">
+		<![CDATA[
+		delete from honbab where articleNo=#{articleNo}
+		 ]]>
+	</delete>
 </mapper>
+
+	<!-- ***빵꾸 이슈 코드인지 확인하기 <update id="updateDeletedBragBoard" parameterType="Bragboard"> 
+		<![CDATA[ update honbab set title=#{title} where articleNo=#{articleNo} ]]> 
+		</update> -->
+
+	<!-- 댓글 쿼리일까 싶어 남겨둔 코드 -->
+	<!--아래는 답변 기능 구현시 기존 글들의 seq번호를 추가해주는 작업을 하는 쿼리문에 해당한다. 이는 최신에 답변된 글이 원글 
+		바로 밑에 위치하도록 하기 위함이다. : 이거랑 위에랑.. 댓글로 변경.. -->
+	<!-- <update id="updateBragBoardReSeq" parameterType="Bragboard"> <![CDATA[ 
+		update team2.honbab set articleNo=articleNo+1 where articleNo=#{articleNo} 
+		and articleNo>#{articleNo} ]]> </update> 원글과 ref는 같고 원글의 seq보다 큰 글들의 seq를 
+		+1 시켜준다. 즉, 위의 조건은 원글의 기존 답변글들의 목록에 해당한다. -->
+
+	<!-- 알수없는 코드들 -->
+	<!-- <select id="selectBragList" resultType="Bragboard" parameterType="int" 
+		> <![CDATA[ select * from honbab order by date desc limit #{startrow},15 
+		]]> </select> -->

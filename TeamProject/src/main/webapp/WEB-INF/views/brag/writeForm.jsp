@@ -1,58 +1,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
 <%!User user = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);%>
 <c:set var="user" value='<%=user%>' />
-<!-- 목업 코드 -->
+<!-- 목업 코드 끝. 수정요. -->
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<!-- ckEditor -->
+<!-- ckEditor code -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<!-- 클래식 에디터 -->
-<script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
-<script>
-	$(function(){
-        ClassicEditor
-        	.create(document.querySelector("#editor"), {
-        		ckfinder : {
-        			uploadUrl : "/brag/upload"
-        		}
-        	}).then(editor=> {
-        		window.editor=editor;
-        	})
-        	.catch((error) => {
-        		console.error(error);
-        	});
-	});
-</script>
+<script
+	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
 
 <title>게시글 작성</title>
-<!-- <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"> -->
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!-- ckEditor 넓이 높이 조절 -->
+
 <style>
+/* ckEditor 넓이 높이 조절 */
 .ck.ck-editor {
 	max-width: 500px;
-	font-weight : bolder;
+	font-weight: bolder;
 }
 
 .ck-editor__editable {
 	min-height: 300px;
 }
-</style>
 
-<style>
 #top {
 	margin-top: 20px;
 }
@@ -65,10 +45,9 @@
 }
 
 .nav_container {
-	background-color : black !important;
-	border :0 !important;
+	background-color: black !important;
+	border: 0 !important;
 }
-
 
 .white {
 	color: white;
@@ -181,8 +160,9 @@ label.star:before {
 	content: '\f006';
 	font-family: FontAwesome;
 }
+
 .outer {
-  text-align: center;
+	text-align: center;
 }
 </style>
 <style>
@@ -193,84 +173,94 @@ label.star:before {
 }
 </style>
 <body>
-<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script> --%>
+	<!--수정요. session 코드. 위의 목업 user 코드와 함께 수정요.  -->
 	<section id="./writeForm">
-		<!--  ./는 localhost:8090/brag임 -->
-	<div >
-		<div class="container pb-3 bg-light" class="outer" >
-			<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
-
-			<form action="./bragwrite" method="post" enctype="multipart/form-data" name="bragform" id="bwForm">
-				<div>
-					<input type="hidden" id="idx" name="idx" value=${user.idx }>
-					<div class="container p-2 ">
-						<div class="row p-1 text-center ">
-							<div class="col">
-								<!-- https://codepen.io/jexordexan/pen/yyYEJa -->
+		<!-- writeForm -->
+		<div>
+			<div class="container pb-3 bg-light" class="outer">
+				<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
+				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
+				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
+					<div>
+						<!-- 수정요. session값 받아오는 코드. session, user와 함께 수정요.  -->
+						<input type="hidden" id="idx" name="idx" value=${user.idx }>
+						<div class="container p-2 ">
+							<div class="col text-center ">
 								<div class="d-flex flex-wrap">
-									<div>
-										<input type="hidden" name="moonpa" id="moonpa">
-										<div class="btn-group-sort" style="width: fit-content;">
-											<button type="button" class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-												data-bs-toggle="dropdown" aria-expanded="false">문파선택</button>
-											<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-												<li><button class="dropdown-item" type="button"
-														onclick="moonpaChange('true')">사먹파</button></li>
-												<li><button class="dropdown-item" type="button"
-														onclick="moonpaChange('false')">해먹파</button></li>
-											</ul>
-										</div>
-									</div>
-
-									<div class="input-group" style="flex-shrink: 0;">
-										<input type="text" class="form-control" id="location" name="location"
-											placeholder="위치를 검색해 보세요!" aria-label="위치">
-										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-									</div>
+									<table>
+										<tr>
+											<td>
+												<!--1. 문파선택  -->
+												<div>
+													<input type="hidden" name="moonpa" id="moonpa">
+													<div class="btn-group-sort" style="width: fit-content;">
+														<button type="button"
+															class="btn btn-secondary dropdown-toggle"
+															id="sortDropdown" data-bs-toggle="dropdown"
+															aria-expanded="false">문파선택</button>
+														<ul class="dropdown-menu text-center"
+															aria-labelledby="sortDropdown">
+															<li><button class="dropdown-item" type="button"
+																	onclick="moonpaChange('true')">사먹파</button></li>
+															<li><button class="dropdown-item" type="button"
+																	onclick="moonpaChange('false')">해먹파</button></li>
+														</ul>
+													</div>
+												</div> <!--2. 위치 선택 (문파 기반) -->
+												<div class="input-group" style="flex-shrink: 0;">
+													<input type="text" class="form-control" id="location"
+														name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
+													<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<!--3. 제목  -->
+												<div>
+													<input name="title" id="title" size="55%"
+														placeholder="제목을 입력해주세요!" required="required">
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
+												<div>
+													<textarea id="editor" name="content"
+														placeholder="내용을 입력해주세요!"></textarea>
+												</div>
+											</td>
+										</tr>
+									</table>
 								</div>
+							</div>
 
-
-								<div>
-									
-									<div>
-									<input name="title" id="title" size="55%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
-									</div>
-									
-									<%-- <div>	
-										<textarea id="title" name="brag_name"
-											style="width: 50%; height: 50%;" placeholder="제목을 입력해주세요!"
-											required="required" value="${title }" ></textarea>
-									</div> --%>
+							<!-- 5. 취소, 전송 버튼 -->
+							<div class="row py-3">
+								<div class="col text-center">
+									<!-- 수정요. 취소버튼 누르면 원래 있던 목록 화면으로 돌아가기  -->
+									<button type="button" class="btn border bd-secondary"
+										id="write_cancel" name="write_cancel">취소</button>
+									<input type="submit" class="btn border bd-secondary"
+										id="write_post" name="write_post" value="전송" />
 								</div>
-
-								<div>
-									<!-- ckEditor -->
-									<!-- <div id="editor">
-										<p>여기에 내용을 입력해주세요!</p>
-									</div> -->
-									
-									<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
-								</div>
-
 							</div>
 						</div>
 					</div>
-
-					<div class="row py-3">
-						<div class="col text-center">
-							<!-- <input type="reset" value="다시쓰기" /> -->
-							<button class="btn border bd-secondary">취소</button>
-							<input type="submit" class="btn border bd-secondary" value="전송" />
-						</div>
-					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 		</div>
-	</div>
 	</section>
 
+
+
+
+	<!-- JavaScript -->
+	<script type="text/javascript"
+		src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script>
-	
+	/*1-1. 문파선택 : dropbox에서 선택 시 그 문파이름으로 고정되게 하는 코드  */
 		function moonpaChange(arg) {
 			document.getElementById('moonpa').value=arg; 
 			
@@ -282,6 +272,24 @@ label.star:before {
 				document.getElementById('sortDropdown').innerText='해먹파';
 			}
 		}
-	</script>
+
+/* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
+	$(function(){
+        ClassicEditor
+        	.create(document.querySelector("#editor"), {
+        		ckfinder : {
+        			uploadUrl : "/brag/upload"
+        		}
+        	}).then(editor=> {
+        		//window.editor=editor;
+        		editor.setData('${content}');
+        	})
+        	.catch((error) => {
+        		console.error(error);
+        	});
+		});
+	
+	
+</script>
 </body>
 </html>
