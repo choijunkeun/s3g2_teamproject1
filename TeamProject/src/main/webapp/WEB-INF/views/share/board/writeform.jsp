@@ -24,7 +24,8 @@
         			uploadUrl : "/share/upload"
         		}
         	}).then(editor=> {
-        		window.editor=editor;
+//        		window.editor=editor;
+        		editor.setData('${content}');
         	})
         	.catch((error) => {
         		console.error(error);
@@ -180,80 +181,83 @@ label.star:before {
         <h2 class="fw-bolder" style="text-align:center;">
 			<strong>반찬공유 글쓰기</strong>
 		</h2>
-			<form action="./sharewrite" method="post" enctype="multipart/form-data" name="shareform" id="shform"> 
+		
+		<form action="./sharewrite" method="post" enctype="multipart/form-data" name="shareform" id="shform"> 
+			<div>
 			<input type="hidden" id="idx" name="idx" value=${user.idx }>
-				<div class="container p-2"> 
-                    <div class="row p-1 text-center">
-						<div class="col">
-							<input type="hidden" name="noticewrtie" id="ntwrite">
-							<div class="btn-group-sort" style="width: fit-content;">
-								<button type="button"
-									class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-									data-bs-toggle="dropdown" aria-expanded="false">공지글쓰기</button>
-								<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-									<li><button class="dropdown-item" type="button"
-										onclick="noticeChange('true')">공지글쓰기</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="noticeChange('false')">일반글쓰기</button></li>
-								</ul>
-							</div> <br>
-						    <input type="hidden" name="subway" id="subway">
-						    <div class="btn-group-sort" style="width: fit-content;">
-								<button type="button"
-									class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
-									data-bs-toggle="dropdown" aria-expanded="">위치를 골라주세요</button>
-								<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('0')">용산역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('1')">신용산역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('2')">이촌역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('3')">서빙고역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('4')">한남역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('5')">한강진역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('6')">이태원역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('7')">녹사평역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('8')">삼각지역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('9')">숙대입구역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('10')">남영역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('11')">효창공원앞역</button></li>
-									<li><button class="dropdown-item" type="button"
-										onclick="subwayChange('')">지역을 골라주세요!</button></li>
-								</ul>
-							</div> <br>
+			<div class="container p-2"> 
+				<div class="row p-1 text-center">
+					<div class="col">
+						<input type="hidden" name="noticewrtie" id="ntwrite">
+						<div class="btn-group-sort" style="width: fit-content;">
+							<button type="button"
+								class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+								data-bs-toggle="dropdown" aria-expanded="false">공지글쓰기</button>
+							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+								<li><button class="dropdown-item" type="button"
+									onclick="noticeChange('true')">공지글쓰기</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="noticeChange('false')">일반글쓰기</button></li>
+							</ul>
+						</div> <br>
+						<input type="hidden" name="subway" id="subway">
+					    <div class="btn-group-sort" style="width: fit-content;">
+							<button type="button"
+								class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
+								data-bs-toggle="dropdown" aria-expanded="">위치를 골라주세요</button>
+							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('0')">용산역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('1')">신용산역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('2')">이촌역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('3')">서빙고역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('4')">한남역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('5')">한강진역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('6')">이태원역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('7')">녹사평역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('8')">삼각지역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('9')">숙대입구역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('10')">남영역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('11')">효창공원앞역</button></li>
+								<li><button class="dropdown-item" type="button"
+									onclick="subwayChange('')">지역을 골라주세요!</button></li>
+							</ul>
+						</div> <br>
 							<!-- ckEditor -->
-							<div>
+						<div>
 							<input name="title" id="title" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
+						</div>
+						<div class="row p-1 text-center">
+							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
+							<span></span>
+						    <div id="classic">
+								<br><p>반찬공유 게시판은 거래가 아닌 공유 목적의 게시판임을 알려드립니다.</p>
 							</div>
-							<div class="row p-1 text-center">
-                                <textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
-								<span></span>
-								    <div id="classic">
-										<br><p>반찬공유 게시판은 거래가 아닌 공유 목적의 게시판임을 알려드립니다.</p>
-									</div>
-                            </div>
-					    </div>
-				    </div>
+						</div>
+					</div>
 				</div>
-		</div>
-		<div class="row py-3">
-			<div class="col text-center">
-				<!-- <input type="reset" value="다시쓰기" /> -->
-				<button class="btn border bd-secondary" onclick="cancleboard()">취소</button>
-				<input type="submit" class="btn border bd-secondary" value="등록" onclick="registerboard()" />
 			</div>
-         </div>
-			</form>
+			<div class="row py-3">
+				<div class="col text-center">
+					<!-- <input type="reset" value="다시쓰기" /> -->
+					<button class="btn border bd-secondary" onclick="cancleboard()">취소</button>
+					<input type="submit" name="writepost" class="btn border bd-secondary" value="등록" onclick="registerboard()" />
+				</div>
+	         </div>
+	         </div>
+		</form>
+		${msg == null ? "" : msg }
     </div>
 </section>
 	<script>
@@ -299,7 +303,12 @@ label.star:before {
 		
     	function registerboard() {
     		 alert("반찬 및 식재료를 공유 시 발생되는 법적인 문제는 개인에게 달려있습니다. 개발진들은 이를 책임지지 않습니다.")
-        	 alert("게시글이 작성되었습니다")
+        	 if(${msg} == null) {
+        		 alert("게시글이 작성되었습니다")
+        	 } else {
+        		 alert("사진을 추가해 주세요")
+        	 }
+    		 
     	}
     	
    	 	function cancleboard() {

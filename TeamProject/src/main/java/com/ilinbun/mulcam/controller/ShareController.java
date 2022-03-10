@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,11 +60,6 @@ public class ShareController {
 	}
 	
 	// CKEditor 적용파트
-	
-	@GetMapping("/")
-	public String home() {
-		return "ckeditor";
-	}
 
 	@ResponseBody
 	@PostMapping("/upload")
@@ -81,7 +79,7 @@ public class ShareController {
 			json.append("fileName", filename);
 			json.append("url", "/share/fileview/" + filename);
 
-			System.out.println(json);
+			System.out.println("json"+json);
 			writer.println(json);
 
 		} catch (IOException e) {
@@ -123,7 +121,16 @@ public class ShareController {
 		}
 	}
 
-	@PostMapping("/sharewrite")
+	// 글쓰기 -> CKEditor 결합	
+	
+	@GetMapping("/board/writeform")
+	public String writeform(Model model) {
+		HttpSession session = null; //로그인
+		String test = "km@ilin.bun";
+		model.addAttribute("email", test);
+		return "share/board/writeform";
+	}
+	@PostMapping("/board/sharewrite")
 	public String sharewriteform(@RequestParam String title, 
 			@RequestParam String content,
 			@RequestParam String subway, 
@@ -135,7 +142,18 @@ public class ShareController {
 		
 		try {
 			Shareboard shareboard = new Shareboard(title, subway, content, idx);
-			shareService.regShareBoard(shareboard);
+			Document doc=Jsoup.parse(shareboard.getContent());
+			if (doc.hasAttr("img")) {
+				Elements img= doc.select("img");
+				String src = img.attr("src");
+				String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+				doc.select("img").attr("src", "/shareupload/"+newSrc);
+				shareboard.setContent(doc.select("body > p").toString());
+				shareService.regShareBoard(shareboard);
+			} else {
+				model.addAttribute("msg", "사진은 필수야");
+				return "share/board/writeform";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,16 +161,6 @@ public class ShareController {
 		model.addAttribute("title", title);
 		model.addAttribute("content", content.trim());
 		return "share/main"; //resultForm다시
-	}
-	
-	// 글쓰기 -> CKEditor 결합
-	
-	@GetMapping("/board/writeform")
-	public String writeform(Model model) {
-		HttpSession session = null; //로그인
-		String test = "km@ilin.bun";
-		model.addAttribute("email", test);
-		return "share/board/writeform";
 	}
 	
 	//글보기
