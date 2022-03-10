@@ -45,4 +45,19 @@ public class PlaceRating {
 	public void setInteriorRate(Double interiorRate) {
 		this.interiorRate = interiorRate;
 	}
+	public Double getTotalRate() {
+		return (interiorRate + tasteRate + serviceRate + priceRate)/4;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "{"+ 
+				"\"tasteRate\":\""+getTasteRate()+"\","+
+				"\"priceRate\":\""+getPriceRate()+"\","+
+				"\"serviceRate\":\""+getServiceRate()+"\","+
+				"\"interiorRate\":\""+getInteriorRate()+"\","+
+				"\"totalRate\":\""+getTotalRate()+"\""+
+				"}";
+	}
 }
