@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
+import javax.lang.model.util.Elements;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,7 +76,7 @@ public class BragController {
 				List<BragBoard> bragList=bragService.getBragboardList(page);
 				for(BragBoard brag : bragList) {
 					Document doc=Jsoup.parse(brag.getContent());
-					Elements img= doc.select("img");
+					org.jsoup.select.Elements img= doc.select("img");
 					String src = img.attr("src");
 					brag.setContent(src);
 				}
@@ -117,7 +117,7 @@ public class BragController {
 				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 				Document doc=Jsoup.parse(bragboard.getContent());
 				
-				Elements img= doc.select("img");
+				org.jsoup.select.Elements img= doc.select("img");
 				String src = img.attr("src");
 				String newSrc =src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
 				doc.select("img").attr("src", "/bragupload/"+newSrc);
@@ -206,7 +206,7 @@ public class BragController {
 				mav.addObject("bboard", bragboard);
 				
 				Document doc=Jsoup.parse(bragboard.getContent()); //content중에 사진만 가져오기
-				Elements img= doc.select("img"); //우선 무수한 요소 중 img만 추출
+				org.jsoup.select.Elements img= doc.select("img"); //우선 무수한 요소 중 img만 추출
 				String src = img.attr("src"); //String으로 변환
 				
 				mav.addObject("imgSrc", src); //mav에 넣기
