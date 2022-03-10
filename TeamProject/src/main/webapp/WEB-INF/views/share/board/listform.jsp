@@ -48,53 +48,47 @@ table {
 </head>
 
 <body>
+<!-- 글쓰기 버튼 -->
+	<div>
+		<a href="${pageContext.request.contextPath}/share/board/writeform">
+			<button class="make_btn btn-outline-secondary" 
+				id="shareMake" name="shareMake" type="button"
+				style="float: right; width: 80px; height:40px;">글쓰기</button>
+		</a>
+	</div>
+
 	<!-- 게시판 리스트 -->
 
-	<h2>
-		반찬공유
-		<button class="btn btn-outline-dark" type="button"
-			style="float: right;" onclick="location.href='writeform'">글쓰기</button>
-	</h2>
-	
-	<c:choose>
-		<c:when test="${articleList!=null && pageInfo.listCount>0 }">
-			<section id="listForm">
-				<table>
-					<tr id="tr_top">
-						<td>번호</td>
-						<td>제목</td>
-						<td>위치</td>
-						<td>작성자</td>
-						<td>날짜</td>
-						<td>조회수</td>
-					</tr>
-
-					<c:forEach var="article" items="${articleList }">
-						<tr>
-							<td>${article.board_num }</td>
-							<td><c:choose>
-									<c:when test="${article.board_re_lev!=0}">
-										<!-- 레벨 0 -->
-										<c:forEach var="i" begin="0" end="${article.board_re_lev*2}">
-											<!-- 댓글에는 레벨이 있음 레벨이 0이 아니면 2개씩 들여쓰기 -->
-							&nbsp;                   <!-- 들여쓰기를 위한 코드 -->
-										</c:forEach>
-						▶
-					</c:when>
-									<c:otherwise>▶</c:otherwise>
-								</c:choose> <a
-								href="./boarddetail?board_num=${article.board_num}&page=${pageInfo.page}">
-									<!-- 링크 --> ${article.board_subject} <!-- 아티클 번호 -->
-							</a></td>
-							<td>${article.board_name }</td>
-							<!-- 보드명 날짜 리드카운트 . 컨텐트는 없음 -->
-							<td>${article.board_date }</td>
-							<td>${article.board_readcount }</td>
-						</tr>
+	<div class="row justify-content-center">
+		<div class="content">
+			<c:choose>
+				<c:when test="${shareList!=null && pageInfo.listCount>0 }">
+					<h2 class="fw-bolder">반찬공유 게시판</h2>
+					<section id="listForm">
+						<table>
+							<tr id="tr_top">
+								<td>번호</td>
+								<td>제목</td>
+								<td>위치</td>
+								<td>작성자</td>
+								<td>날짜</td>
+								<td>조회수</td>
+							</tr>
+					<c:forEach var="shboard" items="${shareList }">
+						<%-- <c:if test="${status.index<15}"> --%>
+							<tr>
+								<td>${shboard.articleNo }</td>
+								<td>${shboard.title }</td>
+								<td>${shboard.subway }</td>
+								<td>${shboard.user }</td>
+								<td>${shboard.date }</td>
+								<td>${shboard.readCount }</td>
+							</tr>
+					<%-- 	</c:if>	 --%>
 					</c:forEach>
-				</table>
-			</section>
-			<section id="pageList">
+						</table>
+					</section>
+					<section id="pageList">
 				<!-- 페이지 목록 -->
 				<!-- if else 랑 같음.  페이지가 1보다 작거나 같으면 이전페이지로 -->
 				<c:choose>
@@ -102,7 +96,7 @@ table {
 					[이전]&nbsp;
 				</c:when>
 					<c:otherwise>
-						<a href="boardlist?page=${pageInfo.page-1}">[이전]</a>&nbsp;
+						<a href="listform?page=${pageInfo.page-1}">[이전]</a>&nbsp;
 				</c:otherwise>
 				</c:choose>
 				<c:forEach var="i" begin="${pageInfo.startPage }"
@@ -113,7 +107,7 @@ table {
 					<c:choose>
 						<c:when test="${pageInfo.page==i }">[${i }]</c:when>
 						<c:otherwise>
-							<a href="boardlist?page=${i}">[${i }]</a>
+							<a href="listform?page=${i}">[${i }]</a>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
@@ -122,7 +116,7 @@ table {
 					[다음]
 				</c:when>
 					<c:otherwise>
-						<a href="boardlist?page=${pageInfo.page+1}">[다음]</a>
+						<a href="listform?page=${pageInfo.page+1}">[다음]</a>
 					</c:otherwise>
 				</c:choose>
 				<!-- 페이지에 답변 달았으면 그 페이지 목록이 보여야함. -->
@@ -133,5 +127,8 @@ table {
 			<section id="emptyArea">등록된 글이 없습니다.</section>
 		</c:otherwise>
 	</c:choose>
+		</div>
+	</div>
+	
 </body>
 </html>

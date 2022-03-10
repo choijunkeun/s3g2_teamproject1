@@ -27,5 +27,5 @@ public interface ShareDAO {
 	void deleteShareBoard(int articleNo) throws Exception;
 	void updateDeletedShareBoard(Shareboard shareboard) throws Exception;
 	
-	
+	Shareboard selectShareboard(int articleNo) throws Exception;
 }

@@ -41,14 +41,12 @@
  			select count(*) from team2.shareBOARD
  		]]>
  	</select>
- 	<select id="selectShareBoardList" resultType="Shareboard" parameterType="int">
+ 	<!-- 글목록 : 게시판 글 목록에 16개 출력 쿼리문 -->
+	<select id="selectShareBoardList" resultType="Shareboard"
+		parameterType="int">
  		<![CDATA[
- 			select *
-				from (select @rownum:=@rownum+1 rnum, tot.* 
-					from (select * from team2.shareBOARD order by articleNo) tot, 
-					(select @rownum:=0) temp) sub
-			where rnum between #{startrow} and #{startrow}+9		
+ 			select * from team2.shareBOARD where articleNo between #{startrow} and #{startrow}+15	
  		]]>
- 	</select>
+	</select>
 
 </mapper>

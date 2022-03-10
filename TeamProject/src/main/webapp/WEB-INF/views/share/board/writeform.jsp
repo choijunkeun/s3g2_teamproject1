@@ -242,7 +242,7 @@ label.star:before {
 							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							<span></span>
 						    <div id="classic">
-								<br><p>반찬공유 게시판은 거래가 아닌 공유 목적의 게시판임을 알려드립니다.</p>
+								<br><p>공유할 식품을 사진으로 보여주세요!</p>
 							</div>
 						</div>
 					</div>
@@ -257,7 +257,7 @@ label.star:before {
 	         </div>
 	         </div>
 		</form>
-		${msg == null ? "" : msg }
+		
     </div>
 </section>
 	<script>
@@ -303,11 +303,6 @@ label.star:before {
 		
     	function registerboard() {
     		 alert("반찬 및 식재료를 공유 시 발생되는 법적인 문제는 개인에게 달려있습니다. 개발진들은 이를 책임지지 않습니다.")
-        	 if(${msg} == null) {
-        		 alert("게시글이 작성되었습니다")
-        	 } else {
-        		 alert("사진을 추가해 주세요")
-        	 }
     		 
     	}
     	
