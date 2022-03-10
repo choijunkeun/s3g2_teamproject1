@@ -89,29 +89,9 @@ public class BragServiceImpl implements BragService {
 		return best;
 	}
 
-<<<<<<< HEAD
-	//글쓰기
-	@Override
-	public void regBragBoard(BragBoard bragboard) throws Exception {
-		Integer articleNo = bragDAO.selectMaxArticleNo();
-		if(articleNo==null) articleNo = 1;
-		else articleNo+=1;
-		bragboard.setArticleNo(articleNo);
-		//bragboard.setDate(Date); 지울까 말까
-<<<<<<< HEAD
-		bragDAO.insertBragBoard(bragboard);
-=======
-=======
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
-	
-<<<<<<< HEAD
-		bragDAO.insertBragBoard(bragboard);		
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
-	}
-=======
 	
 	
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
+	
 
 	//여기서 부터는 구현 전 
 	//글수정
