@@ -13,8 +13,6 @@
 	<!-- 수정요. 컨텐츠 빼는 태그 -->
 	<!--  ${BragBest1.content } -->
 
-
-
 	<!--1. BEST 혼밥자랑 게시판 구현 부분. 1위(이달의혼밥) 크게 출력, 2,3위 작게 두개로 출력  -->
 	<div class="row justify-content-center">
 		<!--row-vh d-flex flex-row justify-content-center : row 방향으로 가로 배열할 때, 중앙 정렬   -->
@@ -61,6 +59,7 @@
 		<button class="make_btn btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
 			style="float: right; width: 80px; height: 40px;">글쓰기</button>
+		
 	</div>
 
 	<!--3. (일반) 혼밥자랑 게시판 구현 부분. 4개씩 2줄 출력(8개) -->
@@ -169,7 +168,11 @@
 /*2-1. 글쓰기 버튼 #bragMake 클릭 시 글쓰기writeform으로 이동  */
 $(document).ready(function(){
 	$('#bragMake').on('click',function(){
-		location.href="/brag/writeform";
+		if('${user.idx }' == ''){
+			location.href="/login";
+		} else {
+			location.href="/brag/writeform";	
+		}
 	});
 });
 

@@ -68,7 +68,6 @@ public class BragController {
 	// brag.jsp (일반 자랑 게시판)
 		@GetMapping("/brag")
 		public ModelAndView brag_list(@RequestParam(value="page", required=false, defaultValue="1") int page) {
-			// User userInfo = (User) session.getAttribute("user"); //User session이 email이 아닌 account(password제외)일때 다시 연결하자
 			ModelAndView mav=new ModelAndView();
 			PageInfo pageInfo=new PageInfo();
 			pageInfo.setPage(page);
@@ -81,7 +80,6 @@ public class BragController {
 					brag.setContent(src);
 				}
 				pageInfo=bragService.getPageInfo(pageInfo);
-				// mav.addObject("userInfo", userInfo); //same as above
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("bragList", bragList);
 				mav.setViewName("brag/brag");
@@ -102,18 +100,20 @@ public class BragController {
 			
 		//글쓰기 	  
 		@GetMapping("/writeform") public String bragwriteform(Model model) { //
-		  HttpSession session = null; //이거는 가라데이터. 로그인 되면 session에서 받아 올거야!!!!!!!!
-		  String test = "th@th.com"; model.addAttribute("email", test); 
 		  return "brag/writeForm"; 
 		  }
+		
+		
 		@PostMapping("/bragwrite")
 		public String bragwriteform(@RequestParam String title, 
 				@RequestParam String content,
 				@RequestParam String moonpa, 
-				@RequestParam String location, 
-				@RequestParam int idx, 
+				@RequestParam String location,
+				@RequestParam int idx,
 				Model model) {
+			
 			try {
+				User userInfo = (User) session.getAttribute("user");
 				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 				Document doc=Jsoup.parse(bragboard.getContent());
 				
