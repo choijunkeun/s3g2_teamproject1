@@ -112,16 +112,19 @@ public class CommunityController {
 	public String commwriteform(@RequestParam String title, @RequestParam String content, @RequestParam int idx,
 			Model model) {
 		try {
-			System.out.println(title+content+idx );
-			
-			
+			//System.out.println(title+content+idx );
 			CommBoard commboard = new CommBoard(idx, title, 0, content);
 			Document doc = Jsoup.parse(commboard.getContent());
-			Elements img = doc.select("img");
+			Elements img = doc.select("img");// 여기에 if 문으로 120~123까지는 묶여야되지 않나 HELP*
+			
+			if(!img.isEmpty()) {
 			String src = img.attr("src");
 			String newSrc = src.substring(src.indexOf("community/fileview/") + ("community/fileview/").length());
 			doc.select("img").attr("src", "/commupload/" + newSrc);
-			System.out.println(doc.select("body > p").toString());
+			//System.out.println(doc.toString());
+			}
+			
+			//System.out.println(doc.select("body > p").toString());
 			commboard.setContent(doc.select("body > p").toString());
 			commService.regCommBoard(commboard);
 		} catch (Exception e) {
