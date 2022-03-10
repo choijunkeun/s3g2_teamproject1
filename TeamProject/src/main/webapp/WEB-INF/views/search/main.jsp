@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
 .map_wrap, .map_wrap * {
 	margin: 0;
@@ -196,46 +196,78 @@
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
 </head>
 <body>
-	<form class="container" onsubmit="searchPlaces(); return false;" >
-		<div class="search_area row justify-content-center p-2" style="width: 100%; flex-wrap: nowrap; ">
+	<form class="container" onsubmit="searchPlaces(); return false;">
+		<div class="search_area row mx-auto p-2" style="width: 100%; flex-wrap: nowrap;">
 			<div class="btn-group-level" style="width: fit-content;">
 				<input type="hidden" id="honbabLv" name="honbabLv" value="5">
 				<button type="button" class="btn btn-danger dropdown-toggle"
-					id="honbabLevelDropdown" data-bs-toggle="dropdown" aria-expanded="false">혼밥 레벨</button>
-				<ul class="dropdown-menu text-center" aria-labelledby="honbabLevelDropdown">
+					id="honbabLevelDropdown" data-bs-toggle="dropdown"
+					aria-expanded="false">혼밥 레벨
+					<i class="fa fa-question-circle" aria-hidden="true" 
+						data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="top"
+						data-bs-content="혼밥 레벨을 설정합니다. 만약 혼밥 레벨을 5로 설정했다면 레벨 5 이하의 모든 식당이 검색됩니다."></i></button>
+				<ul class="dropdown-menu text-center"
+					aria-labelledby="honbabLevelDropdown">
 					<li><button class="dropdown-item" type="button">
-					<span class="badge rounded-pill" style="background: #F6CECE">Lv. 1</span></button></li>
-					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</span></button></li>
-					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #F78181">Lv. 3</span></button></li>
-					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #FA5858">Lv. 4</span></button></li>
-					<li><button class="dropdown-item" type="button"><span
-							class="badge rounded-pill" style="background: #FF0000">Lv. 5</span></button></li>
+							<span class="badge rounded-pill" style="background: #F6CECE">Lv. 1</span>
+						</button></li>
+					<li><button class="dropdown-item" type="button">
+							<span class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</span>
+						</button></li>
+					<li><button class="dropdown-item" type="button">
+							<span class="badge rounded-pill" style="background: #F78181">Lv. 3</span>
+						</button></li>
+					<li><button class="dropdown-item" type="button">
+							<span class="badge rounded-pill" style="background: #FA5858">Lv. 4</span>
+						</button></li>
+					<li><button class="dropdown-item" type="button">
+							<span class="badge rounded-pill" style="background: #FF0000">Lv. 5</span>
+						</button></li>
 				</ul>
-				
+
 			</div>
-			<div class="input-group" style="flex-shrink:1;">
+			<div class="input-group" style="flex-shrink: 1;">
+				<button type="button" class="btn btn-white border" id="currentLocation"
+					onClick="toggleCurrLocation();"
+					data-bs-container="body" data-bs-trigger="hover"
+					data-bs-toggle="popover" data-bs-placement="top"
+					data-bs-content="현재 지도의 위치 기반으로 검색합니다. 이 옵션을 선택하지 않은 경우 '서울시 용산구'를 기준으로 검색을 실시합니다.">
+					<i class="fa fa-crosshairs" aria-hidden="true"></i>
+				</button>
 				<input type="text" class="form-control" id="keyword"
 					placeholder="검색할 혼밥 맛집을 입력하세요" aria-label="혼밥 맛집 추천">
-				<button class="input-group-text btn bg-primary text-white" type="submit">검색하기</button>
+				<button class="input-group-text btn bg-primary text-white"
+					type="submit">검색</button>
 			</div>
-			
+
 			<div class="btn-group-sort" style="width: fit-content;">
 				<input type="hidden" id="searchOption" name="searchOption" value="1">
 				<button type="button" class="btn btn-secondary dropdown-toggle"
-					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별 검색</button>
+					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별
+					검색</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=1;">종합 평점 순</button></li>
-					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=2;">가격 순</button></li>
-					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=3;">맛 평점 순</button></li>
-					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=4;">서비스 평점 순</button></li>
-					<li><button class="dropdown-item" type="button" onclick="document.getElementById('searchOption').value=5;">인테리어 평점 순</button></li>
+					<li><button class="dropdown-item" type="button"
+							onclick="document.getElementById('searchOption').value=1;">종합
+							평점 순</button></li>
+					<li><button class="dropdown-item" type="button"
+							onclick="document.getElementById('searchOption').value=2;">가격
+							순</button></li>
+					<li><button class="dropdown-item" type="button"
+							onclick="document.getElementById('searchOption').value=3;">맛
+							평점 순</button></li>
+					<li><button class="dropdown-item" type="button"
+							onclick="document.getElementById('searchOption').value=4;">서비스
+							평점 순</button></li>
+					<li><button class="dropdown-item" type="button"
+							onclick="document.getElementById('searchOption').value=5;">인테리어
+							평점 순</button></li>
 				</ul>
 			</div>
+			<!-- 			<div class="currentLocationButtonDiv">
+				
+			</div> -->
 		</div>
-	</form> 
+	</form>
 
 
 	<div class="map_wrap">
@@ -296,18 +328,18 @@
 		        // 정상적으로 검색이 완료됐으면
 		        // 검색 목록과 마커를 표출합니다
 		        document.getElementById('menu_wrap').style.visibility = "visible";
+		        
+		        // 여기서 data를 먹으면 카카오맵 레퍼런스 data 그대로를 가져오겠지만,
+		        // 따로 REST API를 통해서 가져온 목록을 쓸 수도 있음
 		        displayPlaces(data);
 		
 		        // 페이지 번호를 표출합니다
 		        displayPagination(pagination);
-		
 		    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-		
 		        alert('검색 결과가 존재하지 않습니다.');
 		        return;
 		
 		    } else if (status === kakao.maps.services.Status.ERROR) {
-		
 		        alert('검색 결과 중 오류가 발생했습니다.');
 		        return;
 		
@@ -316,7 +348,6 @@
 		
 		// 검색 결과 목록과 마커를 표출하는 함수입니다
 		function displayPlaces(places) {
-			
 			
 			// 혼밥 레벨 관련코드 ##########################################################
 			// 1. 결과값들에 점수 붙이기
@@ -332,7 +363,7 @@
 					}
 				})
 			} 
-			
+			// 2. 큰것이 먼저 오도록 정렬하기
 			for(let i=0; i<places.length; i++){
 				let swap;
 				for(let j=0; j<places.length-1-i; j++){
@@ -571,16 +602,23 @@
 		    infowindow.setContent(content);
 		    infowindow.open(map, marker);
 		}
-		
-		 // 검색결과 목록의 자식 Element를 제거하는 함수입니다
-		function removeAllChildNods(el) {   
-		    while (el.hasChildNodes()) {
-		        el.removeChild (el.lastChild);
-		    }
+	
+		// 검색결과 목록의 자식 Element를 제거하는 함수입니다
+		function removeAllChildNods(el) {
+			while (el.hasChildNodes()) {
+				el.removeChild(el.lastChild);
+			}
 		}
-		 
-		function rTypeToString(data){
-			switch(data){
+	</script>
+	<script>
+		var popoverTriggerList = [].slice.call(document
+				.querySelectorAll('[data-bs-toggle="popover"]'))
+		var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
+			return new bootstrap.Popover(popoverTriggerEl)
+		})
+
+		function rTypeToString(data) {
+			switch (data) {
 			case '1':
 				rType = "종합 평점";
 				break;
@@ -595,9 +633,14 @@
 				break;
 			case '5':
 				rType = "멋(인테리어) 평점";
-				break;	
+				break;
 			}
 			return rType;
+		}
+		
+		function toggleCurrLocation(){
+			document.getElementById('currentLocation').classList.toggle('btn-info');
+			document.getElementById('currentLocation').classList.toggle('btn-white');
 		}
 	</script>
 </body>
