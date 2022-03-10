@@ -8,7 +8,7 @@ import com.ilinbun.mulcam.dto.PageInfo;
 public interface BragService {
 
 	// 글쓰기 : 글 쓸때, 마지막 articleNo+1해주는 DAO
-	void regBragBoard(BragBoard bragboard) throws Exception;
+	int regBragBoard(BragBoard bragboard) throws Exception;
 
 	// 글보기 : (viewDetail)에서 id를 받아와 내 글인지 남의 글인지 판별
 	BragBoard bragBoardQueryByID(String id) throws Exception;
@@ -22,7 +22,7 @@ public interface BragService {
 	// 게시글 목록 :아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)
 	PageInfo getPageInfo(PageInfo pageInfo) throws Exception;
 	// 게시글 목록 :게시글 좋아요 순으로 화면에 출력(지금은 조회수로 되어있음 ㅠ)
-	BragBoard bragBest1() throws Exception;
+	public List<BragBoard> bragBest() throws Exception;
 
 	
 	

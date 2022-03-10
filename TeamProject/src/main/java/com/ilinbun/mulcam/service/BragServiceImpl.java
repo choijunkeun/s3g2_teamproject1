@@ -19,14 +19,15 @@ public class BragServiceImpl implements BragService {
 	//[글쓰기Service]
 	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
 		@Override
-		public void regBragBoard(BragBoard bragboard) throws Exception {
+		public int regBragBoard(BragBoard bragboard) throws Exception {
 			Integer articleNo = bragDAO.selectMaxArticleNo();
 			if(articleNo==null) articleNo = 1;
 			else articleNo+=1;
 			bragboard.setArticleNo(articleNo);
 			//bragboard.setDate(Date); 지울까 말까
 		
-			bragDAO.insertBragBoard(bragboard);		
+			bragDAO.insertBragBoard(bragboard);	
+			return articleNo;
 		}
 
 		
@@ -84,8 +85,8 @@ public class BragServiceImpl implements BragService {
 	}
 	//BEST 게시판 글 목록이 조회수 순으로 정렬 쿼리(수정요. 나중에는 좋아요 순으로)
 	@Override
-	public BragBoard bragBest1() throws Exception {
-		BragBoard best = bragDAO.bragBest1();
+	public List<BragBoard> bragBest() throws Exception {
+		List<BragBoard> best = bragDAO.bragBest();
 		return best;
 	}
 
