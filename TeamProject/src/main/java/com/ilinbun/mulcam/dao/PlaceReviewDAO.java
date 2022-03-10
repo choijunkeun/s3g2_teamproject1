@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import com.ilinbun.mulcam.dto.PlaceRating;
 import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.PlaceReviewExtended;
 
@@ -23,4 +24,12 @@ public interface PlaceReviewDAO {
 	
 	void updateReview(PlaceReview pr) throws Exception;
 	void deleteReview(int reviewNo) throws Exception;
+	
+	Double selectPlaceInteriorRating(int id) throws Exception;
+	Double selectPlacePriceRating(int id) throws Exception;
+	Double selectPlaceServiceRating(int id) throws Exception;
+	Double selectPlaceTasteRating(int id) throws Exception;
+	Double selectPlaceTotalRating(int id) throws Exception;
+	PlaceRating selectPlaceAllRating(int id) throws Exception;
+	Double selectPlaceHonbabLv(int id) throws Exception;
 }
