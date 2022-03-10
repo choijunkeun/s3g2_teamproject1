@@ -208,12 +208,15 @@
 		
  		
  /*1-1. 글쓰기 버튼 #bragMake 클릭 시 글쓰기writeform으로 이동  */
-		$(document).ready(function(){
-			$('#bragMake').on('click',function(){
-				location.href="/brag/writeform";
-			});
-		});
- 
+$(document).ready(function(){
+	$('#bragMake').on('click',function(){
+		if('${user.idx }' == ''){
+			location.href="/login";
+		} else {
+			location.href="/brag/writeform";	
+		}
+	});
+});
  
 </script>
 </body>

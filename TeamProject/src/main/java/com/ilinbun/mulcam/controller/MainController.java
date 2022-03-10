@@ -1,11 +1,9 @@
 package com.ilinbun.mulcam.controller;
 
-import java.io.File;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -25,7 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ilinbun.mulcam.dto.User;
+import com.ilinbun.mulcam.service.BragService;
 import com.ilinbun.mulcam.service.UserService;
 
 @Controller
@@ -37,6 +37,9 @@ public class MainController {
 
 	@Autowired
 	HttpSession session;
+	
+	@Autowired
+	BragService bragService;
 
 	@Autowired
 	private ServletContext servletContext;
@@ -173,5 +176,19 @@ public class MainController {
 	public String editInfo() {
 		return "user/editInfoForm";
 	}
+	
+	// 정보수정
+	@PostMapping("/infoUpdate")
+	public String passwordUpdate(User user, HttpSession session) throws Exception {
+		userService.userUpdate(user);
+		session.setAttribute("user", user);
+		
+		
+		return "redirect:/myPage";
+	}
+	
+	
+	
+	
 
 }

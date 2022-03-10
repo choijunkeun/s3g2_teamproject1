@@ -123,7 +123,8 @@
 					<h5 class="fw-bolder">혼밥자랑</h5>
 				</div>
 				<div class="card-body">
-					사용자의 반찬공유 게시글 나오는 부분
+					사용자의 혼밥자랑 게시글 나오는 부분
+					
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<!-- + 클릭 시 상세보기로 이동 -->
@@ -139,7 +140,7 @@
 					<h5 class="fw-bolder">커뮤니티</h5>
 				</div>
 				<div class="card-body">
-					사용자의 반찬공유 게시글 나오는 부분
+					사용자의 커뮤니티 게시글 나오는 부분
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<!-- + 클릭 시 상세보기로 이동 -->

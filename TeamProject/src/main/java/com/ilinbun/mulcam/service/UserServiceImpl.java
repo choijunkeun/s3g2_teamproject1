@@ -61,22 +61,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
-	
-//	//이메일 중복확인
-//		@Override
-//		public String emailCheck(String email) throws Exception {
-//			String msg = "사용가능한 이메일입니다.";
-//			if(email.length()>=2) {
-//				if(userDAO.emailCheck(email) == 1) {
-//					msg = "이미 사용중인 이메일입니다.";
-//				}
-//			} else {
-//				msg = "2글자 이상을 입력하세요";
-//			}
-//			return msg;
-//		}
-
-
+// 로그인
 	@Override
 	public User loginUser(String email, String password) throws Exception {
 		User user = userDAO.login(email);
@@ -88,6 +73,12 @@ public class UserServiceImpl implements UserService {
 		} else if(email.equals(user.getEmail())&&!password.equals(user.getPassword())) {
 			throw new Exception("비밀번호가 일치하지 않습니다");
 		} else return null;
+	}
+
+	@Override
+	public void userUpdate(User user) throws Exception {
+		userDAO.userUpdate(user);
+	
 	}
 
 }

@@ -20,6 +20,12 @@ public interface UserDAO {
 	
 	//로그인
 	User login(String nickname) throws Exception;
+	
+	//회원정보수정
+	
+	void userUpdate(User user) throws Exception;
+	
+	
 
 	
 	

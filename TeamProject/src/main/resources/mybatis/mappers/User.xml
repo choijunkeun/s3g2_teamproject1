@@ -4,36 +4,52 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.UserDAO">
+<!--회원가입-->
 	<insert id="join" parameterType="User">
 		<![CDATA[
 	    INSERT INTO user(email, nickname, password, honbabLevel)
 	                  VALUES(#{email}, #{nickname}, #{password}, #{honbabLevel})
 	    ]]>
     </insert>
-    
-    <!-- 닉네임 중복확인 쿼리 -->
-    
+<!-- 닉네임 중복확인 쿼리 -->
     <select id="nickCheck" resultType="int" parameterType="String">
 		<![CDATA[
 			SELECT COUNT(nickname) FROM user
 			WHERE nickname = #{nickname}
 		]]>
 	</select>
-	
-	<!-- 이메일 중복확인 쿼리 -->
-	
+<!-- 이메일 중복확인-->
 	 <select id="emailCheck" resultType="int" parameterType="String">
 		<![CDATA[
 			SELECT COUNT(email) FROM user
 			WHERE email = #{email}
 		]]>
 	</select>
-	
+<!-- 로그인 -->
 	<select id="login" resultType="User" parameterType="String">
     	<![CDATA[
     	SELECT * FROM user WHERE email=#{email}      	
     	]]>
     </select>
+<!-- 회원정보수정-->
+	<update id="userUpdate">
+		<![CDATA[
+    	UPDATE user SET 
+    	nickname=#{nickname},
+    	password=#{password},
+    	honbabLevel=#{honbabLevel} 
+    	WHERE email=#{email}      	
+    	]]>
+	</update>
+	
+<!-- 혼밥자랑 작성한 게시글 목록 -->
+	<select id="bragWrite">
+		<![CDATA[
+    	SELECT user.idx, user.nickname, honbab.title from user join honbab on user.idx=honbab.idx;
+    	]]>
+	
+	
+	</select> 
     
     
 
