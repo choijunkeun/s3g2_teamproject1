@@ -1,27 +1,71 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>반찬공유 게시판</title>
+<style type="text/css">
+.container-share {
+	margin: 10px auto;
+	padding: 20px auto;
+	background-color: #f6f3f3
+}
+.fa {
+	font-size: 20px;
+}
+.shareboard, .notiboard {
+	font-size: 14px;
+}
+
+a {
+	text-decoration-line: none;
+	color: black;
+}
+
+</style>
 </head>
 <body>
-	 <!-- 반찬공유 공지사항 게시판 -->
-        <div class="container notice board">
-            <div class="board title"><a>공지사항</a><a>더보기</a></div>
-            <div class="column notice board">
-                <div class="col">
-                    <a>${noticeArticle_num}</a>
-                    <a>${noticeArticle_title}</a>
-                    <a>${noticeArticle_date}</a>
-                </div>
-            </div>
-        </div>
+<!-- 공지사항 리스트 -->
+	<h2 class="fa fa-exclamation-circle">공지사항</h2>
+	<button class="btn btn-outline-dark" type="button" style="float:right; "
+	onclick="location.href='share/boardlistN'">더보기</button>
+	
+	
+	<div class="container-share">
+		<!-- Content here -->
+		<!-- 임시 공지사항 -->
+		<div class="container">
+			<div class="column notiboard">
+			
+			<a href="/share/notice/viewformN" >
+				<div class="row">1.  ★★★반찬공유 게시판 이용 가이드 1.1★★★
+					<div class="col" style="text-align: right;">2022-02-22 18:20</div>
+				</div>
+			</a>
+			
+			<a href="/share/boardlistN/2" >
+				<div class="row">2. [INFO] 용산구 전통시장 할인 정보
+					<div class="col" style="text-align: right;">2022-02-22 18:30</div>
+				</div>
+			</a>
+			
+			<a href="/share/boardlistN/3" >
+				<div class="row">3. [꿀팁] 음식물 깔끔하게 소분하는 법!!!
+					<div class="col" style="text-align: right;">2022-02-22 19:28</div>
+				</div>
+			</div>
+			</a>
+		</div>
+	</div>
 
-        <!-- 위치검색 쿼리 -->
+	<br><br>
+	
+	<!-- 위치검색 쿼리 -->
         <div>
-            <label for="location-subway""">어디서 공유를 받고 싶으신가요?</label> <br>
+            <label for="location-subway">어디서 공유를 받고 싶으신가요?</label> <br>
             <select name="location" id="location-subway">
                 <option value="">지역을 골라주세요!</option>
                 <option value="용산역">용산역</option>
@@ -38,101 +82,74 @@
             </select>
             <button class="select button" type="button" value="검색">검색</button>
         </div>
-        <!-- 반찬공유 게시판 리스트 -->
-        <h2><a>반찬공유 게시판 - 혼자 먹는 당신을 위해 나눠드립니다.</a></h2>
-        <div class="container share board">
-            <div class="board title"><a>반찬공유 게시판</a></div>
-            <h2>반찬공유 <a href="/writeform"> 글쓰기</a></h2>
+        
+       
+       <a href="${pageContext.request.contextPath}/share/board/writeform">
+       <div style="float:right;">
+       <button type="button" value="글쓰기">글쓰기</button>
+       </div>
+       </a>
+       
+       <br><br>
+	
+	<h2 class="fa fa-exclamation-circle">반찬공유 - 혼자 먹는 당신을 위해 나눠드립니다. </h2>
+	<button class="btn btn-outline-dark" type="button" style="float:right; "
+	onclick="location.href='share/boardlist'">더보기</button> <br>
 
-        <c:choose>
-            <c:when test="${articleList!=null && pageInfo.listCount>0 }">
-                <section id="listForm">
-                    <table style="border:1px; width:100%;">
-                        <tr id="tr_top">
-                            <td>번호</td>
-                            <td>제목</td>
-                            <td>위치</td>
-                            <td>작성자</td>
-                            <td>날짜</td>
-                            <td>조회수</td>
-                            <td>추천수</td>
-                        </tr>
-                        <tr>
-                        	<td>1</td>
-                            <td>간장게장 나눔합니다~~</td>
-                            <td>남영역</td>
-                            <td>고시히카리</td>
-                            <td>2022-03-04</td>
-                            <td>123</td>
-                            <td>1</td>
-                        </tr>
-
-                        <c:forEach var="article" items="${articleList }">
-                            <tr>
-                                <td>${article.board_num }</td>
-                                <td>
-                                    <a href="./boarddetail?board_num=${article.board_num}&page=${pageInfo.page}"
-                                        ><!-- 링크 -->
-                                        ${article.board_subject}
-                                        <!-- 아티클 번호 -->
-                                    </a>
-                                </td>
-                                <td>${article.board_title }</td>
-                                <td>${article.board_location_sub }</td>
-                                <td>${article.board_username }</td>
-                                <td>${article.board_date }</td>
-                                <td>${article.board_readcount }</td>
-                                <td>${article.board_recommentcount }</td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </section>
-                
-            </c:when>
-            <c:otherwise>
-                <section id="emptyArea">등록된 글이 없습니다.</section>
-            </c:otherwise>
-            <section id="pageList">
-                    <!-- 페이지 목록 --><!-- if else 랑 같음.  페이지가 1보다 작거나 같으면 이전페이지로 -->
-                    <c:choose>
-                        <c:when test="${pageInfo.page<=1}">
-                            [이전]&nbsp;
-                        </c:when>
-                        <c:otherwise>
-                            <a href="boardlist?page=${pageInfo.page-1}"
-                                >[이전]</a
-                            >&nbsp;
-                        </c:otherwise>
-                    </c:choose>
-                    <c:forEach
-                        var="i"
-                        begin="${pageInfo.startPage }"
-                        end="${pageInfo.endPage }"
-                    >
-                        <!-- end page 마지막 페이지 -->
-                        <!-- 현재페이지. 1페이지에서는 현재와 이전페이지 클릭될 필요가없음.-->
-                        <!-- 현재페이지를 제외한 나머지페이지 -->
-                        <c:choose>
-                            <c:when test="${pageInfo.page==i }">[${i }]</c:when>
-                            <c:otherwise>
-                                <a href="boardlist?page=${i}">[${i }]</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                    <c:choose>
-                        <c:when test="${pageInfo.page>=pageInfo.maxPage }">
-                            [다음]
-                        </c:when>
-                        <c:otherwise>
-                            <a href="boardlist?page=${pageInfo.page+1}"
-                                >[다음]</a
-                            >
-                        </c:otherwise>
-                    </c:choose>
-                    <!-- 페이지에 답변 달았으면 그 페이지 목록이 보여야함. -->
-                    <!-- 눈에 보이진 않지만 페이지를 달고다님. -->
-                </section>
-        </c:choose>
-        </div>
+	
+	<div class="container-comm">
+		<!-- Content here -->
+		<div class="container">
+			<div class="row shareboard" style="text-align: center;">
+				<div class="col">No</div>
+				<div class="col-6" style="text-align: left;">제목</div>
+				<div class="col" >위치</div>
+				<div class="col" >작성자</div>
+				<div class="col-2" >작성일</div>
+				<div class="col" >조회수</div>
+				<div class="col" >추천수</div>
+			</div>
+			
+			<!-- 임시 게시물 -->
+			<a href="/share/board/viewform" >
+				<div class="row shareboard" style="text-align: center;">
+					<div class="col">1</div>
+					<div class="col-5" style="text-align: left; ">[공유완료] 콩나물 너무 많이 사버렸어요~~</div>
+					<div class="col" >서울역</div>
+					<div class="col" >혼밥고수</div>
+					<div class="col-2" >2022-02-22 02:28</div>
+					<div class="col" >45</div>
+					<div class="col" >20</div>
+				</div>
+			</a>
+			
+			<a href="/share/boardlist/2" >
+			<div class="row shareboard" style="text-align: center;">
+				<div class="col">2</div>
+				<div class="col-5" style="text-align: left;">[공유중] 삼각지 선착순 1분! 쌀 나눔합니다!</div>
+				<div class="col" >삼각지역</div>
+				<div class="col" >고시히까리</div>
+				<div class="col-2" >2022-02-22 02:28</div>
+				<div class="col" >1</div>
+				<div class="col" >20</div>
+			</div>
+			</a>
+			
+			<a href="/share/boardlist/3" >
+			<div class="row shareboard" style="text-align: center;">
+				<div class="col">3</div>
+				<div class="col-5" style="text-align: left;">[공유중] 간장게장 샀는데 냉장고에 다 안들어가네요 ㅠㅠ</div>
+				<div class="col" >이태원역</div>
+				<div class="col" >데자와</div>
+				<div class="col-2" >2022-02-22 02:28</div>
+				<div class="col" >1</div>
+				<div class="col" >20</div>
+			</div>
+			</a>
+		</div>
+	</div>
+	 
+      
+       
 </body>
 </html>
