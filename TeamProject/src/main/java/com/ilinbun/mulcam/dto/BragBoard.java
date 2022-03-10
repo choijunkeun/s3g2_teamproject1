@@ -16,7 +16,6 @@ public class BragBoard { // 자랑
 
 	int readCount;
 	Date date;
-//	String imgfilename; 
 	String content;
 
 	public BragBoard() {
@@ -102,14 +101,6 @@ public class BragBoard { // 자랑
 	public void setDate(Date date) {
 		this.date = date;
 	}
-//
-//	public String getImgfilename() {
-//		return imgfilename;
-//	}
-//
-//	public void setImgfilename(String imgfilename) {
-//		this.imgfilename = imgfilename;
-//	}
 
 	public String getContent() {
 		return content;
@@ -118,10 +109,5 @@ public class BragBoard { // 자랑
 	public void setContent(String content) {
 		this.content = content;
 	}
-
-//	public int getArticleNo() {
-//	return articleNo;
-//
-//}
 
 }

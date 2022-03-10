@@ -1,40 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<!-- ckEditor -->
+<!-- ckEditor code -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<!-- 클래식 에디터 -->
-<script	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
-
+<script
+	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
 
 <title>게시글 보기</title>
-<!-- <link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"> -->
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!-- ckEditor 넓이 높이 조절 -->
+
 <style>
+/* ckEditor 넓이 높이 조절 */
 .ck.ck-editor {
 	max-width: 500px;
-	font-weight : bolder;
+	font-weight: bolder;
 }
 
 .ck-editor__editable {
 	min-height: 300px;
 }
-</style>
 
-<style>
 #top {
 	margin-top: 20px;
 }
@@ -47,10 +39,9 @@
 }
 
 .nav_container {
-	background-color : black !important;
-	border :0 !important;
+	background-color: black !important;
+	border: 0 !important;
 }
-
 
 .white {
 	color: white;
@@ -163,8 +154,6 @@ label.star:before {
 	content: '\f006';
 	font-family: FontAwesome;
 }
-
-
 </style>
 <style>
 .ck-editor__editable {
@@ -174,22 +163,25 @@ label.star:before {
 }
 </style>
 <body>
-<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/ckeditor/ckeditor.js"></script> --%>
-
-	로그인한 유저 번호 : ${user.idx } <br>
-	로그인한 유저 이메일 : ${user.email }<br>
-	로그인한 유저 별명 : ${user.nickname }<br>
-	
-	지금 보려는 글 정보 <br>
-	글 제목 : ${bboard.title } <br>
-	글 내용 : ${bboard.content } <br>
-	글 이미지 파일명: ${imgSrc }
-	글 작성자 번호 : ${bboard.idx } <br>
-	
-	${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
 
 
+	로그인한 유저 번호 : ${user.idx }
+	<br> 로그인한 유저 이메일 : ${user.email }
+	<br> 로그인한 유저 별명 : ${user.nickname }
+	<br> 지금 보려는 글 정보
+	<br> 글 제목 : ${bboard.title }
+	<br> 글 내용 : ${bboard.content }
+	<br> 글 이미지 파일명: ${imgSrc } 글 작성자 번호 : ${bboard.idx }
+	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
+
+
+
+
+	<!-- JavaScript -->
+	<script type="text/javascript"
+		src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script>
+	/* -1. ekEditor -내용(content)부분 : img 이동경로 지정 코드 */	
 	$(function(){
 	      ClassicEditor.create(document.querySelector("#editor"), {
 	    	  initialData : '${viewdetail.content}'
@@ -199,21 +191,9 @@ label.star:before {
 		   .catch((error) => {
 		   	console.error(error);
 		    });
-		})
+		});
+	
 
 </script>
-	
-	
-<!-- 	<script>
-	
-		function moonpaChange(arg) {
-			document.getElementById('moonpa').value=arg; 
-			
-			if(arg == 'true')
-				document.getElementById('sortDropdown').innerText='사먹파';
-			else
-				document.getElementById('sortDropdown').innerText='해먹파';
-		}
-	</script> -->
 </body>
 </html>
