@@ -1,11 +1,9 @@
 package com.ilinbun.mulcam.controller;
 
-import java.io.File;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -25,13 +23,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.User;
+import com.ilinbun.mulcam.service.BragService;
 import com.ilinbun.mulcam.service.UserService;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
 
+	@Autowired
+	BragService bragService;
+	
 	@Autowired
 	UserService userService;
 
@@ -42,7 +46,15 @@ public class MainController {
 	private ServletContext servletContext;
 
 	@GetMapping({ "", "/index" })
-	public String Main() {
+	public String Main(Model model) {
+		try {
+			List<BragBoard> bestbragList = bragService.bragBest();
+			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
+			model.addAttribute("bragList", bragList);
+			model.addAttribute("bestbragList", bestbragList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "main";
 	}
 

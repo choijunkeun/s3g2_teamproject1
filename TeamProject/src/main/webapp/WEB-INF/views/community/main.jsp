@@ -68,7 +68,7 @@ a {
 	
 	<h2 class="fa fa-exclamation-circle">커뮤니티 </h2>
 	<button class="btn btn-outline-dark" type="button" style="float:right; "
-	onclick="location.href='comm/boardlist'">더보기</button>
+	onclick="location.href='comm/writeform'">글쓰기</button>
 
 	
 	<div class="container-comm">

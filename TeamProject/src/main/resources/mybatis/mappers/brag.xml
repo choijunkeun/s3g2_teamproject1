@@ -49,15 +49,12 @@
  			select count(*) from honbab
  		]]>
 	</select>
-	<!-- 글목록 : BEST : 조회수 순으로 1위(이달의혼밥) 출력.좋아요 순인데 나중에 바꾸기 -->
-	<select id="bragBest1" resultType="Bragboard">
+	<!-- 글목록 : BEST : 조회수 순으로 1위~~~~~5(이달의혼밥) 출력.좋아요 순인데 나중에 바꾸기 -->
+	<select id="bragBest" resultType="Bragboard">
 		<![CDATA[
-			SELECT * FROM honbab order by readCount desc LIMIT 1
+			SELECT * FROM honbab order by readCount desc LIMIT 30
 		]]>
 	</select>
-	<!-- 글목록 : BEST : 조회수 순으로 2,3위 출력 || 메인메인 에는 조회수2~5위. 하나의 쿼리로 해야 할까? -->
-
-
 
 
 

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,9 +14,9 @@
 				클릭 시 팝오버 설명
 				<a class="btn-outline-dark" style="margin: 0 auto;">혼밥 레벨이란?</a> <br> -->
 
-				<!-- 레벨 선택 -->
-				<!-- 클릭 시 색상 변경 -->
-				<!-- <div id="level" class="btn-group flex-wrap justify-content-center">
+	<!-- 레벨 선택 -->
+	<!-- 클릭 시 색상 변경 -->
+	<!-- <div id="level" class="btn-group flex-wrap justify-content-center">
 					<div class="w-100"></div>
 					<input type="radio" name="level-group" class="btn-check" id="lv1" value="1">
 					<label class="btn btn-outline-danger btn-sm" for="lv1">레벨 1</label>
@@ -36,22 +36,30 @@
 			</div>
 		</form>
 	</div> -->
-	
-	<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" style="max-width: 100%; height: 300px;">
+
+	<div id="carouselExampleSlidesOnly" class="carousel slide"
+		data-bs-ride="carousel" style="max-width: 100%; height: 300px;">
 		<div class="carousel-inner">
 			<div class="carousel-item active">
-				<img src="https://dummyimage.com/1200x300/777/ff99ff.jpg&text=explain" class="d-block w-100" alt="...">
+				<img
+					src="https://dummyimage.com/1200x300/777/ff99ff.jpg&text=explain"
+					class="d-block w-100" alt="...">
 			</div>
 			<div class="carousel-item">
-				<img src="https://dummyimage.com/1200x300/555/99ffff.jpg&text=explain" class="d-block w-100" alt="...">
+				<img
+					src="https://dummyimage.com/1200x300/555/99ffff.jpg&text=explain"
+					class="d-block w-100" alt="...">
 			</div>
 			<div class="carousel-item">
-				<img src="https://dummyimage.com/1200x300/999/ffff99.jpg&text=explain" class="d-block w-100" alt="...">
-		  </div>
+				<img
+					src="https://dummyimage.com/1200x300/999/ffff99.jpg&text=explain"
+					class="d-block w-100" alt="...">
+			</div>
 		</div>
-	</div> <!-- https://getbootstrap.com/docs/5.1/components/carousel/ -->
-	
-	
+	</div>
+	<!-- https://getbootstrap.com/docs/5.1/components/carousel/ -->
+
+
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card">
@@ -69,24 +77,28 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
 					<div class="text-center">
-						<h5 class="fw-bolder">혼밥자랑 최신글 제목</h5>
-						혼밥자랑 최신글 내용
+						<h5 class="fw-bolder">혼밥자랑</h5>
+						<c:forEach var="i" begin="0" end="2">
+							<a title="${bragList[i].title }"
+								href="brag/viewdetail/${bragList[i].articleNo }">${bragList[i].title }</a>
+							<br>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<div>
 						<!-- + 클릭 시 상세보기로 이동 -->
-						<a class="btn btn-outline-dark mt-auto" href="#">+</a>
+						<a class="btn btn-outline-dark mt-auto" href="/brag">+</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
@@ -104,7 +116,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card p-4">
@@ -112,56 +124,66 @@
 					<h5 class="fw-bolder">혼밥자랑 BEST 제목</h5>
 				</div>
 				<div class="card-body">
-					<img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
+					<a href="brag/viewdetail/${bestbragList[0].articleNo }">
+						${bestbragList[0].title } <br> <img class="card-img-top"
+						src="${bestbragList[0].content}" name="brag_content" width="300px"
+						height="450px" class="card-img-top" />
+					</a>
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<!-- + 클릭 시 상세보기로 이동 -->
-					<a class="btn btn-outline-dark mt-auto" href="#">+</a>
+					<a class="btn btn-outline-dark mt-auto" href="/brag/best">+</a>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="col mt-5">
 			<div class="card p-4">
 				<div class="card-body">
 					<table>
+						<!-- <div class="border mycard" > -->
 						<tr>
-							<td>
-								<img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td>
-								<img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
+							<c:forEach var="i" begin="1" end="2">
+								<td title="${bestbragList[i].title }"><a
+									href="brag/viewdetail/${bestbragList[i].articleNo }">
+										${bestbragList[i].title } <br> <img
+										src="${bestbragList[i].content}" name="brag_content"
+										width="200px" height="200px" class="card-img-top" />
+								</a></td>
+							</c:forEach>
 						</tr>
 						<tr>
-							<td>
-								<img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td>
-								<img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
+							<c:forEach var="i" begin="3" end="4">
+								<td title="${bestbragList[i].title }"><a
+									href="brag/viewdetail/${bestbragList[i].articleNo }">
+										${bestbragList[i].title } <br> <img
+										src="${bestbragList[i].content}" name="brag_content"
+										width="200px" height="200px" class="card-img-top" />
+								</a></td>
+							</c:forEach>
 						</tr>
 					</table>
-					
+
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
 		var obj_length = document.getElementsByName("level-group").length;
-		  
-	    for (var i=0; i<obj_length; i++) {
-	        if (document.getElementsByName("level-group")[i].checked == true) {
-	            alert(document.getElementsByName("level-group")[i].value);
-	        }
-	    }
-	    function alertbeforesend(){
-	    	var obj = document.querySelector('input[name="level-group"]:checked');
-	    	/* for(let item in obj)
-	    		alert(item.value); */
-	    	alert(obj.value);
-	    	//return false;
-	    }
+
+		for (var i = 0; i < obj_length; i++) {
+			if (document.getElementsByName("level-group")[i].checked == true) {
+				alert(document.getElementsByName("level-group")[i].value);
+			}
+		}
+		function alertbeforesend() {
+			var obj = document
+					.querySelector('input[name="level-group"]:checked');
+			/* for(let item in obj)
+				alert(item.value); */
+			alert(obj.value);
+			//return false;
+		}
 	</script>
 </body>
 </html>

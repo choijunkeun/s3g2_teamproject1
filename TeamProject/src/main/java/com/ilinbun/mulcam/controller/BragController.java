@@ -57,8 +57,10 @@ public class BragController {
 	@GetMapping("")
 	public String Main(Model model) {
 		try {
-			bragboard = bragService.bragBest1();
-			model.addAttribute("BragBest1", bragboard);
+			List<BragBoard> bestbragList = bragService.bragBest();
+			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
+			model.addAttribute("bragList", bragList);
+			model.addAttribute("bestbragList", bestbragList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,7 +70,6 @@ public class BragController {
 	// brag.jsp (일반 자랑 게시판)
 		@GetMapping("/brag")
 		public ModelAndView brag_list(@RequestParam(value="page", required=false, defaultValue="1") int page) {
-			// User userInfo = (User) session.getAttribute("user"); //User session이 email이 아닌 account(password제외)일때 다시 연결하자
 			ModelAndView mav=new ModelAndView();
 			PageInfo pageInfo=new PageInfo();
 			pageInfo.setPage(page);
@@ -81,7 +82,6 @@ public class BragController {
 					brag.setContent(src);
 				}
 				pageInfo=bragService.getPageInfo(pageInfo);
-				// mav.addObject("userInfo", userInfo); //same as above
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("bragList", bragList);
 				mav.setViewName("brag/brag");
@@ -95,25 +95,33 @@ public class BragController {
 		
 		// best.jsp (BEST 게시판)
 		@GetMapping("/best")
-		public String Best() {
+		public String Best(Model model) {
+			try {
+				List<BragBoard> bestbragList = bragService.bragBest();
+				model.addAttribute("bestbragList", bestbragList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return "brag/best";
 		}
-		
 			
 		//글쓰기 	  
 		@GetMapping("/writeform") public String bragwriteform(Model model) { //
-		  HttpSession session = null; //이거는 가라데이터. 로그인 되면 session에서 받아 올거야!!!!!!!!
-		  String test = "th@th.com"; model.addAttribute("email", test); 
 		  return "brag/writeForm"; 
 		  }
+		
+		
 		@PostMapping("/bragwrite")
 		public String bragwriteform(@RequestParam String title, 
 				@RequestParam String content,
 				@RequestParam String moonpa, 
-				@RequestParam String location, 
-				@RequestParam int idx, 
+				@RequestParam String location,
+				@RequestParam int idx,
 				Model model) {
+			
+			int articleNo=0; //모르겠다
 			try {
+				User userInfo = (User) session.getAttribute("user");
 				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 				Document doc=Jsoup.parse(bragboard.getContent());
 				
@@ -122,15 +130,14 @@ public class BragController {
 				String newSrc =src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
 				doc.select("img").attr("src", "/bragupload/"+newSrc);
 				bragboard.setContent(doc.select("body > p").toString());
-				
-				bragService.regBragBoard(bragboard);
+				articleNo = bragService.regBragBoard(bragboard);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			model.addAttribute("title", title);
 			model.addAttribute("content", content.trim());
-			return "brag/brag"; //내가 쓴 글 보기viewform으로 이동으로 수정요.
+			return "redirect:/brag/viewdetail/"+String.valueOf(articleNo); //내가 쓴 글 보기viewform으로 이동으로 수정요.
 		}
 		@ResponseBody
 		@PostMapping("/upload")
@@ -195,10 +202,9 @@ public class BragController {
 	
 	
 		//게시글보기 (viewDetail.jsp)
-		@GetMapping("/brag/viewdetail/{articleNo}")
+		@GetMapping("/viewdetail/{articleNo}")
 		public ModelAndView boardDetail(@PathVariable int articleNo) {
-			// User userinfo = (User) session.getAttribute("user"); //same
-			User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1); //임시 
+			 User userinfo = (User) session.getAttribute("user"); //same
 			ModelAndView mav=new ModelAndView();
 			try {
 				bragboard=bragService.getBragBoard(articleNo); //내가쓴글, 남이쓴글 확인

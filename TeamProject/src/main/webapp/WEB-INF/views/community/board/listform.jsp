@@ -57,7 +57,7 @@ table {
 	</h2>
 	
 	<c:choose>
-		<c:when test="${articleList!=null && pageInfo.listCount>0 }">
+		<c:when test="${commList!=null && pageInfo.listCount>0 }">
 			<section id="listForm">
 				<table>
 					<tr id="tr_top">
@@ -68,9 +68,9 @@ table {
 						<td>조회수</td>
 					</tr>
 
-					<c:forEach var="article" items="${articleList }">
+					<c:forEach var="article" items="${commList }">
 						<tr>
-							<td>${article.board_num }</td>
+			<%-- 				<td>${article.art }</td>
 							<td><c:choose>
 									<c:when test="${article.board_re_lev!=0}">
 										<!-- 레벨 0 -->
@@ -81,14 +81,15 @@ table {
 						▶
 					</c:when>
 									<c:otherwise>▶</c:otherwise>
-								</c:choose> <a
-								href="./boarddetail?board_num=${article.board_num}&page=${pageInfo.page}">
-									<!-- 링크 --> ${article.board_subject} <!-- 아티클 번호 -->
+								</c:choose> --%>
+								 <a
+								href="./community/viewform/${article.articleNo}">
+									<!-- 링크 --> ${article.title} <!-- 아티클 번호 -->
 							</a></td>
-							<td>${article.board_name }</td>
+							<td>${article.idx }</td>
 							<!-- 보드명 날짜 리드카운트 . 컨텐트는 없음 -->
-							<td>${article.board_date }</td>
-							<td>${article.board_readcount }</td>
+							<td>${article.date }</td>
+							<td>${article.views }</td>
 						</tr>
 					</c:forEach>
 				</table>

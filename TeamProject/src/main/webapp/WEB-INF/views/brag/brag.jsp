@@ -7,7 +7,43 @@
 <head>
 <meta charset="UTF-8">
 <title>혼밥자랑</title>
+<style>
+/* img{
+	transform : translateX(-50%) translateY(-50%);
+	top : 50%;
+	left : 50%;
+	min-width : 100%;
+	min-height : 100%;
+	width : auto;
+	height : auto;
+} */
+/* .image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+} */
+/* image {
+background-size:contain;
+} */
+table {
+	width: 800px;
+	table-layout: fixed;
+	border-spacing: 100px;
+}
 
+td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100px;
+	height: 20px;
+}
+</style>
 </head>
 <body>
 	<!-- 1. 글쓰기 버튼 -->
@@ -31,7 +67,7 @@
 									<tr>
 										<c:forEach var="bboard" items="${bragList}" varStatus="status">
 											<c:if test="${status.index<4}">
-												<td><a href="brag/viewdetail/${bboard.articleNo }">
+												<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
 														<!--타이틀, 사진--> ${bboard.title } <br> <img
 														src="${bboard.content}" name="brag_content" width="200px"
 														height="200px" class="card-img-top" />
@@ -42,9 +78,11 @@
 									<tr>
 										</c:if>
 										<c:if test="${status.index>3 && status.index<8}">
-											<td>${bboard.title }<br> <img
-												src="${bboard.content}" name="brag_content" width="200px"
-												height="200px" class="card-img-top" /></td>
+											<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
+													${bboard.title }<br> <img src="${bboard.content}"
+													name="brag_content" width="200px" height="200px"
+													class="card-img-top" />
+											</a></td>
 										</c:if>
 										<c:if test="${status.index==7}">
 									</tr>
@@ -52,9 +90,11 @@
 										</c:if>
 
 										<c:if test="${status.index>7 && status.index<12}">
-											<td>${bboard.title }<br> <img
-												src="${bboard.content}" name="brag_content" width="200px"
-												height="200px" class="card-img-top" /></td>
+											<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
+													${bboard.title }<br> <img src="${bboard.content}"
+													name="brag_content" width="200px" height="200px"
+													class="card-img-top" />
+											</a></td>
 										</c:if>
 										<c:if test="${status.index==11}">
 									</tr>
@@ -62,9 +102,11 @@
 										</c:if>
 
 										<c:if test="${status.index>11 && status.index<16}">
-											<td>${bboard.title }<br> <img
-												src="${bboard.content}" name="brag_content" width="200px"
-												height="200px" class="card-img-top" /></td>
+											<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
+													${bboard.title }<br> <img src="${bboard.content}"
+													name="brag_content" width="200px" height="200px"
+													class="card-img-top" />
+											</a></td>
 										</c:if>
 
 										</c:forEach>
@@ -208,12 +250,15 @@
 		
  		
  /*1-1. 글쓰기 버튼 #bragMake 클릭 시 글쓰기writeform으로 이동  */
-		$(document).ready(function(){
-			$('#bragMake').on('click',function(){
-				location.href="/brag/writeform";
-			});
-		});
- 
+$(document).ready(function(){
+	$('#bragMake').on('click',function(){
+		if('${user.idx }' == ''){
+			location.href="/login";
+		} else {
+			location.href="/brag/writeform";	
+		}
+	});
+});
  
 </script>
 </body>
