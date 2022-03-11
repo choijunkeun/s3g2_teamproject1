@@ -31,7 +31,7 @@
 						</h1>
 						<div>주소 : ${place.address_name }</div>
 						<div>
-							홈페이지 : <a href="${place.place_url }">${place.place_url }</a>
+							홈페이지 : <a href="${place.place_url }" target='_blank'>${place.place_url }</a>
 						</div>
 						<div>연락처 : ${place.phone }</div>
 						<!-- <img src="http://placehold.co/300"> -->
@@ -95,7 +95,9 @@
 						<h2 style="width: fit-content; float:left;"><strong>혼밥 맛집 리뷰<c:if test="${not empty reviewAmount }">(${reviewAmount })</c:if></strong></h2>
 					</div>
 					<div class="col text-right" style="vertical-align: center">
-						<button class="btn border border-secondary" onclick="writeReview()" style="width: fit-content; float: right;">리뷰 작성</button>
+						<c:if test="${not empty user }">
+							<button class="btn border border-secondary" onclick="writeReview()" style="width: fit-content; float: right;">리뷰 작성</button>
+						</c:if>
 					</div>
 				</div>
 				<div class="row px-2 d-flex justify-content-center" style="margin: 0 auto;">
@@ -109,16 +111,19 @@
 								<div class="justify-content-center text-center border-right" style="width:120px;">
 									<img style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;" src='/profile/${pr.profileImg }'><br>
 									<span class="badge bg-danger rounded-pill mb-2">Lv .${pr.honbabLevel }</span>
-									<div class="border pb-2 pt-1 m-2 rounded" style="display: inline; text-overflow: ellipsis; overflow:hidden; white-space: nowrap;">${pr.nickname } 님</div>
+									<div class="border pb-2 pt-1 m-2 mx-auto rounded" style="display: inline; text-overflow: ellipsis; overflow:hidden; white-space: nowrap;">${pr.nickname } 님</div>
 								</div>
 								<div class="col" >
 									<section>
 										<div class="justify-content-between d-flex flex-wrap">
 											<h5><strong>${pr.honbabReason }</strong></h5>
-											<div class="if-thisArticle-mine text-end">
-												<div class="btn border-dark">수정</div>
-												<div class="btn border-dark">삭제</div>
-											</div>
+											<div><input type="checkbox" <c:if test="${pr.rejectedCount}">checked</c:if> onclick="return false;">혼밥 가능 여부</div>
+											<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
+												<div class="if-thisArticle-mine text-end">
+													<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
+													<button class="btn border-dark" onclick="deleteReview(${pr.reviewNo});">삭제</button>
+												</div>
+											</c:if>
 										</div>
 										<p>${pr.reviewContent }</p>
 									</section>
@@ -160,43 +165,71 @@
 					</c:choose>
 				</section>
 			</div>
-			<script>
-				function writeReview(){
-					let f = document.createElement('form');
-					
-				    f.appendChild(makeInputHiddenObj('id','${place.id}'));
-				    f.appendChild(makeInputHiddenObj('place_name','${place.place_name}'));
-				    f.appendChild(makeInputHiddenObj('category_name','${place.category_name}'));
-				    f.appendChild(makeInputHiddenObj('category_group_code','${place.category_group_code}'));
-				    f.appendChild(makeInputHiddenObj('category_group_name','${place.category_group_name}'));
-				    f.appendChild(makeInputHiddenObj('phone','${place.phone}'));
-				    f.appendChild(makeInputHiddenObj('address_name','${place.address_name}'));
-				    f.appendChild(makeInputHiddenObj('road_address_name','${place.road_address_name}'));
-				    f.appendChild(makeInputHiddenObj('x','${place.x}'));
-				    f.appendChild(makeInputHiddenObj('y','${place.y}'));
-				    f.appendChild(makeInputHiddenObj('place_url','${place.place_url}'));
-				    
-				    
-				    //f.setAttribute('enctype','application/json');
-				    f.setAttribute('method', 'post');
-				    f.setAttribute('action', './review/'+${id});
-				    document.body.appendChild(f);
-				    f.submit();
-				}
-				
-				function makeInputHiddenObj(key, value){
-					let obj = document.createElement('input');
-					obj.setAttribute('type', 'hidden');
-				    obj.setAttribute('name', key);
-				    obj.setAttribute('value', value);
-				    return obj;
-				}
-			</script>
+			
 		</c:when>
 	<c:otherwise>
 		<span>결과를 가져오지 못했습니다. 다시 시도해주세요.</span>
 	</c:otherwise>
 </c:choose>
-
+<script>
+	function mIHObj(key, value){ // makeInputHiddenObject : form 형식 만들기 귀찮아서 만듦
+		let obj = document.createElement('input');
+		obj.setAttribute('type', 'hidden');
+	    obj.setAttribute('name', key);
+	    obj.setAttribute('value', value);
+	    return obj;
+	}
+	function writeReview(){
+		let f = document.createElement('form');
+		
+	    f.appendChild(mIHObj('id','${place.id}'));
+	    f.appendChild(mIHObj('place_name','${place.place_name}'));
+	    f.appendChild(mIHObj('address_name','${place.address_name}'));
+	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
+	    f.appendChild(mIHObj('x','${place.x}'));
+	    f.appendChild(mIHObj('y','${place.y}'));
+	    
+	    
+	    //f.setAttribute('enctype','application/json');
+	    f.setAttribute('method', 'post');
+	    f.setAttribute('action', './review/'+${id});
+	    document.body.appendChild(f);
+	    f.submit();
+	}
+	
+	function editReview(reviewNo){
+		let f = document.createElement('form');
+		
+		f.appendChild(mIHObj('reviewNo', reviewNo));
+	    f.appendChild(mIHObj('id','${place.id}'));
+	    f.appendChild(mIHObj('place_name','${place.place_name}'));
+	    f.appendChild(mIHObj('address_name','${place.address_name}'));
+	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
+	    f.appendChild(mIHObj('x','${place.x}'));
+	    f.appendChild(mIHObj('y','${place.y}'));
+	    
+	    
+	    //f.setAttribute('enctype','application/json');
+	    f.setAttribute('method', 'post');
+	    f.setAttribute('action', './edit/'+${id});
+	    document.body.appendChild(f);
+	    f.submit();
+	}
+				
+	function deleteReview(reviewNo){
+		if(confirm("리뷰를 삭제하시겠습니까?")){
+			let f = document.createElement('form');
+			
+			f.appendChild(mIHObj('reviewNo', reviewNo));
+		    f.appendChild(mIHObj('idx','${user.idx}'));
+		    f.appendChild(mIHObj('id','${place.id}'));
+		   
+		    f.setAttribute('method', 'post');
+		    f.setAttribute('action', './deleteReview');
+		    document.body.appendChild(f);
+		    f.submit();
+		}
+	}
+</script>
 </body>
 </html>

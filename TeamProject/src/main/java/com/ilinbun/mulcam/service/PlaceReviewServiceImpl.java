@@ -124,7 +124,7 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 			result = 0.0;
 		}
 		
-		return result != null? result : 1.0;
+		return result != null? result : 0.0;
 	}
 
 	@Override
@@ -135,6 +135,30 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 	@Override
 	public Double getHonbabLv(int id) throws Exception {
 		Double result = placeReviewDAO.selectPlaceHonbabLv(id) ;
-		return result != null? result : 5.0;
+		return result != null? result : 1.0;
+	}
+	
+	@Override
+	public int updateReview(PlaceReview pr) throws Exception {
+		System.out.println("### : "+pr.getReviewContent());
+		// TODO Auto-generated method stub
+		return placeReviewDAO.updateReview(pr);
+	}
+	
+	public int updateReviewFilePath(PlaceReview pr) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.updateReviewFilePath(pr);
+	}
+	
+	@Override
+	public int deleteReview(int reviewNo) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.deleteReview(reviewNo);
+	}
+	
+	@Override
+	public PlaceReview getReview(int reviewNo) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.selectReview(reviewNo);
 	}
 }

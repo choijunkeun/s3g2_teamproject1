@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -76,12 +77,10 @@ public class PlaceController {
 				} 
 				br.close();
 	        }
-	        System.out.println(response.toString());
+	        
 	        JSONObject object = new JSONObject(response.toString());
 	        JSONArray obj = (JSONArray) object.get("documents");
 	        JSONObject target = (JSONObject)obj.get(0);
-	        System.out.println(target.get("id"));
-	        System.out.println(id);
 	        
 	        if(target.get("id").equals(id)) {
 	        	Place place = new Place(
@@ -179,9 +178,22 @@ public class PlaceController {
 	
 	@PostMapping("/review/{id}")
 	public ModelAndView reviewForm(@PathVariable String id, @ModelAttribute Place place) {
-		ModelAndView mv = new ModelAndView("place/reviewForm");
+		ModelAndView mv = new ModelAndView("/place/reviewForm");
 		mv.addObject("id", id);
-		mv.addObject("pr", place);
+		mv.addObject("place", place);
+		
+		return mv;
+	}
+	
+	@PostMapping("/edit/{id}")
+	public ModelAndView reviewEdit(@PathVariable String id, 
+			@RequestParam int reviewNo, @ModelAttribute Place place) throws Exception {
+		ModelAndView mv = new ModelAndView("/place/editReview");
+		//PlaceReview review = placeReviewService.getReview(Integer.parseInt(reviewNo), Integer.parseInt(id));
+		PlaceReview review = placeReviewService.getReview(reviewNo);
+		mv.addObject("id", id);
+		mv.addObject("place", place);
+		mv.addObject("review", review);
 		
 		return mv;
 	}
@@ -217,12 +229,9 @@ public class PlaceController {
 				String nowTime = sdf.format(now);
 				
 				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
-				System.out.println("1");
 				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
 				System.out.println(destFile.getAbsolutePath());
 				file.transferTo(destFile);
-				System.out.println("SUCCESS");
-				System.out.println(pr.getRevImgFilepath());
 			}
 			
 			placeReviewService.writeBoard(pr);
@@ -277,98 +286,75 @@ public class PlaceController {
 	}
 	
 	
-	
-	
-	
-	
 	@ResponseBody
-	@GetMapping("/test")
-	public ResponseEntity<String> test() {
+	@PostMapping("/editReview")
+	public ResponseEntity<String> editReview(@RequestPart("key") Map<String, String> param,
+			@RequestPart(value="file", required=false) MultipartFile file) {
 		ResponseEntity<String> result = null;
-		HttpURLConnection conn = null;
-		StringBuffer response = new StringBuffer();
+		
 		try {
-			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?" + "query=" + URLEncoder.encode("카카오프렌즈", "UTF-8"));
+			PlaceReview pr = new PlaceReview( 
+	                Integer.parseInt(param.get("id")), 
+					Integer.parseInt(param.get("user_PK")), 
+					param.get("reviewContent"), 
+					Boolean.parseBoolean(param.get("rejectedCount")), 
+					Integer.parseInt(param.get("honbabLv")), 
+					param.get("honbabReason"), 
+					Double.parseDouble(param.get("interiorRate")), 
+					Double.parseDouble(param.get("serviceRate")),
+					Double.parseDouble(param.get("priceRate")), 
+					Double.parseDouble(param.get("tasteRate"))
+				);
+			pr.setReviewNo(Integer.parseInt(param.get("reviewNo")));
+			boolean fileChange=Boolean.parseBoolean(param.get("fileChange"));
+			if(fileChange && file != null) { // 파일 첨부시 파일 업로드
+				System.out.println("파일 업로드 시도");
+				String path=servletContext.getRealPath("/revimgupload/");
+				System.out.println(path);
+				
+				// 이미지 파일의 이름을 바꿔봅시다
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+				Date now = new Date(); 
+				String nowTime = sdf.format(now);
+				
+				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
+				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
+				file.transferTo(destFile);
+				placeReviewService.updateReviewFilePath(pr);
+			} else if(fileChange && file == null) {
+				pr.setRevImgFilepath(null);
+				placeReviewService.updateReviewFilePath(pr);
+			}
 			
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("X-Requested-With", "curl");
-	        conn.setRequestProperty("Authorization", "KakaoAK ec3f88c0be25b53b799db6b9849751aa");
-	        conn.setDoOutput(true);
-	        
-	        int responseCode = conn.getResponseCode();
-	        if (responseCode == 400) {
-	            System.out.println("400:: 해당 장소를 가져올 수 없음");
-	        } else if (responseCode == 401) {
-	            System.out.println("401:: 인증 오류");
-	        } else if (responseCode == 500) {
-	            System.out.println("500:: 카카오 서버 에러");
-	        } else { // 성공 후 응답 JSON 데이터받기
-				Charset charset = Charset.forName("UTF-8");
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
-				String inputLine;
-				while ((inputLine = br.readLine()) != null) {
-					response.append(inputLine); 
-				} 
-				br.close();
-	        }
-	        System.out.println(response.toString());
-	        result = new ResponseEntity<String>(response.toString(), HttpStatus.OK);
-	        
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println(placeReviewService.updateReview(pr));
+			result = new ResponseEntity<String>("success", HttpStatus.OK);
+		} catch(Exception e) {
 			e.printStackTrace();
-			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
 		}
 		
-		return result;
+		return result;	
 	}
 	
-//	public String getPlacesFromKakaoAPI(String keyword) {
-//		HttpURLConnection conn = null;
-//		JSONObject library = new JSONObject();
-//		String keyword = "카카오프렌즈";
-//		
-//		for(int i=1; i<=45; i++){
-//			JSONObject res = new JSONObject(getPlacesRAWResultFromKakao(keyword, i));
-//			((JSONObject)res.get("meta")).get(")
-//		}
-//		return response.toString();
-//		
-//	}
-//	
-////	public String getPlacesRAWResultFromKakao(String keyword, int page) {
-//		HttpURLConnection conn = null;
-//		StringBuffer response = new StringBuffer();
-//		try {
-//			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?page=" + page + "&query=" + URLEncoder.encode(keyword, "UTF-8"));
-//			
-//			conn = (HttpURLConnection) url.openConnection();
-//			conn.setRequestMethod("GET");
-//			conn.setRequestProperty("X-Requested-With", "curl");
-//	        conn.setRequestProperty("Authorization", "KakaoAK ec3f88c0be25b53b799db6b9849751aa");
-//	        conn.setDoOutput(true);
-//	        
-//	        int responseCode = conn.getResponseCode();
-//	        if (responseCode == 400) {
-//	            System.out.println("400:: 해당 장소를 가져올 수 없음");
-//	        } else if (responseCode == 401) {
-//	            System.out.println("401:: 인증 오류");
-//	        } else if (responseCode == 500) {
-//	            System.out.println("500:: 카카오 서버 에러");
-//	        } else { // 성공 후 응답 JSON 데이터받기
-//				Charset charset = Charset.forName("UTF-8");
-//				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
-//				String inputLine;
-//				while ((inputLine = br.readLine()) != null) {
-//					response.append(inputLine); 
-//				} 
-//				br.close();
-//	        }
-//	        System.out.println(response.toString());
-//	        
-//	        
-//		} catch(Exception e) {}
-//		return response.toString();
-//	}
+	@ResponseBody
+	@PostMapping("/deleteReview")
+	public ResponseEntity<String> editReview(@RequestParam int reviewNo, @RequestParam String idx) {
+		ResponseEntity<String> result = null;
+		
+		try {
+			PlaceReview target = placeReviewService.getReview(reviewNo);
+			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
+//			int place = target.getId();
+			placeReviewService.deleteReview(reviewNo);
+			String html = "<script>alert('삭제 완료'); window.location = \"/search\"</script>";
+//			System.out.println(html);
+			result = new ResponseEntity<String>(html , HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
 }

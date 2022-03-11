@@ -15,15 +15,16 @@ import com.ilinbun.mulcam.dto.PlaceReviewExtended;
 @Repository("placereview")
 public interface PlaceReviewDAO {
 	void insertReview(PlaceReview pr) throws Exception;
-	PlaceReview selectReview(int reviewNo, int id) throws Exception;
+	PlaceReview selectReview(int reviewNo) throws Exception;
 	
 	List<PlaceReview> selectPRBoardList(HashMap<String, Integer> input) throws Exception;
 	List<PlaceReviewExtended> selectPRReviewList(HashMap<String, Integer> input) throws Exception;
 	Integer selectMaxPRNum() throws Exception;
 	int selectPRBoardCount(int id) throws Exception;
 	
-	void updateReview(PlaceReview pr) throws Exception;
-	void deleteReview(int reviewNo) throws Exception;
+	int updateReview(PlaceReview pr) throws Exception;
+	int updateReviewFilePath(PlaceReview pr) throws Exception;
+	int deleteReview(int reviewNo) throws Exception;
 	
 	Double selectPlaceInteriorRating(int id) throws Exception;
 	Double selectPlacePriceRating(int id) throws Exception;

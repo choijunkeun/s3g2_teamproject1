@@ -5,4 +5,89 @@
    
 <mapper namespace="com.ilinbun.mulcam.dao.CommunityDAO">
 
+<!-- 글쓰기 시 : 현재 articleNo가 어디까지(Max)인지 알려주는 쿼리문 -->
+   <select id="selectMaxArticleNo" resultType="integer">
+      <!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자. PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다. -->
+      <!--null일 경우 값을 가져오기 위해서(null로) 래퍼클래스인 integer로 반환한다. -->
+      <![CDATA[
+         select max(articleNo) from comm_board
+      ]]>
+   </select>
+      <!-- 글쓰기, 글목록 -->
+   <insert id="insertCommBoard" parameterType="CommBoard">
+       <![CDATA[
+          insert into comm_board (idx, title, content)
+          values (#{idx}, #{title}, #{content})
+       ]]>
+   </insert>
+   
+      <!-- 글보기 : articleNo를 가지고 게시글을 조회 -->
+   <select id="selectCommBoard" resultType="CommBoard"
+      parameterType="int">
+       <![CDATA[
+         select * from comm_board where articleNo=#{articleNo}
+       ]]>
+   </select>
+   <!-- 글보기 : 게시글 조회수(+1) -->
+   <update id="updateReadCount" parameterType="int">
+       <![CDATA[
+          update comm_board set readCount=readCount+1 where articleNo=#{articleNo} 
+       ]]>
+   </update>
+   
+   
+   <!-- 글목록 : 게시판 글 목록에 15개 출력 쿼리문 -->
+   <select id="selectCommBoardList" resultType="CommBoard"
+      parameterType="int">
+       <![CDATA[
+          select * from comm_board where articleNo between #{startrow} and #{startrow}+14   
+       ]]>
+   </select>
+   <!-- 글목록 : 전체게시물 조회하기 -->
+   <select id="selectCommBoardCount" resultType="int">
+       <![CDATA[
+          select count(*) from comm_board
+       ]]>
+   </select>
+   
+
+
+
+
+   <!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
+   <update id="updateCommBoard" parameterType="CommBoard">
+      <![CDATA[
+      update comm_board set title = #{title}, content=#{content}, where articleNo = #{articleNo}; 
+       ]]>
+   </update>
+   <!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
+      할 것인가 -->
+   <delete id="deleteCommBoard" parameterType="int">
+      <![CDATA[
+      delete from comm_board where articleNo=#{articleNo}
+       ]]>
+   </delete>
+   
+   <!-- 사용자의 커뮤니티 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
+	<select id="selectCommunityBoardByIdx" resultType="CommBoard" parameterType="int">
+ 		<![CDATA[
+ 			select * from comm_board where idx=#{idx} order by date desc limit 10
+ 		]]>
+	</select>
 </mapper>
+
+   
+
+   <!-- 댓글 쿼리일까 싶어 남겨둔 코드 -->
+   <!--아래는 답변 기능 구현시 기존 글들의 seq번호를 추가해주는 작업을 하는 쿼리문에 해당한다. 이는 최신에 답변된 글이 원글 
+      바로 밑에 위치하도록 하기 위함이다. : 이거랑 위에랑.. 댓글로 변경.. -->
+   <!-- <update id="updateCommBoardReSeq" parameterType="CommBoard"> 
+   <![CDATA[ 
+      update comm_board set articleNo=articleNo+1 where articleNo=#{articleNo} 
+      and articleNo>#{articleNo} ]]> </update> 원글과 ref는 같고 원글의 seq보다 큰 글들의 seq를 
+      +1 시켜준다. 즉, 위의 조건은 원글의 기존 답변글들의 목록에 해당한다. -->
+
+   <!-- 알수없는 코드들 -->
+   <!-- <select id="selectCommList" resultType="CommBoard" parameterType="int" 
+      > <![CDATA[ select * from comm_board order by date desc limit #{startrow},15 
+      ]]> </select> -->

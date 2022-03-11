@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ilinbun.mulcam.dto.BragBoard;
-import com.ilinbun.mulcam.dto.Com_board;
+import com.ilinbun.mulcam.dto.CommBoard;
 import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
-import com.ilinbun.mulcam.service.BoardService;
 import com.ilinbun.mulcam.service.BragService;
+import com.ilinbun.mulcam.service.CommService;
 import com.ilinbun.mulcam.service.ShareService;
 import com.ilinbun.mulcam.service.UserService;
 
@@ -37,22 +37,30 @@ import com.ilinbun.mulcam.service.UserService;
 public class MainController {
 
 	@Autowired
+	BragService bragService;
+	
+	@Autowired
 	UserService userService;
 
 	@Autowired
 	HttpSession session;
 	
 	@Autowired
-	BragService bragService;
-	
-	@Autowired
 	ShareService shareService;
 	
 	@Autowired
-	BoardService boardService;
+	CommService commService;
 
 	@GetMapping({ "", "/index" })
-	public String Main() {
+	public String Main(Model model) {
+		try {
+			List<BragBoard> bestbragList = bragService.bragBest();
+			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
+			model.addAttribute("bragList", bragList);
+			model.addAttribute("bestbragList", bestbragList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "main";
 	}
 
@@ -217,9 +225,9 @@ public class MainController {
 		//마이페이지에 혼밥자랑 게시글 출력
 		@ResponseBody
 		@PostMapping("/MycommunityPosting")
-		public List<Com_board> communityPosting() throws Exception {
+		public List<CommBoard> communityPosting() throws Exception {
 			User user = (User) session.getAttribute("user");
-			List<Com_board> myCommunityList = boardService.MyCommunityBoard(user.getIdx());
+			List<CommBoard> myCommunityList = commService.MyCommunityBoard(user.getIdx());
 			System.out.println("communityboardlist");
 			return myCommunityList;
 		}

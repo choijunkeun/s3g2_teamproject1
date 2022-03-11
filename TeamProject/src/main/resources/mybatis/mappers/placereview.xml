@@ -22,7 +22,7 @@
 	
 	<select id="selectPRReviewList" resultType="PlaceReviewExtended" parameterType="HashMap"> <!-- -->
 		<![CDATA[ 
-			select user_PK, nickname, profileimg, honbabLevel, grp, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
+			select user_PK, nickname, profileimg, honbabLevel, grp, reviewNo, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
 				from (select @rownum:=@rownum+1 rnum, tot.* 
 					from (select * from reviewdb where id=#{id} order by writeTime desc ) tot, 
 					(select @rownum:=0) temp) sub, user
@@ -67,8 +67,15 @@
 	
 	<update id="updateReview" parameterType="placereview">
 		<![CDATA[
-			update reviewdb set reviewContent = #{reviewContent}, honbabReason=#{honbabReason},
-			interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP
+			update reviewdb 
+			set reviewContent=#{reviewContent}, honbabReason=#{honbabReason}, interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP
+			where reviewNo=#{reviewNo}
+		]]>
+	</update>
+	
+	<update id="updateReviewFilePath" parameterType="placereview">
+		<![CDATA[
+			update reviewdb set revImgFilepath=#{revImgFilepath}
 			where reviewNo=#{reviewNo}
 		]]>
 	</update>
