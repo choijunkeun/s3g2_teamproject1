@@ -13,4 +13,7 @@ public interface BoardService {
 	void modifyBoard(Com_board board) throws Exception;
 	void removeBoard(int boardNum, String boardPass) throws Exception;
 	
+	// 마이페이지에 사용자의 커뮤니티 게시글 출력(준근) 
+		List<Com_board> MyCommunityBoard(int idx) throws Exception;
+	
 }

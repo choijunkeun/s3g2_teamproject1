@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,8 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.Com_board;
+import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
+import com.ilinbun.mulcam.service.BoardService;
 import com.ilinbun.mulcam.service.BragService;
+import com.ilinbun.mulcam.service.ShareService;
 import com.ilinbun.mulcam.service.UserService;
 
 @Controller
@@ -40,9 +44,12 @@ public class MainController {
 	
 	@Autowired
 	BragService bragService;
-
+	
 	@Autowired
-	private ServletContext servletContext;
+	ShareService shareService;
+	
+	@Autowired
+	BoardService boardService;
 
 	@GetMapping({ "", "/index" })
 	public String Main() {
@@ -187,8 +194,34 @@ public class MainController {
 		return "redirect:/myPage";
 	}
 	
+	//마이페이지에 혼밥자랑 게시글 출력
+	@ResponseBody
+	@PostMapping("/MybragPosting")
+	public List<BragBoard> bragPosting() throws Exception {
+		User user = (User) session.getAttribute("user");
+		List<BragBoard> myBragList = bragService.MyBragBoard(user.getIdx());
+		System.out.println("bragboardlist");
+		return myBragList;
+	}
 	
-	
-	
+	//마이페이지에 반찬공유 게시글 출력
+		@ResponseBody
+		@PostMapping("/MysharePosting")
+		public List<Shareboard> sharePosting() throws Exception {
+			User user = (User) session.getAttribute("user");
+			List<Shareboard> myShareList = shareService.MyShareBoard(user.getIdx());
+			System.out.println("shareBoardlist");
+			return myShareList;
+		}
+		
+		//마이페이지에 혼밥자랑 게시글 출력
+		@ResponseBody
+		@PostMapping("/MycommunityPosting")
+		public List<Com_board> communityPosting() throws Exception {
+			User user = (User) session.getAttribute("user");
+			List<Com_board> myCommunityList = boardService.MyCommunityBoard(user.getIdx());
+			System.out.println("communityboardlist");
+			return myCommunityList;
+		}
 
 }

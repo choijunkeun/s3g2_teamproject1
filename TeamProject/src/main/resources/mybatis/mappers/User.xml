@@ -42,15 +42,7 @@
     	]]>
 	</update>
 	
-<!-- 혼밥자랑 작성한 게시글 목록 -->
-	<select id="bragWrite">
-		<![CDATA[
-    	SELECT user.idx, user.nickname, honbab.title from user join honbab on user.idx=honbab.idx;
-    	]]>
-	
-	
-	</select> 
-    
+
     
 
 </mapper>

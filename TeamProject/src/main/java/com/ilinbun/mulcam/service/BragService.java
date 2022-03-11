@@ -35,6 +35,10 @@ public interface BragService {
 	// 게시글 삭제
 	void removeBragBoard(int articleNo) throws Exception;
 
+	
+	// 마이페이지에 사용자의 혼밥자랑 게시글 출력(준근)
+	List<BragBoard> MyBragBoard(int idx) throws Exception;
+
 	// 댓글달기
 //	void regBragReply(Bragboard bragboard) throws Exception;
 	// 댓글수정

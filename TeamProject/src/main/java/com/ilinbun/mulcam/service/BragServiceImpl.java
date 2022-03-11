@@ -112,6 +112,12 @@ public class BragServiceImpl implements BragService {
 		
 	}
 
+	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글(준근) 
+	@Override
+	public List<BragBoard> MyBragBoard(int idx) throws Exception {
+		return bragDAO.selectBragBoardByIdx(idx);
+	}
+
 //아마 댓글	
 //	@Override
 //	public void regBragReply(Bragboard bragboard) throws Exception {

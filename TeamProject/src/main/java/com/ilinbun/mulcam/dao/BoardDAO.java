@@ -21,4 +21,7 @@ public interface BoardDAO {
 	String selectPassword(int boardNum) throws Exception;
 	void updateBoard(Com_board board) throws Exception;
 	void deleteBoard(int boardNum) throws Exception;
+	
+	// 마이페이지에 뿌려줄 사용자의 커뮤니티 게시글 출력 DAO(준근)
+		List<Com_board> selectCommunityBoardByIdx(int idx) throws Exception;
 }

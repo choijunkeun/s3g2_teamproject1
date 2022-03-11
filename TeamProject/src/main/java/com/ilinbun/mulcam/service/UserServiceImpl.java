@@ -1,12 +1,15 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
+import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.User;
 
 @Service
@@ -14,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	BragDAO bragDAO;
 
 	// 회원 가입
 	@Override
@@ -74,11 +80,10 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("비밀번호가 일치하지 않습니다");
 		} else return null;
 	}
-
+	//회원정보 수정
 	@Override
 	public void userUpdate(User user) throws Exception {
 		userDAO.userUpdate(user);
 	
 	}
-
 }

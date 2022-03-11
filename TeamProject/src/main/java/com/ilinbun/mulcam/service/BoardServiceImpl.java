@@ -98,4 +98,9 @@ public class BoardServiceImpl implements BoardService {
 			throw new Exception("수정 권한 없음");
 		}
 	}
+	// 마이페이지에 뿌려줄 사용자의 커뮤니티 게시글(준근)
+	@Override
+	public List<Com_board> MyCommunityBoard(int idx) throws Exception {
+		return boardDAO.selectCommunityBoardByIdx(idx);
+	}
 }

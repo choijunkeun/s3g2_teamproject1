@@ -106,7 +106,7 @@
 				<div class="text-center">
 					<h5 class="fw-bolder">반찬공유</h5>
 				</div>
-				<div class="card-body">
+				<div class="card-body" id="myShare">
 					사용자의 반찬공유 게시글 나오는 부분 
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -122,9 +122,7 @@
 				<div class="text-center">
 					<h5 class="fw-bolder">혼밥자랑</h5>
 				</div>
-				<div class="card-body">
-					사용자의 혼밥자랑 게시글 나오는 부분
-					
+				<div class="card-body" id="myBrag">					
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<!-- + 클릭 시 상세보기로 이동 -->
@@ -139,7 +137,7 @@
 				<div class="text-center">
 					<h5 class="fw-bolder">커뮤니티</h5>
 				</div>
-				<div class="card-body">
+				<div class="card-body" id="myCommunity">
 					사용자의 커뮤니티 게시글 나오는 부분
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -155,4 +153,56 @@
 		
 	</div>
 </body>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+
+$(function() {
+	$.ajax({
+		url:'/MybragPosting',		
+		type: 'POST',
+		datatype : "json",
+		success: function(data) {
+			/* $("#myBrag").text(data[0].title); */
+			$.each(data, function(index, item) { // 데이터 = item 
+				$("#myBrag").append(item.articleNo + " ");
+				$("#myBrag").append(item.title + " ");
+				$("#myBrag").append(item.date + "<br>");
+			});
+		}
+      }),
+	
+	
+	
+	$.ajax({
+		url:'/MysharePosting',		// 컨트롤러 
+		type: 'POST',
+		datatype:"json",
+		success: function(data){
+			$.each(data, function(index, item) { // 데이터 = item 
+				$("#myShare").append(item.articleNo + " ");
+				$("#myShare").append(item.title + " ");
+				$("#myShare").append(item.date + "<br>");
+			});
+			
+		}		
+	}),
+	
+	
+	$.ajax({
+		url:'/MycommunityPosting',		// 컨트롤러 
+		type: 'POST',
+		datatype:"json",
+		success: function(data){
+			$.each(data, function(index, item) { // 데이터 = item 
+				$("#myCommunity").append(item.articleNo + " ");
+				$("#myCommunity").append(item.title + " ");
+				$("#myCommunity").append(item.date + "<br>");
+				
+			});
+		}		
+	})
+})
+
+
+</script>
 </html>
