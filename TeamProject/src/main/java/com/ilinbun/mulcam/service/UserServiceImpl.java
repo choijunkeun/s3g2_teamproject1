@@ -1,12 +1,15 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
+import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.User;
 
 @Service
@@ -14,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	BragDAO bragDAO;
 
 	// 회원 가입
 	@Override
@@ -61,22 +67,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
-	
-//	//이메일 중복확인
-//		@Override
-//		public String emailCheck(String email) throws Exception {
-//			String msg = "사용가능한 이메일입니다.";
-//			if(email.length()>=2) {
-//				if(userDAO.emailCheck(email) == 1) {
-//					msg = "이미 사용중인 이메일입니다.";
-//				}
-//			} else {
-//				msg = "2글자 이상을 입력하세요";
-//			}
-//			return msg;
-//		}
-
-
+// 로그인
 	@Override
 	public User loginUser(String email, String password) throws Exception {
 		User user = userDAO.login(email);
@@ -89,5 +80,10 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("비밀번호가 일치하지 않습니다");
 		} else return null;
 	}
-
+	//회원정보 수정
+	@Override
+	public void userUpdate(User user) throws Exception {
+		userDAO.userUpdate(user);
+	
+	}
 }

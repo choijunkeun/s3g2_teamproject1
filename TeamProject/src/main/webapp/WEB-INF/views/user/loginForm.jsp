@@ -109,17 +109,6 @@
     		<p align="center">일인분</p>
     	</div>
     </div>
-    <!-- <div class="container p-4 px-lg-5"  onclick="window.locaiton.href="/">
-		<div class="text-center justify-content-center text-black">
-			<h1 class="display-4 fw-bolder text-center justify-content-center "
-				style="text-align: center;">
-				<a style="text-decoration: none; font-color:black;" href="/">
-				일인분
-				</a>
-			</h1>
-			<span>혼밥 정보가 필요할 땐, 일인분</span>
-		</div>
-	</div> -->
     
     <hr style="width:700px">
    	
@@ -148,7 +137,7 @@
     <button type="submit" class="join-btn">로그인</button>
     <a href="/join">아직 계정이 없으신가요? 가입하기</a>
       
-	</form> 
+   </form> 
 </body>
  <script>
       

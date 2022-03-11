@@ -67,6 +67,13 @@
       delete from comm_board where articleNo=#{articleNo}
        ]]>
    </delete>
+   
+   <!-- 사용자의 커뮤니티 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
+	<select id="selectCommunityBoardByIdx" resultType="CommBoard" parameterType="int">
+ 		<![CDATA[
+ 			select * from comm_board where idx=#{idx} order by date desc limit 10
+ 		]]>
+	</select>
 </mapper>
 
    
