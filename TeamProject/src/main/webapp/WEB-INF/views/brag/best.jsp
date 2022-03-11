@@ -63,12 +63,13 @@ td {
 				<!-- <div class="border mycard" > -->
 				<tr>
 					<c:forEach var="i" begin="1" end="2">
-						<td title="${bestbragList[i].title }"><a
-							href="./viewdetail/${bestbragList[i].articleNo }">
-								${bestbragList[i].title } <br> <img
-								src="${bestbragList[i].content}" name="brag_content"
-								width="200px" height="200px" class="card-img-top" />
-						</a></td>
+						<td title="${bestbragList[i].title }">
+							<a href="./viewdetail/${bestbragList[i].articleNo }">
+								${bestbragList[i].title } <br>
+								<img name="brag_content"
+								width="200px" height="200px" class="card-img-top" src=`${bestbragList[i].content}` />
+							</a>
+						</td>
 					</c:forEach>
 				</tr>
 				<tr>

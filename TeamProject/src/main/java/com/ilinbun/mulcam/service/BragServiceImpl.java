@@ -2,6 +2,9 @@ package com.ilinbun.mulcam.service;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +70,15 @@ public class BragServiceImpl implements BragService {
 	@Override
 	public List<BragBoard> getBragboardList(int page) throws Exception {
 		int startrow=(int) ((page-1)*16+1);
-		return bragDAO.selectBragBoardList(startrow);
+		List<BragBoard> list = bragDAO.selectBragBoardList(startrow);
+		for(int i=0;i<list.size();i++) {
+			String realContent = list.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
+			Document doc=Jsoup.parse(realContent);
+			Elements img= doc.select("img");
+			String src =img.attr("src");
+			list.get(i).setContent(src);
+		}
+		return list;
 	}
 	//게시글 목록 아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)
 	@Override
@@ -97,6 +108,13 @@ public class BragServiceImpl implements BragService {
 	@Override
 	public List<BragBoard> bragBest() throws Exception {
 		List<BragBoard> best = bragDAO.bragBest();
+		for(int i=0;i<best.size();i++) {
+			String realContent = best.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
+			Document doc=Jsoup.parse(realContent);
+			Elements img= doc.select("img");
+			String src =img.attr("src");
+			best.get(i).setContent(src);
+		}
 		return best;
 	}
 
