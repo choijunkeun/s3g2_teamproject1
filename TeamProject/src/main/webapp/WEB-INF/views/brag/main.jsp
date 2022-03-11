@@ -49,7 +49,7 @@ td {
 									<a
 										href="brag/viewdetail/${bestbragList[0].articleNo }">
 											${bestbragList[0].title } <br> <img src="${bestbragList[0].content}"
-											name="brag_content" width="200px" height="200px"
+											name="brag_content" width="500px" height="700px"
 											class="card-img-top" />
 									</a></td>
 						</tr>
@@ -69,7 +69,7 @@ td {
 									<td title="${bestbragList[1].title }">
 										<a href="brag/viewdetail/${bestbragList[1].articleNo }">
 											${bestbragList[1].title } <br>
-											<img name="brag_content" width="200px" height="200px"
+											<img name="brag_content"  width="300px" height="300px"
 											class="card-img-top" src=${bestbragList[1].content}
 											 />
 										</a>
@@ -79,7 +79,7 @@ td {
 									<td title="${bestbragList[2].title }"><a
 										href="brag/viewdetail/${bestbragList[2].articleNo }">
 											${bestbragList[2].title } <br> <img src=${bestbragList[2].content}
-											name="brag_content" width="200px" height="200px"
+											name="brag_content" width="300px" height="300px"
 											class="card-img-top" />
 									</a></td>
 						</tr>
@@ -87,16 +87,18 @@ td {
 
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<!-- 2. 글쓰기 버튼-->
+			
+				<!-- 2. 글쓰기 버튼-->
 	<div>
 		<button class="make_btn btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
 			style="float: right; width: 80px; height: 40px;">글쓰기</button>
-
 	</div>
+			
+		</div>
+	</div>
+
+
 
 	<!--3. (일반) 혼밥자랑 게시판 구현 부분. 4개씩 2줄 출력(8개) -->
 	<div>

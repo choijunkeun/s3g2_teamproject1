@@ -88,7 +88,7 @@ public class BragController {
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
-				mav.setViewName("err");
+				mav.setViewName("/main/err");
 			}
 			return mav;
 		}
@@ -220,7 +220,7 @@ public class BragController {
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
-				mav.setViewName("err");
+				mav.setViewName("/main/err");
 			}
 			return mav;
 		}
@@ -270,7 +270,7 @@ public class BragController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("/brag/err");
+			mav.setViewName("/main/err");
 		}
 		return mav;
 	}
@@ -285,7 +285,7 @@ public class BragController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("brag/err");
+			mav.setViewName("main/err");
 		}
 		return mav;
 	}

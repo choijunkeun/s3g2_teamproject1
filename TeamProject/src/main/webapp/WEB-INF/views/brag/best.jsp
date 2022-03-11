@@ -59,7 +59,7 @@ td {
 	<div class="col mt-5">
 		<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
 		<div class="card-body">
-			<table class="200table">
+			<table >
 				<!-- <div class="border mycard" > -->
 				<tr>
 					<c:forEach var="i" begin="1" end="2">
