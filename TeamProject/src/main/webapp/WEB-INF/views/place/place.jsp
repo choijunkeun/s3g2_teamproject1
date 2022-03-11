@@ -119,8 +119,8 @@
 											<h5><strong>${pr.honbabReason }</strong></h5>
 											<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
 												<div class="if-thisArticle-mine text-end">
-													<div class="btn border-dark">수정</div>
-													<div class="btn border-dark">삭제</div>
+													<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
+													<button class="btn border-dark" onclick="deleteReview(${pr.reviewNo});">삭제</button>
 												</div>
 											</c:if>
 										</div>
@@ -164,43 +164,62 @@
 					</c:choose>
 				</section>
 			</div>
-			<script>
-				function writeReview(){
-					let f = document.createElement('form');
-					
-				    f.appendChild(makeInputHiddenObj('id','${place.id}'));
-				    f.appendChild(makeInputHiddenObj('place_name','${place.place_name}'));
-				    f.appendChild(makeInputHiddenObj('category_name','${place.category_name}'));
-				    f.appendChild(makeInputHiddenObj('category_group_code','${place.category_group_code}'));
-				    f.appendChild(makeInputHiddenObj('category_group_name','${place.category_group_name}'));
-				    f.appendChild(makeInputHiddenObj('phone','${place.phone}'));
-				    f.appendChild(makeInputHiddenObj('address_name','${place.address_name}'));
-				    f.appendChild(makeInputHiddenObj('road_address_name','${place.road_address_name}'));
-				    f.appendChild(makeInputHiddenObj('x','${place.x}'));
-				    f.appendChild(makeInputHiddenObj('y','${place.y}'));
-				    f.appendChild(makeInputHiddenObj('place_url','${place.place_url}'));
-				    
-				    
-				    //f.setAttribute('enctype','application/json');
-				    f.setAttribute('method', 'post');
-				    f.setAttribute('action', './review/'+${id});
-				    document.body.appendChild(f);
-				    f.submit();
-				}
-				
-				function makeInputHiddenObj(key, value){
-					let obj = document.createElement('input');
-					obj.setAttribute('type', 'hidden');
-				    obj.setAttribute('name', key);
-				    obj.setAttribute('value', value);
-				    return obj;
-				}
-			</script>
+			
 		</c:when>
 	<c:otherwise>
 		<span>결과를 가져오지 못했습니다. 다시 시도해주세요.</span>
 	</c:otherwise>
 </c:choose>
-
+<script>
+	function mIHObj(key, value){ // makeInputHiddenObject : form 형식 만들기 귀찮아서 만듦
+		let obj = document.createElement('input');
+		obj.setAttribute('type', 'hidden');
+	    obj.setAttribute('name', key);
+	    obj.setAttribute('value', value);
+	    return obj;
+	}
+	function writeReview(){
+		let f = document.createElement('form');
+		
+	    f.appendChild(mIHObj('id','${place.id}'));
+	    f.appendChild(mIHObj('place_name','${place.place_name}'));
+	    f.appendChild(mIHObj('address_name','${place.address_name}'));
+	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
+	    f.appendChild(mIHObj('x','${place.x}'));
+	    f.appendChild(mIHObj('y','${place.y}'));
+	    
+	    
+	    //f.setAttribute('enctype','application/json');
+	    f.setAttribute('method', 'post');
+	    f.setAttribute('action', './review/'+${id});
+	    document.body.appendChild(f);
+	    f.submit();
+	}
+	
+	function editReview(reviewNo){
+		let f = document.createElement('form');
+		
+		alert(reviewNo);
+		f.appendChild(mIHObj('reviewNo', reviewNo));
+	    f.appendChild(mIHObj('id','${place.id}'));
+	    f.appendChild(mIHObj('place_name','${place.place_name}'));
+	    f.appendChild(mIHObj('address_name','${place.address_name}'));
+	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
+	    f.appendChild(mIHObj('x','${place.x}'));
+	    f.appendChild(mIHObj('y','${place.y}'));
+	    
+	    
+	    //f.setAttribute('enctype','application/json');
+	    f.setAttribute('method', 'post');
+	    f.setAttribute('action', './edit/'+${id});
+	    document.body.appendChild(f);
+	    f.submit();
+	}
+				
+	function deleteReview(reviewNo){
+		if(confirm("리뷰를 삭제하시겠습니까?")){
+		}
+	}
+</script>
 </body>
 </html>

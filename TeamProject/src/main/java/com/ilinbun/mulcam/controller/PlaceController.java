@@ -179,9 +179,23 @@ public class PlaceController {
 	
 	@PostMapping("/review/{id}")
 	public ModelAndView reviewForm(@PathVariable String id, @ModelAttribute Place place) {
-		ModelAndView mv = new ModelAndView("place/reviewForm");
+		ModelAndView mv = new ModelAndView("/place/reviewForm");
 		mv.addObject("id", id);
-		mv.addObject("pr", place);
+		mv.addObject("place", place);
+		
+		return mv;
+	}
+	
+	@PostMapping("/edit/{id}")
+	public ModelAndView reviewEdit(@PathVariable String id, 
+			@RequestParam int reviewNo, @ModelAttribute Place place) throws Exception {
+		System.out.println("리뷰글 번호 : " +  reviewNo);
+		ModelAndView mv = new ModelAndView("/place/editReview");
+		//PlaceReview review = placeReviewService.getReview(Integer.parseInt(reviewNo), Integer.parseInt(id));
+		PlaceReview review = placeReviewService.getReview(reviewNo);
+		mv.addObject("id", id);
+		mv.addObject("place", place);
+		mv.addObject("review", review);
 		
 		return mv;
 	}
@@ -271,6 +285,57 @@ public class PlaceController {
 			result = new ResponseEntity<String>("0.0", HttpStatus.OK);
 			//mv.addObject("err", "새 글 등록 실패");
 			//mv.addObject("/board/err");
+		}
+		
+		return result;	
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/editReview")
+	public ResponseEntity<String> editReview(@RequestPart("key") Map<String, String> param,
+			@RequestPart(value="file", required=false) MultipartFile file) {
+		ResponseEntity<String> result = null;
+		
+		try {
+			PlaceReview pr = new PlaceReview( 
+	                Integer.parseInt(param.get("id")), 
+					Integer.parseInt(param.get("user_PK")), 
+					param.get("reviewContent"), 
+					Boolean.parseBoolean(param.get("rejectedCount")), 
+					Integer.parseInt(param.get("honbabLv")), 
+					param.get("honbabReason"), 
+					Double.parseDouble(param.get("interiorRate")), 
+					Double.parseDouble(param.get("serviceRate")),
+					Double.parseDouble(param.get("priceRate")), 
+					Double.parseDouble(param.get("tasteRate"))
+				);
+			pr.setReviewNo(Integer.parseInt(param.get("reviewNo")));
+			boolean fileChange=Boolean.parseBoolean(param.get("fileChange"));
+			if(fileChange && file != null) { // 파일 첨부시 파일 업로드
+				System.out.println("파일 업로드 시도");
+				String path=servletContext.getRealPath("/revimgupload/");
+				System.out.println(path);
+				
+				// 이미지 파일의 이름을 바꿔봅시다
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+				Date now = new Date(); 
+				String nowTime = sdf.format(now);
+				
+				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
+				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
+				file.transferTo(destFile);
+				placeReviewService.updateReviewFilePath(pr);
+			} else if(fileChange && file == null) {
+				pr.setRevImgFilepath(null);
+				placeReviewService.updateReviewFilePath(pr);
+			}
+			
+			System.out.println(placeReviewService.updateReview(pr));
+			result = new ResponseEntity<String>("success", HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
 		}
 		
 		return result;	
