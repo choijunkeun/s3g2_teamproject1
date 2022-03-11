@@ -47,6 +47,14 @@
  		<![CDATA[
  			select * from team2.shareBOARD where articleNo between #{startrow} and #{startrow}+15	
  		]]>
+ 	</select>
+ 	
+ 	<!-- 사용자의 혼밥자랑 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
+	<select id="selectShareBoardByIdx" resultType="Shareboard" parameterType="int">
+ 		<![CDATA[
+ 			select * from shareBOARD where idx=#{idx} order by date desc limit 10
+ 		]]>
 	</select>
+ 	
 
 </mapper>

@@ -118,7 +118,7 @@
     </div>
    <div>
    	<label for="password">비밀번호</label>
-    <input class="input-field" type="text" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
+    <input class="input-field" type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
      </div>
      
      <div>

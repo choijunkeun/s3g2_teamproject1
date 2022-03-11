@@ -22,8 +22,8 @@ public interface PlaceReviewService {
 	Double getHonbabLv(int id) throws Exception;
 	
 	int updateReview(PlaceReview pr) throws Exception;
-	void updateReviewFilePath(PlaceReview pr) throws Exception;
-	void deleteReview(int id) throws Exception;
+	int updateReviewFilePath(PlaceReview pr) throws Exception;
+	int deleteReview(int reviewNo) throws Exception;
 	
 	PlaceReview getReview(int reviewNo) throws Exception;
 }

@@ -23,8 +23,8 @@ public interface PlaceReviewDAO {
 	int selectPRBoardCount(int id) throws Exception;
 	
 	int updateReview(PlaceReview pr) throws Exception;
-	void updateReviewFilePath(PlaceReview pr) throws Exception;
-	void deleteReview(int reviewNo) throws Exception;
+	int updateReviewFilePath(PlaceReview pr) throws Exception;
+	int deleteReview(int reviewNo) throws Exception;
 	
 	Double selectPlaceInteriorRating(int id) throws Exception;
 	Double selectPlacePriceRating(int id) throws Exception;

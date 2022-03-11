@@ -117,6 +117,7 @@
 									<section>
 										<div class="justify-content-between d-flex flex-wrap">
 											<h5><strong>${pr.honbabReason }</strong></h5>
+											<div><input type="checkbox" <c:if test="${pr.rejectedCount}">checked</c:if> onclick="return false;">혼밥 가능 여부</div>
 											<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
 												<div class="if-thisArticle-mine text-end">
 													<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
@@ -199,7 +200,6 @@
 	function editReview(reviewNo){
 		let f = document.createElement('form');
 		
-		alert(reviewNo);
 		f.appendChild(mIHObj('reviewNo', reviewNo));
 	    f.appendChild(mIHObj('id','${place.id}'));
 	    f.appendChild(mIHObj('place_name','${place.place_name}'));
@@ -218,6 +218,16 @@
 				
 	function deleteReview(reviewNo){
 		if(confirm("리뷰를 삭제하시겠습니까?")){
+			let f = document.createElement('form');
+			
+			f.appendChild(mIHObj('reviewNo', reviewNo));
+		    f.appendChild(mIHObj('idx','${user.idx}'));
+		    f.appendChild(mIHObj('id','${place.id}'));
+		   
+		    f.setAttribute('method', 'post');
+		    f.setAttribute('action', './deleteReview');
+		    document.body.appendChild(f);
+		    f.submit();
 		}
 	}
 </script>

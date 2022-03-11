@@ -145,15 +145,15 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 		return placeReviewDAO.updateReview(pr);
 	}
 	
-	public void updateReviewFilePath(PlaceReview pr) throws Exception {
+	public int updateReviewFilePath(PlaceReview pr) throws Exception {
 		// TODO Auto-generated method stub
-		placeReviewDAO.updateReviewFilePath(pr);
+		return placeReviewDAO.updateReviewFilePath(pr);
 	}
 	
 	@Override
-	public void deleteReview(int id) throws Exception {
+	public int deleteReview(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		placeReviewDAO.deleteReview(id);
+		return placeReviewDAO.deleteReview(reviewNo);
 	}
 	
 	@Override
