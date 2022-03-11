@@ -51,23 +51,23 @@ a {
 		
 	<section id="articleContentArea">
 	<section id="basicInfoArea">
-			제 목 : ${article.board_subject }<br>
-			첨부파일 :
-			<c:if test="${article.board_filename!=null }">
-				<a href="file_down?downFile=${article.board_filename}"> ${article.board_filename} </a>
-			</c:if>
-			<br>
-			<a href="./boardlist?page=${page}" style="text-align: left"> ${article.board_name }</a>
-			 조회수 ${article.board_readcount }  작성일 ${article.board_date }
+			제 목 : ${article.title}<br>
+			<%-- 첨부파일 :
+			<c:if test="${article.idx!=null }">
+				<a href="file_down?downFile=${article.idx}"> ${article.idx} </a>
+			</c:if> --%>
+		
+			<a href="./listform?page=${page}" style="text-align: left"> ${article.idx}</a>
+			 조회수 : ${article.views}  작성일 : ${article.date}
 	</section><br><br>
-		${article.board_content }
+		${article.content}
 	</section>
 	</section>
 	<section id="commandList">
-		<a href="replyform?board_num=${article.board_num}&page=${page}"> [답변] </a> 
-		<a href="modifyform?board_num=${article.board_num}"> [수정] </a> 
-		<a href="deleteform?board_num=${article.board_num}&page=${page}"> [삭제] </a>
-		<a href="./boardlist?page=${page}"> [목록]</a>&nbsp;&nbsp;
+		<a href="replyform?articleNo=${article.articleNo}&page=${page}"> [답변] </a> 
+		<a href="modifyform?articleNo=${article.articleNo}"> [수정] </a> 
+		<a href="deleteform?articleNo=${article.articleNo}&page=${page}"> [삭제] </a>
+		<a href="listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
 	</section>
 </body>
 </html>

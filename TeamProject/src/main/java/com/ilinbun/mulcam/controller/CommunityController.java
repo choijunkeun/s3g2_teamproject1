@@ -112,16 +112,19 @@ public class CommunityController {
 	public String commwriteform(@RequestParam String title, @RequestParam String content, @RequestParam int idx,
 			Model model) {
 		try {
-			System.out.println(title+content+idx );
-			
-			
+			//System.out.println(title+content+idx );
 			CommBoard commboard = new CommBoard(idx, title, 0, content);
 			Document doc = Jsoup.parse(commboard.getContent());
-			Elements img = doc.select("img");
+			Elements img = doc.select("img");// 여기에 if 문으로 120~123까지는 묶여야되지 않나 HELP*
+			
+			if(!img.isEmpty()) {
 			String src = img.attr("src");
 			String newSrc = src.substring(src.indexOf("community/fileview/") + ("community/fileview/").length());
 			doc.select("img").attr("src", "/commupload/" + newSrc);
-			System.out.println(doc.select("body > p").toString());
+			//System.out.println(doc.toString());
+			}
+			
+			//System.out.println(doc.select("body > p").toString());
 			commboard.setContent(doc.select("body > p").toString());
 			commService.regCommBoard(commboard);
 		} catch (Exception e) {
@@ -248,7 +251,7 @@ public class CommunityController {
 	// return false;
 	// }
 
-	// 글수정 (내 글일경우가능)
+	// 글수정 (내 글일경우가능)@@@@@@@@@@
 	@GetMapping(value = "/modifyform")
 	public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo) {
 		ModelAndView mav = new ModelAndView();
@@ -278,6 +281,41 @@ public class CommunityController {
 		}
 		return mav;
 	}
+	
+	
+	
+	@GetMapping(value = "deleteform")
+	public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("articleNo", articleNo);
+		mv.addObject("page", page);
+		mv.setViewName("/community/board/deleteform");
+		return mv;
+	}
+
+	@PostMapping(value = "boarddelete")
+	public ModelAndView boarddelete(@RequestParam(value = "articleNo") int articleNo,
+			@RequestParam(value = "board_pass") String boardPass,
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			commService.removeCommBoard(articleNo, boardPass);
+			mv.addObject("page", page);
+			mv.setViewName("redirect:/comm/listform");
+		} catch (Exception e) {
+			e.printStackTrace();
+			mv.addObject("err", e.getMessage());
+			mv.setViewName("/community/board/err");
+		}
+		return mv;
+	}
+	
+	
+	
+	
+	
+	
 
 //		@ResponseBody
 //		@PostMapping("/upload")

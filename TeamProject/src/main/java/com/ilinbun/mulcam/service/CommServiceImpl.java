@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.CommunityDAO;
+import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.CommBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 @Service
 public class CommServiceImpl implements CommService {
 
 	@Autowired
 	CommunityDAO CommunityDAO;
+	
+	@Autowired
+	UserDAO userDAO;
 
 	// [글쓰기Service]
 	// 글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
@@ -29,6 +34,13 @@ public class CommServiceImpl implements CommService {
 		// CommBoard.setDate(Date); 지울까 말까
 
 		CommunityDAO.insertCommBoard(commboard);
+	}
+	
+	
+	
+	@Override
+	public User selectUserDetail(int idx) throws Exception {
+		return userDAO.selectUserDetail(idx);
 	}
 
 	// [글 보기Service]
@@ -102,9 +114,9 @@ public class CommServiceImpl implements CommService {
 
 	// 글삭제
 	@Override
-	public void removeCommBoard(int articleNo) throws Exception {
+	public void removeCommBoard(int articleNo, String boardPass) throws Exception {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 

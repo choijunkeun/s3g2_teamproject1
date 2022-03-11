@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ilinbun.mulcam.dto.CommBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 public interface CommService {
    // 글쓰기 : 글 쓸때, 마지막 articleNo+1해주는 DAO
@@ -31,7 +32,9 @@ public interface CommService {
       CommBoard getCommBoard(int articleNo) throws Exception;
 
       // 게시글 삭제
-      void removeCommBoard(int articleNo) throws Exception;
+      void removeCommBoard(int articleNo, String boardPass) throws Exception;
+
+
 
       // 댓글달기
 //      void regCommReply(CommBoard commboard) throws Exception;
