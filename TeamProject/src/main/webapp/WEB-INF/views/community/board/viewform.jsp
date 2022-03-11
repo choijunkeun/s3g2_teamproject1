@@ -58,7 +58,7 @@ a {
 	</section>
 	</section>
 	<section id="commandList">
-		<a href="/comm/replyform?articleNo=${cboard.articleNo}&page=${page}"> [답변] </a> 
+		<%-- <a href="/comm/replyform?articleNo=${cboard.articleNo}&page=${page}"> [답변] </a>  --%>
 		<a class="onlyWriter" href="/comm/modifyform?articleNo=${cboard.articleNo}"> [수정] </a> 
 		<a class="onlyWriter" href="/comm/deleteform?articleNo=${cboard.articleNo}&page=${page}"> [삭제] </a>
 		<a href="/comm/listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
@@ -66,11 +66,21 @@ a {
 </body>
 <script>
 $(function() {
-	let loginIdx = ${user.idx};
-	let writerIdx = ${cboard.idx};
-	if (loginIdx != writerIdx) {
-		$('.onlyWriter').css("display", "none");
+	
+	let writerIdx = ${cboard.idx}; //작성자 정보
+	let isLogined = ${user != null} // 로그인 유무
+	
+	$('.onlyWriter').css("display", "none"); // 일단 안보이게
+	
+	let loginIdx = `${user == null ? "" : user.idx}`; // 로그인 한 사용자 정보
+	
+	console.log(loginIdx);
+	let isAdmin = ${user.grp == 2 }	// 로그인한 사용자가 관리자인지
+
+	if ((loginIdx == writerIdx) || isAdmin) { // 만약에 작성자와 로그인한 사용자가 같거나 ,,, 관리자 라면
+		$('.onlyWriter').css("display", "inline-block");	// 보이게 
 	}
 })
+
 </script>
 </html>

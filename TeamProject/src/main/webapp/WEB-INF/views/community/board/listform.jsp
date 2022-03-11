@@ -88,18 +88,7 @@ table {
 					</tr>
 
 					<c:forEach var="article" items="${commList }">
-							<%-- 				<td>${article.art }</td>
-							<td><c:choose>
-									<c:when test="${article.board_re_lev!=0}">
-										<!-- 레벨 0 -->
-										<c:forEach var="i" begin="0" end="${article.board_re_lev*2}">
-											<!-- 댓글에는 레벨이 있음 레벨이 0이 아니면 2개씩 들여쓰기 -->
-							&nbsp;                   <!-- 들여쓰기를 위한 코드 -->
-										</c:forEach>
-						▶
-					</c:when>
-									<c:otherwise>▶</c:otherwise>
-								</c:choose> --%>
+		
 						<tr>
 							<td><a href="./community/viewform/${article.articleNo}">${article.articleNo}</a></td>
 							<td><a href="./community/viewform/${article.articleNo}">${article.title}</a></td>
@@ -157,7 +146,7 @@ table {
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 	<script>
 /*수정요. 비회원 클릭 시 로그인으로 넘어감. 세션값 필요  */
-	console.log(${pageInfo.page});
+//	console.log(${pageInfo.page});
 	// $(function(){
 // 	$("#todayMake").click(function(){
 // 		let id = $('#user_id').val();

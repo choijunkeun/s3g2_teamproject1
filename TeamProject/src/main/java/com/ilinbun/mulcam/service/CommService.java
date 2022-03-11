@@ -32,7 +32,7 @@ public interface CommService {
       CommBoard getCommBoard(int articleNo) throws Exception;
 
       // 게시글 삭제
-      void removeCommBoard(int articleNo, String boardPass) throws Exception;
+      void removeCommBoard(int articleNo) throws Exception;
 
       User selectUserDetail(int idx) throws Exception;
 

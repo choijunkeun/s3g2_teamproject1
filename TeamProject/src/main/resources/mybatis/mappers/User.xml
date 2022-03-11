@@ -41,6 +41,12 @@
     	]]>
     </select>
     
-    
+    <!-- 글쓰기 수정 -->
+    <update id="updateBoard" parameterType="commboard">
+		<![CDATA[
+			update Comm_board set title=#{title},content=#{content}
+			where articleNo=#{articleNo}
+		]]>
+	</update>
 
 </mapper>

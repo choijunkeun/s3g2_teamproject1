@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8"> 
-<title>MVC 게시판</title>
+<title>커뮤니티</title>
 <style>
 
 	#passForm{
@@ -22,15 +22,15 @@
 <table>
 <tr>
 	<td>
-		<label>글 비밀번호 : </label>
+		<label>정말 삭제하시겠습니까?<br>삭제된 글은 복구 할 수 없습니다. </label>
 	</td>
-	<td>
+	<!-- <td>
 		<input name="board_pass" type="password">
-	</td>
+	</td> -->
 </tr>
 <tr>
 	<td>
-		<input type="submit" value = "삭제"/>
+		<input type="submit"  value = "삭제"/>
 		&nbsp;&nbsp;
 		<input type = "button" value = "돌아가기" onClick ="javascript:history.go(-1)"/>
 	</td>

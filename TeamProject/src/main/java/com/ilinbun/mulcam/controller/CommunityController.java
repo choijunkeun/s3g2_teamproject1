@@ -81,11 +81,6 @@ public class CommunityController {
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("commList", commList);
 				mav.setViewName("community/board/listform");
-				
-				
-		
-				
-				
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
@@ -272,11 +267,11 @@ public class CommunityController {
 		try {
 			CommBoard commboard = commService.getArticleNo(articleNo);
 			mav.addObject("article", commboard);
-			mav.setViewName("community/modifyform");
+			mav.setViewName("community/board/modifyform");
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("/community/err");
+			mav.setViewName("community/board/err");
 		}
 		return mav;
 	}
@@ -287,11 +282,11 @@ public class CommunityController {
 		try {
 			commService.modifyCommBoard(commboard);
 			mav.addObject("articleNo", commboard.getArticleNo());
-			mav.setViewName("redirect:/community/viewform");
+			mav.setViewName("redirect:/comm/community/viewform/{articleNo}");
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("community/err");
+			mav.setViewName("community/board/err");
 		}
 		return mav;
 	}
@@ -310,11 +305,11 @@ public class CommunityController {
 
 	@PostMapping(value = "boarddelete")
 	public ModelAndView boarddelete(@RequestParam(value = "articleNo") int articleNo,
-			@RequestParam(value = "board_pass") String boardPass,
+			/* @RequestParam(value = "board_pass") String boardPass, */
 			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			commService.removeCommBoard(articleNo, boardPass);
+			commService.removeCommBoard(articleNo);
 			mv.addObject("page", page);
 			mv.setViewName("redirect:/comm/listform");
 		} catch (Exception e) {
