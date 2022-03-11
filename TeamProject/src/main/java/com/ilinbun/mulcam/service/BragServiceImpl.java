@@ -2,12 +2,17 @@ package com.ilinbun.mulcam.service;
 
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
+import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 @Service
 public class BragServiceImpl implements BragService {
@@ -15,6 +20,9 @@ public class BragServiceImpl implements BragService {
 	
 	@Autowired
 	BragDAO bragDAO;
+	
+	@Autowired
+	UserDAO userDAO;
 
 	//[글쓰기Service]
 	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
@@ -44,6 +52,11 @@ public class BragServiceImpl implements BragService {
 		bragDAO.updateReadCount(articleNo);
 		return bragDAO.selectBragBoard(articleNo);
 	}
+	//글보기, 글목록시 유저의 정보 가져오는거 
+	@Override
+	public User selectUserDetail(int idx) throws  Exception {
+		return userDAO.selectUserDetail(idx);
+	}
 
 
 	//[글 목록Service]
@@ -57,7 +70,15 @@ public class BragServiceImpl implements BragService {
 	@Override
 	public List<BragBoard> getBragboardList(int page) throws Exception {
 		int startrow=(int) ((page-1)*16+1);
-		return bragDAO.selectBragBoardList(startrow);
+		List<BragBoard> list = bragDAO.selectBragBoardList(startrow);
+		for(int i=0;i<list.size();i++) {
+			String realContent = list.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
+			Document doc=Jsoup.parse(realContent);
+			Elements img= doc.select("img");
+			String src =img.attr("src");
+			list.get(i).setContent(src);
+		}
+		return list;
 	}
 	//게시글 목록 아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)
 	@Override
@@ -87,6 +108,13 @@ public class BragServiceImpl implements BragService {
 	@Override
 	public List<BragBoard> bragBest() throws Exception {
 		List<BragBoard> best = bragDAO.bragBest();
+		for(int i=0;i<best.size();i++) {
+			String realContent = best.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
+			Document doc=Jsoup.parse(realContent);
+			Elements img= doc.select("img");
+			String src =img.attr("src");
+			best.get(i).setContent(src);
+		}
 		return best;
 	}
 

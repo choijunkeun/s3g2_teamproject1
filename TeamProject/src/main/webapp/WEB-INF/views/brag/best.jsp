@@ -9,7 +9,27 @@
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 <script type="text/javascript"
 	src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style>
 
+
+/* 400 x 600 size 사진 */
+
+/* 
+/* 200 x 200 size 사진 */
+.200table{
+	width: 800px;
+	table-layout: fixed;
+	border-spacing: 100px;
+} */
+/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
+td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100px;
+	height: 20px;
+}
+</style>
 </head>
 <body>
 	<!-- <a></a> BEST게시판 이동 링크 -->
@@ -25,32 +45,31 @@
 		
 		
 		<div class="col mt-5">
-			<div class="card p-4">
+			<div class="card p-4" style="width: 400px; height: 600px;">
 				<h5 class="fw-bolder">이달의혼밥</h5>
 			<div class="card-body">
 				<a href="./viewdetail/${bestbragList[0].articleNo }">
 					${bestbragList[0].title } <br> <img class="card-img-top"
-					src="${bestbragList[0].content}" name="brag_content" width="300px"
-					height="450px" class="card-img-top" />
+					src="${bestbragList[0].content}" name="brag_content" width="100%"/>
 				</a>
 			</div>
-
 		</div>
 	</div>
 
 	<div class="col mt-5">
 		<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
 		<div class="card-body">
-			<table>
+			<table class="200table">
 				<!-- <div class="border mycard" > -->
 				<tr>
 					<c:forEach var="i" begin="1" end="2">
-						<td title="${bestbragList[i].title }"><a
-							href="./viewdetail/${bestbragList[i].articleNo }">
-								${bestbragList[i].title } <br> <img
-								src="${bestbragList[i].content}" name="brag_content"
-								width="200px" height="200px" class="card-img-top" />
-						</a></td>
+						<td title="${bestbragList[i].title }">
+							<a href="./viewdetail/${bestbragList[i].articleNo }">
+								${bestbragList[i].title } <br>
+								<img name="brag_content"
+								width="200px" height="200px" class="card-img-top" src=`${bestbragList[i].content}` />
+							</a>
+						</td>
 					</c:forEach>
 				</tr>
 				<tr>
@@ -80,7 +99,7 @@
 	</div>
 	</div>
 	<div class="card-body">
-		<table>
+		<table class="200table">
 			<!-- <div class="border mycard" > -->
 			<tr>
 				<c:forEach var="i" begin="7" end="10">
@@ -94,6 +113,16 @@
 			</tr>
 			<tr>
 				<c:forEach var="i" begin="11" end="14">
+					<td title="${bestbragList[i].title }"><a
+						href="./viewdetail/${bestbragList[i].articleNo }">
+							${bestbragList[i].title } <br> <img
+							src="${bestbragList[i].content}" name="brag_content"
+							width="200px" height="200px" class="card-img-top" />
+					</a></td>
+				</c:forEach>
+			</tr>
+			<tr>
+				<c:forEach var="i" begin="15" end="20">
 					<td title="${bestbragList[i].title }"><a
 						href="./viewdetail/${bestbragList[i].articleNo }">
 							${bestbragList[i].title } <br> <img

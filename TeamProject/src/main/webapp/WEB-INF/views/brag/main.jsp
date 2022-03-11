@@ -8,6 +8,23 @@
 <meta charset="UTF-8">
 <title>혼밥자랑 메인</title>
 
+<style>
+
+/* /* 200 x 200 size 사진 */
+.200table{
+	width: 800px;
+	table-layout: fixed;
+	border-spacing: 100px;
+} */
+/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
+td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100px;
+	height: 20px;
+}
+</style>
 </head>
 <body>
 	<!-- 수정요. 컨텐츠 빼는 태그 -->
@@ -28,7 +45,8 @@
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[0].title }"><a
+									<td title="${bestbragList[0].title }">
+									<a
 										href="brag/viewdetail/${bestbragList[0].articleNo }">
 											${bestbragList[0].title } <br> <img src="${bestbragList[0].content}"
 											name="brag_content" width="200px" height="200px"
@@ -48,17 +66,19 @@
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[1].title }"><a
-										href="brag/viewdetail/${bestbragList[1].articleNo }">
-											${bestbragList[1].title } <br> <img src="${bestbragList[1].content}"
-											name="brag_content" width="200px" height="200px"
-											class="card-img-top" />
-									</a></td>
+									<td title="${bestbragList[1].title }">
+										<a href="brag/viewdetail/${bestbragList[1].articleNo }">
+											${bestbragList[1].title } <br>
+											<img name="brag_content" width="200px" height="200px"
+											class="card-img-top" src=${bestbragList[1].content}
+											 />
+										</a>
+									</td>
 						</tr>
 							<tr>
 									<td title="${bestbragList[2].title }"><a
 										href="brag/viewdetail/${bestbragList[2].articleNo }">
-											${bestbragList[2].title } <br> <img src="${bestbragList[2].content}"
+											${bestbragList[2].title } <br> <img src=${bestbragList[2].content}
 											name="brag_content" width="200px" height="200px"
 											class="card-img-top" />
 									</a></td>
@@ -86,7 +106,7 @@
 					<a href="/brag/brag"><h5 class="fw-bolder">혼밥자랑</h5></a>
 				</div>
 				<div class="card-body">
-					<table>
+					<table class="200table">
 						<!-- <div class="border mycard" > -->
 						<tr>
 							<c:forEach var="bboard" items="${bragList}" varStatus="status">

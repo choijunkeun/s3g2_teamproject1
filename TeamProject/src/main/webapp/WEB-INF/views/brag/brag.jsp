@@ -30,12 +30,13 @@
 /* image {
 background-size:contain;
 } */
+/* 200 x 200 size 사진 */
 table {
 	width: 800px;
 	table-layout: fixed;
 	border-spacing: 100px;
 }
-
+/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
 td {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -111,6 +112,7 @@ td {
 
 										</c:forEach>
 									</tr>
+								
 								</table>
 							</div>
 						</div>

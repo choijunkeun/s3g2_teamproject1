@@ -174,6 +174,7 @@ label.star:before {
 		<div>
 			<div class="container pb-3 bg-light" class="outer">
 				<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
+				<h1>${imgnullmsg != null ? imgnullmsg : "" }</h1>
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
 				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
 					<div>
