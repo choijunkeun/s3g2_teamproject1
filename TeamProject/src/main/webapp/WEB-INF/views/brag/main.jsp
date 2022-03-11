@@ -45,7 +45,8 @@ td {
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[0].title }"><a
+									<td title="${bestbragList[0].title }">
+									<a
 										href="brag/viewdetail/${bestbragList[0].articleNo }">
 											${bestbragList[0].title } <br> <img src="${bestbragList[0].content}"
 											name="brag_content" width="200px" height="200px"
@@ -65,17 +66,19 @@ td {
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[1].title }"><a
-										href="brag/viewdetail/${bestbragList[1].articleNo }">
-											${bestbragList[1].title } <br> <img src="${bestbragList[1].content}"
-											name="brag_content" width="200px" height="200px"
-											class="card-img-top" />
-									</a></td>
+									<td title="${bestbragList[1].title }">
+										<a href="brag/viewdetail/${bestbragList[1].articleNo }">
+											${bestbragList[1].title } <br>
+											<img name="brag_content" width="200px" height="200px"
+											class="card-img-top" src=${bestbragList[1].content}
+											 />
+										</a>
+									</td>
 						</tr>
 							<tr>
 									<td title="${bestbragList[2].title }"><a
 										href="brag/viewdetail/${bestbragList[2].articleNo }">
-											${bestbragList[2].title } <br> <img src="${bestbragList[2].content}"
+											${bestbragList[2].title } <br> <img src=${bestbragList[2].content}
 											name="brag_content" width="200px" height="200px"
 											class="card-img-top" />
 									</a></td>

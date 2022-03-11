@@ -41,7 +41,6 @@
 			select idx, email, nickname, honbabLevel from User where idx=#{idx} 
     	]]>
 	</select>
-    
-    
+	
 
 </mapper>

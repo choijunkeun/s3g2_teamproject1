@@ -55,8 +55,7 @@
 			SELECT * FROM honbab order by readCount desc LIMIT 30
 		]]>
 	</select>
-
-
+	
 
 
 	<!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
