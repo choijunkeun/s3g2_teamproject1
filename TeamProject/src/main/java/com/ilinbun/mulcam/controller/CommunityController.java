@@ -38,6 +38,7 @@ import com.ilinbun.mulcam.dto.CommBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.CommService;
+import com.ilinbun.mulcam.service.UserService;
 
 @Controller
 @RequestMapping("/comm")
@@ -48,6 +49,9 @@ public class CommunityController {
 	@Autowired
 	private CommService commService;
 
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private ServletContext servletContext;
 
@@ -77,6 +81,11 @@ public class CommunityController {
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("commList", commList);
 				mav.setViewName("community/board/listform");
+				
+				
+		
+				
+				
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
@@ -201,19 +210,24 @@ public class CommunityController {
 	// 게시글보기 (viewDetail.jsp)
 	@GetMapping("/community/viewform/{articleNo}")
 	public ModelAndView boardDetail(@PathVariable int articleNo) {
-		User userinfo = (User) session.getAttribute("user"); //same
 		ModelAndView mav = new ModelAndView();
 		try {
 			commboard = commService.getCommBoard(articleNo); // 내가쓴글, 남이쓴글 확인
-			mav.addObject("user", userinfo);
 			mav.addObject("cboard", commboard);
-
+			
 			Document doc = Jsoup.parse(commboard.getContent()); // content중에 사진만 가져오기
 			Elements img = doc.select("img"); // 우선 무수한 요소 중 img만 추출
 			String src = img.attr("src"); // String으로 변환
 
 			mav.addObject("imgSrc", src); // mav에 넣기
 			mav.setViewName("community/board/viewform"); // 경로이름 설정
+			
+			int idx = commboard.getIdx();
+			String nickname = userService.getUserNick(idx);
+			// 리턴타입 String, 파라미터타입 int
+			// select 닉네임 from 유저테이블 where idx=#{idx}
+			mav.addObject("nickname", nickname);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());

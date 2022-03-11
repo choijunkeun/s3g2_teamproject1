@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService {
 		} else return null;
 	}
 
+	@Override
+	public String getUserNick(int idx) throws Exception {
+		return userDAO.getUserNick(idx);
+	}
+
 }

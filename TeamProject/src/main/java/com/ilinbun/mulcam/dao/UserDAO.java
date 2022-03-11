@@ -21,6 +21,11 @@ public interface UserDAO {
 	//로그인
 	User login(String nickname) throws Exception;
 
+	//user 불러오기
+	User selectUserDetail(int idx) throws Exception;
+
+	String getUserNick(int idx) throws Exception;
+
 	
 	
 	

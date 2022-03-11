@@ -34,6 +34,8 @@ public interface CommService {
       // 게시글 삭제
       void removeCommBoard(int articleNo, String boardPass) throws Exception;
 
+      User selectUserDetail(int idx) throws Exception;
+
 
 
       // 댓글달기

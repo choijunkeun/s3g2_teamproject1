@@ -35,6 +35,12 @@
     	]]>
     </select>
     
+    <select id="getUserNick" resultType="String" parameterType="int">
+    	<![CDATA[
+    	select nickname from user where idx=#{idx}     	
+    	]]>
+    </select>
+    
     
 
 </mapper>

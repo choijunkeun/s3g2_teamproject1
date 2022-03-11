@@ -51,23 +51,26 @@ a {
 		
 	<section id="articleContentArea">
 	<section id="basicInfoArea">
-			제 목 : ${article.title}<br>
-			<%-- 첨부파일 :
-			<c:if test="${article.idx!=null }">
-				<a href="file_down?downFile=${article.idx}"> ${article.idx} </a>
-			</c:if> --%>
-		
-			<a href="./listform?page=${page}" style="text-align: left"> ${article.idx}</a>
-			 조회수 : ${article.views}  작성일 : ${article.date}
+			제 목 : ${cboard.title}<br>
+			작성자 : ${nickname}  작성일 : ${cboard.date} 조회수 : ${cboard.views}
 	</section><br><br>
-		${article.content}
+		${cboard.content}
 	</section>
 	</section>
 	<section id="commandList">
-		<a href="replyform?articleNo=${article.articleNo}&page=${page}"> [답변] </a> 
-		<a href="modifyform?articleNo=${article.articleNo}"> [수정] </a> 
-		<a href="deleteform?articleNo=${article.articleNo}&page=${page}"> [삭제] </a>
-		<a href="listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
+		<a href="/comm/replyform?articleNo=${cboard.articleNo}&page=${page}"> [답변] </a> 
+		<a class="onlyWriter" href="/comm/modifyform?articleNo=${cboard.articleNo}"> [수정] </a> 
+		<a class="onlyWriter" href="/comm/deleteform?articleNo=${cboard.articleNo}&page=${page}"> [삭제] </a>
+		<a href="/comm/listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
 	</section>
 </body>
+<script>
+$(function() {
+	let loginIdx = ${user.idx};
+	let writerIdx = ${cboard.idx};
+	if (loginIdx != writerIdx) {
+		$('.onlyWriter').css("display", "none");
+	}
+})
+</script>
 </html>
