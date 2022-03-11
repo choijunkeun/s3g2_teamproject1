@@ -26,8 +26,6 @@ td {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 100px;
-	height: 20px;
 }
 </style>
 </head>
@@ -59,7 +57,8 @@ td {
 	<div class="col mt-5">
 		<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
 		<div class="card-body">
-			<table >
+		<div  class="text-center"></div>
+			<table class="200table">
 				<!-- <div class="border mycard" > -->
 				<tr>
 					<c:forEach var="i" begin="1" end="2">
@@ -93,6 +92,7 @@ td {
 					</c:forEach>
 				</tr>
 			</table>
+			</div>
 
 		</div>
 

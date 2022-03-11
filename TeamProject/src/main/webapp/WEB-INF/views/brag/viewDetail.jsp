@@ -171,10 +171,26 @@ label.star:before {
 	<br> 지금 보려는 글 정보
 	<br> 글 제목 : ${bboard.title }
 	<br> 글 내용 : ${bboard.content }
-	<br> 글 이미지 파일명: ${imgSrc } 글 작성자 번호 : ${bboard.idx }
+	<br> 
+	<div "style=width: 200px; height: 200px;"글 이미지 파일명: ${imgSrc }> </div>
+	
+	
+	글 작성자 번호 : ${bboard.idx }
 	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
 
-
+	<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
+	<div class="row py-3">
+		<div class="col text-center">
+			<c:if test="${user.idx == bboard.idx || user.grp == 2 }">
+				<div class="if-thisArticle-mine text-end">
+					<button class="btn border-dark"
+						onclick="editReview(${bboard.articleNo})">수정</button>
+					<button class="btn border-dark"
+						onclick="deleteWrite(${bboard.articleNo});">삭제</button>
+				</div>
+			</c:if>
+		</div>
+	</div>
 
 
 	<!-- JavaScript -->
@@ -192,6 +208,40 @@ label.star:before {
 		   	console.error(error);
 		    });
 		});
+	/*수정버튼 누르면~  */
+	function editWrite(articleNo){
+		let f = document.createElement('form');
+		
+		f.appendChild(mIHObj('reviewNo', reviewNo));
+	    f.appendChild(mIHObj('id','${place.id}'));
+	    f.appendChild(mIHObj('place_name','${place.place_name}'));
+	    f.appendChild(mIHObj('address_name','${place.address_name}'));
+	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
+	    f.appendChild(mIHObj('x','${place.x}'));
+	    f.appendChild(mIHObj('y','${place.y}'));
+	    
+	    
+	    //f.setAttribute('enctype','application/json');
+	    f.setAttribute('method', 'post');
+	    f.setAttribute('action', './edit/'+${id});
+	    document.body.appendChild(f);
+	    f.submit();
+	}
+	
+	/*삭제버튼 누르면~  */
+	function deleteWrite(articleNo){
+		if(confirm("게시글을 삭제하시겠습니까?")){
+			let f = document.createElement('form');
+			
+			f.appendChild(mIHObj('articleNo', reviewNo));
+		    f.appendChild(mIHObj('idx','${user.idx}'));
+		   
+		    f.setAttribute('method', 'post');
+		    f.setAttribute('action', './deleteWrite');
+		    document.body.appendChild(f);
+		    f.submit();
+		}
+	}
 	
 
 </script>

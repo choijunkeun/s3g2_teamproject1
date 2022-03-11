@@ -136,10 +136,10 @@ public class BragServiceImpl implements BragService {
 	}
 	//글삭제
 	@Override
-	public void removeBragBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public int deleteWrite(int articleNo) throws Exception {
+		return bragDAO.deleteWrite(articleNo);
 	}
+	
 
 	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글(준근) 
 	@Override

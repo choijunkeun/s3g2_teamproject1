@@ -152,7 +152,6 @@
 					<a href="javascript:window.history.back();" style="text-decoration: none; color: black;">
 						<i class="fa fa-angle-left"></i> <strong>${place.place_name }</strong></a>
 				</h2>
-				<p>${place.address_name}</p>
 			</div>
 			<!-- <div class="placeImgSection">
 				<img src="#">
@@ -367,7 +366,6 @@
 				var data = {
 			        "id":$('#id').val(),
 			        "user_PK":$('#user_PK').val(),
-			        "reviewContent":$('#reviewContent').val(),
 			        "rejectedCount":($('input[name="rejectedCount"]:checked').val() != null)? $('input[name="rejectedCount"]:checked').val() : "false",
 			        "honbabReason":$('#honbabReason').val(),
 			        "honbabLv":$('input[name="honbabLv"]:checked').val(),

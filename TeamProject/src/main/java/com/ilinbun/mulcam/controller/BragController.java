@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 
@@ -291,22 +294,25 @@ public class BragController {
 	}
 
 	// 글삭제 (내 글일경우가능)
-//		@PostMapping(value="bragdelete")
-//		public ModelAndView bragdelete(@RequestParam(value="board_num")int boardNum,
-//				@RequestParam(value="page")int page, @RequestParam(value="board_pass")String boardPass) {
-//			ModelAndView mav=new ModelAndView();
-//			try {
-//				boardService.removeBoard(boardNum, boardPass);
-//				mav.addObject("page", page);
-//				mav.setViewName("redirect:brag/{$ }");
-//			} catch(Exception e) {
-//				e.printStackTrace();
-//				mav.addObject("err", e.getMessage());
-//				mav.setViewName("brag/err");
-//			}
-//			return mav;
-//		}
-//		
+		@ResponseBody
+		@PostMapping(value="deleteWrite")
+		public ResponseEntity<String> editReview(@RequestParam int articleNo, @RequestParam String idx) {
+			ResponseEntity<String> result = null;
+			
+			try {
+				BragBoard target = bragService.getBragBoard(articleNo);
+				if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
+				bragService.deleteWrite(articleNo);
+				String html = "<script>alert('삭제 완료'); window.location = \"/search\"</script>";
+				result = new ResponseEntity<String>(html , HttpStatus.OK);
+			} catch(Exception e) {
+				e.printStackTrace();
+				result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+			}
+			
+			return result;	
+		}
+		
 
 //		//detail에서 답변을 눌렀을 때 화면 전환 (댓글로 변경하기)
 //		@GetMapping(value="replyform")

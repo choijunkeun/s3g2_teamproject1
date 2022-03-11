@@ -36,7 +36,7 @@ public interface BragService {
 	BragBoard getBragBoard(int articleNo) throws Exception;
 
 	// 게시글 삭제
-	void removeBragBoard(int articleNo) throws Exception;
+	int deleteWrite(int articleNo) throws Exception;
 
 	
 	// 마이페이지에 사용자의 혼밥자랑 게시글 출력(준근)

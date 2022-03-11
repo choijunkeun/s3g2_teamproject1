@@ -66,7 +66,7 @@
 	</update>
 	<!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
 		할 것인가 -->
-	<delete id="deleteBragBoard" parameterType="int">
+	<delete id="deleteWrite" parameterType="int">
 		<![CDATA[
 		delete from honbab where articleNo=#{articleNo}
 		 ]]>

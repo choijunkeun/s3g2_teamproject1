@@ -41,7 +41,7 @@ public interface BragDAO {
 	// 글수정(modifyForm) 시 하나의 글 정보를 select하는 DAO
 	BragBoard selectBragBoard(int articleNo) throws Exception;
 	// 글삭제
-	void deleteBragBoard(int articleNo) throws Exception;
+	int deleteWrite(int articleNo) throws Exception;
 	
 	// 아마 댓글관련 DAO
 	void updateBragBoardReSeq(BragBoard bragboard) throws Exception;

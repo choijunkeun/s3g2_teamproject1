@@ -10,19 +10,21 @@
 
 <style>
 
-/* /* 200 x 200 size 사진 */
+/* 200 x 200 size 사진 */
 .200table{
 	width: 800px;
 	table-layout: fixed;
 	border-spacing: 100px;
-} */
+} 
 /* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
 td {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 100px;
-	height: 20px;
+}
+.450300tr {
+width : 450px !important;
+height : 300px !important;
 }
 </style>
 </head>
@@ -46,12 +48,11 @@ td {
 						<!-- <div class="border mycard" > -->
 						<tr>
 									<td title="${bestbragList[0].title }">
-									<a
-										href="brag/viewdetail/${bestbragList[0].articleNo }">
-											${bestbragList[0].title } <br> <img src="${bestbragList[0].content}"
-											name="brag_content" width="500px" height="700px"
-											class="card-img-top" />
-									</a></td>
+									<a href="brag/viewdetail/${bestbragList[0].articleNo }">
+									${bestbragList[0].title } <br>
+									<img src="${bestbragList[0].content}" name="brag_content" width="500px" height="700px"
+									class="card-img-top" /></a>
+									</td>
 						</tr>
 						</table>
 				</div>
@@ -69,17 +70,15 @@ td {
 									<td title="${bestbragList[1].title }">
 										<a href="brag/viewdetail/${bestbragList[1].articleNo }">
 											${bestbragList[1].title } <br>
-											<img name="brag_content"  width="300px" height="300px"
-											class="card-img-top" src=${bestbragList[1].content}
-											 />
-										</a>
+											<img src="${bestbragList[1].content}" name="brag_content"  width="450px" height="300px"
+											class="card-img-top"/></a>
 									</td>
 						</tr>
 							<tr>
-									<td title="${bestbragList[2].title }"><a
-										href="brag/viewdetail/${bestbragList[2].articleNo }">
-											${bestbragList[2].title } <br> <img src=${bestbragList[2].content}
-											name="brag_content" width="300px" height="300px"
+									<td title="${bestbragList[2].title }">
+									<a href="brag/viewdetail/${bestbragList[2].articleNo }">
+											${bestbragList[2].title } <br> 
+											<img src="${bestbragList[2].content}" name="brag_content" width="450px" height="300px"
 											class="card-img-top" />
 									</a></td>
 						</tr>

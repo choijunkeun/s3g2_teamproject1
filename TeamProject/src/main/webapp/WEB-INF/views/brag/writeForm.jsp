@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -176,9 +177,10 @@ label.star:before {
 				<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
 				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
+			<!-- <form id="bwForm"> -->
+			<input type="hidden" name="idx" id="idx" value="${user.idx }"> 
+			<!-- 목업 유저정보 코드 -> ??? -->
 					<div>
-						<!-- 수정요. session값 받아오는 코드. session, user와 함께 수정요.  -->
-						<input type="hidden" id="idx" name="idx" value=${user.idx }>
 						<div class="container p-2 ">
 							<div class="col text-center ">
 								<div class="d-flex flex-wrap">
@@ -213,7 +215,7 @@ label.star:before {
 											<td>
 												<!--3. 제목  -->
 												<div>
-													<input name="title" id="title" size="55%"
+													<input type="text" name="title" id="title" size="55%"
 														placeholder="제목을 입력해주세요!" required="required">
 												</div>
 											</td>
@@ -236,13 +238,18 @@ label.star:before {
 								<div class="col text-center">
 									<!-- 수정요. 취소버튼 누르면 원래 있던 목록 화면으로 돌아가기  -->
 									<button type="button" class="btn border bd-secondary"
-										id="write_cancel" name="write_cancel">취소</button>
+										id="writeFormCancel" name="write_cancel">취소</button>
 									<input type="submit" class="btn border bd-secondary"
-										id="write_post" name="write_post" value="전송" />
+										id="writeFormSubmit" name="write_post" value="전송" />
 								</div>
 							</div>
+							
+							
+							
+							
 						</div>
 					</div>
+					
 				</form>
 			</div>
 		</div>
@@ -285,6 +292,54 @@ label.star:before {
 		});
 	
 	
+/*5-1. 완료 버튼 누르면 빈 공간 alert 및 작성 후 alert 부분  
+	$('#writeFormSubmit').click(function(){
+		if($('input[name="moonpa"]:checked').val() == null){
+			alert('사먹었나요? 해먹었나요? 문파를 선택해 주세요')
+		} else if($('#location').val() == null){
+			alert('위치를 입력해 주세요')
+		} else if($('#title').val() == null){
+			alert('제목을 입력해주세요')
+		} else if($('#content ').val() == null){
+			alert('내용을 입력해주세요')
+		} else{
+			var formData = new FormData();
+			var data = {
+				"moonpa":$('input[name="moonpa"]:checked').val(),
+		        "location":$('#location').val(),
+		        "title":$('#title').val(),
+		        "content":$('#content').val(),
+		    };
+
+		    formData.append("file",$('#file')[0].files[0]);
+		    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"})); 
+			
+			$.ajax({
+				url:"./writeForm"
+				type:"post",
+				enctype: 'multipart/form-data',		
+				processData: false, 
+				contentType: false,
+				data: formData,
+				cache: false,
+				async:false,
+		        timeout: 600000,  
+				success:function(data, textStatus) {
+					alert("리뷰가 작성되었습니다.");
+			location.href = "../${place.id}?place_name=" + encodeURI("${place.place_name}"); 
+				},
+				error: function(data, textStatus){
+					alert("리뷰 작성 오류");
+					return false; 
+				}
+			});
+			
+		}
+		return false;
+	});
+	 */
+
+	 
 </script>
 </body>
 </html>
