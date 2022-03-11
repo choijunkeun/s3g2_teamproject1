@@ -8,6 +8,23 @@
 <meta charset="UTF-8">
 <title>혼밥자랑 메인</title>
 
+<style>
+
+/* /* 200 x 200 size 사진 */
+.200table{
+	width: 800px;
+	table-layout: fixed;
+	border-spacing: 100px;
+} */
+/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
+td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100px;
+	height: 20px;
+}
+</style>
 </head>
 <body>
 	<!-- 수정요. 컨텐츠 빼는 태그 -->
@@ -86,7 +103,7 @@
 					<a href="/brag/brag"><h5 class="fw-bolder">혼밥자랑</h5></a>
 				</div>
 				<div class="card-body">
-					<table>
+					<table class="200table">
 						<!-- <div class="border mycard" > -->
 						<tr>
 							<c:forEach var="bboard" items="${bragList}" varStatus="status">

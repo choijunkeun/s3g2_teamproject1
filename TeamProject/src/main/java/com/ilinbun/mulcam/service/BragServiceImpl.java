@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
+import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 @Service
 public class BragServiceImpl implements BragService {
@@ -15,6 +17,9 @@ public class BragServiceImpl implements BragService {
 	
 	@Autowired
 	BragDAO bragDAO;
+	
+	@Autowired
+	UserDAO userDAO;
 
 	//[글쓰기Service]
 	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
@@ -43,6 +48,11 @@ public class BragServiceImpl implements BragService {
 	public BragBoard getArticleNo(int articleNo) throws Exception {
 		bragDAO.updateReadCount(articleNo);
 		return bragDAO.selectBragBoard(articleNo);
+	}
+	//글보기, 글목록시 유저의 정보 가져오는거 
+	@Override
+	public User selectUserDetail(int idx) throws  Exception {
+		return userDAO.selectUserDetail(idx);
 	}
 
 

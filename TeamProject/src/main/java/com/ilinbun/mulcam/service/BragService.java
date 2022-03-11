@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 public interface BragService {
 
 	// 글쓰기 : 글 쓸때, 마지막 articleNo+1해주는 DAO
 	int regBragBoard(BragBoard bragboard) throws Exception;
 
+	//글보기 또는 글목록에 유저 디테일 부르기
+	public User selectUserDetail(int idx) throws  Exception;
 	// 글보기 : (viewDetail)에서 id를 받아와 내 글인지 남의 글인지 판별
 	BragBoard bragBoardQueryByID(String id) throws Exception;
 	// 글보기 :시 조회수 올리는 기능

@@ -168,10 +168,12 @@ label.star:before {
 	로그인한 유저 번호 : ${user.idx }
 	<br> 로그인한 유저 이메일 : ${user.email }
 	<br> 로그인한 유저 별명 : ${user.nickname }
+	
+	
 	<br> 지금 보려는 글 정보
 	<br> 글 제목 : ${bboard.title }
 	<br> 글 내용 : ${bboard.content }
-	<br> 글 이미지 파일명: ${imgSrc } 글 작성자 번호 : ${bboard.idx }
+	<br> 글 이미지 파일명: ${imgSrc } 글 작성자 닉네임 : ${userinfo.nickname }
 	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
 
 
