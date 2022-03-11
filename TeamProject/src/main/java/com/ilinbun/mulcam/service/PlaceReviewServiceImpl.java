@@ -137,4 +137,22 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 		Double result = placeReviewDAO.selectPlaceHonbabLv(id) ;
 		return result != null? result : 1.0;
 	}
+	
+	@Override
+	public void updateReview(PlaceReview pr) throws Exception {
+		// TODO Auto-generated method stub
+		placeReviewDAO.updateReview(pr);
+	}
+	
+	@Override
+	public void deleteReview(int id) throws Exception {
+		// TODO Auto-generated method stub
+		placeReviewDAO.deleteReview(id);
+	}
+	
+	@Override
+	public PlaceReview getReview(int reviewNo, int id) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.selectReview(reviewNo, id);
+	}
 }

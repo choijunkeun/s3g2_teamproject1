@@ -20,4 +20,9 @@ public interface PlaceReviewService {
 	Double getTotalRating(int id) throws Exception;
 	PlaceRating getAllRating(int id) throws Exception;
 	Double getHonbabLv(int id) throws Exception;
+	
+	void updateReview(PlaceReview pr) throws Exception;
+	void deleteReview(int id) throws Exception;
+	
+	PlaceReview getReview(int reviewNo, int id) throws Exception;
 }

@@ -164,28 +164,30 @@
 		</div>
 		<form class="container" action="../writeReview" method="post" enctype="multipart/form-data" id="prForm">
 		<!-- <form id="prForm"> -->
-			<input type="hidden" name="user_PK" id="user_PK" value="${user.idx }"> <!-- 목업 유저정보 코드 -->
+			<input type="hidden" name="user_PK" id="user_PK" value="${review.user_PK }"> <!-- 목업 유저정보 코드 -->
 			<input type="hidden" name="id" id="id" value="${place.id }"> <!-- 장소값 코드 -->
-			
+			<input type="hidden" name="reviewNo" id="reviewNo" value="${review.reviewNo }">
 			<table class="justify-content-center" style="width:100%;">
 				<tr>
 					<td>
 						1인 출입 가능 업장
 					</td>
 					<td>
-						<input type="checkbox" id="rejectedCount" name="rejectedCount" value="true">
+						<input type="checkbox" id="rejectedCount" name="rejectedCount" value="${review.rejectedCount }">
 						<label for="rejectedCount">1인 출입 가능 업장</label>
 					</td>
 					
 				</tr>
 				<tr>
 					<td>제목</td>
-					<td><input type="text" name="honbabReason" id="honbabReason" style="width: 100%;" placeholder="제목을 써주세요"></td>
+					<td><input type="text" name="honbabReason" id="honbabReason" 
+					style="width: 100%;" placeholder="제목을 써주세요" value="${review.honbabReason }"></td>
 				</tr>
 				<tr>
 					<td>상세내용</td>
 					<td>
-						<textarea name="reviewContent" id="reviewContent" placeholder="상세 내용을 입력해주세요"
+						<textarea name="reviewContent" id="reviewContent" 
+						placeholder="상세 내용을 입력해주세요" value="${review.reviewContent }"
 						style="width: 100%; height: auto; margin: 10px 0" rows=10></textarea>
 					</td>
 				</tr>
@@ -273,8 +275,11 @@
 						</div>
 					</td>
 				</tr>
-				<tr class="text-center">
-					<td>파일</td>
+				<tr>
+					<td>
+						파일
+						<input type="checkbox" id="fileChange" name="fileChange" onClick="document.getElementsByClass('card')[0].style.visibility='hidden'"><label for="fileChange">변경</label>
+					</td>
 					<td>
 					<div class="card border rounded" style="width: 100%;">
 						<div class="btn-container text-center justify-content-center">
@@ -320,34 +325,40 @@
 	</div>
 
 	<script>
-	$('#file').change(function(){
-		//here we take the file extension and set an array of valid extensions
-	    var res=$('#file').val();
-	    var arr = res.split("\\");
-	    var filename=arr.slice(-1)[0];
-	    filextension=filename.split(".");
-	    filext="."+filextension.slice(-1)[0];
-	    valid=[".jpg",".png",".jpeg",".bmp"];
-		//if file is not valid we show the error icon, the red alert, and hide the submit button
-	    if (valid.indexOf(filext.toLowerCase())==-1){
-	        $( ".imgupload" ).hide("slow");
-	        $( ".imgupload.ok" ).hide("slow");
-	        $( ".imgupload.stop" ).show("slow");
-	      
-	        $('#namefile').css({"color":"gray","font-weight":700, "text-overflow": "ellipsis", "overflow": "hidden"});
-	        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
-	        
-	    } else{
-	        //if file is valid we show the green alert and show the valid submit
-	        $( ".imgupload" ).hide("slow");
-	        $( ".imgupload.stop" ).hide("slow");
-	        $( ".imgupload.ok" ).show("slow");
-	      
-	        $('#namefile').css({"color":"#ff3f3f","font-weight":700});
-	        $('#namefile').html(" 업로드한 파일 : " + filename);
-	      
-	    }
-	});
+		$('input[name=interiorRate]').val(${review.interiorRate});
+		$('input[name=serviceRate]').val(${review.serviceRate});
+		$('input[name=priceRate]').val(${review.priceRate});
+		$('input[name=tasteRate]').val(${review.tasteRate});
+		
+	
+		$('#file').change(function(){
+			//here we take the file extension and set an array of valid extensions
+		    var res=$('#file').val();
+		    var arr = res.split("\\");
+		    var filename=arr.slice(-1)[0];
+		    filextension=filename.split(".");
+		    filext="."+filextension.slice(-1)[0];
+		    valid=[".jpg",".png",".jpeg",".bmp"];
+			//if file is not valid we show the error icon, the red alert, and hide the submit button
+		    if (valid.indexOf(filext.toLowerCase())==-1){
+		        $( ".imgupload" ).hide("slow");
+		        $( ".imgupload.ok" ).hide("slow");
+		        $( ".imgupload.stop" ).show("slow");
+		      
+		        $('#namefile').css({"color":"gray","font-weight":700, "text-overflow": "ellipsis", "overflow": "hidden"});
+		        $('#namefile').html(filename+" 파일은 사진이 아닌 것 같습니다.");
+		        
+		    } else{
+		        //if file is valid we show the green alert and show the valid submit
+		        $( ".imgupload" ).hide("slow");
+		        $( ".imgupload.stop" ).hide("slow");
+		        $( ".imgupload.ok" ).show("slow");
+		      
+		        $('#namefile').css({"color":"#ff3f3f","font-weight":700});
+		        $('#namefile').html(" 업로드한 파일 : " + filename);
+		      
+		    }
+		});
 	
 	</script>
 	<script>
@@ -379,10 +390,10 @@
 			        "serviceRate":$('input[name="serviceRate"]:checked').val(),
 			        "priceRate":$('input[name="priceRate"]:checked').val(),
 			        "tasteRate":$('input[name="tasteRate"]:checked').val(),
-			        
+			        "fileChange":$('input[name="fileChange"]').is(':checked')
 			    };
-	
-			    formData.append("file",$('#file')[0].files[0]);
+				
+				if($('input[name="fileChange"]').is(':checked')) formData.append("file",$('#file')[0].files[0]);
 			    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"}));
 				
 				$.ajax({
@@ -396,7 +407,7 @@
 					async:false,
 			        timeout: 600000,  
 					success:function(data, textStatus) {
-						alert("리뷰가 작성되었습니다.");
+						alert("리뷰가 수정되었습니다.");
 						location.href = "../${place.id}?place_name=" + encodeURI("${place.place_name}");
 					},
 					error: function(data, textStatus){
