@@ -3,6 +3,7 @@ package com.ilinbun.mulcam.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -33,4 +34,9 @@ public interface PlaceReviewDAO {
 	Double selectPlaceTotalRating(int id) throws Exception;
 	PlaceRating selectPlaceAllRating(int id) throws Exception;
 	Double selectPlaceHonbabLv(int id) throws Exception;
+	
+	int queryReviewLikes(int reviewNo) throws Exception;
+	int addReviewLikes(Map<String, Integer> map) throws Exception;
+	int removeReviewLikes(Map<String, Integer> map) throws Exception;
+	int queryIfILikeThis(Map<String, Integer> map) throws Exception;
 }

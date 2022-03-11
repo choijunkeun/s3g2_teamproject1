@@ -125,4 +125,28 @@
 		]]>
 	</select>
 
+
+	<select id="queryReviewLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from reviewlikes where reviewNo=#{reviewNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from reviewlikes where reviewNo=#{reviewNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addReviewLikes" parameterType="Map">
+		<![CDATA[
+			insert into reviewlikes values(#{reviewNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeReviewLikes" parameterType="Map">
+		<![CDATA[
+			delete from reviewLikes where reviewNo=#{reviewNo} and idx=#{idx}
+		]]>
+	</delete> 
 </mapper>
