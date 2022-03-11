@@ -21,8 +21,8 @@ public interface UserDAO {
 	//로그인
 	User login(String nickname) throws Exception;
 
-	
-	
-	
+	//-idx가지고 화면에 출력할 email, nickname, hblv가져오기
+	User selectUserDetail(int idx) throws Exception;
+
 	
 }

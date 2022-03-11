@@ -204,11 +204,11 @@ public class BragController {
 		//게시글보기 (viewDetail.jsp)
 		@GetMapping("/viewdetail/{articleNo}")
 		public ModelAndView boardDetail(@PathVariable int articleNo) {
-			 User userinfo = (User) session.getAttribute("user"); //same
 			ModelAndView mav=new ModelAndView();
 			try {
 				bragboard=bragService.getBragBoard(articleNo); //내가쓴글, 남이쓴글 확인
-				mav.addObject("user", userinfo);
+				User userinfo = bragService.selectUserDetail(bragboard.getIdx()); //유저 정보 가져오기 
+				mav.addObject("userinfo", userinfo);
 				mav.addObject("bboard", bragboard);
 				
 				Document doc=Jsoup.parse(bragboard.getContent()); //content중에 사진만 가져오기
