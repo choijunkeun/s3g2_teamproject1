@@ -46,4 +46,7 @@ public interface BragDAO {
 	// 아마 댓글관련 DAO
 	void updateBragBoardReSeq(BragBoard bragboard) throws Exception;
 
+	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글 출력 DAO(준근)
+	List<BragBoard> selectBragBoardByIdx(int idx) throws Exception;
+
 }

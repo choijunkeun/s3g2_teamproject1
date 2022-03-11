@@ -20,6 +20,10 @@ public interface CommService {
       List<CommBoard> getCommBoardList(int page) throws Exception;
       // 게시글 목록 :아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)
       PageInfo getPageInfo(PageInfo pageInfo) throws Exception;
+      
+      
+      // 마이페이지에 사용자의 혼밥자랑 게시글 출력(준근)
+      List<CommBoard> MyCommunityBoard(int idx) throws Exception;
 
 
       

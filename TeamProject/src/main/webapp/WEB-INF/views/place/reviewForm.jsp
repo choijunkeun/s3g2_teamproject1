@@ -2,10 +2,6 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
-<%@ page import="com.ilinbun.mulcam.dto.User"%>
-
-<!-- 목업 코드 -->
 
 <!DOCTYPE html>
 <html>
