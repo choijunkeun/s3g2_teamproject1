@@ -100,8 +100,8 @@
 <body>
    <form action="<c:url value="/login"/>" method="POST" onsubmit="return formCheck(this)">
    	
-    <div class="title">
-    	<div>
+    <div class="title d-flex">
+    	<div class="justify-content-center text-center">
     		<img src="https://placehold.co/30">일인분
     	</div>
     	<div class="title-text">
@@ -109,32 +109,46 @@
     		<p align="center">일인분</p>
     	</div>
     </div>
+    <!-- <div class="container p-4 px-lg-5"  onclick="window.locaiton.href="/">
+		<div class="text-center justify-content-center text-black">
+			<h1 class="display-4 fw-bolder text-center justify-content-center "
+				style="text-align: center;">
+				<a style="text-decoration: none; font-color:black;" href="/">
+				일인분
+				</a>
+			</h1>
+			<span>혼밥 정보가 필요할 땐, 일인분</span>
+		</div>
+	</div> -->
     
     <hr style="width:700px">
    	
-    <div>
-    <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="email" value="${cookie.email.value}" placeholder="이메일을 입력해주세요.">
-    </div>
-   <div>
-   	<label for="password">비밀번호</label>
-    <input class="input-field" type="text" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
-     </div>
-     
-     <div>
-     	<div>
-      		<label><input type="checkbox" name="rememberEmail" value="on" ${empty cookie.email.value ? "":"checked"}>로그인 저장</label> 
-     	</div>
-     	<div>
-     		<a href="searchPwd">비밀번호 찾기</a>
-     	</div>
-     </div>
+   	<table>
+   		<tr>
+   			<td><label for="email">이메일</label></td>
+   			<td><input class="input-field" type="email" id="email" name="email" 
+   				value="${cookie.email.value}" placeholder="이메일을 입력해주세요."></td>
+   		</tr>
+		<tr>
+			<td><label for="password">비밀번호</label></td>
+			<td><input class="input-field" type="password" id="password" 
+				name="password" placeholder="비밀번호를 입력해주세요."></td>
+		</tr>   	
+   	</table>
+	<div>
+		<div>
+			<label><input type="checkbox" name="rememberEmail" value="on" ${empty cookie.email.value ? "":"checked"}>로그인 저장</label> 
+		</div>
+		<div>
+			<a href="searchPwd">비밀번호 찾기</a>
+		</div>
+	</div>
      
     <div id="msg" class="msg"> ${URLDecoder.decode(param.msg, "utf-8")}</div>
     <button type="submit" class="join-btn">로그인</button>
     <a href="/join">아직 계정이 없으신가요? 가입하기</a>
       
-   </form> 
+	</form> 
 </body>
  <script>
       

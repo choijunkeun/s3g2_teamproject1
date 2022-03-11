@@ -409,5 +409,13 @@
 			return false;
 		});
 	</script>
+	<script> // 좋아요 관련 코드
+		$(function(){
+			$.ajax(){
+				
+			}
+			
+		})
+	</script>
 </body>
 </html>
