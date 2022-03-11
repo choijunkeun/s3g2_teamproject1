@@ -9,9 +9,9 @@ public class Shareboard {
 	String title;
 	String content;
 	
-	Date datetime;
+	Date date;
 	int headerTag;
-	int readcount;
+	int readCount;
 	
 	public Shareboard() {
 		
@@ -25,16 +25,16 @@ public class Shareboard {
 		this.idx = idx;
 	}
 	
-	public Shareboard(int articleNo, int idx, String subway, String title, String content, Date datetime, int headerTag, int readcount) {
+	public Shareboard(int articleNo, int idx, String subway, String title, String content, Date date, int headerTag, int readCount) {
 		super();
 		this.articleNo = articleNo;
 		this.idx = idx;
 		this.subway = subway;
 		this.title = title;
 		this.content = content;
-		this.datetime = datetime;
+		this.date = date;
 		this.headerTag = headerTag;
-		this.readcount = readcount;
+		this.readCount = readCount;
 	}
 
 	public int getArticleNo() {
@@ -77,12 +77,12 @@ public class Shareboard {
 		this.content = content;
 	}
 
-	public Date getDatetime() {
-		return datetime;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setDatetime(Date datetime) {
-		this.datetime = datetime;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
 	public int getHeaderTag() {
@@ -93,12 +93,12 @@ public class Shareboard {
 		this.headerTag = headerTag;
 	}
 
-	public int getReadcount() {
-		return readcount;
+	public int getReadCount() {
+		return readCount;
 	}
 
-	public void setReadcount(int readcount) {
-		this.readcount = readcount;
+	public void setReadCount(int readCount) {
+		this.readCount = readCount;
 	}
 
 	

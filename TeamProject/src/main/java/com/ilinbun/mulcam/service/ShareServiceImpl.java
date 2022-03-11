@@ -6,14 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.ShareDAO;
+import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.Shareboard;
+import com.ilinbun.mulcam.dto.User;
 
 @Service
 public class ShareServiceImpl implements ShareService {
 
 	@Autowired
 	ShareDAO shareDAO;
+	
+	@Autowired
+	UserDAO userDAO;
 	
 	@Override
 	public Shareboard shareboard() throws Exception {
@@ -92,5 +97,10 @@ public class ShareServiceImpl implements ShareService {
 	@Override
 	public Shareboard getShareboard() throws Exception {
 		return shareDAO.selectShareboard();
+	}
+
+	@Override
+	public User selectUserDetail(int idx) throws Exception {
+		return userDAO.selectUserDetail(idx);
 	}
 }

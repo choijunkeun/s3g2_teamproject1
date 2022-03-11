@@ -78,9 +78,11 @@ table {
 						<%-- <c:if test="${status.index<15}"> --%>
 							<tr>
 								<td>${shboard.articleNo }</td>
-								<td>${shboard.title }</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }">${shboard.title }</a>
+								</td>
 								<td>${shboard.subway }</td>
-								<td>${shboard.user }</td>
+								<td>${shboard.idx }</td>
 								<td>${shboard.date }</td>
 								<td>${shboard.readCount }</td>
 							</tr>
@@ -129,6 +131,17 @@ table {
 	</c:choose>
 		</div>
 	</div>
-	
+	<script>
+	$(document).ready(function(){
+		$('#shareMake').on('click',function(){
+			if('${user.idx }' == ''){
+				location.href="/login";
+			} else {
+				location.href="/share/writeform";	
+			}
+		});
+	});
+
+	</script>
 </body>
 </html>

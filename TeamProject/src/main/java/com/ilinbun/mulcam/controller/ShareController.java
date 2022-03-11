@@ -43,6 +43,9 @@ import com.ilinbun.mulcam.service.ShareService;
 public class ShareController {
 	
 	@Autowired
+	HttpSession session;
+	
+	@Autowired
 	ShareService shareService;
 	
 	@Autowired
@@ -202,14 +205,15 @@ public class ShareController {
 	
 	
 	//글보기
-	@GetMapping("/board/viewdetail/{articleNo}")
+	@GetMapping("/board/viewform/{articleNo}")
 	public ModelAndView boardDetail(@PathVariable int articleNo) {
-		// User userinfo = (User) session.getAttribute("user"); //same
-		User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1); //임시 
+//		User userinfo = (User) session.getAttribute("user"); //same
+//		User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1); //임시 
 		ModelAndView mav=new ModelAndView();
 		try {
 			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
-			mav.addObject("user", userinfo);
+			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
+			mav.addObject("userinfo", userinfo);
 			mav.addObject("shboard", shareboard);
 			System.out.println(shareboard);
 			
@@ -218,7 +222,7 @@ public class ShareController {
 			String src = img.attr("src"); //String으로 변환
 			
 			mav.addObject("imgSrc", src); //mav에 넣기
-			mav.setViewName("share/board/viewDetail"); //경로이름 설정
+			mav.setViewName("share/board/viewform"); //경로이름 설정
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());

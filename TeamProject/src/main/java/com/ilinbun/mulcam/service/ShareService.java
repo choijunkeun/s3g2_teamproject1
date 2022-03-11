@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.Shareboard;
+import com.ilinbun.mulcam.dto.User;
 
 public interface ShareService {
 	Shareboard shareboard() throws Exception;
@@ -16,4 +17,5 @@ public interface ShareService {
 	PageInfo getPageInfo(PageInfo pageInfo) throws Exception;
 	Shareboard getShareboard(int articleNo) throws Exception;
 	Shareboard getShareboard() throws Exception;
+	User selectUserDetail(int idx) throws Exception;
 }

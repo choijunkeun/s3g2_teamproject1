@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
+<%-- <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%> 
 <%!User user = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1);%>
-<c:set var="user" value="<%=user%>" />
+<c:set var="user" value="<%=user%>" /> --%>
 <!-- 목업 코드 -->
 <!DOCTYPE html>
 <html>
@@ -43,11 +43,16 @@
 }
 
 .ck-editor__editable {
-	min-height: 300px;
+	min-height: 100%;
 }
 </style>
 
 <style>
+.writeform {
+	margin : 20px;
+	float: center;
+}
+
 #top {
 	margin-top: 20px;
 }
@@ -135,61 +140,19 @@ h4>strong {
 	text-shadow: 0px 0px 5px #1e2832;
 }
 </style>
-<style>
-input.star {
-	display: none;
-}
-
-label.star {
-	float: right;
-	padding: 5px;
-	font-size: 20px;
-	color: #444;
-	/* transition: all .2s; */
-}
-
-input.star:checked ~ label.star:before {
-	content: '\f005';
-	color: #FD4;
-	/* transition: all .25s; */
-}
-
-/* input.star-5:checked ~ label.star:before {
-			color: #FE7;
-			text-shadow: 0 0 20px #952;
-		}
-		
-		input.star-1:checked ~ label.star:before {
-			color: #F62;
-		}
-		
-		label.star:hover {
-			transform: rotate(-15deg) scale(1.3);
-		} */
-label.star:before {
-	content: '\f006';
-	font-family: FontAwesome;
-}
-.outer {
-  text-align: center;
-}
-</style>
 </head>
 <body>
 <section id="./writeform"> 
     <div class="container pb-3 bg-light" class="outer"> 
-        <h2 class="fw-bolder" style="text-align:center;">
-			<strong>반찬공유 글쓰기</strong>
-		</h2>
-		
+        
 		<form action="./sharewrite" method="post" enctype="multipart/form-data" name="shareform" id="shform"> 
 			<div>
 			<input type="hidden" id="idx" name="idx" value=${user.idx }>
-			<div class="container p-2"> 
+			<div class="container"> 
 				<div class="row p-1 text-center">
 					<div class="col">
 						<input type="hidden" name="noticewrtie" id="ntwrite">
-						<div class="btn-group-sort" style="width: fit-content;">
+						<div class="btn-group-sort" style="width: fit-content; visibility: hidden;">
 							<button type="button"
 								class="btn btn-secondary dropdown-toggle" id="sortDropdown"
 								data-bs-toggle="dropdown" aria-expanded="false">공지글쓰기</button>
@@ -206,39 +169,41 @@ label.star:before {
 								class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
 								data-bs-toggle="dropdown" aria-expanded="">위치를 골라주세요</button>
 							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
 									onclick="subwayChange('0')">용산역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="신용산역" value='${subway }'
 									onclick="subwayChange('1')">신용산역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="이촌역" value='${subway }'
 									onclick="subwayChange('2')">이촌역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="서빙고역" value='${subway }'
 									onclick="subwayChange('3')">서빙고역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="한남역" value='${subway }'
 									onclick="subwayChange('4')">한남역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="한강진역" value='${subway }'
 									onclick="subwayChange('5')">한강진역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="이태원역" value='${subway }'
 									onclick="subwayChange('6')">이태원역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="녹사평역" value='${subway }'
 									onclick="subwayChange('7')">녹사평역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="삼각지역" value='${subway }'
 									onclick="subwayChange('8')">삼각지역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="숙대입구역" value='${subway }'
 									onclick="subwayChange('9')">숙대입구역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="남영역" value='${subway }'
 									onclick="subwayChange('10')">남영역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="효창공원앞역" value='${subway }'
 									onclick="subwayChange('11')">효창공원앞역</button></li>
-								<li><button class="dropdown-item" type="button"
+								<li><button class="dropdown-item" type="button" name="null" value='${subway }'
 									onclick="subwayChange('')">지역을 골라주세요!</button></li>
 							</ul>
 						</div> <br>
+						<h2 class="fw-bolder" style="text-align:center;">
+       					 <br> <strong>반찬공유 글쓰기</strong></h2>
 							<!-- ckEditor -->
-						<div>
+						<div class="writeform">
 							<input name="title" id="title" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
 						</div>
-						<div class="row p-1 text-center">
+						<div class="row text-center writeform">
 							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							<span></span>
 						    <div id="classic">
