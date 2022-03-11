@@ -38,12 +38,13 @@
 <!-- ckEditor 넓이 높이 조절 -->
 <style>
 .ck.ck-editor {
-	max-width: 100%;
-	font-weight: bolder;
+	
 }
 
 .ck-editor__editable {
-	min-height: 100%;
+	max-width: 100%;
+	font-weight: bolder;
+	min-height: 350px;
 }
 </style>
 
@@ -167,43 +168,44 @@ h4>strong {
 					    <div class="btn-group-sort" style="width: fit-content;">
 							<button type="button"
 								class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
-								data-bs-toggle="dropdown" aria-expanded="">위치를 골라주세요</button>
+								data-bs-toggle="dropdown" aria-expanded="false">위치를 골라주세요</button>
 							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 								<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
-									onclick="subwayChange('0')">용산역</button></li>
+									onclick="subwayChange('용산역')">용산역</button></li>
 								<li><button class="dropdown-item" type="button" name="신용산역" value='${subway }'
-									onclick="subwayChange('1')">신용산역</button></li>
+									onclick="subwayChange('신용산역')">신용산역</button></li>
 								<li><button class="dropdown-item" type="button" name="이촌역" value='${subway }'
-									onclick="subwayChange('2')">이촌역</button></li>
+									onclick="subwayChange('이촌역')">이촌역</button></li>
 								<li><button class="dropdown-item" type="button" name="서빙고역" value='${subway }'
-									onclick="subwayChange('3')">서빙고역</button></li>
+									onclick="subwayChange('서빙고역')">서빙고역</button></li>
 								<li><button class="dropdown-item" type="button" name="한남역" value='${subway }'
-									onclick="subwayChange('4')">한남역</button></li>
+									onclick="subwayChange('한남역')">한남역</button></li>
 								<li><button class="dropdown-item" type="button" name="한강진역" value='${subway }'
-									onclick="subwayChange('5')">한강진역</button></li>
+									onclick="subwayChange('한강진역')">한강진역</button></li>
 								<li><button class="dropdown-item" type="button" name="이태원역" value='${subway }'
-									onclick="subwayChange('6')">이태원역</button></li>
+									onclick="subwayChange('이태원역')">이태원역</button></li>
 								<li><button class="dropdown-item" type="button" name="녹사평역" value='${subway }'
-									onclick="subwayChange('7')">녹사평역</button></li>
+									onclick="subwayChange('녹사평역')">녹사평역</button></li>
 								<li><button class="dropdown-item" type="button" name="삼각지역" value='${subway }'
-									onclick="subwayChange('8')">삼각지역</button></li>
+									onclick="subwayChange('삼각지역')">삼각지역</button></li>
 								<li><button class="dropdown-item" type="button" name="숙대입구역" value='${subway }'
-									onclick="subwayChange('9')">숙대입구역</button></li>
+									onclick="subwayChange('숙대입구역')">숙대입구역</button></li>
 								<li><button class="dropdown-item" type="button" name="남영역" value='${subway }'
-									onclick="subwayChange('10')">남영역</button></li>
+									onclick="subwayChange('남영역')">남영역</button></li>
 								<li><button class="dropdown-item" type="button" name="효창공원앞역" value='${subway }'
-									onclick="subwayChange('11')">효창공원앞역</button></li>
+									onclick="subwayChange('효창공원앞역')">효창공원앞역</button></li>
 								<li><button class="dropdown-item" type="button" name="null" value='${subway }'
 									onclick="subwayChange('')">지역을 골라주세요!</button></li>
 							</ul>
-						</div> <br>
+							
+						</div> 
 						<h2 class="fw-bolder" style="text-align:center;">
        					 <br> <strong>반찬공유 글쓰기</strong></h2>
 							<!-- ckEditor -->
 						<div class="writeform">
 							<input name="title" id="title" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
 						</div>
-						<div class="row text-center writeform">
+						<div class="writeform">
 							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							<span></span>
 						    <div id="classic">
@@ -237,29 +239,29 @@ h4>strong {
 		
 		function subwayChange(sub) {
 			document.getElementById('subway').value=sub;
-			if(sub == '0') {
+			if(sub == '용산역') {
 				document.getElementById('sortDropdownSub').innerText='용산역';
-			} else if(sub == '1') {
+			} else if(sub == '신용산역') {
 				document.getElementById('sortDropdownSub').innerText='신용산역';
-			} else if(sub == '2') {
+			} else if(sub == '이촌역') {
 				document.getElementById('sortDropdownSub').innerText='이촌역';
-			} else if(sub == '3') {
+			} else if(sub == '서빙고역') {
 				document.getElementById('sortDropdownSub').innerText='서빙고역';
-			} else if(sub == '4') {
+			} else if(sub == '한남역') {
 				document.getElementById('sortDropdownSub').innerText='한남역';
-			} else if(sub == '5') {
+			} else if(sub == '한강진역') {
 				document.getElementById('sortDropdownSub').innerText='한강진역';
-			} else if(sub == '6') {
+			} else if(sub == '이태원역') {
 				document.getElementById('sortDropdownSub').innerText='이태원역';
-			} else if(sub == '7') {
+			} else if(sub == '녹사평역') {
 				document.getElementById('sortDropdownSub').innerText='녹사평역';
-			} else if(sub == '8') {
+			} else if(sub == '삼각지역') {
 				document.getElementById('sortDropdownSub').innerText='삼각지역';
-			} else if(sub == '9') {
+			} else if(sub == '숙대입구역') {
 				document.getElementById('sortDropdownSub').innerText='숙대입구역';
-			} else if(sub == '10') {
+			} else if(sub == '남영역') {
 				document.getElementById('sortDropdownSub').innerText='남영역';
-			} else if(sub == '11') {
+			} else if(sub == '효창공원앞역') {
 				document.getElementById('sortDropdownSub').innerText='효창공원앞역';
 			} else {
 				document.getElementById('sortDropdownSub').innerText='지역을 골라주세요!';

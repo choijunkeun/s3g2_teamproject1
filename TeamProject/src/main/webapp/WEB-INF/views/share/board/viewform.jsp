@@ -126,8 +126,8 @@ h4>strong {
 </style>
 <style type="text/css">
 #articleForm {
-	width: 700px;
-	height: 500px;
+	width: 1200px;
+	height: 700px;
 	/* border: 1px solid red; */
 	margin: auto;
 }
@@ -149,7 +149,7 @@ a {
 #articleContentArea {
 	background:  #f6f3f3;
 	margin-top: 10px;
-	height: 410px;
+	height: 500px;
 	text-align: center;
 	overflow: auto;
 }
@@ -168,14 +168,16 @@ a {
 		<section id="articleContentArea">
 			<div>
 			<section id="basicInfoArea">
-				로그인한 유저 번호 : ${user.idx }
-				<br> 로그인한 유저 이메일 : ${user.email }
-				<br> 로그인한 유저 별명 : ${user.nickname }
-				<br> 지금 보려는 글 정보
-				<br> 글 제목 : ${shboard.title }
-				<br> 글 내용 : ${shboard.content }
-				<br> 글 이미지 파일명: ${imgSrc } 글 작성자 번호 : ${shboard.idx }
-				<br> ${shboard.idx == user.idx ? "수정, 삭제" : "안보여"}
+			<div>로그인한 유저 번호 : ${user.idx }</div>
+			<div>로그인한 유저 이메일 : ${user.email }</div>
+			<div>로그인한 유저 별명 : ${user.nickname }</div>	
+			<div>지금 보려는 글 정보</div>
+			<div>글 제목 : ${shboard.title }</div>
+			<div>글 이미지 파일명: ${imgSrc }</div>
+			<div>글 작성자 번호 : ${shboard.idx }</div>
+			<br>글 내용 : ${shboard.content }
+			${shboard.content }
+			
 			</section>
 			</div>
 		</section>

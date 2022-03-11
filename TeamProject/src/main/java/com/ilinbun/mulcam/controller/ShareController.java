@@ -139,7 +139,7 @@ public class ShareController {
 			
 			model.addAttribute("title", title);
 			model.addAttribute("content", content.trim());
-			return "share/main"; //resultForm다시
+			return "board/listform"; //resultForm다시
 		}
 
 	@ResponseBody
@@ -215,7 +215,7 @@ public class ShareController {
 			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
 			mav.addObject("userinfo", userinfo);
 			mav.addObject("shboard", shareboard);
-			System.out.println(shareboard);
+			System.out.println("shareboard check : "+shareboard);
 			
 			Document doc=Jsoup.parse(shareboard.getContent()); //content중에 사진만 가져오기
 			Elements img= doc.select("img"); //우선 무수한 요소 중 img만 추출
