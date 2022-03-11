@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -76,12 +77,10 @@ public class PlaceController {
 				} 
 				br.close();
 	        }
-	        System.out.println(response.toString());
+	        
 	        JSONObject object = new JSONObject(response.toString());
 	        JSONArray obj = (JSONArray) object.get("documents");
 	        JSONObject target = (JSONObject)obj.get(0);
-	        System.out.println(target.get("id"));
-	        System.out.println(id);
 	        
 	        if(target.get("id").equals(id)) {
 	        	Place place = new Place(
@@ -189,7 +188,6 @@ public class PlaceController {
 	@PostMapping("/edit/{id}")
 	public ModelAndView reviewEdit(@PathVariable String id, 
 			@RequestParam int reviewNo, @ModelAttribute Place place) throws Exception {
-		System.out.println("리뷰글 번호 : " +  reviewNo);
 		ModelAndView mv = new ModelAndView("/place/editReview");
 		//PlaceReview review = placeReviewService.getReview(Integer.parseInt(reviewNo), Integer.parseInt(id));
 		PlaceReview review = placeReviewService.getReview(reviewNo);
@@ -231,12 +229,9 @@ public class PlaceController {
 				String nowTime = sdf.format(now);
 				
 				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
-				System.out.println("1");
 				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
 				System.out.println(destFile.getAbsolutePath());
 				file.transferTo(destFile);
-				System.out.println("SUCCESS");
-				System.out.println(pr.getRevImgFilepath());
 			}
 			
 			placeReviewService.writeBoard(pr);
@@ -333,6 +328,27 @@ public class PlaceController {
 			
 			System.out.println(placeReviewService.updateReview(pr));
 			result = new ResponseEntity<String>("success", HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
+	@ResponseBody
+	@PostMapping("/deleteReview")
+	public ResponseEntity<String> editReview(@RequestParam int reviewNo, @RequestParam String idx) {
+		ResponseEntity<String> result = null;
+		
+		try {
+			PlaceReview target = placeReviewService.getReview(reviewNo);
+			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
+//			int place = target.getId();
+			placeReviewService.deleteReview(reviewNo);
+			String html = "<script>alert('삭제 완료'); window.location = \"/search\"</script>";
+//			System.out.println(html);
+			result = new ResponseEntity<String>(html , HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);

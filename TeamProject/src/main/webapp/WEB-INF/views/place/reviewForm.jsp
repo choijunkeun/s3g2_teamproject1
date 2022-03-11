@@ -356,7 +356,7 @@
 				alert('리뷰 제목을 입력해주세요')
 			} else if($('#reviewContent').val() == null){
 				alert('리뷰 내용을 입력해주세요')
-			} else if($('#honbabLv').val() == null){
+			} else if($('input[name="honbabLv"]:checked').val() == null){
 				alert('혼밥 레벨을 선택해주세요')
 			} else if($('input[name="priceRate"]:checked').val() == null){
 				alert('가격 평점을 선택해주세요')
