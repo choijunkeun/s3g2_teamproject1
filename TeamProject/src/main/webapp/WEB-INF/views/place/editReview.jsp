@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!-- 목업 코드, 아래 영역을 주석처리하면 로그아웃 처리된 것으로 짜볼 수 있음 -->
 <%@ page import="com.ilinbun.mulcam.dto.User"%>
 
@@ -36,11 +37,11 @@
 		  color: #ff3f3f;
 		}
 		.btn-primary {
-		  border-color: #ff3f3f !important;
+		  /* border-color: #ff3f3f !important; */
 		  color: #ffffff;
 		  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-		  background-color: #ff3f3f !important;
-		  border-color: #ff3f3f !important;
+		  /* background-color: #ff3f3f !important;
+		  border-color: #ff3f3f !important; */
 		}
 		
 		/*these two are set to not display at start*/
@@ -153,10 +154,10 @@
 			<div class="placeInfoSection p-2">
 				<!-- <div>용궁반점 여기에 대충 위치 표시하는 용도</div> -->
 				<h2>
-					<a href="javascript:window.history.back();" style="text-decoration: none; color: black;">
-						<i class="fa fa-angle-left"></i> <strong>${place.place_name }</strong></a>
+					<%-- <a href="javascript:window.history.back();" style="text-decoration: none; color: black;">
+						<i class="fa fa-angle-left"></i> <strong>${place.place_name }</strong></a> --%>
 				</h2>
-				<p>${place.address_name}</p>
+				<%-- <p>${place.address_name}</p> --%>
 			</div>
 			<!-- <div class="placeImgSection">
 				<img src="#">
@@ -165,7 +166,7 @@
 		<form class="container" action="../writeReview" method="post" enctype="multipart/form-data" id="prForm">
 		<!-- <form id="prForm"> -->
 			<input type="hidden" name="user_PK" id="user_PK" value="${review.user_PK }"> <!-- 목업 유저정보 코드 -->
-			<input type="hidden" name="id" id="id" value="${place.id }"> <!-- 장소값 코드 -->
+			<input type="hidden" name="id" id="id" value="${review.id }"> <!-- 장소값 코드 -->
 			<input type="hidden" name="reviewNo" id="reviewNo" value="${review.reviewNo }">
 			<table class="justify-content-center" style="width:100%;">
 				<tr>
@@ -186,9 +187,8 @@
 				<tr>
 					<td>상세내용</td>
 					<td>
-						<textarea name="reviewContent" id="reviewContent" 
-						placeholder="상세 내용을 입력해주세요" value="${review.reviewContent }"
-						style="width: 100%; height: auto; margin: 10px 0" rows=10></textarea>
+						<textarea name="reviewContent" id="reviewContent" placeholder="상세 내용을 입력해주세요"
+						style="width: 100%; height: auto; margin: 10px 0" rows=10>${review.reviewContent }</textarea>
 					</td>
 				</tr>
 				<tr>
@@ -290,8 +290,8 @@
 							<!--this field changes dinamically displaying the filename we are trying to upload-->
 							<p id="namefile">사진만 올려주세요!(jpg,jpeg,bmp,png)</p>
 							<!--our custom btn which which stays under the actual one-->
-							<button type="button" id="btnup" class="btn btn-primary btn-lg">파일 선택</button>
-							<input type="file" value="" name="file" id="file">
+							<button type="button" id="btnup" class="btn btn-secondary btn-lg">파일 선택</button>
+							<input type="file" value="" name="file" id="file" disabled>
 						</div>
 					</div>
 					</td>
@@ -325,11 +325,23 @@
 	</div>
 
 	<script>
-		$('input[name=interiorRate]').val(${review.interiorRate});
-		$('input[name=serviceRate]').val(${review.serviceRate});
-		$('input[name=priceRate]').val(${review.priceRate});
-		$('input[name=tasteRate]').val(${review.tasteRate});
+		$('#rejectedCount').prop('checked', ${review.rejectedCount}>0);
+		$('#lv${review.honbabLv}').prop('checked', true);
+		$('#price-'+<fmt:formatNumber type="number" maxFractionDigits="0" value="${review.priceRate}"/>).prop('checked', true);
+		$('#taste-'+<fmt:formatNumber type="number" maxFractionDigits="0" value="${review.tasteRate}"/>).prop('checked', true);
+		$('#service-'+<fmt:formatNumber type="number" maxFractionDigits="0" value="${review.serviceRate}"/>).prop('checked', true);
+		$('#interior-'+<fmt:formatNumber type="number" maxFractionDigits="0" value="${review.interiorRate}"/>).prop('checked', true);
 		
+		$('#fileChange').click(function(){
+			$('#file').prop('disabled', !$('#file').prop('disabled'));
+			if($('#file').prop('disabled')){
+				$('#btnup').addClass('btn-secondary');
+				$('#btnup').removeClass('btn-danger');
+			} else{
+				$('#btnup').addClass('btn-danger');
+				$('#btnup').removeClass('btn-secondary');
+			}
+		})
 	
 		$('#file').change(function(){
 			//here we take the file extension and set an array of valid extensions
@@ -362,10 +374,12 @@
 	
 	</script>
 	<script>
+	
+	
 		$('#prFormSubmit').click(function(){
-			if($('#honbabReason').val() == null){
+			if($('#honbabReason').val() == ""){
 				alert('리뷰 제목을 입력해주세요')
-			} else if($('#reviewContent').val() == null){
+			} else if($('#reviewContent').val() == ""){
 				alert('리뷰 내용을 입력해주세요')
 			} else if($('#honbabLv').val() == null){
 				alert('혼밥 레벨을 선택해주세요')
@@ -380,6 +394,7 @@
 			} else{
 				var formData = new FormData();
 				var data = {
+					"reviewNo":$('#reviewNo').val(),
 			        "id":$('#id').val(),
 			        "user_PK":$('#user_PK').val(),
 			        "reviewContent":$('#reviewContent').val(),
@@ -397,7 +412,7 @@
 			    formData.append("key", new Blob([JSON.stringify(data)], {type:"application/json"}));
 				
 				$.ajax({
-					url:"../writeReview",
+					url:"../editReview",
 					type:"post",
 					enctype: 'multipart/form-data',		
 					processData: false, 

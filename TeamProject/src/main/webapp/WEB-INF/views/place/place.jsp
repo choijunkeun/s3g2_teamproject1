@@ -218,18 +218,6 @@
 				
 	function deleteReview(reviewNo){
 		if(confirm("리뷰를 삭제하시겠습니까?")){
-			/* let f = document.createElement('form');
-			f.appencChild(mIHObj('reviewNo', 'reviewNo'));
-			f.appencChild(mIHObj('idx', '${user.idx}'));
-			f.setAttribute('method', 'post');
-		    f.setAttribute('action', './delete/');
-		    document.body.appendChild(f);
-		    f.submit();
-		    $.ajax({
-		    	type:"post",
-		    	url:"./delete/"
-		    })
-		    window.location() */
 		}
 	}
 </script>

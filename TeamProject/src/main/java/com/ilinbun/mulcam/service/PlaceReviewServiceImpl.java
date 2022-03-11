@@ -139,9 +139,15 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 	}
 	
 	@Override
-	public void updateReview(PlaceReview pr) throws Exception {
+	public int updateReview(PlaceReview pr) throws Exception {
+		System.out.println("### : "+pr.getReviewContent());
 		// TODO Auto-generated method stub
-		placeReviewDAO.updateReview(pr);
+		return placeReviewDAO.updateReview(pr);
+	}
+	
+	public void updateReviewFilePath(PlaceReview pr) throws Exception {
+		// TODO Auto-generated method stub
+		placeReviewDAO.updateReviewFilePath(pr);
 	}
 	
 	@Override
@@ -151,8 +157,8 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 	}
 	
 	@Override
-	public PlaceReview getReview(int reviewNo, int id) throws Exception {
+	public PlaceReview getReview(int reviewNo) throws Exception {
 		// TODO Auto-generated method stub
-		return placeReviewDAO.selectReview(reviewNo, id);
+		return placeReviewDAO.selectReview(reviewNo);
 	}
 }

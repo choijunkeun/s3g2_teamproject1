@@ -188,9 +188,11 @@ public class PlaceController {
 	
 	@PostMapping("/edit/{id}")
 	public ModelAndView reviewEdit(@PathVariable String id, 
-			@RequestParam String reviewNo, @ModelAttribute Place place) throws Exception {
+			@RequestParam int reviewNo, @ModelAttribute Place place) throws Exception {
+		System.out.println("리뷰글 번호 : " +  reviewNo);
 		ModelAndView mv = new ModelAndView("/place/editReview");
-		PlaceReview review = placeReviewService.getReview(Integer.parseInt(reviewNo), Integer.parseInt(id));
+		//PlaceReview review = placeReviewService.getReview(Integer.parseInt(reviewNo), Integer.parseInt(id));
+		PlaceReview review = placeReviewService.getReview(reviewNo);
 		mv.addObject("id", id);
 		mv.addObject("place", place);
 		mv.addObject("review", review);
@@ -308,8 +310,8 @@ public class PlaceController {
 					Double.parseDouble(param.get("priceRate")), 
 					Double.parseDouble(param.get("tasteRate"))
 				);
+			pr.setReviewNo(Integer.parseInt(param.get("reviewNo")));
 			boolean fileChange=Boolean.parseBoolean(param.get("fileChange"));
-			
 			if(fileChange && file != null) { // 파일 첨부시 파일 업로드
 				System.out.println("파일 업로드 시도");
 				String path=servletContext.getRealPath("/revimgupload/");
@@ -321,17 +323,15 @@ public class PlaceController {
 				String nowTime = sdf.format(now);
 				
 				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
-				System.out.println("1");
 				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
-				System.out.println(destFile.getAbsolutePath());
 				file.transferTo(destFile);
-				System.out.println("SUCCESS");
-				System.out.println(pr.getRevImgFilepath());
+				placeReviewService.updateReviewFilePath(pr);
 			} else if(fileChange && file == null) {
 				pr.setRevImgFilepath(null);
+				placeReviewService.updateReviewFilePath(pr);
 			}
 			
-			placeReviewService.updateReview(pr);
+			System.out.println(placeReviewService.updateReview(pr));
 			result = new ResponseEntity<String>("success", HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
