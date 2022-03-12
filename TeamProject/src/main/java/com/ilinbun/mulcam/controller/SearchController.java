@@ -99,7 +99,7 @@ public class SearchController {
 			// 이제 전달해주기만 하면 되는데 서버 안정성을 위해 15개만 전달할겁니다
 			JSONArray finaljarr = new JSONArray();
 			int limit = 15;
-			if(sortedJarr.length() < 15) limit = sortedJarr.length();
+			if(sortedJarr.length() < limit) limit = sortedJarr.length();
 			for(int i=0; i<limit; i++) {
 				finaljarr.put(sortedJarr.getJSONObject(i));
 			}
@@ -161,6 +161,82 @@ public class SearchController {
 		StringBuffer response = new StringBuffer();
 		try {
 			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?category\\_group\\_code=FD6&x=" + x + "&y=" + y + "&page=" + page + "&query=" + URLEncoder.encode(keyword, "UTF-8"));
+			
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("X-Requested-With", "curl");
+	        conn.setRequestProperty("Authorization", "KakaoAK ec3f88c0be25b53b799db6b9849751aa");
+	        conn.setDoOutput(true);
+	        
+	        int responseCode = conn.getResponseCode();
+	        if (responseCode == 400) {
+	            System.out.println("400:: 해당 장소를 가져올 수 없음");
+	        } else if (responseCode == 401) {
+	            System.out.println("401:: 인증 오류");
+	        } else if (responseCode == 500) {
+	            System.out.println("500:: 카카오 서버 에러");
+	        } else { // 성공 후 응답 JSON 데이터받기
+				Charset charset = Charset.forName("UTF-8");
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), charset));
+				String inputLine;
+				while ((inputLine = br.readLine()) != null) {
+					response.append(inputLine); 
+				} 
+				br.close();
+	        }
+	        
+		} catch(Exception e) {}
+		return response.toString();
+	}
+	
+	@ResponseBody
+	@GetMapping("/q")
+	public ResponseEntity<String> searchPlaces(@RequestParam String keyword){
+		ResponseEntity<String> result  = null;
+		try {
+			JSONArray jarr= getPlacesFromKakaoAPI(keyword);
+			
+			JSONArray finaljarr = new JSONArray();
+			int limit = 10;
+			if(jarr.length() < limit) limit = jarr.length();
+			for(int i=0; i<limit; i++) {
+				finaljarr.put(jarr.getJSONObject(i));
+			}
+			JSONObject resultobj = new JSONObject();
+			resultobj.put("documents", finaljarr);
+	        result = new ResponseEntity<String>(resultobj.toString(), HttpStatus.OK);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;
+	}
+	
+	public JSONArray getPlacesFromKakaoAPI(String keyword) throws NumberFormatException, JSONException, Exception {
+		HttpURLConnection conn = null;
+		JSONArray library = new JSONArray();
+		
+		for(int i=1; i<=45; i++){
+			JSONObject res = new JSONObject(getPlacesRAWResultFromKakao(keyword));
+			JSONArray jarr = (JSONArray) res.get("documents");
+			for(int j =0; j<jarr.length(); j++) {
+				JSONObject temp = jarr.getJSONObject(j);
+				if(temp.getString("category_group_code").equals("FD6") && temp.getString("category_group_name").equals("음식점"))
+					library.put(temp);
+			}
+			if((res.getJSONObject("meta")).getBoolean("is_end")) break;
+		}
+		return library;
+		
+	}
+	
+	public String getPlacesRAWResultFromKakao(String keyword) {
+		HttpURLConnection conn = null;
+		StringBuffer response = new StringBuffer();
+		try {
+			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?category\\_group\\_code=FD6&size=10&query=" + URLEncoder.encode(keyword, "UTF-8"));
 			
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

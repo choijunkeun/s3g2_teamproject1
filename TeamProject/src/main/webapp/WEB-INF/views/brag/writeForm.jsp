@@ -205,7 +205,7 @@ label.star:before {
 													</div>
 												</div> <!--2. 위치 선택 (문파 기반) -->
 												<div class="input-group" style="flex-shrink: 0;">
-													<input type="text" class="form-control" id="location"
+													<input type="text" class="form-control" id="location" onchange="searchByKeyword(this);"
 														name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
 													<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
 												</div>
@@ -340,6 +340,22 @@ label.star:before {
 	 */
 
 	 
+</script>
+<script>
+	function searchByKeyword(element){
+		var keyword = element.value;
+		
+		$.ajax({
+			type:"GET",
+			url:"/search/q?keyword=" + encodeURI(keyword),
+			success:function(data){
+				console.log(data);
+			},
+			error:function(){
+				console.log("error");
+			}
+		})
+	}
 </script>
 </body>
 </html>
