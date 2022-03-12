@@ -50,7 +50,10 @@
 				</div>
 				
 				<div>
-					<div style="text-align:center;"><a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a></div>
+					<div style="text-align:center;">
+					<a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a>
+					<a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/deleteUserForm">회원탈퇴</a>
+					</div>
 				</div>
 
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -198,7 +201,7 @@ $(function() {
 		datatype:"json",
 		success: function(data){
 			$.each(data, function(index, item) { 
-				$("#myCommunity").append("<tr><td><a href=/comm/boardlist/"+item.articleNo+">"
+				$("#myCommunity").append("<tr><td><a href=/comm/community/viewform/"+item.articleNo+">"
 				+item.title + "</a></td><td>"
 				+item.views + "</td></tr><br>");
 				});

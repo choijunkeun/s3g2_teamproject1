@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
@@ -82,10 +83,24 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("비밀번호가 일치하지 않습니다");
 		} else return null;
 	}
+
+	@Override
+	public String getUserNick(int idx) throws Exception {
+		return userDAO.getUserNick(idx);
+	}
+
 	//회원정보 수정
 	@Override
 	public void userUpdate(User user) throws Exception {
 		userDAO.userUpdate(user);
 	
 	}
+
+	@Override
+	public void userDelete(User user) throws Exception {
+		userDAO.remove(user);
+		
+	}
+	
+	
 }

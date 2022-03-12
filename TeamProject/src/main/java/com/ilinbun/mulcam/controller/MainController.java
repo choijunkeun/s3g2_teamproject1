@@ -19,6 +19,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -240,7 +241,7 @@ public class MainController {
 			return myCommunityList;
 		}
 		
-		//마이페이지에 리뷰 게시글 출력
+		//마이페이지에 혼밥리뷰 게시글 출력
 		@ResponseBody
 		@PostMapping("/MyreviewPosting")
 		public List<PlaceReview> reviewPosting() throws Exception {
@@ -249,6 +250,44 @@ public class MainController {
 			System.out.println("Review Board List");
 			return myReviewList;
 		}
+		//회원삭제 폼
+		@GetMapping("/deleteUserForm")
+		public String deleteUserForm() throws Exception {
+			return "default/user/deleteUserForm";
+		}
+		
+		@PostMapping("/deleteUser")
+		public String deleteUser(User user,HttpSession session) throws Exception {
+			//현재 세션에 저장되있는 유저객체(실제 로그인 되어있는 사용자의 객체정보)를 얻어와 변수에 저장
+			System.out.println("deletecontoroller");
+			User user2 = (User)session.getAttribute("user");
+			System.out.println(user2);
+			System.out.println(user.getEmail());
+			System.out.println(user.getPassword());
+			System.out.println(user2.getEmail());
+			System.out.println(user2.getPassword());
+			
+			//문제점 .. 로그인 할 때 password를 null로 바꿨기 때문에 세션에서 비밀번호를 얻어올 수 없음..
+		
+			//사용자(세션에 저장되어있는)의 비밀번호를 변수에 저장
+
+			
+			String oldPass = user2.getPassword();
+			//회원탈퇴에서 넘어온 비밀번호를 변수에 저장
+			String newPass = user.getPassword();
+			
+			if(oldPass.equals(newPass)) {
+				userService.userDelete(user);
+				session.invalidate();
+				System.out.println("회원탈퇴성공");
+				return "redirect:/";
+			} else {
+				return "redirect:/deleteUserForm";
+			}
+		}
+		
+		
+		
 		
 		
 

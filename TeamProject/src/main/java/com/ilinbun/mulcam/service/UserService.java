@@ -17,9 +17,14 @@ public interface UserService {
 	
 	//이메일 체크
 	String emailCheck(String email) throws Exception;
+
+	String getUserNick(int idx) throws Exception;
+
 	
 	//회원정보수정
 	void userUpdate(User user) throws Exception;
-	
+
+	// 회원 삭제
+	void userDelete(User user) throws Exception;
 	
 }

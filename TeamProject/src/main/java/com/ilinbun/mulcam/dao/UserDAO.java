@@ -29,12 +29,21 @@ public interface UserDAO {
 	
 	void userUpdate(User user) throws Exception;
 	
+	//회원 탈퇴
+	void remove(User user) throws Exception;
+	
 	// 혼밥자랑 게시글 출력
 	List<BragBoard> bragPosting(BragBoard bragBoard) throws Exception;
 	
 	
 
-	//-idx가지고 화면에 출력할 email, nickname, hblv가져오기
+	//user 불러오기(소연)
 	User selectUserDetail(int idx) throws Exception;
+	//(종현)
+	String getUserNick(int idx) throws Exception;
+
+	
+	
+	
 	
 }
