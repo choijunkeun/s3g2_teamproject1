@@ -222,7 +222,7 @@ public class BragController {
 					System.out.println("유저 정보 인식");
 					int didILiked = bragService.queryIfILikeThis(articleNo, user.getIdx());
 					System.out.println("이전에 누른 적 있음 : " +didILiked);
-					mav.addObject("didILiked", didILiked);
+					mav.addObject("didILiked", didILiked);  //좋아요 유지
 				}
 				
 				mav.addObject("likes", likes);
@@ -331,6 +331,8 @@ public class BragController {
 		return result;	
 	}
 	
+	
+	  //  좋아요
 	@ResponseBody
 	@PostMapping("/likes")
 	public ResponseEntity<String> toggleLikes(@RequestParam("articleNo") String articleNo, 

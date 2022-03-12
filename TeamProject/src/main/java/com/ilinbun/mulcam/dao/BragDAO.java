@@ -50,7 +50,7 @@ public interface BragDAO {
 	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글 출력 DAO(준근)
 	List<BragBoard> selectBragBoardByIdx(int idx) throws Exception;
 
-	
+	//좋아요 기능
 	int queryArticleLikes(int articleNo) throws Exception;
 	int addArticleLikes(Map<String, Integer> map) throws Exception;
 	int removeArticleLikes(Map<String, Integer> map) throws Exception;

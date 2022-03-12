@@ -50,6 +50,8 @@ public interface BragService {
 	// 댓글삭제
 //	void remBragReply(Bragboard bragboard) throws Exception;	
 	
+	
+	// 좋아요
 	int queryArticleLikes(int articleNo) throws Exception;
 	int addArticleLikes(int articleNo, int idx) throws Exception;
 	int removeArticleLikes(int articleNo, int idx) throws Exception;

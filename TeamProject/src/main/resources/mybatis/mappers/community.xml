@@ -42,7 +42,7 @@
        <![CDATA[
           select * from comm_board where articleNo between #{startrow} and #{startrow}+14   
        ]]>
-   </select>
+   </select>  <!--  select * from comm_board where articleNo order by desc between #{startrow} and #{startrow}+14 -->
    <!-- 글목록 : 전체게시물 조회하기 -->
    <select id="selectCommBoardCount" resultType="int">
        <![CDATA[
@@ -69,6 +69,47 @@
        ]]>
    </delete>
    
+   
+   
+   
+ <!--        [커뮤니티 공지사항] 글 맨위로 뜨게 (종현)
+   	List<CommBoard> commNotice() throws Exception;
+   <select id="bragBest" resultType="CommBoard">
+		<![CDATA[
+			SELECT * FROM comm_board order by readCount desc LIMIT 3
+		]]>
+	</select> -->
+   
+   <!-- @@@@@@@좋아요@@@@@@@@@@ -->
+	<select id="queryArticleLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from commLikes where articleNo=#{articleNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from commLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addArticleLikes" parameterType="Map">
+		<![CDATA[
+			insert into commLikes values(#{articleNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeArticleLikes" parameterType="Map">
+		<![CDATA[
+			delete from commLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</delete> 
+	
+   
+   
+   
+   
+   
    <!-- 사용자의 커뮤니티 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
 	<select id="selectCommunityBoardByIdx" resultType="CommBoard" parameterType="int">
  		<![CDATA[
@@ -76,6 +117,7 @@
  		]]>
 	</select>
 </mapper>
+
 
    
 

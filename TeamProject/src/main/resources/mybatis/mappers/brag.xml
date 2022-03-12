@@ -79,7 +79,7 @@
  		]]>
 	</select>
 	
-	
+	<!-- @@@@@@@좋아요@@@@@@@@@@ -->
 	<select id="queryArticleLikes" resultType="integer" parameterType="int">
 		<![CDATA[
 			select count(*) from honbabLikes where articleNo=#{articleNo}

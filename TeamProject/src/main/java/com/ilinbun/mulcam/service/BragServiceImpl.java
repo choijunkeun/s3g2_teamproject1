@@ -183,7 +183,7 @@ public class BragServiceImpl implements BragService {
 	
 	
 
-	
+	// 좋아요
 	@Override
 	public int queryArticleLikes(int articleNo) throws Exception {
 		// TODO Auto-generated method stub

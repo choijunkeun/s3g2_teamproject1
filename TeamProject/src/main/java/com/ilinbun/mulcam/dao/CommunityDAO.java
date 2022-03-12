@@ -2,6 +2,7 @@ package com.ilinbun.mulcam.dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -46,7 +47,17 @@ public interface CommunityDAO {
       
       // 아마 댓글관련 DAO
       void updateCommBoardReSeq(CommBoard commboard) throws Exception;
+      
+      
+     //[커뮤니티 공지사항] 글 맨위로 뜨게 (종현)
+   	List<CommBoard> commNotice() throws Exception;
 
+
+  //좋아요 기능
+  	int queryArticleLikes(int articleNo) throws Exception;
+  	int addArticleLikes(Map<String, Integer> map) throws Exception;
+  	int removeArticleLikes(Map<String, Integer> map) throws Exception;
+  	int queryIfILikeThis(Map<String, Integer> map) throws Exception;
 
 
 

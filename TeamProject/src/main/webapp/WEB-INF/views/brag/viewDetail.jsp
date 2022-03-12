@@ -178,6 +178,8 @@ body>div>p>img{
 	<br> 
 	<div "style=width: 200px; height: 200px;"글 이미지 파일명: ${imgSrc }> </div>
 	
+	
+	<!-- 좋아요 -->
 	<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
 		id="likebtn${bboard.articleNo }" onclick="toggleLikes(${bboard.articleNo})">
 		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" 
@@ -261,6 +263,8 @@ body>div>p>img{
 		}
 	}
 </script>
+
+<!-- 좋아요 -->
 <script>
 function toggleLikes(articleNo){
 	if(${empty user}){

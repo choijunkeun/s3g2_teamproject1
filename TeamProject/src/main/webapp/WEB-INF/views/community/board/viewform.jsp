@@ -53,6 +53,14 @@ a {
 	<section id="basicInfoArea">
 			제 목 : ${cboard.title}<br>
 			작성자 : ${nickname}  작성일 : ${cboard.date} 조회수 : ${cboard.views}
+			<!-- 좋아요 -->
+	<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
+		id="likebtn${cboard.articleNo }" onclick="toggleLikes(${cboard.articleNo})">
+		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" 
+		aria-hidden="true">${likes }</i>
+		</button>
+		<br>
+			
 	</section><br><br>
 		${cboard.content}
 	</section>
@@ -65,6 +73,8 @@ a {
 	</section>
 </body>
 <script>
+
+/* @@@@@@@     관리자나 로그인한 사용자만 수정 삭제 보이게 구현    @@@@@@@*/
 $(function() {
 	
 	let writerIdx = ${cboard.idx}; //작성자 정보
@@ -82,5 +92,37 @@ $(function() {
 	}
 })
 
+</script>
+
+<!-- 좋아요 -->
+<script>
+function toggleLikes(articleNo){
+	if(${empty user}){
+		alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+		return false;
+	} else {
+		$.ajax({
+			type:"POST",
+			url:"/comm/likes/",
+			cache: false,
+			data:{"articleNo": articleNo, "idx":${not empty user.idx? user.idx:"0"}},
+			async:false,
+			success: function(data){
+				result = JSON.parse(data);
+				$('#likebtn' + articleNo).children('i').text(result.currentLikes);
+				if(result.processed >0){
+					$('#likebtn' + articleNo).children('i').removeClass('fa-heart-o');
+					$('#likebtn' + articleNo).children('i').addClass('fa-heart');
+				} else if(result.processed <0){
+					$('#likebtn' + articleNo).children('i').removeClass('fa-heart');
+					$('#likebtn' + articleNo).children('i').addClass('fa-heart-o');
+				}
+			},
+			error:function(data){
+				$('#likebtn' + articleNo).children('i').text('좋아요');
+			}
+		})
+	}
+}
 </script>
 </html>
