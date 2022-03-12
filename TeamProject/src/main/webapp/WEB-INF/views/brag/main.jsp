@@ -26,6 +26,16 @@ td {
 width : 450px !important;
 height : 300px !important;
 }
+
+.img-latest {
+	width: 200px;
+	height:200px;
+	min-width:200px;
+	min-height:200px;
+	max-width:200px;
+	max-height:200px;
+}
+
 </style>
 </head>
 <body>
@@ -47,12 +57,13 @@ height : 300px !important;
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[0].title }">
-									<a href="brag/viewdetail/${bestbragList[0].articleNo }">
+							<td title="${bestbragList[0].title }">
+								<a href="brag/viewdetail/${bestbragList[0].articleNo }">
 									${bestbragList[0].title } <br>
-									<img src="${bestbragList[0].content}" name="brag_content" width="500px" height="700px"
+									<img src="${bestbragList[0].content}" name="brag_content" 
+									width="500px" height="700px"
 									class="card-img-top" /></a>
-									</td>
+							</td>
 						</tr>
 						</table>
 				</div>
@@ -67,20 +78,20 @@ height : 300px !important;
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[1].title }">
-										<a href="brag/viewdetail/${bestbragList[1].articleNo }">
-											${bestbragList[1].title } <br>
-											<img src="${bestbragList[1].content}" name="brag_content"  width="450px" height="300px"
-											class="card-img-top"/></a>
-									</td>
+							<td title="${bestbragList[1].title }">
+								<a href="brag/viewdetail/${bestbragList[1].articleNo }">
+									${bestbragList[1].title } <br>
+									<img src="${bestbragList[1].content}" name="brag_content"  width="450px" height="300px"
+									class="card-img-top"/></a>
+							</td>
 						</tr>
-							<tr>
-									<td title="${bestbragList[2].title }">
-									<a href="brag/viewdetail/${bestbragList[2].articleNo }">
-											${bestbragList[2].title } <br> 
-											<img src="${bestbragList[2].content}" name="brag_content" width="450px" height="300px"
-											class="card-img-top" />
-									</a></td>
+						<tr>
+							<td title="${bestbragList[2].title }">
+							<a href="brag/viewdetail/${bestbragList[2].articleNo }">
+									${bestbragList[2].title } <br> 
+									<img src="${bestbragList[2].content}" name="brag_content" width="450px" height="300px"
+									class="card-img-top" />
+							</a></td>
 						</tr>
 					</table>
 
@@ -89,7 +100,7 @@ height : 300px !important;
 			
 				<!-- 2. 글쓰기 버튼-->
 	<div>
-		<button class="make_btn btn-outline-secondary" id="bragMake"
+		<button class="make_btn m-2 btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
 			style="float: right; width: 80px; height: 40px;">글쓰기</button>
 	</div>
@@ -116,7 +127,7 @@ height : 300px !important;
 										href="brag/viewdetail/${bboard.articleNo }"> <!--타이틀, 사진-->
 											${bboard.title } <br> <img src="${bboard.content}"
 											name="brag_content" width="200px" height="200px"
-											class="card-img-top" />
+											class="card-img-top img-latest" />
 									</a></td>
 								</c:if>
 								<c:if test="${status.index==3}">
@@ -127,7 +138,7 @@ height : 300px !important;
 								<td title="${bboard.title }"><a
 									href="brag/viewdetail/${bboard.articleNo }"> ${bboard.title }<br>
 										<img src="${bboard.content}" name="brag_content" width="200px"
-										height="200px" class="card-img-top" />
+										height="200px" class="card-img-top img-latest" />
 								</a></td>
 							</c:if>
 							<c:if test="${status.index==7}">

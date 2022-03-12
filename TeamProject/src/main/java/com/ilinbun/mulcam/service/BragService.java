@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
@@ -48,5 +49,10 @@ public interface BragService {
 //	void modBragReply(Bragboard bragboard) throws Exception;
 	// 댓글삭제
 //	void remBragReply(Bragboard bragboard) throws Exception;	
+	
+	int queryArticleLikes(int articleNo) throws Exception;
+	int addArticleLikes(int articleNo, int idx) throws Exception;
+	int removeArticleLikes(int articleNo, int idx) throws Exception;
+	int queryIfILikeThis(int articleNo, int idx) throws Exception;
 
 }

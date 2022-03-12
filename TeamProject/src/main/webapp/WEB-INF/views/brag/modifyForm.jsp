@@ -193,7 +193,7 @@ label.star:before {
 														<button type="button"
 															class="btn btn-secondary dropdown-toggle"
 															id="sortDropdown" data-bs-toggle="dropdown"
-															aria-expanded="false">문파선택</button>
+															aria-expanded="false">${bboard.moonpa? '사먹파':'해먹파' }</button>
 														<ul class="dropdown-menu text-center"
 															aria-labelledby="sortDropdown">
 															<li><button class="dropdown-item" type="button"
@@ -210,7 +210,7 @@ label.star:before {
 												</div>
 											</td>
 										</tr>
-										<tr>
+										<tr> 
 											<td>
 												<!--3. 제목  -->
 												<div>
@@ -224,7 +224,7 @@ label.star:before {
 												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
 												<div>
 													<textarea id="editor" name="content"
-														placeholder="내용을 입력해주세요!" value="${bboard.content }"></textarea>
+														placeholder="내용을 입력해주세요!" >${bboard.content }</textarea>
 												</div>
 											</td>
 										</tr>

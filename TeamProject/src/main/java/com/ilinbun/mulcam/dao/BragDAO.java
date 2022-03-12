@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -49,4 +50,9 @@ public interface BragDAO {
 	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글 출력 DAO(준근)
 	List<BragBoard> selectBragBoardByIdx(int idx) throws Exception;
 
+	
+	int queryArticleLikes(int articleNo) throws Exception;
+	int addArticleLikes(Map<String, Integer> map) throws Exception;
+	int removeArticleLikes(Map<String, Integer> map) throws Exception;
+	int queryIfILikeThis(Map<String, Integer> map) throws Exception;
 }

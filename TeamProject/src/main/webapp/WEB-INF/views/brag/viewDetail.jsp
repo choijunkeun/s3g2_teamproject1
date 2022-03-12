@@ -161,6 +161,10 @@ label.star:before {
 	min-width: 550px;
 	max-width: 100%;
 }
+body>div>p>img{
+	max-width:500px;
+	height: auto;
+}
 </style>
 <body>
 
@@ -174,7 +178,12 @@ label.star:before {
 	<br> 
 	<div "style=width: 200px; height: 200px;"글 이미지 파일명: ${imgSrc }> </div>
 	
-	
+	<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
+		id="likebtn${bboard.articleNo }" onclick="toggleLikes(${bboard.articleNo})">
+		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" 
+		aria-hidden="true">${likes }</i>
+		</button>
+		<br>
 	글 작성자 번호 : ${bboard.idx }
 	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
 
@@ -184,7 +193,7 @@ label.star:before {
 			<c:if test="${user.idx == bboard.idx || user.grp == 2 }">
 				<div class="if-thisArticle-mine text-end">
 					<button class="btn border-dark"
-						onclick="editReview(${bboard.articleNo})">수정</button>
+						onclick="editWrite(${bboard.articleNo});">수정</button>
 					<button class="btn border-dark"
 						onclick="deleteWrite(${bboard.articleNo});">삭제</button>
 				</div>
@@ -199,31 +208,40 @@ label.star:before {
 	<script>
 	/* -1. ekEditor -내용(content)부분 : img 이동경로 지정 코드 */	
 	$(function(){
-	      ClassicEditor.create(document.querySelector("#editor"), {
-	    	  initialData : '${viewdetail.content}'
-	      }).then(editor=> {
-    		window.editor=editor;
-    		})
-		   .catch((error) => {
-		   	console.error(error);
-		    });
-		});
+      ClassicEditor.create(document.querySelector("#editor"), {
+    	  initialData : '${viewdetail.content}'
+      }).then(editor=> {
+   		window.editor=editor;
+   		})
+	   .catch((error) => {
+	   	console.error(error);
+	    });
+	});
+	
+	function mIHObj(key, value){ // makeInputHiddenObject : form 형식 만들기 귀찮아서 만듦
+		let obj = document.createElement('input');
+		obj.setAttribute('type', 'hidden');
+	    obj.setAttribute('name', key);
+	    obj.setAttribute('value', value);
+	    return obj;
+	}
+	
 	/*수정버튼 누르면~  */
 	function editWrite(articleNo){
 		let f = document.createElement('form');
 		
-		f.appendChild(mIHObj('reviewNo', reviewNo));
-	    f.appendChild(mIHObj('id','${place.id}'));
-	    f.appendChild(mIHObj('place_name','${place.place_name}'));
+		f.appendChild(mIHObj('articleNo', articleNo));
+	    f.appendChild(mIHObj('idx','${user.idx}'));
+	    /* f.appendChild(mIHObj('place_name','${place.place_name}'));
 	    f.appendChild(mIHObj('address_name','${place.address_name}'));
 	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
 	    f.appendChild(mIHObj('x','${place.x}'));
-	    f.appendChild(mIHObj('y','${place.y}'));
+	    f.appendChild(mIHObj('y','${place.y}')); */
 	    
 	    
 	    //f.setAttribute('enctype','application/json');
 	    f.setAttribute('method', 'post');
-	    f.setAttribute('action', './edit/'+${id});
+	    f.setAttribute('action', '../editWrite');
 	    document.body.appendChild(f);
 	    f.submit();
 	}
@@ -233,17 +251,45 @@ label.star:before {
 		if(confirm("게시글을 삭제하시겠습니까?")){
 			let f = document.createElement('form');
 			
-			f.appendChild(mIHObj('articleNo', reviewNo));
+			f.appendChild(mIHObj('articleNo', articleNo));
 		    f.appendChild(mIHObj('idx','${user.idx}'));
 		   
 		    f.setAttribute('method', 'post');
-		    f.setAttribute('action', './deleteWrite');
+		    f.setAttribute('action', '../deleteWrite'); // /brag/deleteWrite
 		    document.body.appendChild(f);
 		    f.submit();
 		}
 	}
-	
-
+</script>
+<script>
+function toggleLikes(articleNo){
+	if(${empty user}){
+		alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+		return false;
+	} else {
+		$.ajax({
+			type:"POST",
+			url:"/brag/likes/",
+			cache: false,
+			data:{"articleNo": articleNo, "idx":${not empty user.idx? user.idx:"0"}},
+			async:false,
+			success: function(data){
+				result = JSON.parse(data);
+				$('#likebtn' + articleNo).children('i').text(result.currentLikes);
+				if(result.processed >0){
+					$('#likebtn' + articleNo).children('i').removeClass('fa-heart-o');
+					$('#likebtn' + articleNo).children('i').addClass('fa-heart');
+				} else if(result.processed <0){
+					$('#likebtn' + articleNo).children('i').removeClass('fa-heart');
+					$('#likebtn' + articleNo).children('i').addClass('fa-heart-o');
+				}
+			},
+			error:function(data){
+				$('#likebtn' + articleNo).children('i').text('좋아요');
+			}
+		})
+	}
+}
 </script>
 </body>
 </html>
