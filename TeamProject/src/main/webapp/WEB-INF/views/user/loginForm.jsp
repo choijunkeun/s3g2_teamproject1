@@ -100,8 +100,8 @@
 <body>
    <form action="<c:url value="/login"/>" method="POST" onsubmit="return formCheck(this)">
    	
-    <div class="title">
-    	<div>
+    <div class="title d-flex">
+    	<div class="justify-content-center text-center">
     		<img src="https://placehold.co/30">일인분
     	</div>
     	<div class="title-text">
@@ -112,23 +112,26 @@
     
     <hr style="width:700px">
    	
-    <div>
-    <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="email" value="${cookie.email.value}" placeholder="이메일을 입력해주세요.">
-    </div>
-   <div>
-   	<label for="password">비밀번호</label>
-    <input class="input-field" type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
-     </div>
-     
-     <div>
-     	<div>
-      		<label><input type="checkbox" name="rememberEmail" value="on" ${empty cookie.email.value ? "":"checked"}>로그인 저장</label> 
-     	</div>
-     	<div>
-     		<a href="searchPwd">비밀번호 찾기</a>
-     	</div>
-     </div>
+   	<table>
+   		<tr>
+   			<td><label for="email">이메일</label></td>
+   			<td><input class="input-field" type="email" id="email" name="email" 
+   				value="${cookie.email.value}" placeholder="이메일을 입력해주세요."></td>
+   		</tr>
+		<tr>
+			<td><label for="password">비밀번호</label></td>
+			<td><input class="input-field" type="password" id="password" 
+				name="password" placeholder="비밀번호를 입력해주세요."></td>
+		</tr>   	
+   	</table>
+	<div>
+		<div>
+			<label><input type="checkbox" name="rememberEmail" value="on" ${empty cookie.email.value ? "":"checked"}>로그인 저장</label> 
+		</div>
+		<div>
+			<a href="searchPwd">비밀번호 찾기</a>
+		</div>
+	</div>
      
     <div id="msg" class="msg"> ${URLDecoder.decode(param.msg, "utf-8")}</div>
     <button type="submit" class="join-btn">로그인</button>

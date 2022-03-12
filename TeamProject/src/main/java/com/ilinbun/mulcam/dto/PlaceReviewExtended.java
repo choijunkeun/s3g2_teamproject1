@@ -8,7 +8,7 @@ public class PlaceReviewExtended extends PlaceReview{
 	String nickname;
 	String profileImg;
 	int honbabLevel;
-	int group;
+	int grp;
 	public String getNickname() {
 		return nickname;
 	}
@@ -27,21 +27,21 @@ public class PlaceReviewExtended extends PlaceReview{
 	public void setHonbabLevel(int honbabLevel) {
 		this.honbabLevel = honbabLevel;
 	}
-	public int getGroup() {
-		return group;
+	public int getGrp() {
+		return grp;
 	}
-	public void setGroup(int group) {
-		this.group = group;
+	public void setGrp(int grp) {
+		this.grp = grp;
 	}
 	
 	public PlaceReviewExtended() {}
 	
-	public PlaceReviewExtended(String nickname, String profileImg, int honbabLevel, int group) {
+	public PlaceReviewExtended(String nickname, String profileImg, int honbabLevel, int grp) {
 		super();
 		this.nickname = nickname;
 		this.profileImg = profileImg;
 		this.honbabLevel = honbabLevel;
-		this.group = group;
+		this.grp = grp;
 	}
 	
 	

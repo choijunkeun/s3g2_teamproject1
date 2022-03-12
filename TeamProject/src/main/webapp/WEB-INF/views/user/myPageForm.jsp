@@ -188,10 +188,11 @@ $(function() {
 		type: 'POST',
 		datatype:"json",
 		success: function(data){
-			$.each(data, function(index, item) {  
-				$("#myShare").append(item.articleNo + " ");
-				$("#myShare").append(item.title + "<br>");
-			});
+			$.each(data, function(index, item) { 
+				$("#myShare").append("<tr><td><a href=/brag/viewdetail/"+item.articleNo+">"
+				+item.title + "</a></td><td>"
+				+item.readCount + "</td></tr><br>");
+				});
 			
 		}		
 	}),
@@ -202,9 +203,10 @@ $(function() {
 		datatype:"json",
 		success: function(data){
 			$.each(data, function(index, item) { 
-				$("#myCommunity").append(item.articleNo + " ");
-				$("#myCommunity").append(item.title + "<br>");		
-			});
+				$("#myCommunity").append("<tr><td><a href=/comm/boardlist/"+item.articleNo+">"
+				+item.title + "</a></td><td>"
+				+item.views + "</td></tr><br>");
+				});
 		}		
 	}),
 	// 리뷰 게시글
@@ -215,17 +217,20 @@ $(function() {
 		success: function(data) {			
 			$.each(data, function(index, item) { 
 				var index = (item.serviceRate+item.interiorRate+item.priceRate+item.tasteRate)/4;
-				console.log(index);
+				/* console.log(index); */
 				
 				$("#myReview").append("<tr><td><span class='badge bg-danger rounded-pill' style='font-size:0.75rem'>Lv."+
 						+item.honbabLv + "</span></td><td>"
 						+item.honbabReason + "</td><td>"+index+"</td></a></tr>");
 						});
-				
+			
+			
+			//url 경로연결은 카카오API 경로 지원 문제 떄문에 사용하지 못함.
+			/* $("#myReview").append("<tr><td><span class='badge bg-danger rounded-pill' style='font-size:0.75rem'>Lv."+
+					+item.honbabLv + "</span></td><td><a href=/place/"+item.id+">"
+					+item.honbabReason + "</a></td><td>"+index+"</td></a></tr>");
+					}); */
 
-				/* $("#myReview").append(item.honbabLv + " ");
-				$("#myReview").append(item.honbabReason+ "<br>");	
-				}); */
 			}
       })
 })

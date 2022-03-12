@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!-- 풀 하기 전 -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +48,7 @@ td {
 </head>
 <body>
 	<!-- 1. 글쓰기 버튼 -->
-	<div>
+	<div >
 		<button class="make_btn btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
 			style="float: right; width: 80px; height: 40px;">글쓰기</button>
