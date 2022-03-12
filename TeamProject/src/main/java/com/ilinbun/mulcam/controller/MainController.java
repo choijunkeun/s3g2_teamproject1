@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.CommBoard;
+import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 import com.ilinbun.mulcam.service.CommService;
+import com.ilinbun.mulcam.service.PlaceReviewService;
 import com.ilinbun.mulcam.service.ShareService;
 import com.ilinbun.mulcam.service.UserService;
 
@@ -50,6 +52,9 @@ public class MainController {
 	
 	@Autowired
 	CommService commService;
+	
+	@Autowired
+	PlaceReviewService placeReviewService;
 
 	@GetMapping({ "", "/index" })
 	public String Main(Model model) {
@@ -222,7 +227,7 @@ public class MainController {
 			return myShareList;
 		}
 		
-		//마이페이지에 혼밥자랑 게시글 출력
+		//마이페이지에 커뮤니티 게시글 출력
 		@ResponseBody
 		@PostMapping("/MycommunityPosting")
 		public List<CommBoard> communityPosting() throws Exception {
@@ -230,6 +235,16 @@ public class MainController {
 			List<CommBoard> myCommunityList = commService.MyCommunityBoard(user.getIdx());
 			System.out.println("communityboardlist");
 			return myCommunityList;
+		}
+		
+		//마이페이지에 리뷰 게시글 출력
+		@ResponseBody
+		@PostMapping("/MyreviewPosting")
+		public List<PlaceReview> reviewPosting() throws Exception {
+			User user = (User) session.getAttribute("user");
+			List<PlaceReview> myReviewList = placeReviewService.MyReviewBoard(user.getIdx());
+			System.out.println("Review Board List");
+			return myReviewList;
 		}
 
 }

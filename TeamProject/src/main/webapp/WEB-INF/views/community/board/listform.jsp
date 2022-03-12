@@ -82,8 +82,7 @@ table {
 					</c:when>
 									<c:otherwise>▶</c:otherwise>
 								</c:choose> --%>
-								 <a
-								href="./community/viewform/${article.articleNo}">
+							<a href="./community/viewform/${article.articleNo}">
 									<!-- 링크 --> ${article.title} <!-- 아티클 번호 -->
 							</a></td>
 							<td>${article.idx }</td>

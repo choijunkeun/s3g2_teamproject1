@@ -124,5 +124,12 @@
 			select avg(Honbablv) from reviewdb where id=#{id}
 		]]>
 	</select>
+	
+	<!-- 사용자의 리뷰 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
+	<select id="selectReviewBoardByIdx" resultType="placereview" parameterType="int">
+ 		<![CDATA[
+ 			select * from reviewDB where user_PK=#{user_PK} order by writeTime desc limit 10
+ 		]]>
+	</select>
 
 </mapper>

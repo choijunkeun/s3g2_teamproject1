@@ -161,4 +161,10 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 		// TODO Auto-generated method stub
 		return placeReviewDAO.selectReview(reviewNo);
 	}
+
+	// 마이페이지에 뿌려줄 사용자의 리뷰 게시글(준근) 
+	@Override
+	public List<PlaceReview> MyReviewBoard(int idx) throws Exception {
+		return placeReviewDAO.selectReviewBoardByIdx(idx);
+	}
 }

@@ -33,4 +33,7 @@ public interface PlaceReviewDAO {
 	Double selectPlaceTotalRating(int id) throws Exception;
 	PlaceRating selectPlaceAllRating(int id) throws Exception;
 	Double selectPlaceHonbabLv(int id) throws Exception;
+	
+	// 마이페이지에 뿌려줄 사용자의 리뷰 게시글 출력 DAO(준근)
+	List<PlaceReview> selectReviewBoardByIdx(int idx) throws Exception;
 }
