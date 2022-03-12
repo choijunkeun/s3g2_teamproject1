@@ -80,6 +80,12 @@ public class UserServiceImpl implements UserService {
 			throw new Exception("비밀번호가 일치하지 않습니다");
 		} else return null;
 	}
+
+	@Override
+	public String getUserNick(int idx) throws Exception {
+		return userDAO.getUserNick(idx);
+	}
+
 	//회원정보 수정
 	@Override
 	public void userUpdate(User user) throws Exception {

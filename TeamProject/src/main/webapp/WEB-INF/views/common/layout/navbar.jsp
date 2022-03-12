@@ -37,7 +37,7 @@ a:link, a:visited, a:hover, a:active { color: grey; text-decoration: none; !impo
 					<li class="nav-item"><a class="mt-auto mx-3" id="search-nav" href="/search">혼밥검색</a></li>
 					<li class="nav-item"><a class="mt-auto mx-3" id="share-nav" href="/share">반찬공유</a></li>
 					<li class="nav-item"><a class="mt-auto mx-3" id="brag-nav" href="/brag">혼밥자랑</a></li>
-					<li class="nav-item"><a class="mt-auto mx-3" id="comm-nav" href="/comm">커뮤니티</a></li>
+					<li class="nav-item"><a class="mt-auto mx-3" id="comm-nav" href="/comm/listform">커뮤니티</a></li>
 				</ul>
 
 			</nav>
