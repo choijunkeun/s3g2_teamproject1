@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.CommunityDAO;
+import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.CommBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 @Service
 public class CommServiceImpl implements CommService {
 
 	@Autowired
 	CommunityDAO CommunityDAO;
+	
+	@Autowired
+	UserDAO userDAO;
 
 	// [글쓰기Service]
 	// 글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
@@ -30,6 +35,13 @@ public class CommServiceImpl implements CommService {
 
 		CommunityDAO.insertCommBoard(commboard);
 	}
+	
+	
+	
+	@Override
+	public User selectUserDetail(int idx) throws Exception {
+		return userDAO.selectUserDetail(idx);
+	}
 
 	// [글 보기Service]
 	// 글보기(viewDetail)에서 id를 받아와 내 글인지 남의 글인지 판별
@@ -39,10 +51,10 @@ public class CommServiceImpl implements CommService {
 		return viewform;
 	}
 
-	// 글보기 시 조회수 올리는 기능
+	// 글 수정 기능
 	@Override
 	public CommBoard getArticleNo(int articleNo) throws Exception {
-		CommunityDAO.updateReadCount(articleNo);
+		
 		return CommunityDAO.selectCommBoard(articleNo);
 	}
 
@@ -96,22 +108,24 @@ public class CommServiceImpl implements CommService {
 	// 글수정
 	@Override
 	public void modifyCommBoard(CommBoard Commboard) throws Exception {
-		// TODO Auto-generated method stub
+		CommunityDAO.updateCommBoard(Commboard);
+
 	}
 
-	// 글수정(modifyForm) 시 하나의 글 정보를 select하는 쿼리문
+	// 글조회수 올리는 기능
 	@Override
 	public CommBoard getCommBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
+		CommunityDAO.updateReadCount(articleNo);
 		return CommunityDAO.selectCommBoard(articleNo);
 	}
 
 	// 글삭제
 	@Override
 	public void removeCommBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
-
+		CommunityDAO.deleteCommBoard(articleNo);
 	}
+
+
 
 
 

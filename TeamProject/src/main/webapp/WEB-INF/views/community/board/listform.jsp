@@ -8,11 +8,14 @@
 <head>
 <meta charset="UTF-8" />
 <title>MVC 게시판</title>
+
 <style type="text/css">
 h2 {
 	text-align: center;
 	margin-left: 80px;
 }
+
+
 
 a {
 	text-decoration-line: none;
@@ -45,54 +48,59 @@ table {
 	text-align: center;
 }
 </style>
+
+
 </head>
 
 <body>
+
+
+
+
+
+
+
+
+
+
 	<!-- 게시판 리스트 -->
 
-	<h2>
-		커뮤니티
-		<button class="btn btn-outline-dark" type="button"
-			style="float: right;" onclick="location.href='writeform'">글쓰기</button>
-	</h2>
+	<table>
+	<tr style="text-align: center;">
+	<th class="fa fa-exclamation-circle" style="font-size: 30px; margin-left: 150px;">커뮤니티</th>
+        	<!-- 2. 글쓰기 버튼-->
+		<button class="btn btn-outline-dark" id="commMake" name="commMake" type="button" style="float: right; width: 80px; height: 40px;">글쓰기</button>
+	</tr>
+	</table><br>
 	
+
+
 	<c:choose>
 		<c:when test="${commList!=null && pageInfo.listCount>0 }">
 			<section id="listForm">
 				<table>
 					<tr id="tr_top">
-						<td>번호</td>
-						<td>제목</td>
-						<td>작성자</td>
-						<td>날짜</td>
-						<td>조회수</td>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>날짜</th>
+						<th>조회수</th>
 					</tr>
 
 					<c:forEach var="article" items="${commList }">
+		
 						<tr>
-			<%-- 				<td>${article.art }</td>
-							<td><c:choose>
-									<c:when test="${article.board_re_lev!=0}">
-										<!-- 레벨 0 -->
-										<c:forEach var="i" begin="0" end="${article.board_re_lev*2}">
-											<!-- 댓글에는 레벨이 있음 레벨이 0이 아니면 2개씩 들여쓰기 -->
-							&nbsp;                   <!-- 들여쓰기를 위한 코드 -->
-										</c:forEach>
-						▶
-					</c:when>
-									<c:otherwise>▶</c:otherwise>
-								</c:choose> --%>
-								 <a
-								href="./community/viewform/${article.articleNo}">
-									<!-- 링크 --> ${article.title} <!-- 아티클 번호 -->
-							</a></td>
-							<td>${article.idx }</td>
-							<!-- 보드명 날짜 리드카운트 . 컨텐트는 없음 -->
-							<td>${article.date }</td>
-							<td>${article.views }</td>
+							<td><a href="./community/viewform/${article.articleNo}">${article.articleNo}</a></td>
+							<td><a href="./community/viewform/${article.articleNo}">${article.title}</a></td>
+							<td><a href="./community/viewform/${article.articleNo}">${article.idx}</a></td>
+							<td><a href="./community/viewform/${article.articleNo}">${article.date}</a></td>
+							<td><a href="./community/viewform/${article.articleNo}">${article.views}</a></td>
 						</tr>
 					</c:forEach>
 				</table>
+				
+				
+				
 			</section>
 			<section id="pageList">
 				<!-- 페이지 목록 -->
@@ -102,7 +110,7 @@ table {
 					[이전]&nbsp;
 				</c:when>
 					<c:otherwise>
-						<a href="boardlist?page=${pageInfo.page-1}">[이전]</a>&nbsp;
+						<a href="listform?page=${pageInfo.page-1}">[이전]</a>&nbsp;
 				</c:otherwise>
 				</c:choose>
 				<c:forEach var="i" begin="${pageInfo.startPage }"
@@ -113,7 +121,7 @@ table {
 					<c:choose>
 						<c:when test="${pageInfo.page==i }">[${i }]</c:when>
 						<c:otherwise>
-							<a href="boardlist?page=${i}">[${i }]</a>
+							<a href="listform?page=${i}">[${i }]</a>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
@@ -122,7 +130,7 @@ table {
 					[다음]
 				</c:when>
 					<c:otherwise>
-						<a href="boardlist?page=${pageInfo.page+1}">[다음]</a>
+						<a href="listform?page=${pageInfo.page+1}">[다음]</a>
 					</c:otherwise>
 				</c:choose>
 				<!-- 페이지에 답변 달았으면 그 페이지 목록이 보여야함. -->
@@ -133,5 +141,39 @@ table {
 			<section id="emptyArea">등록된 글이 없습니다.</section>
 		</c:otherwise>
 	</c:choose>
+	
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<script>
+/*수정요. 비회원 클릭 시 로그인으로 넘어감. 세션값 필요  */
+//	console.log(${pageInfo.page});
+	// $(function(){
+// 	$("#todayMake").click(function(){
+// 		let id = $('#user_id').val();
+// 		if(id == ''){
+// 			alert("로그인 먼저 진행해주세요");
+// 		}else{
+// 			console.log("값넘기는거확인1");
+// 			return "today_make";
+// 		}
+// 	});
+// }); 
+	
+	
+// 글쓰기 버튼 #bragMake 클릭 시 글쓰기writeform으로 이동  */
+$(document).ready(function(){
+	$('#commMake').on('click',function(){
+		if('${user.idx }' == ''){
+	        alert("회원이 아닙니다. 로그인을 해주세요!");
+			location.href="/login";
+		} else {
+			location.href="/comm/writeform";	
+		}
+	});
+});
+
+
+</script>
+
 </body>
 </html>

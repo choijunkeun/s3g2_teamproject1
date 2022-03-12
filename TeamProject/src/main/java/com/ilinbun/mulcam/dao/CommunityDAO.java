@@ -30,6 +30,8 @@ public interface CommunityDAO {
       List<CommBoard> selectCommBoardList(int startrow) throws Exception;
       // [글 목록Service] 전체 게시물 조회 : 게시판 페이지 번호를 만들기 위해 저장된 글의 총 갯수의 정보를 반환하는 DAO
       int selectCommBoardCount() throws Exception;
+      // 글수정
+      void updateCommBoard(CommBoard commboard) throws Exception;
       
       // 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글 출력 DAO(준근)
       List<CommBoard> selectCommunityBoardByIdx(int idx) throws Exception;
@@ -37,8 +39,6 @@ public interface CommunityDAO {
       
 
       //여기서 부터는 구현아직 안함
-      // 글수정
-      void updateCommBoard(CommBoard commboard) throws Exception;
       // 글수정(modifyForm) 시 하나의 글 정보를 select하는 DAO
       CommBoard selectCommBoard(int articleNo) throws Exception;
       // 글삭제
@@ -46,5 +46,9 @@ public interface CommunityDAO {
       
       // 아마 댓글관련 DAO
       void updateCommBoardReSeq(CommBoard commboard) throws Exception;
+
+
+
+
 }
       

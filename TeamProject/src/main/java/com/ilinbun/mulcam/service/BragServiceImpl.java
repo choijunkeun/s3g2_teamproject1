@@ -1,6 +1,8 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -136,10 +138,10 @@ public class BragServiceImpl implements BragService {
 	}
 	//글삭제
 	@Override
-	public void removeBragBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public int deleteWrite(int articleNo) throws Exception {
+		return bragDAO.deleteWrite(articleNo);
 	}
+	
 
 	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글(준근) 
 	@Override
@@ -182,5 +184,34 @@ public class BragServiceImpl implements BragService {
 	
 
 	
+	@Override
+	public int queryArticleLikes(int articleNo) throws Exception {
+		// TODO Auto-generated method stub
+		return bragDAO.queryArticleLikes(articleNo);
+	}
+	@Override
+	public int addArticleLikes(int articleNo, int idx) throws Exception {
+		Map<String, Integer> map = new HashMap<>();
+		
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		return bragDAO.addArticleLikes(map);
+	}
 	
+	@Override
+	public int removeArticleLikes(int articleNo, int idx) throws Exception {
+		Map<String, Integer> map = new HashMap<>();
+		
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		return bragDAO.removeArticleLikes(map);
+	}
+	@Override
+	public int queryIfILikeThis(int articleNo, int idx) throws Exception {
+		Map<String, Integer> map = new HashMap<>();
+		
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		return bragDAO.queryIfILikeThis(map);
+	}
 }

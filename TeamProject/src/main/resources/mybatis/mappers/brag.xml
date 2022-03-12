@@ -66,7 +66,7 @@
 	</update>
 	<!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
 		할 것인가 -->
-	<delete id="deleteBragBoard" parameterType="int">
+	<delete id="deleteWrite" parameterType="int">
 		<![CDATA[
 		delete from honbab where articleNo=#{articleNo}
 		 ]]>
@@ -78,6 +78,33 @@
  			select * from honbab where idx=#{idx} order by date desc limit 10
  		]]>
 	</select>
+	
+	
+	<select id="queryArticleLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from honbabLikes where articleNo=#{articleNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from honbabLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addArticleLikes" parameterType="Map">
+		<![CDATA[
+			insert into honbabLikes values(#{articleNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeArticleLikes" parameterType="Map">
+		<![CDATA[
+			delete from honbabLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</delete> 
+	
+	
 </mapper>
 
 	<!-- ***빵꾸 이슈 코드인지 확인하기 <update id="updateDeletedBragBoard" parameterType="Bragboard"> 

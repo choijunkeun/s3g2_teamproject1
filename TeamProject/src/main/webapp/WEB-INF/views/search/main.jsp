@@ -572,6 +572,14 @@
 			objsubmit.setAttribute('value', "상세보기");
 			f.appendChild(objsubmit);
 			
+			if(${not empty user.idx}){
+				let objidx = document.createElement('input');
+				objidx.setAttribute('type', 'hidden');
+				objidx.setAttribute('name', 'idx');
+				objidx.setAttribute('value', ${user.idx});
+				f.appendChild(objidx);
+			}
+			
 			f.setAttribute('method', 'post');
 			f.setAttribute('action', './place/'+places.id);
 			//f.setAttribute('enctype', 'application/json');

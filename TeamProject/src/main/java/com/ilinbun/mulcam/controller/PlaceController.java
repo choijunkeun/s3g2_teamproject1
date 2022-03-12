@@ -8,7 +8,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -48,7 +49,9 @@ public class PlaceController {
 	private ServletContext servletContext;
 	
 	@GetMapping("/{id}")
-	public ModelAndView placeInfo(@PathVariable String id,@RequestParam("place_name") String place_name) {
+	public ModelAndView placeInfo(@PathVariable String id,
+			@RequestParam("place_name") String place_name,
+			@RequestParam(required=false) String idx) {
 		ModelAndView mv = new ModelAndView();
 		HttpURLConnection conn = null;
 		StringBuffer response = new StringBuffer();
@@ -102,6 +105,26 @@ public class PlaceController {
 		        
 		        PageInfo pageInfo = new PageInfo();
 		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(1, pageInfo, place.getId());
+		        
+		        HashMap<Integer, Integer> reviewLikesList = new HashMap<>();
+				HashMap<Integer, Integer> didILikedList = new HashMap<>();
+				for(int i=0; i<reviewList.size(); i++) {
+					reviewLikesList.put(reviewList.get(i).getReviewNo(),
+						placeReviewService.queryReviewLikes(reviewList.get(i).getReviewNo()));
+					if(idx != null) {
+						didILikedList.put(reviewList.get(i).getReviewNo(), 
+								placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), Integer.parseInt(idx)));
+					}
+				}
+				
+				for(Integer key : didILikedList.keySet()) {
+					System.out.println(key + ":" + didILikedList.get(key));
+				}
+				
+				if(idx != null) { 
+					mv.addObject("didILikedList", didILikedList);
+				}
+		        
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 				mv.addObject("prList", reviewList);
@@ -136,6 +159,7 @@ public class PlaceController {
 			@RequestParam("y") String y,
 			@RequestParam("place_url") String place_url,
 			@RequestParam(value="page", required=false, defaultValue="1") int page
+			,@RequestParam(required=false) String idx
 			) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("id", id);
@@ -154,7 +178,27 @@ public class PlaceController {
 		
 		PageInfo pageInfo = new PageInfo();
 		try {
+			System.out.println(idx);
 			List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(page, pageInfo, place.getId());
+			HashMap<Integer, Integer> reviewLikesList = new HashMap<>();
+			HashMap<Integer, Integer> didILikedList = new HashMap<>();
+			for(int i=0; i<reviewList.size(); i++) {
+				reviewLikesList.put(reviewList.get(i).getReviewNo(),
+					placeReviewService.queryReviewLikes(reviewList.get(i).getReviewNo()));
+				if(idx != null) {
+					didILikedList.put(reviewList.get(i).getReviewNo(), 
+							placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), Integer.parseInt(idx)));
+				}
+			}
+			
+			for(Integer key : didILikedList.keySet()) {
+				System.out.println(key + ":" + didILikedList.get(key));
+			}
+			
+			if(idx != null) { 
+				mv.addObject("didILikedList", didILikedList);
+			}
+			mv.addObject("reviewLikesList",reviewLikesList);
 			mv.addObject("pageInfo", pageInfo);
 			mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 			mv.addObject("prList", reviewList);
@@ -165,6 +209,7 @@ public class PlaceController {
 			mv.addObject("interiorRate", String.format("%.1f", placeReviewService.getInteriorRating(place.getId())));
 			mv.addObject("tasteRate", String.format("%.1f", placeReviewService.getTasteRating(place.getId())));
 			mv.addObject("honbabLv", Math.round(placeReviewService.getHonbabLv(place.getId())));
+			
 			mv.setViewName("place/place");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -357,4 +402,55 @@ public class PlaceController {
 		return result;	
 	}
 	
+//	@ResponseBody
+//	@GetMapping("/likes/{reviewNo}/query")
+//	public ResponseEntity<Integer> queryLikes(@PathVariable int reviewNo, @RequestParam int id) {
+//		ResponseEntity<Integer> result = null;
+//		
+//		try {
+//			Integer val = placeReviewService.queryReviewLikes(reviewNo);
+//			int didILiked = placeReviewService.queryIfILikeThis(reviewNo, id);
+//			result = new ResponseEntity<Integer>(val , HttpStatus.OK);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			result = new ResponseEntity<Integer>(0, HttpStatus.BAD_REQUEST);
+//		}
+//		
+//		return result;	
+//	}
+	
+	@ResponseBody
+	@PostMapping("/likes")
+	public ResponseEntity<String> toggleLikes(@RequestParam("reviewNo") String reviewNo, 
+			@RequestParam("idx") String idx) {
+		ResponseEntity<String> result = null;
+		
+		int rNo = Integer.parseInt(reviewNo);
+		int useridx = Integer.parseInt(idx);
+		
+		int processed = 0;
+		try {
+			if(placeReviewService.queryIfILikeThis(rNo, useridx)>0) {
+				placeReviewService.removeReviewLikes(rNo, useridx);
+				processed = -1;
+			} else {
+				placeReviewService.addReviewLikes(rNo, useridx);
+				processed = 1;
+			}
+			Integer val = placeReviewService.queryReviewLikes(rNo);
+			JSONObject robj = new JSONObject();
+			robj.put("currentLikes", val);
+			robj.put("processed", processed);
+			
+			result = new ResponseEntity<String>(robj.toString() , HttpStatus.OK);
+//			result = new ResponseEntity<String>("" , HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
 }
+

@@ -31,6 +31,12 @@
     	SELECT * FROM user WHERE email=#{email}      	
     	]]>
     </select>
+    
+    <select id="getUserNick" resultType="String" parameterType="int">
+    	<![CDATA[
+    	select nickname from user where idx=#{idx}     	
+    	]]>
+    </select>
 <!-- 회원정보수정-->
 	<update id="userUpdate">
 		<![CDATA[
@@ -42,7 +48,20 @@
     	]]>
 	</update>
 	
+<!--idx가지고 화면에 출력할 email, nickname, hblv가져오기-->
+	<select id="selectUserDetail" resultType="User" parameterType="int">
+    	<![CDATA[
+			select idx, email, nickname, honbabLevel from User where idx=#{idx} 
+    	]]>
+	</select>
 
     
+    <!-- 글쓰기 수정 -->
+    <update id="updateBoard" parameterType="commboard">
+		<![CDATA[
+			update Comm_board set title=#{title},content=#{content}
+			where articleNo=#{articleNo}
+		]]>
+	</update>
 
 </mapper>

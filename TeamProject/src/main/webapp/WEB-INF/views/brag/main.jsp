@@ -10,20 +10,32 @@
 
 <style>
 
-/* /* 200 x 200 size 사진 */
+/* 200 x 200 size 사진 */
 .200table{
 	width: 800px;
 	table-layout: fixed;
 	border-spacing: 100px;
-} */
+} 
 /* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
 td {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 100px;
-	height: 20px;
 }
+.450300tr {
+width : 450px !important;
+height : 300px !important;
+}
+
+.img-latest {
+	width: 200px;
+	height:200px;
+	min-width:200px;
+	min-height:200px;
+	max-width:200px;
+	max-height:200px;
+}
+
 </style>
 </head>
 <body>
@@ -45,13 +57,13 @@ td {
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[0].title }">
-									<a
-										href="brag/viewdetail/${bestbragList[0].articleNo }">
-											${bestbragList[0].title } <br> <img src="${bestbragList[0].content}"
-											name="brag_content" width="200px" height="200px"
-											class="card-img-top" />
-									</a></td>
+							<td title="${bestbragList[0].title }">
+								<a href="brag/viewdetail/${bestbragList[0].articleNo }">
+									${bestbragList[0].title } <br>
+									<img src="${bestbragList[0].content}" name="brag_content" 
+									width="500px" height="700px"
+									class="card-img-top" /></a>
+							</td>
 						</tr>
 						</table>
 				</div>
@@ -66,37 +78,37 @@ td {
 					<table>
 						<!-- <div class="border mycard" > -->
 						<tr>
-									<td title="${bestbragList[1].title }">
-										<a href="brag/viewdetail/${bestbragList[1].articleNo }">
-											${bestbragList[1].title } <br>
-											<img name="brag_content" width="200px" height="200px"
-											class="card-img-top" src=${bestbragList[1].content}
-											 />
-										</a>
-									</td>
+							<td title="${bestbragList[1].title }">
+								<a href="brag/viewdetail/${bestbragList[1].articleNo }">
+									${bestbragList[1].title } <br>
+									<img src="${bestbragList[1].content}" name="brag_content"  width="450px" height="300px"
+									class="card-img-top"/></a>
+							</td>
 						</tr>
-							<tr>
-									<td title="${bestbragList[2].title }"><a
-										href="brag/viewdetail/${bestbragList[2].articleNo }">
-											${bestbragList[2].title } <br> <img src=${bestbragList[2].content}
-											name="brag_content" width="200px" height="200px"
-											class="card-img-top" />
-									</a></td>
+						<tr>
+							<td title="${bestbragList[2].title }">
+							<a href="brag/viewdetail/${bestbragList[2].articleNo }">
+									${bestbragList[2].title } <br> 
+									<img src="${bestbragList[2].content}" name="brag_content" width="450px" height="300px"
+									class="card-img-top" />
+							</a></td>
 						</tr>
 					</table>
 
 				</div>
 			</div>
+			
+				<!-- 2. 글쓰기 버튼-->
+	<div>
+		<button class="make_btn m-2 btn-outline-secondary" id="bragMake"
+			name="bragMake" type="button"
+			style="float: right; width: 80px; height: 40px;">글쓰기</button>
+	</div>
+			
 		</div>
 	</div>
 
-	<!-- 2. 글쓰기 버튼-->
-	<div>
-		<button class="make_btn btn-outline-secondary" id="bragMake"
-			name="bragMake" type="button"
-			style="float: right; width: 80px; height: 40px;">글쓰기</button>
 
-	</div>
 
 	<!--3. (일반) 혼밥자랑 게시판 구현 부분. 4개씩 2줄 출력(8개) -->
 	<div>
@@ -115,7 +127,7 @@ td {
 										href="brag/viewdetail/${bboard.articleNo }"> <!--타이틀, 사진-->
 											${bboard.title } <br> <img src="${bboard.content}"
 											name="brag_content" width="200px" height="200px"
-											class="card-img-top" />
+											class="card-img-top img-latest" />
 									</a></td>
 								</c:if>
 								<c:if test="${status.index==3}">
@@ -126,7 +138,7 @@ td {
 								<td title="${bboard.title }"><a
 									href="brag/viewdetail/${bboard.articleNo }"> ${bboard.title }<br>
 										<img src="${bboard.content}" name="brag_content" width="200px"
-										height="200px" class="card-img-top" />
+										height="200px" class="card-img-top img-latest" />
 								</a></td>
 							</c:if>
 							<c:if test="${status.index==7}">
