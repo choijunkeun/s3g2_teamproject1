@@ -184,9 +184,27 @@ a {
 		<div>
 			<section id="commandList">
 				<a href="replyform?board_num=${articleNo}&page=${page}"> [답변] </a> 
-				<a href="modifyform?board_num=${articleNo}"> [수정] </a> 
-				<a href="deleteform?board_num=${articleNo}&page=${page}"> [삭제] </a>
-				<a href="./boardlist?page=${page}"> [목록]</a>&nbsp;&nbsp;
+				<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
+	<div class="row py-3">
+		<div class="col text-center">
+			<c:if test="${user.idx == shboard.idx || user.grp == 2 }">
+				<div class="if-thisArticle-mine text-end">
+					<button class="btn border-dark"
+						onclick="editWrite(${shboard.articleNo});">수정</button>
+					<button class="btn border-dark"
+						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+				</div>
+			</c:if>
+		</div>
+	</div>
+				<%-- <c:if test="${user.idx eq shboard.idx}">
+				<a href="../modifyform?articleNo=${articleNo}"> [수정] </a>
+				</c:if>
+				<c:if test="${user.idx eq shboard.idx || user.grp == 2 }"> 
+				<a href="../deleteform?articleNo=${articleNo}"> [삭제] </a>
+				</c:if> --%>
+				
+				<a href="../listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
 			</section>
 		</div>
 	</section>
@@ -203,6 +221,50 @@ a {
 		   	console.error(error);
 		    });
 		});
-</script>
+	
+	function mIHObj(key, value){ // makeInputHiddenObject : form 형식 만들기 귀찮아서 만듦
+		let obj = document.createElement('input');
+		obj.setAttribute('type', 'hidden');
+	    obj.setAttribute('name', key);
+	    obj.setAttribute('value', value);
+	    return obj;
+	}
+	
+	/*수정버튼 누르면~  */
+	function editWrite(articleNo){
+		let f = document.createElement('form');
+		
+		f.appendChild(mIHObj('articleNo', articleNo));
+	    f.appendChild(mIHObj('idx','${user.idx}'));
+	    /* f.appendChild(mIHObj('place_name','${place.place_name}'));
+	    f.appendChild(mIHObj('address_name','${place.address_name}'));
+	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
+	    f.appendChild(mIHObj('x','${place.x}'));
+	    f.appendChild(mIHObj('y','${place.y}')); */
+	    
+	    
+	    //f.setAttribute('enctype','application/json');
+	    f.setAttribute('method', 'post');
+	    f.setAttribute('action', '/share/modifyform');
+	    document.body.appendChild(f);
+	    f.submit();
+	}
+	
+	/*삭제버튼 누르면~  */
+	function deleteWrite(articleNo){
+		if(confirm("게시글을 삭제하시겠습니까?")){
+			let f = document.createElement('form');
+			
+			f.appendChild(mIHObj('articleNo', articleNo));
+		    f.appendChild(mIHObj('idx','${user.idx}'));
+		   
+		    f.setAttribute('method', 'post');
+		    f.setAttribute('action', '/share/deleteform'); // /brag/deleteWrite
+		    document.body.appendChild(f);
+		    f.submit();
+		}
+	}
+	</script>
+	
 </body>
 </html>

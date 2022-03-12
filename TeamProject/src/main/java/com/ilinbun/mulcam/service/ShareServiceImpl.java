@@ -20,11 +20,14 @@ public class ShareServiceImpl implements ShareService {
 	@Autowired
 	UserDAO userDAO;
 	
+	
+	
 	@Override
-	public Shareboard shareboard() throws Exception {
-		Shareboard share = shareDAO.selectShareboard();
-		return share;
+	public Shareboard getShareboard(int articleNo) throws Exception {
+		shareDAO.updateReadCount(articleNo);
+		return shareDAO.selectShareboard(articleNo);
 	}
+	
 
 	@Override
 	public void regShareBoard(Shareboard shareboard) throws Exception {
@@ -44,7 +47,7 @@ public class ShareServiceImpl implements ShareService {
 
 	@Override
 	public Shareboard getArticleNo(int articleNo) throws Exception {
-		shareDAO.updateReadCount(articleNo);
+		
 		return shareDAO.selectShareboard();
 	}
 
@@ -78,10 +81,7 @@ public class ShareServiceImpl implements ShareService {
 		return pageInfo;
 	}
 
-	@Override
-	public Shareboard getShareboard(int articleNo) throws Exception {
-		return shareDAO.selectShareboard(articleNo);
-	}
+
 
 	@Override
 	public void setInputList(Shareboard shareboard) throws Exception {
@@ -97,12 +97,13 @@ public class ShareServiceImpl implements ShareService {
 	
 	@Override
 	public void modifyShareBoard(Shareboard shareboard) throws Exception {
-		// TODO Auto-generated method stub
+		shareDAO.updateShareBoard(shareboard);
 	}
 	
+	
 	@Override
-	public Shareboard getShareboard() throws Exception {
-		return shareDAO.selectShareboard();
+	public void removeShareBoard(int articleNo) throws Exception {
+		shareDAO.deleteShareBoard(articleNo);
 	}
 
 	
@@ -111,4 +112,7 @@ public class ShareServiceImpl implements ShareService {
 	public List<Shareboard> MyShareBoard(int idx) throws Exception {
 		return shareDAO.selectShareBoardByIdx(idx);
 	}
+
+
+	
 }

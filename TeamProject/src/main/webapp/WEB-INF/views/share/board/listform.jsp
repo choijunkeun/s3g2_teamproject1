@@ -68,6 +68,7 @@ table {
 						<table>
 							<tr id="tr_top">
 								<td>번호</td>
+								<td>말머리</td>
 								<td>제목</td>
 								<td>위치</td>
 								<td>작성자</td>
@@ -78,8 +79,9 @@ table {
 						<%-- <c:if test="${status.index<15}"> --%>
 							<tr>
 								<td>${shboard.articleNo }</td>
+								<td>${shboard.headerTag eq 0? "공유중": shboard.headerTag eq 1? "공유완료":"알 수 없음" }</td>
 								<td>
-									<a href="./viewform/${shboard.articleNo }">${shboard.title }</a>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.title }</a>
 								</td>
 								<td>${shboard.subway }</td>
 								<td>${shboard.idx }</td>

@@ -4,30 +4,29 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.ShareDAO">	
-	<select id="selectShareboard" resultType="Shareboard">
+	<!-- 글보기:articlNo 가지고 게시글 조회 -->
+	<select id="selectShareboard" resultType="Shareboard" parameterType="int">
 		<![CDATA[
-			SELECT * FROM shareboard ORDER BY articleno DESC LIMIT 1 
+			SELECT * FROM shareboard where articleNo=#{articleNo}
 		]]>
 	</select>
+	<!-- 글쓰기, 글목록 -->
 	<insert id="insertShareBoard" parameterType="Shareboard">
  		<![CDATA[
  			insert into team2.shareBOARD (idx, subway, title, content)
  			
  			values (#{idx}, #{subway}, #{title}, #{content})
  		]]>
- 		
  	</insert>
-	<update id="updateShareBoard" parameterType="Shareboard">
- 		<![CDATA[
- 			update team2.shareBOARD set title=#{board_subject}, content=#{content}
- 			where articleNo=#{articleNo}
- 		]]>
- 	</update>
+
+	<!-- 글보기 게시글 조회수 +1 -->
  	<update id="updateReadCount" parameterType="int">
  		<![CDATA[
  			update team2.shareBOARD set readCount=readCount+1 where articleNo=#{articleNo} 
  		]]>
  	</update>
+ 	
+ 	<!-- 글쓰기 시 : 현재 articleNo가 어디까지(Max)인지 알려주는 쿼리문 -->
  	<select id="selectMaxArticleNo" resultType="integer">
 	<!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자.
 	PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다.-->
@@ -36,6 +35,8 @@
 			select max(articleNo) from team2.shareBOARD
 		]]>
 	</select>
+	
+	<!-- 글목록 : 전체게시물 조회하기 -->
 	<select id="selectShareBoardCount" resultType="int">
  		<![CDATA[
  			select count(*) from team2.shareBOARD
@@ -45,7 +46,7 @@
 	<select id="selectShareBoardList" resultType="Shareboard"
 		parameterType="int">
  		<![CDATA[
- 			select * from team2.shareBOARD where articleNo between #{startrow} and #{startrow}+15	
+ 			select * from team2.shareBOARD where articleNo between #{startrow} and #{startrow}+14	
  		]]>
  	</select>
  	
@@ -55,6 +56,21 @@
  			select * from shareBOARD where idx=#{idx} order by date desc limit 10
  		]]>
 	</select>
+	
+	<!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
+	 <update id="updateShareBoard" parameterType="ShareBoard">
+      <![CDATA[
+     
+      update shareBOARD set title=#{title},content=#{content} where articleNo=#{articleNo}
+       ]]>
+   </update>
+   <!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
+      할 것인가 -->
+   <delete id="deleteShareBoard" parameterType="int">
+      <![CDATA[
+      delete from shareBOARD where articleNo=#{articleNo}
+       ]]>
+   </delete>
  	
 
 </mapper>
