@@ -68,7 +68,7 @@
 	<update id="updateReview" parameterType="placereview">
 		<![CDATA[
 			update reviewdb 
-			set reviewContent=#{reviewContent}, honbabReason=#{honbabReason}, interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP
+			set reviewContent=#{reviewContent}, honbabReason=#{honbabReason}, interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP, honbabLv=#{honbabLv}
 			where reviewNo=#{reviewNo}
 		]]>
 	</update>

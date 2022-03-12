@@ -71,8 +71,12 @@ public class SearchController {
 			
 			for(int i=0; i<temp.length(); i++) {
 				JSONObject target = temp.getJSONObject(i);
-				if(target.getString("category_group_code").equals("FD6") && target.getString("category_group_name").equals("음식점") && target.getInt("honbabLv") <= honbabLv)
+				if(target.getString("category_group_code").equals("FD6") && 
+						target.getString("category_group_name").equals("음식점") && 
+						target.getInt("honbabLv") <= honbabLv) {
 					jarr.put(target);
+				}
+					
 			}
 			
 			// 이제부터 정렬을 시작합니다
@@ -218,8 +222,9 @@ public class SearchController {
 		HttpURLConnection conn = null;
 		JSONArray library = new JSONArray();
 		
-		for(int i=1; i<=45; i++){
-			JSONObject res = new JSONObject(getPlacesRAWResultFromKakao(keyword));
+		for(int i=1; i<=5; i++){
+			String jsonresult = getPlacesRAWResultFromKakao(keyword);
+			JSONObject res = new JSONObject(jsonresult);
 			JSONArray jarr = (JSONArray) res.get("documents");
 			for(int j =0; j<jarr.length(); j++) {
 				JSONObject temp = jarr.getJSONObject(j);

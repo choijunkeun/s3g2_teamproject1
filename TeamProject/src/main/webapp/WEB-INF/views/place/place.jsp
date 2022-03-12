@@ -118,16 +118,21 @@
 									<section>
 										<div class="justify-content-between d-flex flex-wrap">
 											<h5><strong>${pr.honbabReason }</strong></h5>
-											<span class="badge ${pr.rejectedCount? "bg-danger":"bg-secondary"} rounded-pill mb-2">
-												${pr.rejectedCount? "혼밥 가능"  : "혼밥 불가능"}</span>
-											<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
 												<div class="if-thisArticle-mine text-end">
-													<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
-													<button class="btn border-dark" onclick="deleteReview(${pr.reviewNo});">삭제</button>
+													<span class="badge ${pr.rejectedCount? "bg-danger":"bg-secondary"} rounded-pill mb-2">
+													${pr.rejectedCount? "혼밥 가능"  : "혼밥 불가능"}</span>
+													<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
+														<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
+														<button class="btn border-dark" onclick="deleteReview(${pr.reviewNo});">삭제</button>
+													</c:if>
 												</div>
-											</c:if>
+											
 										</div>
 										<p>${pr.reviewContent }</p>
+										<c:if test="${not empty pr.revImgFilepath}">
+											<img src="/revimgupload/${pr.revImgFilepath}" 
+												style="width: 200px; height: 200px; max-width: 200px; max-height: 200px; min-width: 200px; min-height: 200px;">
+										</c:if>
 									</section>
 									<div class="d-flex flex-wrap" style="align-items:center; font-size: 0.9rem;">
 										<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
@@ -143,6 +148,7 @@
 											<span style="font-size: 0.9rem;"><i class="bi bi-pencil-square"></i> ${pr.writeTime }</span>
 										</div>
 									</div>
+									
 								</div>
 							</div>
 						</c:forEach>

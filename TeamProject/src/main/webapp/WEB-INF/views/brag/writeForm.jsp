@@ -10,8 +10,7 @@
 <meta charset="UTF-8">
 <!-- ckEditor code -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <script
 	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
@@ -168,6 +167,8 @@ label.star:before {
 	max-width: 100%;
 }
 </style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
+</head>
 <body>
 	<!--수정요. session 코드. 위의 목업 user 코드와 함께 수정요.  -->
 	<section id="./writeForm">
@@ -205,7 +206,8 @@ label.star:before {
 													</div>
 												</div> <!--2. 위치 선택 (문파 기반) -->
 												<div class="input-group" style="flex-shrink: 0;">
-													<input type="text" class="form-control" id="location" onchange="searchByKeyword(this);"
+													<input type="hidden" id="locationId">
+													<input type="text" class="form-control" id="location"
 														name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
 													<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
 												</div>
@@ -244,9 +246,6 @@ label.star:before {
 								</div>
 							</div>
 							
-							
-							
-							
 						</div>
 					</div>
 					
@@ -261,6 +260,7 @@ label.star:before {
 	<!-- JavaScript -->
 	<script type="text/javascript"
 		src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 	<script>
 	/*1-1. 문파선택 : dropbox에서 선택 시 그 문파이름으로 고정되게 하는 코드  */
 		function moonpaChange(arg) {
@@ -277,19 +277,57 @@ label.star:before {
 
 /* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
 	$(function(){
-        ClassicEditor
-        	.create(document.querySelector("#editor"), {
-        		ckfinder : {
-        			uploadUrl : "/brag/upload"
-        		}
-        	}).then(editor=> {
-        		//window.editor=editor;
-        		editor.setData('${content}');
-        	})
-        	.catch((error) => {
-        		console.error(error);
-        	});
+		ClassicEditor
+		.create(document.querySelector("#editor"), {
+			ckfinder : {
+				uploadUrl : "/brag/upload"
+			}
+		}).then(editor=> {
+			//window.editor=editor;
+			editor.setData('${content}');
+		})
+		.catch((error) => {
+			console.error(error);
 		});
+		// 훈 : 위치 검색 자동완성 구현 실험중
+		$("#location").autocomplete({
+			source: function(request, response){
+				$.ajax({
+					type:"GET",
+					url:"/search/q?keyword=" + encodeURI($('#location').val()),
+					async: false,
+					success:function(data){
+						var result = JSON.parse(data);
+						var list = result["documents"];
+						console.log(list);
+						
+						response(
+							$.map(list, function(item){
+								return {
+									label: item.place_name + "(" + item.address_name + ")",
+									value: item.place_name,
+									'data-id': item.id
+								};
+							})
+						);
+					},
+					error:function(){
+						console.log("error");
+						return false;
+					}
+				})
+			},
+			focus : function(event, ui) { // 방향키로 자동완성단어 선택 가능하게 만들어줌	
+				return false;
+			}, 
+			select: function(event, ui){
+				$('#locationId').val(${ui.item['data-id']});
+			},
+			minLength:1,
+			delay:500,
+			autoFocus: true
+		});
+	});
 	
 	
 /*5-1. 완료 버튼 누르면 빈 공간 alert 및 작성 후 alert 부분  
@@ -340,22 +378,6 @@ label.star:before {
 	 */
 
 	 
-</script>
-<script>
-	function searchByKeyword(element){
-		var keyword = element.value;
-		
-		$.ajax({
-			type:"GET",
-			url:"/search/q?keyword=" + encodeURI(keyword),
-			success:function(data){
-				console.log(data);
-			},
-			error:function(){
-				console.log("error");
-			}
-		})
-	}
 </script>
 </body>
 </html>
