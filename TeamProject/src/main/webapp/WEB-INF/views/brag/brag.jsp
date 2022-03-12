@@ -30,12 +30,13 @@
 /* image {
 background-size:contain;
 } */
+/* 200 x 200 size 사진 */
 table {
 	width: 800px;
 	table-layout: fixed;
 	border-spacing: 100px;
 }
-
+/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
 td {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -47,7 +48,7 @@ td {
 </head>
 <body>
 	<!-- 1. 글쓰기 버튼 -->
-	<div>
+	<div >
 		<button class="make_btn btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
 			style="float: right; width: 80px; height: 40px;">글쓰기</button>
@@ -111,6 +112,7 @@ td {
 
 										</c:forEach>
 									</tr>
+								
 								</table>
 							</div>
 						</div>

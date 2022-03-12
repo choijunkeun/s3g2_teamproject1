@@ -97,6 +97,12 @@ public class CommServiceImpl implements CommService {
 		pageInfo.setStartPage(startPage);
 		return pageInfo;
 	}
+	
+	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글(준근) 
+	@Override
+	public List<CommBoard> MyCommunityBoard(int idx) throws Exception {
+		return CommunityDAO.selectCommunityBoardByIdx(idx);
+	}
 
 	// 여기서 부터는 구현 전
 	// 글수정

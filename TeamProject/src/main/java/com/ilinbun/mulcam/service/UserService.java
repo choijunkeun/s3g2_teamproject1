@@ -1,5 +1,8 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.List;
+
+
 import com.ilinbun.mulcam.dto.User;
 
 public interface UserService {
@@ -20,5 +23,8 @@ public interface UserService {
 
 	String getUserNick(int idx) throws Exception;
 
+	
+	//회원정보수정
+	void userUpdate(User user) throws Exception;
 	
 }

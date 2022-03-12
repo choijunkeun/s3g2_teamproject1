@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -41,9 +42,17 @@ public interface BragDAO {
 	// 글수정(modifyForm) 시 하나의 글 정보를 select하는 DAO
 	BragBoard selectBragBoard(int articleNo) throws Exception;
 	// 글삭제
-	void deleteBragBoard(int articleNo) throws Exception;
+	int deleteWrite(int articleNo) throws Exception;
 	
 	// 아마 댓글관련 DAO
 	void updateBragBoardReSeq(BragBoard bragboard) throws Exception;
 
+	// 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글 출력 DAO(준근)
+	List<BragBoard> selectBragBoardByIdx(int idx) throws Exception;
+
+	
+	int queryArticleLikes(int articleNo) throws Exception;
+	int addArticleLikes(Map<String, Integer> map) throws Exception;
+	int removeArticleLikes(Map<String, Integer> map) throws Exception;
+	int queryIfILikeThis(Map<String, Integer> map) throws Exception;
 }

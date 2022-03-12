@@ -1,15 +1,19 @@
 package com.ilinbun.mulcam.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.User;
 
 public interface BragService {
 
 	// 글쓰기 : 글 쓸때, 마지막 articleNo+1해주는 DAO
 	int regBragBoard(BragBoard bragboard) throws Exception;
 
+	//글보기 또는 글목록에 유저 디테일 부르기
+	public User selectUserDetail(int idx) throws  Exception;
 	// 글보기 : (viewDetail)에서 id를 받아와 내 글인지 남의 글인지 판별
 	BragBoard bragBoardQueryByID(String id) throws Exception;
 	// 글보기 :시 조회수 올리는 기능
@@ -33,7 +37,11 @@ public interface BragService {
 	BragBoard getBragBoard(int articleNo) throws Exception;
 
 	// 게시글 삭제
-	void removeBragBoard(int articleNo) throws Exception;
+	int deleteWrite(int articleNo) throws Exception;
+
+	
+	// 마이페이지에 사용자의 혼밥자랑 게시글 출력(준근)
+	List<BragBoard> MyBragBoard(int idx) throws Exception;
 
 	// 댓글달기
 //	void regBragReply(Bragboard bragboard) throws Exception;
@@ -41,5 +49,10 @@ public interface BragService {
 //	void modBragReply(Bragboard bragboard) throws Exception;
 	// 댓글삭제
 //	void remBragReply(Bragboard bragboard) throws Exception;	
+	
+	int queryArticleLikes(int articleNo) throws Exception;
+	int addArticleLikes(int articleNo, int idx) throws Exception;
+	int removeArticleLikes(int articleNo, int idx) throws Exception;
+	int queryIfILikeThis(int articleNo, int idx) throws Exception;
 
 }

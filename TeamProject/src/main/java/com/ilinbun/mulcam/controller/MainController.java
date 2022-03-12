@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.CommBoard;
+import com.ilinbun.mulcam.dto.PlaceReview;
+import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
+import com.ilinbun.mulcam.service.CommService;
+import com.ilinbun.mulcam.service.PlaceReviewService;
+import com.ilinbun.mulcam.service.ShareService;
 import com.ilinbun.mulcam.service.UserService;
 
 @Controller
@@ -41,9 +46,15 @@ public class MainController {
 
 	@Autowired
 	HttpSession session;
-
+	
 	@Autowired
-	private ServletContext servletContext;
+	ShareService shareService;
+	
+	@Autowired
+	CommService commService;
+	
+	@Autowired
+	PlaceReviewService placeReviewService;
 
 	@GetMapping({ "", "/index" })
 	public String Main(Model model) {
@@ -121,7 +132,7 @@ public class MainController {
 	// 로그인 폼
 	@GetMapping("/login")
 	public String loginForm() {
-		return "default/user/loginForm";
+		return "default/user/loginForm"; 
 	}
 
 	// 로그인 기능 컨트롤러
@@ -185,5 +196,55 @@ public class MainController {
 	public String editInfo() {
 		return "user/editInfoForm";
 	}
+	
+	// 정보수정
+	@PostMapping("/infoUpdate")
+	public String passwordUpdate(User user, HttpSession session) throws Exception {
+		userService.userUpdate(user);
+		session.setAttribute("user", user);
+		
+		
+		return "redirect:/myPage";
+	}
+	
+	//마이페이지에 혼밥자랑 게시글 출력
+	@ResponseBody
+	@PostMapping("/MybragPosting")
+	public List<BragBoard> bragPosting() throws Exception {
+		User user = (User) session.getAttribute("user");
+		List<BragBoard> myBragList = bragService.MyBragBoard(user.getIdx());
+		System.out.println("bragboardlist");
+		return myBragList;
+	}
+	
+	//마이페이지에 반찬공유 게시글 출력
+		@ResponseBody
+		@PostMapping("/MysharePosting")
+		public List<Shareboard> sharePosting() throws Exception {
+			User user = (User) session.getAttribute("user");
+			List<Shareboard> myShareList = shareService.MyShareBoard(user.getIdx());
+			System.out.println("shareBoardlist");
+			return myShareList;
+		}
+		
+		//마이페이지에 커뮤니티 게시글 출력
+		@ResponseBody
+		@PostMapping("/MycommunityPosting")
+		public List<CommBoard> communityPosting() throws Exception {
+			User user = (User) session.getAttribute("user");
+			List<CommBoard> myCommunityList = commService.MyCommunityBoard(user.getIdx());
+			System.out.println("communityboardlist");
+			return myCommunityList;
+		}
+		
+		//마이페이지에 리뷰 게시글 출력
+		@ResponseBody
+		@PostMapping("/MyreviewPosting")
+		public List<PlaceReview> reviewPosting() throws Exception {
+			User user = (User) session.getAttribute("user");
+			List<PlaceReview> myReviewList = placeReviewService.MyReviewBoard(user.getIdx());
+			System.out.println("Review Board List");
+			return myReviewList;
+		}
 
 }

@@ -184,8 +184,6 @@ public class SearchController {
 				} 
 				br.close();
 	        }
-	        //System.out.println(response.toString());
-	        
 	        
 		} catch(Exception e) {}
 		return response.toString();

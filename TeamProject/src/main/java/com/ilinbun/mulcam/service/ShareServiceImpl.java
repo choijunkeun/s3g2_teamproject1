@@ -1,5 +1,7 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +45,12 @@ public class ShareServiceImpl implements ShareService {
 	@Override
 	public void modifyShareBoard(Shareboard shareboard) throws Exception {
 		
+	}
+
+	
+	//마이페이지에 뿌려줄 사용자의 반찬공유 게시글(준근)
+	@Override
+	public List<Shareboard> MyShareBoard(int idx) throws Exception {
+		return shareDAO.selectShareBoardByIdx(idx);
 	}
 }

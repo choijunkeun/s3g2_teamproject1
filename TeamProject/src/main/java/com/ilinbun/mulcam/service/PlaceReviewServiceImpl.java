@@ -2,6 +2,7 @@ package com.ilinbun.mulcam.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -137,4 +138,68 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 		Double result = placeReviewDAO.selectPlaceHonbabLv(id) ;
 		return result != null? result : 1.0;
 	}
+	
+	@Override
+	public int updateReview(PlaceReview pr) throws Exception {
+		System.out.println("### : "+pr.getReviewContent());
+		// TODO Auto-generated method stub
+		return placeReviewDAO.updateReview(pr);
+	}
+	
+	public int updateReviewFilePath(PlaceReview pr) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.updateReviewFilePath(pr);
+	}
+	
+	@Override
+	public int deleteReview(int reviewNo) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.deleteReview(reviewNo);
+	}
+	
+	@Override
+	public PlaceReview getReview(int reviewNo) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.selectReview(reviewNo);
+	}
+	
+	@Override
+	public int queryReviewLikes(int reviewNo) throws Exception {
+		// TODO Auto-generated method stub
+		return placeReviewDAO.queryReviewLikes(reviewNo);
+	}
+	
+	@Override
+	public int addReviewLikes(int reviewNo, int idx) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Integer> map = new HashMap<>();
+		map.put("reviewNo", reviewNo);
+		map.put("idx", idx);
+		return placeReviewDAO.addReviewLikes(map);
+	}
+	@Override
+	public int removeReviewLikes(int reviewNo, int idx) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Integer> map = new HashMap<>();
+		map.put("reviewNo", reviewNo);
+		map.put("idx", idx);
+		return placeReviewDAO.removeReviewLikes(map);
+	}
+	
+	@Override
+	public int queryIfILikeThis(int reviewNo, int idx) throws Exception {
+		// TODO Auto-generated method stub
+		Map<String, Integer> map = new HashMap<>();
+		map.put("reviewNo", reviewNo);
+		map.put("idx", idx);
+		int i =  placeReviewDAO.queryIfILikeThis(map);
+		return i;
+	}
+	
+	// 마이페이지에 뿌려줄 사용자의 리뷰 게시글(준근) 
+		@Override
+		public List<PlaceReview> MyReviewBoard(int idx) throws Exception {
+			return placeReviewDAO.selectReviewBoardByIdx(idx);
+		}
+
 }

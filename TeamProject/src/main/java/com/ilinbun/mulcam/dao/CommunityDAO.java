@@ -33,6 +33,9 @@ public interface CommunityDAO {
       // 글수정
       void updateCommBoard(CommBoard commboard) throws Exception;
       
+      // 마이페이지에 뿌려줄 사용자의 혼밥자랑 게시글 출력 DAO(준근)
+      List<CommBoard> selectCommunityBoardByIdx(int idx) throws Exception;
+      
       
 
       //여기서 부터는 구현아직 안함

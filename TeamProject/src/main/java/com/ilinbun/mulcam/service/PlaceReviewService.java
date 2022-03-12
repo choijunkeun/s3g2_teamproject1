@@ -20,4 +20,18 @@ public interface PlaceReviewService {
 	Double getTotalRating(int id) throws Exception;
 	PlaceRating getAllRating(int id) throws Exception;
 	Double getHonbabLv(int id) throws Exception;
+	
+	int updateReview(PlaceReview pr) throws Exception;
+	int updateReviewFilePath(PlaceReview pr) throws Exception;
+	int deleteReview(int reviewNo) throws Exception;
+	
+	PlaceReview getReview(int reviewNo) throws Exception;
+	
+	int queryReviewLikes(int reviewNo) throws Exception;
+	int addReviewLikes(int reviewNo, int idx) throws Exception;
+	int removeReviewLikes(int reviewNo, int idx) throws Exception;
+	int queryIfILikeThis(int reviewNo, int idx) throws Exception;
+
+	//마이페이지에 사용자의 리뷰 게시글 출력(준근)
+	List<PlaceReview> MyReviewBoard(int idx) throws Exception;
 }

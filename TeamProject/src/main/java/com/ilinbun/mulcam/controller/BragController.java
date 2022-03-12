@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 
@@ -75,12 +78,14 @@ public class BragController {
 			pageInfo.setPage(page);
 			try {
 				List<BragBoard> bragList=bragService.getBragboardList(page);
-				for(BragBoard brag : bragList) {
-					Document doc=Jsoup.parse(brag.getContent());
-					Elements img= doc.select("img");
-					String src = img.attr("src");
-					brag.setContent(src);
-				}
+//				for(BragBoard brag : bragList) {
+//					Document doc=Jsoup.parse(brag.getContent());
+//					System.out.println(doc.toString());
+//					Elements img= doc.select("img");
+//					String src = img.attr("src");
+//					System.out.println("img src = " + src);
+//					brag.setContent(src);
+//				}
 				pageInfo=bragService.getPageInfo(pageInfo);
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("bragList", bragList);
@@ -88,7 +93,7 @@ public class BragController {
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
-				mav.setViewName("err");
+				mav.setViewName("/main/err");
 			}
 			return mav;
 		}
@@ -203,12 +208,26 @@ public class BragController {
 	
 		//게시글보기 (viewDetail.jsp)
 		@GetMapping("/viewdetail/{articleNo}")
-		public ModelAndView boardDetail(@PathVariable int articleNo) {
-			 User userinfo = (User) session.getAttribute("user"); //same
+		public ModelAndView boardDetail(@PathVariable int articleNo, HttpServletRequest request) {
 			ModelAndView mav=new ModelAndView();
 			try {
 				bragboard=bragService.getBragBoard(articleNo); //내가쓴글, 남이쓴글 확인
-				mav.addObject("user", userinfo);
+				User userinfo = bragService.selectUserDetail(bragboard.getIdx()); //유저 정보 가져오기
+				
+				int likes = bragService.queryArticleLikes(articleNo);
+				
+				HttpSession session = request.getSession();
+				User user = (User) session.getAttribute("user");
+				if(user != null) {
+					System.out.println("유저 정보 인식");
+					int didILiked = bragService.queryIfILikeThis(articleNo, user.getIdx());
+					System.out.println("이전에 누른 적 있음 : " +didILiked);
+					mav.addObject("didILiked", didILiked);
+				}
+				
+				mav.addObject("likes", likes);
+				
+				mav.addObject("userinfo", userinfo);
 				mav.addObject("bboard", bragboard);
 				
 				Document doc=Jsoup.parse(bragboard.getContent()); //content중에 사진만 가져오기
@@ -220,7 +239,7 @@ public class BragController {
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
-				mav.setViewName("err");
+				mav.setViewName("/main/err");
 			}
 			return mav;
 		}
@@ -260,17 +279,19 @@ public class BragController {
 	// }
 
 	// 글수정 (내 글일경우가능)
-	@GetMapping(value = "/modifyform")
-	public ModelAndView bragmodifyform(@RequestParam(value = "articleNo") int articleNo) {
+	@PostMapping(value = "/editWrite")
+	public ModelAndView editWrite(@RequestParam(value = "articleNo") int articleNo , @RequestParam(value = "idx") int idx) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			BragBoard Bragboard = bragService.getArticleNo(articleNo);
-			mav.addObject("article", Bragboard);
+			BragBoard bragboard = bragService.getBragBoard(articleNo);
+			if(bragboard.getIdx() != idx) throw new Exception("로그인한 사람과 글 작성자가 다릅니다");
+			
+			mav.addObject("bboard", bragboard);
 			mav.setViewName("brag/modifyForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("/brag/err");
+			mav.setViewName("/main/err");
 		}
 		return mav;
 	}
@@ -285,28 +306,64 @@ public class BragController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("brag/err");
+			mav.setViewName("main/err");
 		}
 		return mav;
 	}
 
 	// 글삭제 (내 글일경우가능)
-//		@PostMapping(value="bragdelete")
-//		public ModelAndView bragdelete(@RequestParam(value="board_num")int boardNum,
-//				@RequestParam(value="page")int page, @RequestParam(value="board_pass")String boardPass) {
-//			ModelAndView mav=new ModelAndView();
-//			try {
-//				boardService.removeBoard(boardNum, boardPass);
-//				mav.addObject("page", page);
-//				mav.setViewName("redirect:brag/{$ }");
-//			} catch(Exception e) {
-//				e.printStackTrace();
-//				mav.addObject("err", e.getMessage());
-//				mav.setViewName("brag/err");
-//			}
-//			return mav;
-//		}
-//		
+	@ResponseBody
+	@PostMapping(value="/deleteWrite") // /brag/deleteWrite
+	public ResponseEntity<String> deleteWrite(@RequestParam int articleNo, @RequestParam String idx) {
+		ResponseEntity<String> result = null;
+		
+		try {
+			BragBoard target = bragService.getBragBoard(articleNo);
+			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
+			bragService.deleteWrite(articleNo);
+			String html = "<script>alert('삭제 완료'); window.location = \"/search\"</script>";
+			result = new ResponseEntity<String>(html , HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
+	@ResponseBody
+	@PostMapping("/likes")
+	public ResponseEntity<String> toggleLikes(@RequestParam("articleNo") String articleNo, 
+			@RequestParam("idx") String idx) {
+		ResponseEntity<String> result = null;
+		
+		int rNo = Integer.parseInt(articleNo);
+		int useridx = Integer.parseInt(idx);
+		
+		int processed = 0;
+		try {
+			if(bragService.queryIfILikeThis(rNo, useridx)>0) {
+				bragService.removeArticleLikes(rNo, useridx);
+				processed = -1;
+			} else {
+				bragService.addArticleLikes(rNo, useridx);
+				processed = 1;
+			}
+			Integer val = bragService.queryArticleLikes(rNo);
+			JSONObject robj = new JSONObject();
+			robj.put("currentLikes", val);
+			robj.put("processed", processed);
+			
+			result = new ResponseEntity<String>(robj.toString() , HttpStatus.OK);
+//			result = new ResponseEntity<String>("" , HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
 
 //		//detail에서 답변을 눌렀을 때 화면 전환 (댓글로 변경하기)
 //		@GetMapping(value="replyform")

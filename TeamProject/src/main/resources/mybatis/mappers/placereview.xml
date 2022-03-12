@@ -22,7 +22,7 @@
 	
 	<select id="selectPRReviewList" resultType="PlaceReviewExtended" parameterType="HashMap"> <!-- -->
 		<![CDATA[ 
-			select user_PK, nickname, profileimg, honbabLevel, grp, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
+			select user_PK, nickname, profileimg, honbabLevel, grp, reviewNo, reviewContent, revImgFilepath, rejectedCount, honbabReason, writeTime, honbabLv, interiorRate, serviceRate, priceRate, tasteRate 
 				from (select @rownum:=@rownum+1 rnum, tot.* 
 					from (select * from reviewdb where id=#{id} order by writeTime desc ) tot, 
 					(select @rownum:=0) temp) sub, user
@@ -67,8 +67,15 @@
 	
 	<update id="updateReview" parameterType="placereview">
 		<![CDATA[
-			update reviewdb set reviewContent = #{reviewContent}, honbabReason=#{honbabReason},
-			interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP
+			update reviewdb 
+			set reviewContent=#{reviewContent}, honbabReason=#{honbabReason}, interiorRate=#{interiorRate},serviceRate=#{serviceRate},priceRate=#{priceRate},tasteRate=#{tasteRate}, writeTime=CURRENT_TIMESTAMP
+			where reviewNo=#{reviewNo}
+		]]>
+	</update>
+	
+	<update id="updateReviewFilePath" parameterType="placereview">
+		<![CDATA[
+			update reviewdb set revImgFilepath=#{revImgFilepath}
 			where reviewNo=#{reviewNo}
 		]]>
 	</update>
@@ -117,5 +124,36 @@
 			select avg(Honbablv) from reviewdb where id=#{id}
 		]]>
 	</select>
+	
+	<!-- 사용자의 리뷰 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
+	<select id="selectReviewBoardByIdx" resultType="placereview" parameterType="int">
+ 		<![CDATA[
+ 			select * from reviewDB where user_PK=#{user_PK} order by writeTime desc limit 10
+ 		]]>
+	</select>
 
+
+	<select id="queryReviewLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from reviewlikes where reviewNo=#{reviewNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from reviewlikes where reviewNo=#{reviewNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addReviewLikes" parameterType="Map">
+		<![CDATA[
+			insert into reviewlikes values(#{reviewNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeReviewLikes" parameterType="Map">
+		<![CDATA[
+			delete from reviewLikes where reviewNo=#{reviewNo} and idx=#{idx}
+		]]>
+	</delete> 
 </mapper>

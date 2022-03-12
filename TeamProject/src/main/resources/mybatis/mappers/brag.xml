@@ -55,8 +55,7 @@
 			SELECT * FROM honbab order by readCount desc LIMIT 30
 		]]>
 	</select>
-
-
+	
 
 
 	<!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
@@ -67,11 +66,45 @@
 	</update>
 	<!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
 		할 것인가 -->
-	<delete id="deleteBragBoard" parameterType="int">
+	<delete id="deleteWrite" parameterType="int">
 		<![CDATA[
 		delete from honbab where articleNo=#{articleNo}
 		 ]]>
 	</delete>
+	
+	<!-- 사용자의 혼밥자랑 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
+	<select id="selectBragBoardByIdx" resultType="Bragboard" parameterType="int">
+ 		<![CDATA[
+ 			select * from honbab where idx=#{idx} order by date desc limit 10
+ 		]]>
+	</select>
+	
+	
+	<select id="queryArticleLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from honbabLikes where articleNo=#{articleNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from honbabLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addArticleLikes" parameterType="Map">
+		<![CDATA[
+			insert into honbabLikes values(#{articleNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeArticleLikes" parameterType="Map">
+		<![CDATA[
+			delete from honbabLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</delete> 
+	
+	
 </mapper>
 
 	<!-- ***빵꾸 이슈 코드인지 확인하기 <update id="updateDeletedBragBoard" parameterType="Bragboard"> 

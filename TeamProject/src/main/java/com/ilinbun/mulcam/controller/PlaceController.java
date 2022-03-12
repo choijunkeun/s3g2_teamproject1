@@ -8,7 +8,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +49,9 @@ public class PlaceController {
 	private ServletContext servletContext;
 	
 	@GetMapping("/{id}")
-	public ModelAndView placeInfo(@PathVariable String id,@RequestParam("place_name") String place_name) {
+	public ModelAndView placeInfo(@PathVariable String id,
+			@RequestParam("place_name") String place_name,
+			@RequestParam(required=false) String idx) {
 		ModelAndView mv = new ModelAndView();
 		HttpURLConnection conn = null;
 		StringBuffer response = new StringBuffer();
@@ -76,12 +80,10 @@ public class PlaceController {
 				} 
 				br.close();
 	        }
-	        System.out.println(response.toString());
+	        
 	        JSONObject object = new JSONObject(response.toString());
 	        JSONArray obj = (JSONArray) object.get("documents");
 	        JSONObject target = (JSONObject)obj.get(0);
-	        System.out.println(target.get("id"));
-	        System.out.println(id);
 	        
 	        if(target.get("id").equals(id)) {
 	        	Place place = new Place(
@@ -103,6 +105,26 @@ public class PlaceController {
 		        
 		        PageInfo pageInfo = new PageInfo();
 		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(1, pageInfo, place.getId());
+		        
+		        HashMap<Integer, Integer> reviewLikesList = new HashMap<>();
+				HashMap<Integer, Integer> didILikedList = new HashMap<>();
+				for(int i=0; i<reviewList.size(); i++) {
+					reviewLikesList.put(reviewList.get(i).getReviewNo(),
+						placeReviewService.queryReviewLikes(reviewList.get(i).getReviewNo()));
+					if(idx != null) {
+						didILikedList.put(reviewList.get(i).getReviewNo(), 
+								placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), Integer.parseInt(idx)));
+					}
+				}
+				
+				for(Integer key : didILikedList.keySet()) {
+					System.out.println(key + ":" + didILikedList.get(key));
+				}
+				
+				if(idx != null) { 
+					mv.addObject("didILikedList", didILikedList);
+				}
+		        
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 				mv.addObject("prList", reviewList);
@@ -137,6 +159,7 @@ public class PlaceController {
 			@RequestParam("y") String y,
 			@RequestParam("place_url") String place_url,
 			@RequestParam(value="page", required=false, defaultValue="1") int page
+			,@RequestParam(required=false) String idx
 			) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("id", id);
@@ -155,7 +178,27 @@ public class PlaceController {
 		
 		PageInfo pageInfo = new PageInfo();
 		try {
+			System.out.println(idx);
 			List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(page, pageInfo, place.getId());
+			HashMap<Integer, Integer> reviewLikesList = new HashMap<>();
+			HashMap<Integer, Integer> didILikedList = new HashMap<>();
+			for(int i=0; i<reviewList.size(); i++) {
+				reviewLikesList.put(reviewList.get(i).getReviewNo(),
+					placeReviewService.queryReviewLikes(reviewList.get(i).getReviewNo()));
+				if(idx != null) {
+					didILikedList.put(reviewList.get(i).getReviewNo(), 
+							placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), Integer.parseInt(idx)));
+				}
+			}
+			
+			for(Integer key : didILikedList.keySet()) {
+				System.out.println(key + ":" + didILikedList.get(key));
+			}
+			
+			if(idx != null) { 
+				mv.addObject("didILikedList", didILikedList);
+			}
+			mv.addObject("reviewLikesList",reviewLikesList);
 			mv.addObject("pageInfo", pageInfo);
 			mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 			mv.addObject("prList", reviewList);
@@ -166,6 +209,7 @@ public class PlaceController {
 			mv.addObject("interiorRate", String.format("%.1f", placeReviewService.getInteriorRating(place.getId())));
 			mv.addObject("tasteRate", String.format("%.1f", placeReviewService.getTasteRating(place.getId())));
 			mv.addObject("honbabLv", Math.round(placeReviewService.getHonbabLv(place.getId())));
+			
 			mv.setViewName("place/place");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -179,9 +223,22 @@ public class PlaceController {
 	
 	@PostMapping("/review/{id}")
 	public ModelAndView reviewForm(@PathVariable String id, @ModelAttribute Place place) {
-		ModelAndView mv = new ModelAndView("place/reviewForm");
+		ModelAndView mv = new ModelAndView("/place/reviewForm");
 		mv.addObject("id", id);
-		mv.addObject("pr", place);
+		mv.addObject("place", place);
+		
+		return mv;
+	}
+	
+	@PostMapping("/edit/{id}")
+	public ModelAndView reviewEdit(@PathVariable String id, 
+			@RequestParam int reviewNo, @ModelAttribute Place place) throws Exception {
+		ModelAndView mv = new ModelAndView("/place/editReview");
+		//PlaceReview review = placeReviewService.getReview(Integer.parseInt(reviewNo), Integer.parseInt(id));
+		PlaceReview review = placeReviewService.getReview(reviewNo);
+		mv.addObject("id", id);
+		mv.addObject("place", place);
+		mv.addObject("review", review);
 		
 		return mv;
 	}
@@ -217,12 +274,9 @@ public class PlaceController {
 				String nowTime = sdf.format(now);
 				
 				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
-				System.out.println("1");
 				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
 				System.out.println(destFile.getAbsolutePath());
 				file.transferTo(destFile);
-				System.out.println("SUCCESS");
-				System.out.println(pr.getRevImgFilepath());
 			}
 			
 			placeReviewService.writeBoard(pr);
@@ -276,4 +330,127 @@ public class PlaceController {
 		return result;	
 	}
 	
+	
+	@ResponseBody
+	@PostMapping("/editReview")
+	public ResponseEntity<String> editReview(@RequestPart("key") Map<String, String> param,
+			@RequestPart(value="file", required=false) MultipartFile file) {
+		ResponseEntity<String> result = null;
+		
+		try {
+			PlaceReview pr = new PlaceReview( 
+	                Integer.parseInt(param.get("id")), 
+					Integer.parseInt(param.get("user_PK")), 
+					param.get("reviewContent"), 
+					Boolean.parseBoolean(param.get("rejectedCount")), 
+					Integer.parseInt(param.get("honbabLv")), 
+					param.get("honbabReason"), 
+					Double.parseDouble(param.get("interiorRate")), 
+					Double.parseDouble(param.get("serviceRate")),
+					Double.parseDouble(param.get("priceRate")), 
+					Double.parseDouble(param.get("tasteRate"))
+				);
+			pr.setReviewNo(Integer.parseInt(param.get("reviewNo")));
+			boolean fileChange=Boolean.parseBoolean(param.get("fileChange"));
+			if(fileChange && file != null) { // 파일 첨부시 파일 업로드
+				System.out.println("파일 업로드 시도");
+				String path=servletContext.getRealPath("/revimgupload/");
+				System.out.println(path);
+				
+				// 이미지 파일의 이름을 바꿔봅시다
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+				Date now = new Date(); 
+				String nowTime = sdf.format(now);
+				
+				File destFile = new File(path + nowTime + "_" + file.getOriginalFilename());
+				pr.setRevImgFilepath(nowTime + "_" + file.getOriginalFilename());
+				file.transferTo(destFile);
+				placeReviewService.updateReviewFilePath(pr);
+			} else if(fileChange && file == null) {
+				pr.setRevImgFilepath(null);
+				placeReviewService.updateReviewFilePath(pr);
+			}
+			
+			System.out.println(placeReviewService.updateReview(pr));
+			result = new ResponseEntity<String>("success", HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
+	@ResponseBody
+	@PostMapping("/deleteReview")
+	public ResponseEntity<String> editReview(@RequestParam int reviewNo, @RequestParam String idx) {
+		ResponseEntity<String> result = null;
+		
+		try {
+			PlaceReview target = placeReviewService.getReview(reviewNo);
+			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
+//			int place = target.getId();
+			placeReviewService.deleteReview(reviewNo);
+			String html = "<script>alert('삭제 완료'); window.location = \"/search\"</script>";
+//			System.out.println(html);
+			result = new ResponseEntity<String>(html , HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
+//	@ResponseBody
+//	@GetMapping("/likes/{reviewNo}/query")
+//	public ResponseEntity<Integer> queryLikes(@PathVariable int reviewNo, @RequestParam int id) {
+//		ResponseEntity<Integer> result = null;
+//		
+//		try {
+//			Integer val = placeReviewService.queryReviewLikes(reviewNo);
+//			int didILiked = placeReviewService.queryIfILikeThis(reviewNo, id);
+//			result = new ResponseEntity<Integer>(val , HttpStatus.OK);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			result = new ResponseEntity<Integer>(0, HttpStatus.BAD_REQUEST);
+//		}
+//		
+//		return result;	
+//	}
+	
+	@ResponseBody
+	@PostMapping("/likes")
+	public ResponseEntity<String> toggleLikes(@RequestParam("reviewNo") String reviewNo, 
+			@RequestParam("idx") String idx) {
+		ResponseEntity<String> result = null;
+		
+		int rNo = Integer.parseInt(reviewNo);
+		int useridx = Integer.parseInt(idx);
+		
+		int processed = 0;
+		try {
+			if(placeReviewService.queryIfILikeThis(rNo, useridx)>0) {
+				placeReviewService.removeReviewLikes(rNo, useridx);
+				processed = -1;
+			} else {
+				placeReviewService.addReviewLikes(rNo, useridx);
+				processed = 1;
+			}
+			Integer val = placeReviewService.queryReviewLikes(rNo);
+			JSONObject robj = new JSONObject();
+			robj.put("currentLikes", val);
+			robj.put("processed", processed);
+			
+			result = new ResponseEntity<String>(robj.toString() , HttpStatus.OK);
+//			result = new ResponseEntity<String>("" , HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		
+		return result;	
+	}
+	
 }
+

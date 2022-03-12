@@ -1,7 +1,11 @@
 package com.ilinbun.mulcam.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.User;
 
 @Mapper
@@ -20,6 +24,15 @@ public interface UserDAO {
 	
 	//로그인
 	User login(String nickname) throws Exception;
+	
+	//회원정보수정
+	
+	void userUpdate(User user) throws Exception;
+	
+	// 혼밥자랑 게시글 출력
+	List<BragBoard> bragPosting(BragBoard bragBoard) throws Exception;
+	
+	
 
 	//user 불러오기
 	User selectUserDetail(int idx) throws Exception;
