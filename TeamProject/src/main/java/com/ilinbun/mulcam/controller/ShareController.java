@@ -139,7 +139,7 @@ public class ShareController {
 			
 			model.addAttribute("title", title);
 			model.addAttribute("content", content.trim());
-			return "board/listform"; //resultForm다시
+			return "/share/main"; //resultForm다시
 		}
 
 	@ResponseBody

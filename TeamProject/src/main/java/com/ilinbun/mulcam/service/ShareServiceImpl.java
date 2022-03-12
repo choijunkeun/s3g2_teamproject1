@@ -49,12 +49,6 @@ public class ShareServiceImpl implements ShareService {
 	}
 
 	@Override
-	public void modifyShareBoard(Shareboard shareboard) throws Exception {
-		
-	}
-
-<<<<<<< HEAD
-	@Override
 	public List<Shareboard> getShareboardList(int page) throws Exception {
 		int startrow=(int) ((page-1)*15+1);
 		return shareDAO.selectShareBoardList(startrow);
@@ -92,23 +86,29 @@ public class ShareServiceImpl implements ShareService {
 	@Override
 	public void setInputList(Shareboard shareboard) throws Exception {
 		shareDAO.insertShareBoard(shareboard);
-		
-	}
-
-	@Override
-	public Shareboard getShareboard() throws Exception {
-		return shareDAO.selectShareboard();
 	}
 
 	@Override
 	public User selectUserDetail(int idx) throws Exception {
 		return userDAO.selectUserDetail(idx);
-=======
+	}
+	
+	//수정파트
+	
+	@Override
+	public void modifyShareBoard(Shareboard shareboard) throws Exception {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public Shareboard getShareboard() throws Exception {
+		return shareDAO.selectShareboard();
+	}
+
 	
 	//마이페이지에 뿌려줄 사용자의 반찬공유 게시글(준근)
 	@Override
 	public List<Shareboard> MyShareBoard(int idx) throws Exception {
 		return shareDAO.selectShareBoardByIdx(idx);
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
 	}
 }
