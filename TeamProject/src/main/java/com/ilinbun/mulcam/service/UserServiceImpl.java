@@ -1,15 +1,14 @@
 package com.ilinbun.mulcam.service;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
-import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.User;
 
 @Service
@@ -20,6 +19,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	BragDAO bragDAO;
+	
+	@Autowired
+	SqlSessionTemplate sqlSession;
 
 	// 회원 가입
 	@Override

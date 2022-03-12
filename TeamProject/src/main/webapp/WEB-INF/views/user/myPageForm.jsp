@@ -48,11 +48,7 @@
 						<span class="badge bg-danger rounded-pill" style="font-size: 1.5rem;">Lv.${user.honbabLevel}</span>
 					</div>
 				</div>
-				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">팔로워 0 &emsp;&emsp;&emsp; 팔로잉 0</h5>
-					</div>
-				</div>
+				
 				<div>
 					<div style="text-align:center;"><a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a></div>
 				</div>
@@ -66,13 +62,11 @@
 		
 		<div class="col mt-5">
 			<div class="card">
-				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">내가 작성한 리뷰</h5>
-					</div>
+				<div class="text-center">
+					<h5 class="fw-bolder">내가 작성한 리뷰</h5>
 				</div>
 				<div class="card-body p-4">
-					<div class="text-center" >
+					<div class="text-center table-responsive">
 						<table class="table table-striped">
 							<thead>
 							<tr>
@@ -85,10 +79,11 @@
 							</tbody>										
 						</table>					
 					</div>
-				</div>																			
-			</div>
+				</div>	
+			</div>																		
 		</div>
-		</div>	
+	</div>
+		
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card p-4" style="height:500px">

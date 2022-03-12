@@ -55,6 +55,9 @@ public class MainController {
 	
 	@Autowired
 	PlaceReviewService placeReviewService;
+	
+	
+	
 
 	@GetMapping({ "", "/index" })
 	public String Main(Model model) {
@@ -246,5 +249,12 @@ public class MainController {
 			System.out.println("Review Board List");
 			return myReviewList;
 		}
+		
+		
+
+		
+		
+		
+		
 
 }
