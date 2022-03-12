@@ -98,7 +98,6 @@ public class SearchController {
 			for(int i=0; i<jarr.length(); i++) {
 				sortedJarr.put(jsonForSort.get(i));
 			}
-			System.out.println(sortedJarr);
 			
 			// 이제 전달해주기만 하면 되는데 서버 안정성을 위해 15개만 전달할겁니다
 			JSONArray finaljarr = new JSONArray();
@@ -109,7 +108,6 @@ public class SearchController {
 			}
 			
 			// 정렬이 끝난 sortedJarr를 jsonobject에 담아 전송합니다.
-			//System.out.println(response.toString());
 			JSONObject resultobj = new JSONObject();
 			resultobj.put("documents", finaljarr);
 	        result = new ResponseEntity<String>(resultobj.toString(), HttpStatus.OK);

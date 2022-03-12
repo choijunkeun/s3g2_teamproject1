@@ -58,6 +58,7 @@ public class PlaceController {
 	@GetMapping("/{id}")
 	public ModelAndView placeInfo(@PathVariable String id,
 			@RequestParam("place_name") String place_name,
+			@RequestParam(required=false, defaultValue="1") int page,
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		
@@ -116,7 +117,7 @@ public class PlaceController {
 		        
 		        
 		        PageInfo pageInfo = new PageInfo();
-		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(1, pageInfo, place.getId());
+		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(page, pageInfo, place.getId());
 		        
 		        HashMap<Integer, Integer> reviewLikesList = new HashMap<>();
 				HashMap<Integer, Integer> didILikedList = new HashMap<>();

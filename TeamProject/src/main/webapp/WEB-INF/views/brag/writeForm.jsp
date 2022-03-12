@@ -11,16 +11,14 @@
 <!-- ckEditor code -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script
-	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
-
+<script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
 <title>게시글 작성</title>
 
 <style>
 /* ckEditor 넓이 높이 조절 */
 .ck.ck-editor {
-	max-width: 500px;
+	max-width: 100%;
 	font-weight: bolder;
 }
 
@@ -48,114 +46,6 @@
 	color: white;
 }
 
-.imgupload {
-	color: #1e2832;
-	padding-top: 40px;
-	font-size: 7em;
-}
-
-#namefile {
-	color: black;
-}
-
-h4>strong {
-	color: #ff3f3f;
-}
-
-.btn-primary {
-	border-color: #ff3f3f !important;
-	color: #ffffff;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	background-color: #ff3f3f !important;
-	border-color: #ff3f3f !important;
-}
-
-/*these two are set to not display at start*/
-.imgupload.ok {
-	display: none;
-	color: green;
-}
-
-.imgupload.stop {
-	display: none;
-	color: red;
-}
-
-/*this sets the actual file input to overlay our button*/
-#fileup {
-	opacity: 0;
-	-moz-opacity: 0;
-	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
-	width: 200px;
-	cursor: pointer;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 40px;
-	height: 50px;
-}
-
-/*switch between input and not active input*/
-#submitbtn {
-	padding: 5px 50px;
-	display: none;
-}
-
-#fakebtn {
-	padding: 5px 40px;
-}
-
-/*www.emilianocostanzo.com*/
-#sign {
-	color: #1e2832;
-	position: fixed;
-	right: 10px;
-	bottom: 10px;
-	text-shadow: 0px 0px 0px #1e2832;
-	transition: all.3s;
-}
-
-#sign:hover {
-	color: #1e2832;
-	text-shadow: 0px 0px 5px #1e2832;
-}
-</style>
-<style>
-input.star {
-	display: none;
-}
-
-label.star {
-	float: right;
-	padding: 5px;
-	font-size: 20px;
-	color: #444;
-	/* transition: all .2s; */
-}
-
-input.star:checked ~ label.star:before {
-	content: '\f005';
-	color: #FD4;
-	/* transition: all .25s; */
-}
-
-/* input.star-5:checked ~ label.star:before {
-			color: #FE7;
-			text-shadow: 0 0 20px #952;
-		}
-		
-		input.star-1:checked ~ label.star:before {
-			color: #F62;
-		}
-		
-		label.star:hover {
-			transform: rotate(-15deg) scale(1.3);
-		} */
-label.star:before {
-	content: '\f006';
-	font-family: FontAwesome;
-}
-
 .outer {
 	text-align: center;
 }
@@ -167,29 +57,29 @@ label.star:before {
 	max-width: 100%;
 }
 </style>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
 </head>
 <body>
 	<!--수정요. session 코드. 위의 목업 user 코드와 함께 수정요.  -->
-	<section id="./writeForm">
+	<section class="container" id="./writeForm">
 		<!-- writeForm -->
 		<div>
-			<div class="container pb-3 bg-light" class="outer">
-				<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
+			<div class="container pb-3 bg-light outer  border rounded">
+				<h5 class="fw-bolder pt-3 pb-2" style="margin-left: 0%;">혼밥자랑</h5>
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
 				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
 			<!-- <form id="bwForm"> -->
 			<input type="hidden" name="idx" id="idx" value="${user.idx }"> 
 			<!-- 목업 유저정보 코드 -> ??? -->
 					<div>
-						<div class="container p-2 ">
+						<div class="row p-2 ">
 							<div class="col text-center ">
-								<div class="d-flex flex-wrap">
-									<table>
+								<div class="d-flex flex-wrap" >
+									<table style="width: 100%; min-width: 100%; max-width: 100%;">
 										<tr>
 											<td>
 												<!--1. 문파선택  -->
-												<div>
+												<div class="d-flex" style="flex-wrap: nowrap;">
 													<input type="hidden" name="moonpa" id="moonpa">
 													<div class="btn-group-sort" style="width: fit-content;">
 														<button type="button"
@@ -204,20 +94,21 @@ label.star:before {
 																	onclick="moonpaChange('false')">해먹파</button></li>
 														</ul>
 													</div>
-												</div> <!--2. 위치 선택 (문파 기반) -->
-												<div class="input-group" style="flex-shrink: 0;">
-													<input type="hidden" id="locationId">
-													<input type="text" class="form-control" id="location"
-														name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
-													<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-												</div>
+													<!--2. 위치 선택 (문파 기반) -->
+													<div class="input-group" id="locationDiv" style="max-width: auto; flex-shrink: 1; display: none;">
+														<input type="hidden" id="locationId">
+														<input type="text" class="form-control" id="location"
+															name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
+														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+													</div>
+												</div> 
 											</td>
 										</tr>
 										<tr>
 											<td>
 												<!--3. 제목  -->
-												<div>
-													<input type="text" name="title" id="title" size="55%"
+												<div class="input-group">
+													<input type="text" name="title" id="title" class="form-control"
 														placeholder="제목을 입력해주세요!" required="required">
 												</div>
 											</td>
@@ -268,10 +159,12 @@ label.star:before {
 			
 			if(arg == 'true'){
 				document.getElementById('sortDropdown').innerText='사먹파';
+				document.getElementById('locationDiv').style.display="flex";
 				/* document.getElementById('location'). */
 			}
 			else{
 				document.getElementById('sortDropdown').innerText='해먹파';
+				document.getElementById('locationDiv').style.display="none";
 			}
 		}
 
