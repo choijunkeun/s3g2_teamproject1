@@ -57,6 +57,12 @@ public class ShareController {
 	// main.jsp 화면 출력 (현재 공지사항 게시판 + 반찬공유 게시판)
 	@GetMapping("")
 	public String Main(Model model) {
+		try {
+			List<Shareboard> shareList = shareService.getShareboardList(1);
+			model.addAttribute("shareList", shareList);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		return "share/main";
 	}
 	

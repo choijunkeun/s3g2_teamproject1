@@ -126,8 +126,8 @@ h4>strong {
 </style>
 <style type="text/css">
 #articleForm {
-	width: 1200px;
-	height: 700px;
+	width: 1500px;
+	height: 1000px;
 	/* border: 1px solid red; */
 	margin: auto;
 }
@@ -149,8 +149,9 @@ a {
 #articleContentArea {
 	background:  #f6f3f3;
 	margin-top: 10px;
-	height: 500px;
+	height: 1000px;
 	text-align: center;
+	float: left;
 	overflow: auto;
 }
 
@@ -176,7 +177,7 @@ a {
 			<div>글 이미지 파일명: ${imgSrc }</div>
 			<div>글 작성자 번호 : ${shboard.idx }</div>
 			<br>글 내용 : ${shboard.content }
-			${shboard.content }
+			
 			
 			</section>
 			</div>

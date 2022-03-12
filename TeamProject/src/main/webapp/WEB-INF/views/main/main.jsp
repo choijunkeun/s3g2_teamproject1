@@ -66,13 +66,17 @@
 				<div class="card-body p-4">
 					<div class="text-center">
 						<h5 class="fw-bolder">반찬공유 최신글 제목</h5>
-						반찬공유 최신글 내용
+						<c:forEach var="i" begin="0" end="2">
+							<a title="${shareList[i].title }"
+								href="brag/viewdetail/${shareList[i].articleNo }">${shareList[i].title }</a>
+							<br>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<div>
 						<!-- + 클릭 시 상세보기로 이동 -->
-						<a class="btn btn-outline-dark mt-auto" href="#">+</a>
+						<a class="btn btn-outline-dark mt-auto" href="share/board/listform">+</a>
 					</div>
 				</div>
 			</div>
