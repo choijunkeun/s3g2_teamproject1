@@ -61,7 +61,7 @@
 	<!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
 	<update id="updateBragBoard" parameterType="Bragboard">
 		<![CDATA[
-		update honbab set moonpa = #{moonpa}, title = #{title}, location = #{location}, content=#{content}, where articleNo = #{articleNo}; 
+		update honbab set moonpa = #{moonpa}, title = #{title}, location = #{location}, content=#{content}, where articleNo = #{articleNo} 
 		 ]]>
 	</update>
 	<!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
@@ -103,6 +103,36 @@
 			delete from honbabLikes where articleNo=#{articleNo} and idx=#{idx}
 		]]>
 	</delete> 
+	
+			<!-- 댓글달기 -->
+	<insert id="insertReply" parameterType="Map">
+ 		<![CDATA[
+ 		insert into honbabcomment (articleNo, idx, comment)
+ 			values (#{articleNo}, #{idx}, #{comment})
+ 		]]>
+	</insert>
+	
+			<!-- 댓글보기 -->
+	<select id="selectReply" parameterType="int" resultType="BragReply">
+		<![CDATA[
+			select * from honbabcomment where articleNo=#{articleNo} order by date desc
+		]]>
+	</select> 
+	
+	
+			<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="int">
+		<![CDATA[
+		delete from honbabcomment where commentNo=#{commentNo}
+		 ]]>
+	</delete>
+	
+	<!-- 댓글수정 --> 
+	<update id="editReply" parameterType="Map">
+		<![CDATA[
+		update honbabcomment set comment = #{comment} where commentNo = #{commentNo}
+		 ]]>
+	</update>
 	
 	
 </mapper>

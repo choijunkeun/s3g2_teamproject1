@@ -161,8 +161,9 @@ label.star:before {
 	min-width: 550px;
 	max-width: 100%;
 }
-body>div>p>img{
-	max-width:500px;
+
+body>div>p>img {
+	max-width: 500px;
 	height: auto;
 }
 </style>
@@ -175,27 +176,76 @@ body>div>p>img{
 	<br> 지금 보려는 글 정보
 	<br> 글 제목 : ${bboard.title }
 	<br> 글 내용 : ${bboard.content }
-	<br> 
-	<div "style=width: 200px; height: 200px;"글 이미지 파일명: ${imgSrc }> </div>
-	
-	
+	<br>
+	<div "style=width: 200px; height: 200px;"글 이미지파일명: ${imgSrc }></div>
+
+
 	<!-- 좋아요 -->
-	<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
-		id="likebtn${bboard.articleNo }" onclick="toggleLikes(${bboard.articleNo})">
-		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" 
-		aria-hidden="true">${likes }</i>
-		</button>
-		<br>
-	글 작성자 번호 : ${bboard.idx }
+	<button class="btn-sm border-danger rounded-pill bg-white text-danger"
+		id="likebtn${bboard.articleNo }"
+		onclick="toggleLikes(${bboard.articleNo})">
+		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
+			aria-hidden="true">${likes }</i>
+	</button>
+	<br>
+	<!-- 댓글 보기 -->
+	<!-- 프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼  -->
+	<!--commentUserList commentList-->
+	<c:forEach var="reply" items="${commentList}" varStatus="status">
+		<div>
+			<img style="border-radius: 50px; width: 30px; height: 30px;"
+				src=/profile/${commentUserList[status.index].profileImg}>
+			<p>${commentUserList[status.index].nickname }</p>
+			<input type="text" id="comment${reply.commentNo}"
+				value="${reply.comment }" readOnly></input>
+			<p>${reply.date }</p>
+
+
+			<c:if test="${user.idx == reply.idx}">
+				<div class="if-thisArticle-mine text-end">
+					<button class="btn border-dark"
+						onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
+
+					<button class="btn border-dark"
+						onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+				</div>
+			</c:if>
+			<c:if test="${user.grp == 2 }">
+				<div class="if-thisArticle-mine text-end">
+					<button class="btn border-dark"
+						onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+				</div>
+			</c:if>
+		</div>
+	</c:forEach>
+	<br>
+	<!--댓글 작성  -->
+	<form id="" action="/brag/comment" method="post">
+		<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
+		<input name="idx" type="hidden" value=${user.idx }></input>
+		<textarea name="commentWrite">
+				
+			</textarea>
+		<input id="commentBtn" type="submit" value="댓글작성">
+	</form>
+
+
+	<br> 글 작성자 번호 : ${bboard.idx }
 	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
 
 	<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
 	<div class="row py-3">
 		<div class="col text-center">
-			<c:if test="${user.idx == bboard.idx || user.grp == 2 }">
+			<c:if test="${user.idx == bboard.idx}">
 				<div class="if-thisArticle-mine text-end">
 					<button class="btn border-dark"
 						onclick="editWrite(${bboard.articleNo});">수정</button>
+					<button class="btn border-dark"
+						onclick="deleteWrite(${bboard.articleNo});">삭제</button>
+				</div>
+			</c:if>
+			<c:if test="${user.grp == 2 }">
+				<div class="if-thisArticle-mine text-end">
 					<button class="btn border-dark"
 						onclick="deleteWrite(${bboard.articleNo});">삭제</button>
 				</div>
@@ -262,10 +312,59 @@ body>div>p>img{
 		    f.submit();
 		}
 	}
-</script>
+	/*댓글 수정버튼 누르면~  */
+	function editReply(commentNo, articleNo){
+ 		
+		let isReadOnly = $('#comment'+commentNo).attr("readOnly")
+		if(isReadOnly){
+			$('#comment'+commentNo).attr("readOnly", false) 
+		} else{
+			let comment = $('#comment'+commentNo).val()
+			
+			$.ajax({
+				type:"POST",
+				url:"/brag/editReply",
+				cache: false,
+				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
+				async:false,
+				complete:function(){
+					window.location.href="/brag/viewdetail/"+articleNo;
+				}
+				
+			})
+		}
+	}
 
-<!-- 좋아요 -->
-<script>
+	
+
+	
+	/*댓글 삭제버튼 누르면~  */
+	function deleteReply(commentNo, articleNo){
+		if(confirm("게시글을 삭제하시겠습니까?")){
+			let f = document.createElement('form');
+			
+			f.appendChild(mIHObj('commentNo', commentNo));
+		    f.appendChild(mIHObj('articleNo',articleNo));
+		   
+		    f.setAttribute('method', 'post');
+		    f.setAttribute('action', '../deleteReply'); // /brag/deleteReply
+		    document.body.appendChild(f);
+		    f.submit();
+		}
+	}
+</script>
+	<!--댓글달기 -->
+	<script>
+$(function(){ 
+	$("#commentBtn").click(function(){
+		if(${empty user}){
+			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+		}
+	})
+})
+</script>
+	<!-- 좋아요 -->
+	<script>
 function toggleLikes(articleNo){
 	if(${empty user}){
 		alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");

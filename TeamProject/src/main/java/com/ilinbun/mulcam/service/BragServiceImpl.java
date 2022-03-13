@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
@@ -213,5 +214,42 @@ public class BragServiceImpl implements BragService {
 		map.put("articleNo", articleNo);
 		map.put("idx", idx);
 		return bragDAO.queryIfILikeThis(map);
+	}
+
+	
+	//댓글 쓰기
+	@Override
+	public void boardReply(int articleNo, int idx, String comment) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		map.put("comment", comment);
+		bragDAO.insertReply(map);
+		
+	}
+
+	//댓글 보기
+	@Override
+	public List<Object> boardReplyList(int articleNo) throws Exception {
+		return bragDAO.selectReply(articleNo);
+		
+	}
+
+	//댓글 삭제
+	@Override
+	public void deleteReply(int commentNo) throws Exception {
+		bragDAO.deleteReply(commentNo);
+		
+	}
+
+	//댓글 수정
+	@Override
+	public void editReply(int commentNo, String comment) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("commentNo", commentNo);
+		map.put("comment", comment);
+		
+		bragDAO.editReply(map);
+		
 	}
 }
