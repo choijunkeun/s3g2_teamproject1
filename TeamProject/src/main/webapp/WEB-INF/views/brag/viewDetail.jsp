@@ -173,11 +173,9 @@ body>div>p>img {
 	로그인한 유저 번호 : ${user.idx }
 	<br> 로그인한 유저 이메일 : ${user.email }
 	<br> 로그인한 유저 별명 : ${user.nickname }
-	<br> 지금 보려는 글 정보
-	<br> 글 제목 : ${bboard.title }
-	<br> 글 내용 : ${bboard.content }
+	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title } 글 내용 : ${bboard.content }
 	<br>
-	<div "style=width: 200px; height: 200px;"글 이미지파일명: ${imgSrc }></div>
+	<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
 
 
 	<!-- 좋아요 -->
@@ -191,47 +189,82 @@ body>div>p>img {
 	<!-- 댓글 보기 -->
 	<!-- 프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼  -->
 	<!--commentUserList commentList-->
-	<c:forEach var="reply" items="${commentList}" varStatus="status">
-		<div>
-			<img style="border-radius: 50px; width: 30px; height: 30px;"
-				src=/profile/${commentUserList[status.index].profileImg}>
-			<p>${commentUserList[status.index].nickname }</p>
-			<input type="text" id="comment${reply.commentNo}"
-				value="${reply.comment }" readOnly></input>
-			<p>${reply.date }</p>
-
-
-			<c:if test="${user.idx == reply.idx}">
-				<div class="if-thisArticle-mine text-end">
-					<button class="btn border-dark"
-						onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
-
-					<button class="btn border-dark"
-						onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+	<div class="container">
+		<c:forEach var="reply" items="${commentList}" varStatus="status">
+		<c:choose>
+		<c:when test="${reply.blind eq false || reply.idx eq user.idx || bboard.idx eq user.idx}">
+			<div class="row">
+				<div class="col">
+					<img style="border-radius: 50px; width: 30px; height: 30px;"
+						src=/profile/${commentUserList[status.index].profileImg}>
+					<p>${commentUserList[status.index].nickname }</p>
 				</div>
-			</c:if>
-			<c:if test="${user.grp == 2 }">
-				<div class="if-thisArticle-mine text-end">
-					<button class="btn border-dark"
-						onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+				<div class="col">
+					<input type="text" id="comment${reply.commentNo}"
+						value="${reply.comment }" readOnly></input>
 				</div>
-			</c:if>
-		</div>
-	</c:forEach>
+				<div class="col">
+					<p>${reply.date }</p>
+				</div>
+				<div class="col">
+					<c:if test="${user!=null}">
+						<div class="if-thisArticle-mine text-end">
+							<button class="btn border-dark"
+								onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">
+								대댓글쓰기</button>							
+						</div>
+					</c:if>
+					<c:if test="${user.idx == reply.idx}">
+						<div class="if-thisArticle-mine text-end">
+							<button class="btn border-dark"
+								onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
+
+							<button class="btn border-dark"
+								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+						</div>
+					</c:if>
+					<c:if test="${user.grp == 2 }">
+						<div class="if-thisArticle-mine text-end">
+							<button class="btn border-dark"
+								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+						</div>
+					</c:if>
+				</div>
+				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
+					<form id="replyReply" action="/brag/reReply" method="post">
+						<input type="text" name="commentWrite">
+						<input type="hidden" name="idx" value="${user.idx }">
+						<input type="hidden" name="articleNo" value="${bboard.articleNo}">
+						<input type="hidden" name="commentNo" value="${reply.commentNo}">
+						<input type="checkbox" name="blind" id="blind${reply.commentNo }" value="1">
+						<label for="blind${reply.commentNo }">비밀댓글</label>
+						<input type="submit" value="답글쓰기">
+					</form>
+					
+				</div>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="row">
+				<span>해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.</span>
+			</div>
+		</c:otherwise>
+		</c:choose>
+		</c:forEach>
+	</div>
 	<br>
 	<!--댓글 작성  -->
 	<form id="" action="/brag/comment" method="post">
 		<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
 		<input name="idx" type="hidden" value=${user.idx }></input>
-		<textarea name="commentWrite">
-				
-			</textarea>
+		<textarea name="commentWrite"></textarea>
+		<input id="blind" name="blind" type="checkbox" value="1">익명댓글
 		<input id="commentBtn" type="submit" value="댓글작성">
 	</form>
 
 
-	<br> 글 작성자 번호 : ${bboard.idx }
-	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"}
+	<%-- 	<br> 글 작성자 번호 : ${bboard.idx }
+	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"} --%>
 
 	<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
 	<div class="row py-3">
@@ -353,15 +386,18 @@ body>div>p>img {
 		}
 	}
 </script>
-	<!--댓글달기 -->
-	<script>
+	<%--댓글달기 한jsp에서 이렇게 ${function) 나만 된다 / 익명댓글 쓰기--%>
+<script>
 $(function(){ 
 	$("#commentBtn").click(function(){
 		if(${empty user}){
 			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+			return false;
 		}
+		
 	})
 })
+
 </script>
 	<!-- 좋아요 -->
 	<script>

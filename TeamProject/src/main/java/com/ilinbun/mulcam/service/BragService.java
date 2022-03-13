@@ -57,13 +57,17 @@ public interface BragService {
 	int addArticleLikes(int articleNo, int idx) throws Exception;
 	int removeArticleLikes(int articleNo, int idx) throws Exception;
 	int queryIfILikeThis(int articleNo, int idx) throws Exception;
-
+	
+	//  댓글 리스트 관련 페이지
+	PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception;
 	
 	//댓글쓰기
-	void boardReply(int articleNo, int idx, String comment) throws Exception;
+	void boardReply(int articleNo, int idx, String comment, Integer blind) throws Exception;
+	//대댓글쓰기
+	void reReply(int commentNo, int articleNo, int idx, String comment, Integer blind) throws Exception;
 	
 	//댓글보기
-	List<Object> boardReplyList(int articleNo) throws Exception;
+	List<BragReply> boardReplyList(int articleNo, int startrow) throws Exception;
 
 	//댓글삭제
 	void deleteReply(int commentNo) throws Exception;
@@ -71,4 +75,12 @@ public interface BragService {
 	//댓글 수정
 	void editReply(int commentNo, String comment) throws Exception;
 
+	//익명댓글 처리
+	void setBlind(int blind, int commentNo) throws Exception;
+
+	Integer countComment() throws Exception;
+
+	void updateCommentSeq(BragReply br) throws Exception;
+	
+	
 }

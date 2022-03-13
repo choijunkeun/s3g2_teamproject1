@@ -107,6 +107,30 @@ public class BragServiceImpl implements BragService {
 		pageInfo.setStartPage(startPage);
 		return pageInfo;
 	}
+	//댓글에 대한 페이지 보기
+	@Override
+	public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
+		int listCount=bragDAO.countComment();
+		System.out.println("리스트카운트 :"+listCount);
+		int maxPage=(int)Math.ceil((double)listCount/16);
+		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
+		//table에 있는 모든 row 개수
+		double pagenation = pageInfo.getPage(); //? 새로 추가 
+		//아래에 페이지 이동 버튼도 10개로 구성하고자 하기 위함이다.
+		int startPage=(((int) ((double)pagenation/10+0.9))-1)*10+1;
+		//현재 페이지에 보여줄 시작 페이지 수(1, 11, 21, ...)
+		
+		int endPage=startPage+10-1;
+		//현재 페이지에 보여줄 마지막 페이지 수(10, 20, 30, ...)
+		if(maxPage<endPage) {
+			endPage=maxPage;
+		}
+		pageInfo.setListCount(listCount);
+		pageInfo.setMaxPage(maxPage);
+		pageInfo.setEndPage(endPage);
+		pageInfo.setStartPage(startPage);
+		return pageInfo;
+	}
 	//BEST 게시판 글 목록이 조회수 순으로 정렬 쿼리(수정요. 나중에는 좋아요 순으로)
 	@Override
 	public List<BragBoard> bragBest() throws Exception {
@@ -219,20 +243,49 @@ public class BragServiceImpl implements BragService {
 	
 	//댓글 쓰기
 	@Override
-	public void boardReply(int articleNo, int idx, String comment) throws Exception {
+	public void boardReply(int articleNo, int idx, String comment, Integer blind) throws Exception {
+		Integer commentNo = bragDAO.selectMaxCommentNo();
+		if(commentNo == null) commentNo = 1;
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("articleNo", articleNo);
 		map.put("idx", idx);
 		map.put("comment", comment);
+		map.put("blind", (blind != null? true : false));
+		map.put("refer", commentNo);
+		map.put("lev", 0);
+		map.put("seq", 0);
+		bragDAO.insertReply(map);
+		
+	}
+	
+	//대댓글 쓰기
+	@Override
+	public void reReply(int commentNo, int articleNo, int idx, String comment, Integer blind) throws Exception {
+		System.out.println("src reply getting");
+		BragReply src_reply = (BragReply)bragDAO.selectReply(commentNo);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		map.put("comment", comment);
+		map.put("blind", (blind != null? true : false));
+		map.put("refer", src_reply.getRefer());
+		map.put("lev", src_reply.getLev()+1);
+		bragDAO.updateCommentSeq(src_reply);
+		map.put("seq", src_reply.getSeq()+1);
 		bragDAO.insertReply(map);
 		
 	}
 
 	//댓글 보기
 	@Override
-	public List<Object> boardReplyList(int articleNo) throws Exception {
-		return bragDAO.selectReply(articleNo);
-		
+	public List<BragReply> boardReplyList(int articleNo, int page) throws Exception {
+		int startrow=(int) ((page-1)*10+1);
+		Map<String, Integer> map = new HashMap<>();
+		map.put("articleNo", articleNo);
+		map.put("startrow", startrow);
+		return bragDAO.selectReplyList(map);
 	}
 
 	//댓글 삭제
@@ -250,6 +303,26 @@ public class BragServiceImpl implements BragService {
 		map.put("comment", comment);
 		
 		bragDAO.editReply(map);
-		
 	}
+	
+	//익명댓글 처리
+	@Override
+	public void setBlind(int blind, int commentNo) throws Exception{
+		Map<String, Object> map = new HashMap<>();
+		map.put("blind", blind);
+		map.put("commentNo", commentNo);
+		
+		bragDAO.setBlind(map);
+	}
+	
+	@Override
+	public Integer countComment() throws Exception{
+		return bragDAO.countComment();
+	}
+	
+	@Override
+	public void updateCommentSeq(BragReply br) throws Exception{
+		bragDAO.updateCommentSeq(br);
+	}
+	
 }
