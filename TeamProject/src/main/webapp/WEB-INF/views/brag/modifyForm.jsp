@@ -21,7 +21,7 @@
 <style>
 /* ckEditor 넓이 높이 조절 */
 .ck.ck-editor {
-	max-width: 500px;
+	max-width: 100%;
 	font-weight: bolder;
 }
 
@@ -47,114 +47,6 @@
 
 .white {
 	color: white;
-}
-
-.imgupload {
-	color: #1e2832;
-	padding-top: 40px;
-	font-size: 7em;
-}
-
-#namefile {
-	color: black;
-}
-
-h4>strong {
-	color: #ff3f3f;
-}
-
-.btn-primary {
-	border-color: #ff3f3f !important;
-	color: #ffffff;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	background-color: #ff3f3f !important;
-	border-color: #ff3f3f !important;
-}
-
-/*these two are set to not display at start*/
-.imgupload.ok {
-	display: none;
-	color: green;
-}
-
-.imgupload.stop {
-	display: none;
-	color: red;
-}
-
-/*this sets the actual file input to overlay our button*/
-#fileup {
-	opacity: 0;
-	-moz-opacity: 0;
-	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
-	width: 200px;
-	cursor: pointer;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	bottom: 40px;
-	height: 50px;
-}
-
-/*switch between input and not active input*/
-#submitbtn {
-	padding: 5px 50px;
-	display: none;
-}
-
-#fakebtn {
-	padding: 5px 40px;
-}
-
-/*www.emilianocostanzo.com*/
-#sign {
-	color: #1e2832;
-	position: fixed;
-	right: 10px;
-	bottom: 10px;
-	text-shadow: 0px 0px 0px #1e2832;
-	transition: all.3s;
-}
-
-#sign:hover {
-	color: #1e2832;
-	text-shadow: 0px 0px 5px #1e2832;
-}
-</style>
-<style>
-input.star {
-	display: none;
-}
-
-label.star {
-	float: right;
-	padding: 5px;
-	font-size: 20px;
-	color: #444;
-	/* transition: all .2s; */
-}
-
-input.star:checked ~ label.star:before {
-	content: '\f005';
-	color: #FD4;
-	/* transition: all .25s; */
-}
-
-/* input.star-5:checked ~ label.star:before {
-			color: #FE7;
-			text-shadow: 0 0 20px #952;
-		}
-		
-		input.star-1:checked ~ label.star:before {
-			color: #F62;
-		}
-		
-		label.star:hover {
-			transform: rotate(-15deg) scale(1.3);
-		} */
-label.star:before {
-	content: '\f006';
-	font-family: FontAwesome;
 }
 
 .outer {
