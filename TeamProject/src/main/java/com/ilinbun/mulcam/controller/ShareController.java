@@ -20,6 +20,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -374,5 +376,118 @@ public class ShareController {
 		}
 		return mv;
 	}
+	 //  좋아요
+		@ResponseBody
+		@PostMapping("/likes")
+		public ResponseEntity<String> toggleLikes(@RequestParam("articleNo") String articleNo, 
+				@RequestParam("idx") String idx) {
+			ResponseEntity<String> result = null;
+			
+			int rNo = Integer.parseInt(articleNo);
+			int useridx = Integer.parseInt(idx);
+			
+			int processed = 0;
+			try {
+				if(shareService.queryIfILikeThis(rNo, useridx)>0) {
+					shareService.removeArticleLikes(rNo, useridx);
+					processed = -1;
+				} else {
+					shareService.addArticleLikes(rNo, useridx);
+					processed = 1;
+				}
+				Integer val = shareService.queryArticleLikes(rNo);
+				JSONObject robj = new JSONObject();
+				robj.put("currentLikes", val);
+				robj.put("processed", processed);
+				
+				result = new ResponseEntity<String>(robj.toString() , HttpStatus.OK);
+//				result = new ResponseEntity<String>("" , HttpStatus.OK);
+			} catch(Exception e) {
+				e.printStackTrace();
+				result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+			}
+			
+			return result;	
+		}
+		
+		//댓글쓰기 with 비밀댓글 (댓글보기는 글보기 Controller에 추가함)
+		@PostMapping("/comment")
+		public String boardReply(@RequestParam("commentWrite") String comment, 
+				@RequestParam Integer idx, 
+				@RequestParam Integer articleNo, 
+				@RequestParam(required=false) Integer blind ) {
+			System.out.println(comment);
+			System.out.println(idx);
+			System.out.println(articleNo);
+			System.out.println(blind);
+			if(idx == null) {
+				return "default/user/loginForm";
+			} else {
+				try {
+					shareService.boardReply(articleNo.intValue(), idx.intValue(), comment, blind);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+		
+		@PostMapping("/reReply")
+		public String commentReply(@RequestParam("commentWrite") String comment, 
+				@RequestParam Integer idx,
+				@RequestParam Integer commentNo,
+				@RequestParam Integer articleNo, 
+				@RequestParam(required=false) Integer blind ) {
+			System.out.println(comment);
+			System.out.println(idx);
+			System.out.println(articleNo);
+			System.out.println(blind);
+			if(idx == null) {
+				return "default/user/loginForm";
+			} else {
+				try {
+					shareService.reReply(commentNo, articleNo.intValue(), idx.intValue(), comment, blind);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+		
+		
+		// 댓글수정 (내 댓글일경우가능)
+		@PostMapping(value="/editReply") // /brag/deleteReply
+		public void editReply(@RequestParam int commentNo, @RequestParam String comment, @RequestParam int articleNo) {
+			try {
+				shareService.editReply(commentNo, comment);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		// 댓글삭제 (내 댓글일경우가능)
+		@PostMapping(value="/deleteReply") // /brag/deleteReply
+		public String deleteReply(@RequestParam int commentNo, @RequestParam int articleNo) {
+			try {
+				shareService.deleteReply(commentNo);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+		
+		//말머리 바꾸기
+		@PostMapping(value="header")
+		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
+			try {
+				shareService.changeHeader(headerTag);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+	
 	
 }

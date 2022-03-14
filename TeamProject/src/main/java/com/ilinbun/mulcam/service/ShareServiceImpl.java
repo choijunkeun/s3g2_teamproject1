@@ -263,5 +263,12 @@ public class ShareServiceImpl implements ShareService {
 	}
 
 
+	@Override
+	public void changeHeader(int headerTag) throws Exception {
+		shareDAO.changeHeaderTag(headerTag);
+		
+	}
+
+
 	
 }

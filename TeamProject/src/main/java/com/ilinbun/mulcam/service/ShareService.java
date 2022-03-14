@@ -55,4 +55,6 @@ public interface ShareService {
 	Integer countComment() throws Exception;
 
 	void updateCommentSeq(ShareReply shr) throws Exception;
+	
+	void changeHeader(int headerTag) throws Exception;
 }

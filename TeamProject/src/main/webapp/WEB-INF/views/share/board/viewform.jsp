@@ -263,14 +263,29 @@ a {
 	</div>
 	<br>
 	<!--댓글 작성  -->
-	<form id="" action="/brag/comment" method="post">
+	<form id="comment" action="/share/board/comment" method="post">
 		<input name="articleNo" type="hidden" value=${shboard.articleNo }></input>
 		<input name="idx" type="hidden" value=${user.idx }></input>
 		<textarea name="commentWrite"></textarea>
 		<input id="blind" name="blind" type="checkbox" value="1">익명댓글
 		<input id="commentBtn" type="submit" value="댓글작성">
 	</form>
-
+		<!-- 말머리 바꾸기 -->
+		<c:if test="${user.idx == shboard.idx}">
+		<form id="headerChange" action="/share/board/header" method="post">
+			<div class="if-thisArticle-mine text-end">
+				<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+					data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
+				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+					<li><button class="dropdown-item" type="button"
+						onclick="headerChange(0)">공유중</button></li>
+					<li><button class="dropdown-item" type="button"
+						onclick="headerChange(1)">공유완료</button></li>
+				</ul>
+			<input id="headerBtn" type="submit" value="말머리 변경">
+			</div>
+		</form>		
+		</c:if>
 
 	<%-- 	<br> 글 작성자 번호 : ${bboard.idx }
 	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"} --%>
@@ -414,6 +429,15 @@ a {
 		    f.submit();
 		}
 	}
+	/* 말머리 변경 */
+	function headerChange(arg) {
+			document.getElementById('headerTag').value=arg; 
+			
+			if(arg == '0')
+				document.getElementById('sortDropdown').innerText='공유중';
+			else if (arg == '1')
+				document.getElementById('sortDropdown').innerText='공유완료';
+		}
 	</script>
 	<!-- 좋아요 -->
 	<script>

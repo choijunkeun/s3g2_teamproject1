@@ -47,4 +47,6 @@ public interface ShareDAO {
 	public void deleteReply(int commentNo) throws Exception;
 	public void editReply(Map<String, Object> map) throws Exception;
 	public void setBlind(Map<String, Object> map) throws Exception;
+
+	public void changeHeaderTag(int headerTag) throws Exception;
 }

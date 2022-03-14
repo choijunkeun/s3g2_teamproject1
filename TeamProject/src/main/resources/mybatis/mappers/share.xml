@@ -161,6 +161,13 @@
 			where refer=#{refer} and seq>#{seq}
 		]]>
 	</update>
+	
+	<!-- headerTag 변경 -->
+	<update id="changeHeader" parameterType="ShareBoard">
+      <![CDATA[
+      update shareBOARD set headerTag=#{headerTag} where articleNo=#{articleNo}
+       ]]>
+   </update>
  	
 
 </mapper>
