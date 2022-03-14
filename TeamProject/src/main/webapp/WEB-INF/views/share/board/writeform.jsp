@@ -152,16 +152,16 @@ h4>strong {
 			<div class="container"> 
 				<div class="row p-1 text-center">
 					<div class="col">
-						<input type="hidden" name="noticewrtie" id="ntwrite">
-						<div class="btn-group-sort" style="width: fit-content; visibility: hidden;">
+						<input type="hidden" name="headerTag" id="headerTag">
+						<div class="btn-group-sort" style="width: fit-content; ">
 							<button type="button"
 								class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-								data-bs-toggle="dropdown" aria-expanded="false">공지글쓰기</button>
+								data-bs-toggle="dropdown" aria-expanded="false">말머리 선택</button>
 							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 								<li><button class="dropdown-item" type="button"
-									onclick="noticeChange('true')">공지글쓰기</button></li>
+									onclick="headerChange(0)">공유중</button></li>
 								<li><button class="dropdown-item" type="button"
-									onclick="noticeChange('false')">일반글쓰기</button></li>
+									onclick="headerChange(1)">공유완료</button></li>
 							</ul>
 						</div> <br>
 						<input type="hidden" name="subway" id="subway">
@@ -228,13 +228,13 @@ h4>strong {
     </div>
 </section>
 	<script>
-		function noticeChange(arg) {
-			document.getElementById('ntwrite').value=arg; 
+		function headerChange(arg) {
+			document.getElementById('headerTag').value=arg; 
 			
-			if(arg == 'true')
-				document.getElementById('sortDropdown').innerText='공지글쓰기';
-			else
-				document.getElementById('sortDropdown').innerText='일반글쓰기';
+			if(arg == '0')
+				document.getElementById('sortDropdown').innerText='공유중';
+			else if (arg == '1')
+				document.getElementById('sortDropdown').innerText='공유완료';
 		}
 		
 		function subwayChange(sub) {

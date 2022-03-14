@@ -17,12 +17,13 @@ public class Shareboard {
 		
 	}
 	
-	public Shareboard(String title, String subway, String content, int idx) {
+	public Shareboard(String title, String subway, String content, int idx, int headerTag) {
 		super();
 		this.title = title;
 		this.subway = subway;
 		this.content = content;
 		this.idx = idx;
+		this.headerTag = headerTag;
 	}
 	
 	public Shareboard(int articleNo, int idx, String subway, String title, String content, Date date, int headerTag, int readCount) {

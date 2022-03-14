@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
+import javax.lang.model.element.Element;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -112,34 +113,58 @@ public class ShareController {
 				@RequestParam String content,
 				@RequestParam String subway, 
 				@RequestParam int idx, 
+				@RequestParam int headerTag,
 				Model model) {
 			
 			System.out.println("title : "+title); // DB저장
 			System.out.println("content : "+content.trim()); // DB저장, 반드시 trim()
 			System.out.println("subway : "+subway);
 			System.out.println("idx : "+idx);
+			System.out.println("headerTag: "+headerTag);
 			
 			try {
-				Shareboard shareboard = new Shareboard(title, subway, content, idx);
+				Shareboard shareboard = new Shareboard(title, subway, content, idx, headerTag);
 				Document doc=Jsoup.parse(shareboard.getContent());
+				Elements docContentElements = doc.body().children();
+				String result = "";
+				for(org.jsoup.nodes.Element e: docContentElements) {
+					if(e.tagName().equals("figure")) {
+						e = e.selectFirst("img");
+						String src = e.attr("src");
+						String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+						e.attr("src", "/shareupload/"+newSrc);
+					}
+					result += e.toString();
+				}
+				
 //				if (doc.hasAttr("img")) {
-					Elements img= doc.select("img");
-					String src = img.attr("src");
-					String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
-					doc.select("img").attr("src", "/shareupload/"+newSrc);
-					shareboard.setContent(doc.select("body > p").toString());
-					shareService.regShareBoard(shareboard);
-//				} else {
+//				Elements img= doc.select("img");
+//				if(img.isEmpty() == false) {
+//					for(org.jsoup.nodes.Element e : img) {
+//						String src = e.attr("src");
+//						/* System.out.println("img tag found : " + src); */
+//						String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+//						e.attr("src", "/shareupload/"+newSrc);
+//						System.out.println(e.attr("src"));
+//					};
+//					shareboard.setContent(doc.select("body > p").toString());
+////					String src = img.attr("src");
+////					String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+////					doc.select("img").attr("src", "/shareupload/"+newSrc);
+////					shareboard.setContent(doc.select("body > p").toString());
+//				} /*else {*/
 //					model.addAttribute("msg", "사진은 필수야");
-//					return "share/board/writeform";
-//				}
+					//return "share/board/writeform";
+					/* } */
+				shareboard.setContent(result);
+				shareService.regShareBoard(shareboard);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
 			model.addAttribute("title", title);
 			model.addAttribute("content", content.trim());
-			return "/share/main"; //resultForm다시
+			return "redirect:/share/board/listform"; //resultForm다시
 		}
 
 	@ResponseBody
