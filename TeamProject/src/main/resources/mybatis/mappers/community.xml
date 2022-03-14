@@ -39,8 +39,11 @@
    <!-- 글목록 : 게시판 글 목록에 15개 출력 쿼리문 -->
    <select id="selectCommBoardList" resultType="CommBoard"
       parameterType="int">
+      <!-- SELECT * from comm_board order by field(idx, idx in (select idx from user where grp = 2 )) desc
+       	union all
+       	select * from comm_board where articleNo between #{startrow} and #{startrow}+14 -->
        <![CDATA[
-       	SELECT * from comm_board order by field(idx, idx in (select idx from user where grp = 2 )) desc, date DESC limit #{startrow}, 15
+       	SELECT * from comm_board order by case when idx in (select idx from user where grp = 2 ) then 0 else 1 end, date desc limit #{startrow}, 15
        ]]>
    </select>  <!--  select * from comm_board where articleNo order by desc between #{startrow} and #{startrow}+14 -->
    <!-- 글목록 : 전체게시물 조회하기 -->

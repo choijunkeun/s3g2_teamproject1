@@ -92,4 +92,10 @@ public class UserServiceImpl implements UserService {
 		userDAO.userUpdate(user);
 	
 	}
+
+	//유저 닉네임 게시판 불러오기 (종현)
+	@Override
+	public User getUserinfo(int writerIdx) throws Exception {
+		return userDAO.selectUserDetail(writerIdx);
+	}
 }

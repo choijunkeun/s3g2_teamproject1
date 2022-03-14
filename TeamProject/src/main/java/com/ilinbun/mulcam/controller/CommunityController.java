@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -29,14 +32,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.CommBoard;
+import com.ilinbun.mulcam.dto.CommReply;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.CommService;
@@ -82,6 +85,14 @@ public class CommunityController {
 				pageInfo=commService.getPageInfo(pageInfo);
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("commList", commList);
+				
+				Map<Integer, User> userMap = new HashMap<Integer, User>();
+				for(int i=0; i<commList.size(); i++) {
+					int writerIdx = commList.get(i).getIdx();
+					User writerInfo = userService.getUserinfo(writerIdx);
+					userMap.put(writerIdx, writerInfo);
+				}
+				mav.addObject("userMap", userMap);
 				mav.setViewName("community/board/listform");
 			} catch(Exception e) {
 				e.printStackTrace();
@@ -228,8 +239,6 @@ public class CommunityController {
 			mav.addObject("likes", likes);
 			
 			mav.addObject("userinfo", userinfo);
-	
-			
 			mav.addObject("cboard", commboard);
 			
 			Document doc = Jsoup.parse(commboard.getContent()); // content중에 사진만 가져오기
@@ -239,12 +248,12 @@ public class CommunityController {
 			mav.addObject("imgSrc", src); // mav에 넣기
 			mav.setViewName("community/board/viewform"); // 경로이름 설정
 			
-			int idx = commboard.getIdx();
-			String nickname = userService.getUserNick(idx);
-			// 리턴타입 String, 파라미터타입 int
+			int idx = commboard.getIdx(); 		// 리턴타입 String, 파라미터타입 int
+			String nickname = userService.getUserNick(idx); 
 			// select 닉네임 from 유저테이블 where idx=#{idx}
 			mav.addObject("nickname", nickname);
 			
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
@@ -304,7 +313,7 @@ public class CommunityController {
 		try {
 			commService.modifyCommBoard(commboard);
 			mav.addObject("articleNo", commboard.getArticleNo());
-			mav.setViewName("redirect:/comm/community/viewform/{articleNo}");
+			mav.setViewName("redirect:/comm/viewform/{articleNo}");
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());

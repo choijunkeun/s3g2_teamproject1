@@ -39,9 +39,5 @@ public interface UserDAO {
 
 	//UserNick 불러오기(종현)
 	String getUserNick(int idx) throws Exception;
-
-	
-	
-	
 	
 }

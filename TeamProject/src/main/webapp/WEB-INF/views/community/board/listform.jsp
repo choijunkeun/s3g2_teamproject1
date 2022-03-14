@@ -47,6 +47,16 @@ table {
 	width: 950px;
 	text-align: center;
 }
+
+/* 공시사항 게시글 배경색깔 */
+.noti {
+	background-color: black;
+	opacity:0.8;
+	color: black !important;
+	font-weight: bold;
+
+
+}
 </style>
 
 
@@ -71,7 +81,7 @@ table {
 			<section id="listForm">
 				<table class="table">
 					<tr id="tr_top">
-						<th>번호</th>
+						<th>글종류</th>
 						<th>제목</th>
 						<th>작성자</th>
 						<th>날짜</th>
@@ -79,11 +89,10 @@ table {
 					</tr>
 
 					<c:forEach var="article" items="${commList }">
-		
-						<tr>
-							<td><a href="./viewform/${article.articleNo}">${article.articleNo}</a></td>
+						<tr class=${userMap[article.idx].grp == 2 ? "noti" : "normal"}>
+							<td><a href="./viewform/${article.articleNo}">${userMap[article.idx].grp == 2 ? "공지글" : "일반글"}</a></td>
 							<td><a href="./viewform/${article.articleNo}">${article.title}</a></td>
-							<td><a href="./viewform/${article.articleNo}">${article.idx}</a></td>
+							<td><a href="./viewform/${article.articleNo}">${userMap[article.idx].nickname}</a></td>
 							<td><a href="./viewform/${article.articleNo}">${article.date}</a></td>
 							<td><a href="./viewform/${article.articleNo}">${article.views}</a></td>
 						</tr>

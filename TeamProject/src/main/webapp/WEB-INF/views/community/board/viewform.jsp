@@ -31,7 +31,8 @@ a {
 #articleContentArea {
 	background:  #f6f3f3;
 	margin-top: 10px;
-	height: 410px;
+	max-width: 100%;
+	height: auto;
 	text-align: center;
 	overflow: auto;
 }
@@ -126,4 +127,5 @@ function toggleLikes(articleNo){
 }
 </script>
 </html>
+
 
