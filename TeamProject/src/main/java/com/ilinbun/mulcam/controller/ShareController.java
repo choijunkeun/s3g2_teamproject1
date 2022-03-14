@@ -314,7 +314,7 @@ public class ShareController {
 	 */
 	
 	// 글수정 (내 글일경우가능)
-		@GetMapping(value = "/modifyform")
+		@GetMapping(value = "/board/modifyform")
 		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, HttpServletRequest request) {
 			ModelAndView mav = new ModelAndView();
 			
@@ -336,7 +336,7 @@ public class ShareController {
 			return mav;
 		}
 
-		@PostMapping(value = "/modifyform")
+		@PostMapping(value = "/board/modifyform")
 		public ModelAndView sharemodify(@ModelAttribute Shareboard shareboard) {
 			ModelAndView mav = new ModelAndView();
 			try {
@@ -383,7 +383,7 @@ public class ShareController {
 	
 	//글 삭제
 	@ResponseBody
-	@PostMapping(value = "/deleteform")
+	@PostMapping(value = "/board/deleteform")
 	public ResponseEntity<String> deleteform(@RequestParam int articleNo, @RequestParam String idx) {
 		ResponseEntity<String> result = null;
 		
@@ -471,7 +471,7 @@ public class ShareController {
 				}
 			}
 			
-			return "redirect:/share/board/viewform/"+articleNo;
+			return "redirect:/share/viewform/"+articleNo;
 		}
 		
 		@PostMapping("/reReply")
@@ -520,7 +520,7 @@ public class ShareController {
 		}
 		
 		//말머리 바꾸기
-		@PostMapping(value="header")
+		@PostMapping(value="/header")
 		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
 			try {
 				shareService.changeHeader(headerTag);
