@@ -4,30 +4,29 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ilinbun.mulcam.dao.ShareDAO">	
-	<select id="selectShareboard" resultType="Shareboard">
+	<!-- 글보기:articlNo 가지고 게시글 조회 -->
+	<select id="selectShareboard" resultType="Shareboard" parameterType="int">
 		<![CDATA[
-			SELECT * FROM shareboard ORDER BY articleno DESC LIMIT 1 
+			SELECT * FROM shareboard where articleNo=#{articleNo}
 		]]>
 	</select>
+	<!-- 글쓰기, 글목록 -->
 	<insert id="insertShareBoard" parameterType="Shareboard">
  		<![CDATA[
- 			insert into team2.shareBOARD (idx, subway, title, content)
+ 			insert into team2.shareBOARD (idx, subway, title, content, headerTag)
  			
- 			values (#{idx}, #{subway}, #{title}, #{content})
+ 			values (#{idx}, #{subway}, #{title}, #{content}, #{headerTag})
  		]]>
- 		
  	</insert>
-	<update id="updateShareBoard" parameterType="Shareboard">
- 		<![CDATA[
- 			update team2.shareBOARD set title=#{board_subject}, content=#{content}
- 			where articleNo=#{articleNo}
- 		]]>
- 	</update>
+
+	<!-- 글보기 게시글 조회수 +1 -->
  	<update id="updateReadCount" parameterType="int">
  		<![CDATA[
  			update team2.shareBOARD set readCount=readCount+1 where articleNo=#{articleNo} 
  		]]>
  	</update>
+ 	
+ 	<!-- 글쓰기 시 : 현재 articleNo가 어디까지(Max)인지 알려주는 쿼리문 -->
  	<select id="selectMaxArticleNo" resultType="integer">
 	<!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자.
 	PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다.-->
@@ -36,18 +35,18 @@
 			select max(articleNo) from team2.shareBOARD
 		]]>
 	</select>
+	
+	<!-- 글목록 : 전체게시물 조회하기 -->
 	<select id="selectShareBoardCount" resultType="int">
  		<![CDATA[
  			select count(*) from team2.shareBOARD
  		]]>
  	</select>
- 	<select id="selectShareBoardList" resultType="Shareboard" parameterType="int">
+ 	<!-- 글목록 : 게시판 글 목록에 16개 출력 쿼리문 -->
+	<select id="selectShareBoardList" resultType="Shareboard"
+		parameterType="int">
  		<![CDATA[
- 			select *
-				from (select @rownum:=@rownum+1 rnum, tot.* 
-					from (select * from team2.shareBOARD order by articleNo) tot, 
-					(select @rownum:=0) temp) sub
-			where rnum between #{startrow} and #{startrow}+9		
+ 			select * from team2.shareBOARD where articleNo between #{startrow} and #{startrow}+14
  		]]>
  	</select>
  	
@@ -57,6 +56,118 @@
  			select * from shareBOARD where idx=#{idx} order by date desc limit 10
  		]]>
 	</select>
+	
+	<!-- 게시물 수정 :articleNo를 가지고 게시글을 조회해서 수정함 -->
+	 <update id="updateShareBoard" parameterType="ShareBoard">
+      <![CDATA[
+     
+      update shareBOARD set title=#{title},content=#{content},headerTag=#{headerTag} where articleNo=#{articleNo}
+       ]]>
+   </update>
+   <!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
+      할 것인가 -->
+   <delete id="deleteShareBoard" parameterType="int">
+      <![CDATA[
+      delete from shareBOARD where articleNo=#{articleNo}
+       ]]>
+   </delete>
+   
+   <!-- @@@@@@@좋아요@@@@@@@@@@ -->
+	<select id="queryArticleLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from shareLikes where articleNo=#{articleNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from shareLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addArticleLikes" parameterType="Map">
+		<![CDATA[
+			insert into shareLikes values(#{articleNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeArticleLikes" parameterType="Map">
+		<![CDATA[
+			delete from shareLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</delete> 
+	
+			<!-- 댓글달기 -->
+	<insert id="insertReply" parameterType="Map">
+ 		<![CDATA[
+ 		insert into sharecomment (articleNo, idx, comment, blind, refer, lev, seq)
+ 			values (#{articleNo}, #{idx}, #{comment}, #{blind}, #{refer}, #{lev}, #{seq})
+ 		]]>
+	</insert>
+	
+			<!-- 댓글보기 -->
+			<!-- select commentNo, articleNo, idx,date, comment, blind, refer, lev, seq -->
+	<select id="selectReplyList" parameterType="Map" resultType="BragReply">
+		<![CDATA[
+			select  commentNo, articleNo, idx,date, comment, blind, refer, lev, seq
+				from (select @rownum:=@rownum+1 rnum, tot.*
+					from (select * from sharecomment where articleNo=#{articleNo} order by refer desc, seq asc, date desc) tot,
+							(select @rownum:=0) temp) sub
+				where rnum between #{startrow} and #{startrow}+9
+			
+		]]>
+	</select> 
+	<select id="selectReply" parameterType="int" resultType="BragReply">
+		<![CDATA[
+			select * from sharecomment where commentNo=#{commentNo}
+		]]>
+	</select>
+	<select id="selectMaxCommentNo" resultType="Integer">
+		<![CDATA[
+			select max(commentNo) from sharecomment
+		]]>
+	</select>
+	
+		<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="int">
+		<![CDATA[
+		delete from sharecomment where commentNo=#{commentNo}
+		 ]]>
+	</delete>
+	
+	<!-- 댓글수정 --> 
+	<update id="editReply" parameterType="Map">
+		<![CDATA[
+		update sharecomment set comment = #{comment} where commentNo = #{commentNo}
+		 ]]>
+	</update>
+	
+	<!-- 익명댓글 처리 -->
+	<update id="setBlind" parameterType="Map">
+		<![CDATA[
+		update sharecomment set blind = #{blind} where commentNo = #{commentNo}
+		 ]]>
+	</update>
+	
+	<select id="countComment" resultType="Integer">
+		<![CDATA[
+			select count(*) from sharecomment
+		]]>
+	</select>
+	
+	<update id="updateCommentSeq" parameterType="BragReply">
+		<![CDATA[
+			update sharecomment set seq=seq+1 
+			where refer=#{refer} and seq>#{seq}
+		]]>
+	</update>
+	
+	<!-- headerTag 변경 -->
+	<update id="changeHeader" parameterType="ShareBoard">
+      <![CDATA[
+      update shareBOARD set headerTag=#{headerTag} where articleNo=#{articleNo}
+       ]]>
+   </update>
  	
 
 </mapper>

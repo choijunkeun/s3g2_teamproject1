@@ -31,7 +31,7 @@ a {
 <!-- 공지사항 리스트 -->
 	<h2 class="fa fa-exclamation-circle">공지사항</h2>
 	<button class="btn btn-outline-dark" type="button" style="float:right; "
-	onclick="location.href='share/boardlistN'">더보기</button>
+	onclick="location.href='share/board/listform'">더보기</button>
 	
 	
 	<div class="container-share">
@@ -94,7 +94,7 @@ a {
 	
 	<h2 class="fa fa-exclamation-circle">반찬공유 - 혼자 먹는 당신을 위해 나눠드립니다. </h2>
 	<button class="btn btn-outline-dark" type="button" style="float:right; "
-	onclick="location.href='share/boardlist'">더보기</button> <br>
+	onclick="location.href='share/board/listform'">더보기</button> <br>
 
 	
 	<div class="container-comm">
