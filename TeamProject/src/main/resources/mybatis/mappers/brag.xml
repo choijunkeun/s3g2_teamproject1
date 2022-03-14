@@ -36,11 +36,11 @@
 	</update>
 	
 	
-	<!-- 글목록 : 게시판 글 목록에 16개 출력 쿼리문 -->
+	<!-- 글목록 : 게시판 글 목록에 24개 출력 쿼리문 -->
 	<select id="selectBragBoardList" resultType="Bragboard"
-		parameterType="int">
+		parameterType="Map">
  		<![CDATA[
- 			select * from honbab where articleNo between #{startrow} and #{startrow}+15	
+ 			select * from honbab limit #{startrow}, #{howManyBrag}
  		]]>
 	</select>
 	<!-- 글목록 : 전체게시물 조회하기 -->
