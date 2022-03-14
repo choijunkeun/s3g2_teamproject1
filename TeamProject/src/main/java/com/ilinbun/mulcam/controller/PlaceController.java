@@ -137,7 +137,8 @@ public class PlaceController {
 				if(idx != null) { 
 					mv.addObject("didILikedList", didILikedList);
 				}
-		        
+
+				mv.addObject("reviewLikesList",reviewLikesList);
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 				mv.addObject("prList", reviewList);
