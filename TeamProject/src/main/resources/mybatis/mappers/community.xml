@@ -39,8 +39,11 @@
    <!-- 글목록 : 게시판 글 목록에 15개 출력 쿼리문 -->
    <select id="selectCommBoardList" resultType="CommBoard"
       parameterType="int">
+      <!-- SELECT * from comm_board order by field(idx, idx in (select idx from user where grp = 2 )) desc
+       	union all
+       	select * from comm_board where articleNo between #{startrow} and #{startrow}+14 -->
        <![CDATA[
-          select * from comm_board where articleNo between #{startrow} and #{startrow}+14   
+       	SELECT * from comm_board order by case when idx in (select idx from user where grp = 2 ) then 0 else 1 end, date desc limit #{startrow}, 15
        ]]>
    </select>  <!--  select * from comm_board where articleNo order by desc between #{startrow} and #{startrow}+14 -->
    <!-- 글목록 : 전체게시물 조회하기 -->
@@ -105,7 +108,70 @@
 		]]>
 	</delete> 
 	
-   
+	
+   	<!-- 댓글달기 -->
+	<insert id="insertReply" parameterType="Map">
+ 		<![CDATA[
+ 		insert into comm_comment (articleNo, idx, comment, blind, refer, lev, seq)
+ 			values (#{articleNo}, #{idx}, #{comment}, #{blind}, #{refer}, #{lev}, #{seq})
+ 		]]>
+	</insert>
+	
+			<!-- 댓글보기 -->
+			<!-- select commentNo, articleNo, idx,date, comment, blind, refer, lev, seq -->
+	<select id="selectReplyList" parameterType="Map" resultType="CommReply">
+		<![CDATA[
+			select commentNo, articleNo, idx,date, comment, blind, refer, lev, seq
+				from (select @rownum:=@rownum+1 rnum, tot.*
+					from (select * from comm_comment where articleNo=#{articleNo} order by refer desc, seq asc, date desc) tot,
+							(select @rownum:=0) temp) sub
+				where rnum between #{startrow} and #{startrow}+9
+		]]>
+	</select> 
+	<select id="selectReply" parameterType="int" resultType="CommReply">
+		<![CDATA[
+			select * from comm_comment where commentNo=#{commentNo}
+		]]>
+	</select>
+	<select id="selectMaxCommentNo" resultType="Integer">
+		<![CDATA[
+			select max(commentNo) from comm_comment
+		]]>
+	</select>
+	
+			<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="int">
+		<![CDATA[
+		delete from comm_comment where commentNo=#{commentNo}
+		 ]]>
+	</delete>
+	
+	<!-- 댓글수정 --> 
+	<update id="editReply" parameterType="Map">
+		<![CDATA[
+		update comm_comment set comment = #{comment} where commentNo = #{commentNo}
+		 ]]>
+	</update>
+	
+	<!-- 익명댓글 처리 -->
+	<update id="setBlind" parameterType="Map">
+		<![CDATA[
+		update comm_comment set blind = #{blind} where commentNo = #{commentNo}
+		 ]]>
+	</update>
+	
+	<select id="countComment" resultType="Integer">
+		<![CDATA[
+			select count(*) from comm_comment
+		]]>
+	</select>
+	
+	<update id="updateCommentSeq" parameterType="CommReply">
+		<![CDATA[
+			update comm_comment set seq=seq+1 
+			where refer=#{refer} and seq>#{seq}
+		]]>
+	</update>
    
    
    
