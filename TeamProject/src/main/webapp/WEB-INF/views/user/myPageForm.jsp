@@ -169,9 +169,10 @@
 // 혼밥자랑 게시글
 $(function() {
 	$.ajax({
-		url:'/MybragPosting',		
+		url:'/bragPosting',		
 		type: 'POST',
 		datatype : "json",
+		data: {"idx": ${user.idx}},
 		success: function(data) {
 			/* $("#myBrag").text(data[0].title); */
 			$.each(data, function(index, item) { 
@@ -184,9 +185,10 @@ $(function() {
 	
 //반찬공유 게시글
 	$.ajax({
-		url:'/MysharePosting',		
+		url:'/sharePosting',		
 		type: 'POST',
 		datatype:"json",
+		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
 				$("#myShare").append("<tr><td><a href=/brag/viewdetail/"+item.articleNo+">"
@@ -198,9 +200,10 @@ $(function() {
 	}),
 //커뮤니티 게시글
 	$.ajax({
-		url:'/MycommunityPosting',		
+		url:'/communityPosting',		
 		type: 'POST',
 		datatype:"json",
+		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
 				$("#myCommunity").append("<tr><td><a href=/comm/boardlist/"+item.articleNo+">"
@@ -211,9 +214,10 @@ $(function() {
 	}),
 	// 리뷰 게시글
 	$.ajax({
-		url:'/MyreviewPosting',		
+		url:'/reviewPosting',		
 		type: 'POST',
 		datatype : "json",
+		data: {"idx": ${user.idx}},
 		success: function(data) {			
 			$.each(data, function(index, item) { 
 				var index = (item.serviceRate+item.interiorRate+item.priceRate+item.tasteRate)/4;

@@ -2,7 +2,7 @@ package com.ilinbun.mulcam.service;
 
 import java.util.List;
 
-
+import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
 public interface UserService {
@@ -26,5 +26,18 @@ public interface UserService {
 	
 	//회원정보수정
 	void userUpdate(User user) throws Exception;
+
+	//유저 정보 불러오기(훈)
+	User getUserDetail(int idx) throws Exception;
 	
+	
+	//팔로잉/팔로워/팔로우/언팔로우 (훈)
+	Integer getFollowingCount(int idx) throws Exception;
+	Integer getFollowerCount(int follow) throws Exception;
+	Integer didIFollowed(int idx, int follow) throws Exception;
+	void toggleFollow(int idx, int follow) throws Exception;
+
+	List<User> getFollowingList(int idx) throws Exception;
+
+	List<User> getFollowerList(int idx) throws Exception;
 }

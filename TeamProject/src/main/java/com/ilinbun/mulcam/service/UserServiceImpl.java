@@ -1,6 +1,8 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
-import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
 @Service
@@ -91,5 +93,55 @@ public class UserServiceImpl implements UserService {
 	public void userUpdate(User user) throws Exception {
 		userDAO.userUpdate(user);
 	
+	}
+	
+	//회원정보 가져오기 (훈)
+	@Override
+	public User getUserDetail(int idx) throws Exception {
+		User user = userDAO.selectUserDetail(idx); 
+		user.setPassword("");
+		return user;
+	}
+	
+	//해당 회원의 팔로잉 수 가져오기(훈)
+	@Override
+	public Integer getFollowingCount(int idx) throws Exception{
+		return userDAO.getFollowingCount(idx);
+	}
+	//해당 회원의 팔로워 수 가져오기(훈)
+	@Override
+	public Integer getFollowerCount(int follow) throws Exception{
+		return userDAO.getFollowerCount(follow);
+	}
+	// 팔로우(훈)
+	@Override
+	public void toggleFollow(int idx, int follow) throws Exception{
+		Integer didIFollowed = didIFollowed(idx, follow);
+		
+		Map<String, Integer> map = new HashMap<>();
+		map.put("idx", idx);
+		map.put("follow", follow);
+		
+		if(didIFollowed >0) {
+			userDAO.unfollow(map);
+		} else userDAO.follow(map);
+		
+	}
+	//팔로우 했는지 확인
+	@Override
+	public Integer didIFollowed(int idx, int follow) throws Exception {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("idx", idx);
+		map.put("follow", follow);
+		return userDAO.didIFollowed(map);
+	}
+	
+	@Override
+	public List<User> getFollowingList(int idx) throws Exception{
+		return userDAO.getFollowingList(idx);
+	}
+	@Override
+	public List<User> getFollowerList(int idx) throws Exception{
+		return userDAO.getFollowerList(idx);
 	}
 }

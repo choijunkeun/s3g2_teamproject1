@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -39,9 +40,13 @@ public interface UserDAO {
 
 	//UserNick 불러오기(종현)
 	String getUserNick(int idx) throws Exception;
-
 	
-	
-	
-	
+	// 팔로워 수, 팔로잉 수, 팔로우, 언팔로우(훈)
+	Integer getFollowerCount(int follow) throws Exception;
+	Integer getFollowingCount(int idx) throws Exception;
+	void follow(Map<String, Integer> map) throws Exception;
+	void unfollow(Map<String, Integer> map) throws Exception;
+	Integer didIFollowed(Map<String, Integer> map) throws Exception;
+	List<User> getFollowerList(int idx) throws Exception;
+	List<User> getFollowingList(int idx) throws Exception;
 }

@@ -44,15 +44,13 @@ a:link, a:visited, a:hover, a:active {
 	<script>
 		//$('#'+window.location.pathname.split("/")[1]+'-nav').addClass('btn-dark text-white');
 		//$('#'+window.location.pathname.split("/")[1]+'-nav').addClass('btn-dark text-white');
-		if (window.location.pathname !== "/") {
-			if (window.location.pathname.split("/")[1] != 'place') {
-				//document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('btn-dark');
-				//document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('text-white');
-				document.getElementById(window.location.pathname.split("/")[1]
-						+ '-nav').classList.add('font-weight-bold');
-				document.getElementById(window.location.pathname.split("/")[1]
-						+ '-nav').classList.add('text-white');
-			}
+		if (window.location.pathname !== "/" && 
+			window.location.pathname.split("/")[1] != "place" && 
+			window.location.pathname.split("/")[1] != "userInfo") {
+			//document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('btn-dark');
+			//document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('text-white');
+			document.getElementById(window.location.pathname.split("/")[1] + '-nav').classList.add('font-weight-bold');
+			document.getElementById(window.location.pathname.split("/")[1] + '-nav').classList.add('text-white');
 		}
 	</script>
 </body>
