@@ -71,6 +71,96 @@
       delete from shareBOARD where articleNo=#{articleNo}
        ]]>
    </delete>
+   
+   <!-- @@@@@@@좋아요@@@@@@@@@@ -->
+	<select id="queryArticleLikes" resultType="integer" parameterType="int">
+		<![CDATA[
+			select count(*) from shareLikes where articleNo=#{articleNo}
+		]]>
+	</select> 
+	
+	<select id="queryIfILikeThis" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from shareLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</select> 
+	
+	<insert id="addArticleLikes" parameterType="Map">
+		<![CDATA[
+			insert into shareLikes values(#{articleNo}, #{idx})
+		]]>
+	</insert> 
+	
+	<delete id="removeArticleLikes" parameterType="Map">
+		<![CDATA[
+			delete from shareLikes where articleNo=#{articleNo} and idx=#{idx}
+		]]>
+	</delete> 
+	
+			<!-- 댓글달기 -->
+	<insert id="insertReply" parameterType="Map">
+ 		<![CDATA[
+ 		insert into sharecomment (articleNo, idx, comment, blind, refer, lev, seq)
+ 			values (#{articleNo}, #{idx}, #{comment}, #{blind}, #{refer}, #{lev}, #{seq})
+ 		]]>
+	</insert>
+	
+			<!-- 댓글보기 -->
+			<!-- select commentNo, articleNo, idx,date, comment, blind, refer, lev, seq -->
+	<select id="selectReplyList" parameterType="Map" resultType="BragReply">
+		<![CDATA[
+			select  commentNo, articleNo, idx,date, comment, blind, refer, lev, seq
+				from (select @rownum:=@rownum+1 rnum, tot.*
+					from (select * from sharecomment where articleNo=#{articleNo} order by refer desc, seq asc, date desc) tot,
+							(select @rownum:=0) temp) sub
+				where rnum between #{startrow} and #{startrow}+9
+			
+		]]>
+	</select> 
+	<select id="selectReply" parameterType="int" resultType="BragReply">
+		<![CDATA[
+			select * from sharecomment where commentNo=#{commentNo}
+		]]>
+	</select>
+	<select id="selectMaxCommentNo" resultType="Integer">
+		<![CDATA[
+			select max(commentNo) from sharecomment
+		]]>
+	</select>
+	
+		<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="int">
+		<![CDATA[
+		delete from sharecomment where commentNo=#{commentNo}
+		 ]]>
+	</delete>
+	
+	<!-- 댓글수정 --> 
+	<update id="editReply" parameterType="Map">
+		<![CDATA[
+		update sharecomment set comment = #{comment} where commentNo = #{commentNo}
+		 ]]>
+	</update>
+	
+	<!-- 익명댓글 처리 -->
+	<update id="setBlind" parameterType="Map">
+		<![CDATA[
+		update sharecomment set blind = #{blind} where commentNo = #{commentNo}
+		 ]]>
+	</update>
+	
+	<select id="countComment" resultType="Integer">
+		<![CDATA[
+			select count(*) from sharecomment
+		]]>
+	</select>
+	
+	<update id="updateCommentSeq" parameterType="BragReply">
+		<![CDATA[
+			update sharecomment set seq=seq+1 
+			where refer=#{refer} and seq>#{seq}
+		]]>
+	</update>
  	
 
 </mapper>

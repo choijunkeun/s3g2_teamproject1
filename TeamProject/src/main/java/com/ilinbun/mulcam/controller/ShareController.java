@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.lang.model.element.Element;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,8 +33,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilinbun.mulcam.dto.BragBoard;
 import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.ShareReply;
 import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.ShareService;
@@ -232,10 +232,13 @@ public class ShareController {
 	//글보기
 	@GetMapping("/board/viewform/{articleNo}")
 	public ModelAndView boardDetail(@PathVariable int articleNo,
-			@RequestParam(required=false, defaultValue="1") int page) {
+			@RequestParam(required=false, defaultValue="1") int page,
+			HttpServletRequest request) {
 //		User userinfo = (User) session.getAttribute("user"); //same
 //		User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1); //임시 
 		ModelAndView mav=new ModelAndView();
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPage(page);
 		try {
 			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
 			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
@@ -250,6 +253,26 @@ public class ShareController {
 			
 			mav.addObject("imgSrc", src); //mav에 넣기
 			mav.setViewName("share/board/viewform"); //경로이름 설정
+			
+			Integer countComment = shareService.countComment();
+			mav.addObject("countComment", countComment);
+			
+			//댓글 보기
+			//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
+			pageInfo=shareService.getCommentPageInfo(pageInfo);
+			System.out.println("댓글 받아오기 시작");
+			List<ShareReply> commentList = shareService.boardReplyList(articleNo, pageInfo.getStartPage());
+			System.out.println(commentList.size() + "개 받음");
+			List<User> commentUserList = new ArrayList<User>();
+			for(int i=0; i<commentList.size(); i++) {
+				//System.out.println(((BragReply) commentList.get(i)).getIdx());
+				int idx = ((ShareReply) commentList.get(i)).getIdx();
+				User commentUser = shareService.selectUserDetail(idx);
+				commentUserList.add(commentUser);
+			}
+			mav.addObject("commentList", commentList);
+			mav.addObject("commentUserList", commentUserList);
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());

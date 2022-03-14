@@ -184,7 +184,117 @@ a {
 			</section>
 			</div>
 		</section>
-		<div>
+		<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
+
+
+	<!-- 좋아요 -->
+	<button class="btn-sm border-danger rounded-pill bg-white text-danger"
+		id="likebtn${shboard.articleNo }"
+		onclick="toggleLikes(${shboard.articleNo})">
+		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
+			aria-hidden="true">${likes }</i>
+	</button>
+	<br>
+	<!-- 댓글 보기 -->
+	<!-- 프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼  -->
+	<!--commentUserList commentList-->
+	<div class="container">
+		<c:forEach var="reply" items="${commentList}" varStatus="status">
+		<c:choose>
+		<c:when test="${reply.blind eq false || reply.idx eq user.idx || shboard.idx eq user.idx}">
+			<div class="row">
+				<div class="col">
+					<img style="border-radius: 50px; width: 30px; height: 30px;"
+						src=/profile/${commentUserList[status.index].profileImg}>
+					<p>${commentUserList[status.index].nickname }</p>
+				</div>
+				<div class="col">
+					<input type="text" id="comment${reply.commentNo}"
+						value="${reply.comment }" readOnly></input>
+				</div>
+				<div class="col">
+					<p>${reply.date }</p>
+				</div>
+				<div class="col">
+					<c:if test="${user!=null}">
+						<div class="if-thisArticle-mine text-end">
+							<button class="btn border-dark"
+								onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">
+								대댓글쓰기</button>							
+						</div>
+					</c:if>
+					<c:if test="${user.idx == reply.idx}">
+						<div class="if-thisArticle-mine text-end">
+							<button class="btn border-dark"
+								onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
+
+							<button class="btn border-dark"
+								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+						</div>
+					</c:if>
+					<c:if test="${user.grp == 2 }">
+						<div class="if-thisArticle-mine text-end">
+							<button class="btn border-dark"
+								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+						</div>
+					</c:if>
+				</div>
+				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
+					<form id="replyReply" action="/brag/reReply" method="post">
+						<input type="text" name="commentWrite">
+						<input type="hidden" name="idx" value="${user.idx }">
+						<input type="hidden" name="articleNo" value="${shboard.articleNo}">
+						<input type="hidden" name="commentNo" value="${reply.commentNo}">
+						<input type="checkbox" name="blind" id="blind${reply.commentNo }" value="1">
+						<label for="blind${reply.commentNo }">비밀댓글</label>
+						<input type="submit" value="답글쓰기">
+					</form>
+					
+				</div>
+			</div>
+		</c:when>
+		<c:otherwise>
+			<div class="row">
+				<span>해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.</span>
+			</div>
+		</c:otherwise>
+		</c:choose>
+		</c:forEach>
+	</div>
+	<br>
+	<!--댓글 작성  -->
+	<form id="" action="/brag/comment" method="post">
+		<input name="articleNo" type="hidden" value=${shboard.articleNo }></input>
+		<input name="idx" type="hidden" value=${user.idx }></input>
+		<textarea name="commentWrite"></textarea>
+		<input id="blind" name="blind" type="checkbox" value="1">익명댓글
+		<input id="commentBtn" type="submit" value="댓글작성">
+	</form>
+
+
+	<%-- 	<br> 글 작성자 번호 : ${bboard.idx }
+	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"} --%>
+
+	<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
+	<div class="row py-3">
+		<div class="col text-center">
+			<c:if test="${user.idx == shboard.idx}">
+				<div class="if-thisArticle-mine text-end">
+					<button class="btn border-dark"
+						onclick="editWrite(${shboard.articleNo});">수정</button>
+					<button class="btn border-dark"
+						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+				</div>
+			</c:if>
+			<c:if test="${user.grp == 2 }">
+				<div class="if-thisArticle-mine text-end">
+					<button class="btn border-dark"
+						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+				</div>
+			</c:if>
+		</div>
+	</div>
+		<%-- <div>
 			<section id="commandList">
 				<a href="replyform?board_num=${articleNo}&page=${page}"> [답변] </a> 
 				<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
@@ -200,16 +310,16 @@ a {
 			</c:if>
 		</div>
 	</div>
-				<%-- <c:if test="${user.idx eq shboard.idx}">
+				<c:if test="${user.idx eq shboard.idx}">
 				<a href="../modifyform?articleNo=${articleNo}"> [수정] </a>
 				</c:if>
 				<c:if test="${user.idx eq shboard.idx || user.grp == 2 }"> 
 				<a href="../deleteform?articleNo=${articleNo}"> [삭제] </a>
-				</c:if> --%>
+				</c:if>
 				
 				<a href="../listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
 			</section>
-		</div>
+		</div> --%>
 	</section>
 
 	<script>
@@ -248,7 +358,7 @@ a {
 	    
 	    //f.setAttribute('enctype','application/json');
 	    f.setAttribute('method', 'post');
-	    f.setAttribute('action', '/share/modifyform');
+	    f.setAttribute('action', '/share/board/modifyform');
 	    document.body.appendChild(f);
 	    f.submit();
 	}
@@ -262,12 +372,79 @@ a {
 		    f.appendChild(mIHObj('idx','${user.idx}'));
 		   
 		    f.setAttribute('method', 'post');
-		    f.setAttribute('action', '/share/deleteform'); // /brag/deleteWrite
+		    f.setAttribute('action', '/share/board/deleteform'); // /brag/deleteWrite
+		    document.body.appendChild(f);
+		    f.submit();
+		}
+	}
+	/*댓글 수정버튼 누르면~  */
+	function editReply(commentNo, articleNo){
+ 		
+		let isReadOnly = $('#comment'+commentNo).attr("readOnly")
+		if(isReadOnly){
+			$('#comment'+commentNo).attr("readOnly", false) 
+		} else{
+			let comment = $('#comment'+commentNo).val()
+			
+			$.ajax({
+				type:"POST",
+				url:"/share/board/editReply",
+				cache: false,
+				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
+				async:false,
+				complete:function(){
+					window.location.href="/share/board/viewform/"+articleNo;
+				}
+				
+			})
+		}
+	}
+
+	/*댓글 삭제버튼 누르면~  */
+	function deleteReply(commentNo, articleNo){
+		if(confirm("게시글을 삭제하시겠습니까?")){
+			let f = document.createElement('form');
+			
+			f.appendChild(mIHObj('commentNo', commentNo));
+		    f.appendChild(mIHObj('articleNo',articleNo));
+		   
+		    f.setAttribute('method', 'post');
+		    f.setAttribute('action', '../deleteReply'); // /brag/deleteReply
 		    document.body.appendChild(f);
 		    f.submit();
 		}
 	}
 	</script>
-	
+	<!-- 좋아요 -->
+	<script>
+function toggleLikes(articleNo){
+	if(${empty user}){
+		alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+		return false;
+	} else {
+		$.ajax({
+			type:"POST",
+			url:"/share/board/likes/",
+			cache: false,
+			data:{"articleNo": articleNo, "idx":${not empty user.idx? user.idx:"0"}},
+			async:false,
+			success: function(data){
+				result = JSON.parse(data);
+				$('#likebtn' + articleNo).children('i').text(result.currentLikes);
+				if(result.processed >0){
+					$('#likebtn' + articleNo).children('i').removeClass('fa-heart-o');
+					$('#likebtn' + articleNo).children('i').addClass('fa-heart');
+				} else if(result.processed <0){
+					$('#likebtn' + articleNo).children('i').removeClass('fa-heart');
+					$('#likebtn' + articleNo).children('i').addClass('fa-heart-o');
+				}
+			},
+			error:function(data){
+				$('#likebtn' + articleNo).children('i').text('좋아요');
+			}
+		})
+	}
+}
+</script>
 </body>
 </html>
