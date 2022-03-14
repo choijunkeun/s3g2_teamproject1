@@ -90,11 +90,11 @@ table {
 					<c:forEach var="article" items="${commList }">
 		
 						<tr>
-							<td><a href="./community/viewform/${article.articleNo}">${article.articleNo}</a></td>
-							<td><a href="./community/viewform/${article.articleNo}">${article.title}</a></td>
-							<td><a href="./community/viewform/${article.articleNo}">${article.idx}</a></td>
-							<td><a href="./community/viewform/${article.articleNo}">${article.date}</a></td>
-							<td><a href="./community/viewform/${article.articleNo}">${article.views}</a></td>
+							<td><a href="./viewform/${article.articleNo}">${article.articleNo}</a></td>
+							<td><a href="./viewform/${article.articleNo}">${article.title}</a></td>
+							<td><a href="./viewform/${article.articleNo}">${article.idx}</a></td>
+							<td><a href="./viewform/${article.articleNo}">${article.date}</a></td>
+							<td><a href="./viewform/${article.articleNo}">${article.views}</a></td>
 						</tr>
 					</c:forEach>
 				</table>

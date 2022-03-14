@@ -71,7 +71,8 @@ public class CommServiceImpl implements CommService {
 	// 게시글 목록 : 15개가 화면에 띄워지게 하는 DAO
 	@Override
 	public List<CommBoard> getCommBoardList(int page) throws Exception {
-		int startrow = (int) ((page - 1) * 15 + 1);
+		int startrow = (int) ((page - 1) * 15);
+		System.out.println(startrow);
 		return CommunityDAO.selectCommBoardList(startrow);
 	}
 

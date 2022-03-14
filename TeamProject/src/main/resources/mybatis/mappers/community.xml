@@ -40,7 +40,7 @@
    <select id="selectCommBoardList" resultType="CommBoard"
       parameterType="int">
        <![CDATA[
-          select * from comm_board where articleNo between #{startrow} and #{startrow}+14   
+       	SELECT * from comm_board order by field(idx, idx in (select idx from user where grp = 2 )) desc, date DESC limit #{startrow}, 15
        ]]>
    </select>  <!--  select * from comm_board where articleNo order by desc between #{startrow} and #{startrow}+14 -->
    <!-- 글목록 : 전체게시물 조회하기 -->

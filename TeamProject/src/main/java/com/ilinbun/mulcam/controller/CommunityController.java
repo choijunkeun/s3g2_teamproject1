@@ -206,7 +206,7 @@ public class CommunityController {
 	}
 
 	// 게시글보기 (viewDetail.jsp)
-	@GetMapping("/community/viewform/{articleNo}")
+	@GetMapping("/viewform/{articleNo}")
 	public ModelAndView boardDetail(@PathVariable int articleNo) {
 		ModelAndView mav = new ModelAndView();
 		try {
