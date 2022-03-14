@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,8 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.PageInfo;
-import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
 
@@ -62,7 +63,7 @@ public class BragController {
 		try {
 			List<BragBoard> bestbragList = bragService.bragBest();
 			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
-			model.addAttribute("bragList", bragList);
+			model.addAttribute("bragList", bragList); //담아야 가져옴
 			model.addAttribute("bestbragList", bestbragList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,12 +130,15 @@ public class BragController {
 				User userInfo = (User) session.getAttribute("user");
 				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 				Document doc=Jsoup.parse(bragboard.getContent());
-				
+				System.out.println("doc.toString :" + doc.toString());
 				Elements img= doc.select("img");
 				String src = img.attr("src");
+				System.out.println("src :" + src);
 				String newSrc =src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
+				System.out.println("newSrc :" + newSrc);
 				doc.select("img").attr("src", "/bragupload/"+newSrc);
 				bragboard.setContent(doc.select("body > p").toString());
+				System.out.println("doc.select body>p :" + doc.select("body > p").toString());
 				articleNo = bragService.regBragBoard(bragboard);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -208,8 +212,12 @@ public class BragController {
 	
 		//게시글보기 (viewDetail.jsp)
 		@GetMapping("/viewdetail/{articleNo}")
-		public ModelAndView boardDetail(@PathVariable int articleNo, HttpServletRequest request) {
+		public ModelAndView boardDetail(@PathVariable int articleNo,
+				@RequestParam(required=false, defaultValue="1") int page,
+				HttpServletRequest request) {
 			ModelAndView mav=new ModelAndView();
+			PageInfo pageInfo=new PageInfo();
+			pageInfo.setPage(page);
 			try {
 				bragboard=bragService.getBragBoard(articleNo); //내가쓴글, 남이쓴글 확인
 				User userinfo = bragService.selectUserDetail(bragboard.getIdx()); //유저 정보 가져오기
@@ -222,7 +230,7 @@ public class BragController {
 					System.out.println("유저 정보 인식");
 					int didILiked = bragService.queryIfILikeThis(articleNo, user.getIdx());
 					System.out.println("이전에 누른 적 있음 : " +didILiked);
-					mav.addObject("didILiked", didILiked);
+					mav.addObject("didILiked", didILiked);  //좋아요 유지
 				}
 				
 				mav.addObject("likes", likes);
@@ -236,6 +244,25 @@ public class BragController {
 				
 				mav.addObject("imgSrc", src); //mav에 넣기
 				mav.setViewName("brag/viewDetail"); //경로이름 설정
+				
+				Integer countComment = bragService.countComment();
+				mav.addObject("countComment", countComment);
+				
+				//댓글 보기
+				//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
+				pageInfo=bragService.getCommentPageInfo(pageInfo);
+				System.out.println("댓글 받아오기 시작");
+				List<BragReply> commentList = bragService.boardReplyList(articleNo, pageInfo.getStartPage());
+				System.out.println(commentList.size() + "개 받음");
+				List<User> commentUserList = new ArrayList<User>();
+				for(int i=0; i<commentList.size(); i++) {
+					//System.out.println(((BragReply) commentList.get(i)).getIdx());
+					int idx = ((BragReply) commentList.get(i)).getIdx();
+					User commentUser = bragService.selectUserDetail(idx);
+					commentUserList.add(commentUser);
+				}
+				mav.addObject("commentList", commentList);
+				mav.addObject("commentUserList", commentUserList);
 			} catch(Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
@@ -331,6 +358,8 @@ public class BragController {
 		return result;	
 	}
 	
+	
+	  //  좋아요
 	@ResponseBody
 	@PostMapping("/likes")
 	public ResponseEntity<String> toggleLikes(@RequestParam("articleNo") String articleNo, 
@@ -363,6 +392,93 @@ public class BragController {
 		
 		return result;	
 	}
+	
+	/*
+	 * //댓글쓰기 (댓글보기는 글보기 Controller에 추가함) - !!!삭제 금지 실현 코드임!!!!
+	 * 
+	 * @PostMapping("/comment") public String
+	 * boardReply(@RequestParam("commentWrite") String comment, @RequestParam
+	 * Integer idx, @RequestParam Integer articleNo) { System.out.println(comment);
+	 * System.out.println(idx); System.out.println(articleNo); if(idx == null) {
+	 * return "default/user/loginForm"; } else { try {
+	 * bragService.boardReply(articleNo.intValue(), idx.intValue(), comment); }
+	 * catch (Exception e) { // TODO Auto-generated catch block e.printStackTrace();
+	 * } }
+	 * 
+	 * return "redirect:/brag/viewdetail/"+articleNo; }
+	 */
+	
+	//댓글쓰기 with 비밀댓글 (댓글보기는 글보기 Controller에 추가함)
+	@PostMapping("/comment")
+	public String boardReply(@RequestParam("commentWrite") String comment, 
+			@RequestParam Integer idx, 
+			@RequestParam Integer articleNo, 
+			@RequestParam(required=false) Integer blind ) {
+		System.out.println(comment);
+		System.out.println(idx);
+		System.out.println(articleNo);
+		System.out.println(blind);
+		if(idx == null) {
+			return "default/user/loginForm";
+		} else {
+			try {
+				bragService.boardReply(articleNo.intValue(), idx.intValue(), comment, blind);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return "redirect:/brag/viewdetail/"+articleNo;
+	}
+	
+	@PostMapping("/reReply")
+	public String commentReply(@RequestParam("commentWrite") String comment, 
+			@RequestParam Integer idx,
+			@RequestParam Integer commentNo,
+			@RequestParam Integer articleNo, 
+			@RequestParam(required=false) Integer blind ) {
+		System.out.println(comment);
+		System.out.println(idx);
+		System.out.println(articleNo);
+		System.out.println(blind);
+		if(idx == null) {
+			return "default/user/loginForm";
+		} else {
+			try {
+				bragService.reReply(commentNo, articleNo.intValue(), idx.intValue(), comment, blind);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return "redirect:/brag/viewdetail/"+articleNo;
+	}
+	
+	
+	// 댓글수정 (내 댓글일경우가능)
+	@PostMapping(value="/editReply") // /brag/deleteReply
+	public void editReply(@RequestParam int commentNo, @RequestParam String comment, @RequestParam int articleNo) {
+		try {
+			bragService.editReply(commentNo, comment);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	// 댓글삭제 (내 댓글일경우가능)
+	@PostMapping(value="/deleteReply") // /brag/deleteReply
+	public String deleteReply(@RequestParam int commentNo, @RequestParam int articleNo) {
+		try {
+			bragService.deleteReply(commentNo);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/brag/viewdetail/"+articleNo;
+	}
+	
+	
 	
 
 //		//detail에서 답변을 눌렀을 때 화면 전환 (댓글로 변경하기)

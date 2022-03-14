@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -117,6 +119,7 @@ public class CommunityController {
 			Model model) {
 		try {
 			//System.out.println(title+content+idx );
+			User userInfo = (User) session.getAttribute("user");
 			CommBoard commboard = new CommBoard(idx, title, 0, content);
 			Document doc = Jsoup.parse(commboard.getContent());
 			Elements img = doc.select("img");// 여기에 if 문으로 120~123까지는 묶여야되지 않나 HELP*
@@ -208,6 +211,25 @@ public class CommunityController {
 		ModelAndView mav = new ModelAndView();
 		try {
 			commboard = commService.getCommBoard(articleNo); // 내가쓴글, 남이쓴글 확인
+			
+			User userinfo = commService.selectUserDetail(commboard.getIdx()); //유저 정보 가져오기
+			
+			int likes = commService.queryArticleLikes(articleNo);
+			
+			
+			User user = (User) session.getAttribute("user");
+			if(user != null) {
+				System.out.println("유저 정보 인식");
+				int didILiked = commService.queryIfILikeThis(articleNo, user.getIdx());
+				System.out.println("이전에 누른 적 있음 : " +didILiked);
+				mav.addObject("didILiked", didILiked);  //좋아요 유지
+			}
+			
+			mav.addObject("likes", likes);
+			
+			mav.addObject("userinfo", userinfo);
+	
+			
 			mav.addObject("cboard", commboard);
 			
 			Document doc = Jsoup.parse(commboard.getContent()); // content중에 사진만 가져오기
@@ -320,7 +342,39 @@ public class CommunityController {
 		return mv;
 	}
 	
-	
+	  //  좋아요
+		@ResponseBody
+		@PostMapping("/likes")
+		public ResponseEntity<String> toggleLikes(@RequestParam("articleNo") String articleNo, 
+				@RequestParam("idx") String idx) {
+			ResponseEntity<String> result = null;
+			
+			int rNo = Integer.parseInt(articleNo);
+			int useridx = Integer.parseInt(idx);
+			
+			int processed = 0;
+			try {
+				if(commService.queryIfILikeThis(rNo, useridx)>0) {
+					commService.removeArticleLikes(rNo, useridx);
+					processed = -1;
+				} else {
+					commService.addArticleLikes(rNo, useridx);
+					processed = 1;
+				}
+				Integer val = commService.queryArticleLikes(rNo);
+				JSONObject robj = new JSONObject();
+				robj.put("currentLikes", val);
+				robj.put("processed", processed);
+				
+				result = new ResponseEntity<String>(robj.toString() , HttpStatus.OK);
+//				result = new ResponseEntity<String>("" , HttpStatus.OK);
+			} catch(Exception e) {
+				e.printStackTrace();
+				result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+			}
+			
+			return result;	
+		}
 	
 	
 	

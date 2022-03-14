@@ -2,7 +2,9 @@ package com.ilinbun.mulcam.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -15,12 +17,16 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +43,7 @@ import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.Place;
 import com.ilinbun.mulcam.dto.PlaceReview;
 import com.ilinbun.mulcam.dto.PlaceReviewExtended;
+import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.PlaceReviewService;
 
 @RestController
@@ -51,8 +58,14 @@ public class PlaceController {
 	@GetMapping("/{id}")
 	public ModelAndView placeInfo(@PathVariable String id,
 			@RequestParam("place_name") String place_name,
-			@RequestParam(required=false) String idx) {
+			@RequestParam(required=false, defaultValue="1") int page,
+			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		
+		HttpSession session = request.getSession();
+		Integer idx = null;
+		if(session.getAttribute("user") != null ) idx = ((User)session.getAttribute("user")).getIdx();
+		
 		HttpURLConnection conn = null;
 		StringBuffer response = new StringBuffer();
 		try {
@@ -104,7 +117,7 @@ public class PlaceController {
 		        
 		        
 		        PageInfo pageInfo = new PageInfo();
-		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(1, pageInfo, place.getId());
+		        List<PlaceReviewExtended> reviewList = placeReviewService.getReviewList(page, pageInfo, place.getId());
 		        
 		        HashMap<Integer, Integer> reviewLikesList = new HashMap<>();
 				HashMap<Integer, Integer> didILikedList = new HashMap<>();
@@ -113,7 +126,7 @@ public class PlaceController {
 						placeReviewService.queryReviewLikes(reviewList.get(i).getReviewNo()));
 					if(idx != null) {
 						didILikedList.put(reviewList.get(i).getReviewNo(), 
-								placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), Integer.parseInt(idx)));
+								placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), idx));
 					}
 				}
 				
@@ -159,10 +172,14 @@ public class PlaceController {
 			@RequestParam("y") String y,
 			@RequestParam("place_url") String place_url,
 			@RequestParam(value="page", required=false, defaultValue="1") int page
-			,@RequestParam(required=false) String idx
+			,HttpServletRequest request
 			) {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("id", id);
+		
+		HttpSession session = request.getSession();
+		Integer idx = null;
+		if(session.getAttribute("user") != null ) idx = ((User)session.getAttribute("user")).getIdx();
 		
 		Place place = new Place(Integer.parseInt(id), 
 				place_name,
@@ -187,7 +204,7 @@ public class PlaceController {
 					placeReviewService.queryReviewLikes(reviewList.get(i).getReviewNo()));
 				if(idx != null) {
 					didILikedList.put(reviewList.get(i).getReviewNo(), 
-							placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), Integer.parseInt(idx)));
+							placeReviewService.queryIfILikeThis(reviewList.get(i).getReviewNo(), idx));
 				}
 			}
 			
@@ -350,6 +367,8 @@ public class PlaceController {
 					Double.parseDouble(param.get("priceRate")), 
 					Double.parseDouble(param.get("tasteRate"))
 				);
+			System.out.println(param.get("honbabLv"));
+			
 			pr.setReviewNo(Integer.parseInt(param.get("reviewNo")));
 			boolean fileChange=Boolean.parseBoolean(param.get("fileChange"));
 			if(fileChange && file != null) { // 파일 첨부시 파일 업로드
@@ -452,5 +471,39 @@ public class PlaceController {
 		return result;	
 	}
 	
+	
+	@GetMapping("/img/{filename}")
+	public void fileview(@PathVariable String filename, HttpServletRequest request, HttpServletResponse response) {
+		String path = servletContext.getRealPath("/revimgupload/");
+		File file = new File(path + filename);
+		String sfilename = null;
+		FileInputStream fis = null;
+
+		try {
+			if (request.getHeader("User-Agent").indexOf("MSIE") > -1) {
+				sfilename = URLEncoder.encode(file.getName(), "utf-8");
+			} else {
+				sfilename = new String(file.getName().getBytes("utf-8"), "ISO-8859-1");
+			}
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("application/octet-stream;charset=utf-8");
+			// response.setHeader("Content-Disposition", "attachment;
+			// filename=\""+sfilename+"\";");
+			response.setHeader("Content-Disposition", "attachment; filename=" + sfilename);
+			OutputStream out = response.getOutputStream();
+			fis = new FileInputStream(file);
+			FileCopyUtils.copy(fis, out);
+			out.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
 }
 

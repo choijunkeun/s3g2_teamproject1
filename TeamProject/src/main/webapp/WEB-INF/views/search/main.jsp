@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -202,26 +203,31 @@
 				<input type="hidden" id="honbabLv" name="honbabLv" value="5">
 				<button type="button" class="btn btn-danger dropdown-toggle"
 					id="honbabLevelDropdown" data-bs-toggle="dropdown"
-					aria-expanded="false">혼밥 레벨
+					aria-expanded="false"><label id="honbabDropdownLabel">혼밥 레벨</label>
 					<i class="fa fa-question-circle" aria-hidden="true" 
 						data-bs-trigger="hover" data-bs-toggle="popover" data-bs-placement="top"
 						data-bs-content="혼밥 레벨을 설정합니다. 만약 혼밥 레벨을 5로 설정했다면 레벨 5 이하의 모든 식당이 검색됩니다."></i></button>
 				<ul class="dropdown-menu text-center"
 					aria-labelledby="honbabLevelDropdown">
 					<li><button class="dropdown-item" type="button">
-							<span class="badge rounded-pill" style="background: #F6CECE">Lv. 1</span>
+							<span class="badge rounded-pill" style="background: #F6CECE"
+							 onclick="setHonbabLv(1)">Lv. 1</span>
 						</button></li>
 					<li><button class="dropdown-item" type="button">
-							<span class="badge rounded-pill" style="background: #F5A9A9">Lv. 2</span>
+							<span class="badge rounded-pill" style="background: #F5A9A9"
+							 onclick="setHonbabLv(2)">Lv. 2</span>
 						</button></li>
 					<li><button class="dropdown-item" type="button">
-							<span class="badge rounded-pill" style="background: #F78181">Lv. 3</span>
+							<span class="badge rounded-pill" style="background: #F78181"
+							 onclick="setHonbabLv(3)">Lv. 3</span>
 						</button></li>
 					<li><button class="dropdown-item" type="button">
-							<span class="badge rounded-pill" style="background: #FA5858">Lv. 4</span>
+							<span class="badge rounded-pill" style="background: #FA5858"
+							 onclick="setHonbabLv(4)">Lv. 4</span>
 						</button></li>
 					<li><button class="dropdown-item" type="button">
-							<span class="badge rounded-pill" style="background: #FF0000">Lv. 5</span>
+							<span class="badge rounded-pill" style="background: #FF0000"
+							 onclick="setHonbabLv(5)">Lv. 5</span>
 						</button></li>
 				</ul>
 
@@ -281,6 +287,13 @@
 		</div>
 	</div>
 
+	<script>
+		function setHonbabLv(data){
+			document.getElementById('honbabLv').value=data;
+			document.getElementById('honbabDropdownLabel').innerText="Lv. " + data;
+			
+		}
+	</script>
 	<script type="text/javascript"
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a69fc7ca725d20c3e61c5b6bb3d32242&libraries=services"></script>
 	<script>
@@ -321,11 +334,8 @@
 		
 		    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
 		    
-		    // 카카오맵 순정 api는 이거지만
-		    // ps.keywordSearch( keyword, placesSearchCB, {category_group_code:'FD6, CE7'});
-		    
-		    // 자체 구현한 restapi가 담긴 searchcontroller의 query를 통해 이를 가져오도록 대체합니다
-		    // 물론 하려면 할 수는 있지만 서버가 고통받을까봐 15개만 가져옵니다...
+		    // 자체 구현한 restapi가 담긴 searchcontroller의 query를 통해 이를 가져옵니다
+		    // 물론 더 가져오려면 할 수는 있지만 서버가 고통받을까봐 15개만 가져옵니다...
 		    var option = "?keyword=" + keyword + "&searchOption=" + document.getElementById('searchOption').value + "&x=" + center.getLng() + "&y=" + center.getLat();
 		    if(document.getElementById('honbabLv').value != null) {
 		    	option += "&honbabLv=" + document.getElementById('honbabLv').value;
@@ -346,39 +356,12 @@
 		    });
 		}
 		
-		// 원래 카카오맵 API에서 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
-		/* function placesSearchCB(data, status, pagination) {
-		    if (status === kakao.maps.services.Status.OK) {
-				//var placesData = data;
-		        // 정상적으로 검색이 완료됐으면
-		        // 검색 목록과 마커를 표출합니다
-		        document.getElementById('menu_wrap').style.visibility = "visible";
-		        
-		        // 여기서 data를 먹으면 카카오맵 레퍼런스 data 그대로를 가져오겠지만,
-		        // 따로 REST API를 통해서 가져온 목록을 쓸 수도 있음
-		        displayPlaces(data);
-		
-		        // 페이지 번호를 표출합니다
-		        displayPagination(pagination);
-		    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-		        alert('검색 결과가 존재하지 않습니다.');
-		        return;
-		
-		    } else if (status === kakao.maps.services.Status.ERROR) {
-		        alert('검색 결과 중 오류가 발생했습니다.');
-		        return;
-		
-		    }
-		} */
-		
-		//약간 응용해서 이렇게 수정했습니다
 		function placesSearchCB(data) {
 		    //if (status === kakao.maps.services.Status.OK) {
 		    if(data.length == 0){
 		    	alert('검색 결과가 존재하지 않습니다.');
 	        	return;
 		    } 
-
 	    	//var placesData = data;
 	        // 정상적으로 검색이 완료됐으면
 	        // 검색 목록과 마커를 표출합니다
@@ -386,40 +369,9 @@
 	        // 여기서 data를 먹으면 카카오맵 레퍼런스 data 그대로를 가져오겠지만,
 	        // 따로 REST API를 통해서 가져온 목록을 쓸 수도 있음
 	        displayPlaces(data);
-		
-		    
 		}
 		
-		// 원래 카카오맵 API를 활용하여 검색 결과 목록과 마커를 표출하는 함수입니다
 		function displayPlaces(places) {
-			
-			// 카카오맵 API를 그대로 활용하는 경우 혼밥 레벨 관련코드 ##########################################################
-			// 1. 결과값들에 점수 붙이기
-			/* for(let i = 0; i<places.length; i++){
-				$.ajax({
-					type:"GET",
-					url:"/place/getRating",
-					data: {"id": places[i].id, "searchOption":$('#searchOption').val()},
-					async:false,
-					success: function(data){
-						places[i].rating=data;
-						places[i].ratingType=$('#searchOption').val();
-						return false;
-					},
-				})
-			} 
-			// 2. 큰것이 먼저 오도록 정렬하기
-			for(let i=0; i<places.length; i++){
-				let swap;
-				for(let j=0; j<places.length-1-i; j++){
-					if(places[j].rating < places[j+1].rating){
-						swap = places[j];
-						places[j] = places[j+1];
-						places[j+1] = swap;
-					}
-				}
-			} */
-			
 		    var listEl = document.getElementById('placesList'), 
 		    menuEl = document.getElementById('menu_wrap'),
 		    fragment = document.createDocumentFragment(), 
@@ -485,6 +437,8 @@
 		        itemStr += '    <span>' +  places.address_name  + '</span>'; 
 		    }
 			itemStr += '  <span class="tel">' + places.phone  + '</span>';
+			
+			itemStr += '	<span class="badge bg-danger rounded-pill px-2 mb-2" style="width: fit-content;">Lv .' + Math.round(places.honbabLv) + '</span>'
 			
 			itemStr += '  <span>'+ rTypeToString(document.getElementById('searchOption').value) +'&nbsp;: ' + places.rating  + '</span>';
 			

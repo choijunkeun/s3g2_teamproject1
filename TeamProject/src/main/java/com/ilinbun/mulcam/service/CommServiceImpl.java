@@ -1,7 +1,9 @@
 package com.ilinbun.mulcam.service;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -125,6 +127,39 @@ public class CommServiceImpl implements CommService {
 		CommunityDAO.deleteCommBoard(articleNo);
 	}
 
+	// 좋아요
+		@Override
+		public int queryArticleLikes(int articleNo) throws Exception {
+			// TODO Auto-generated method stub
+			return CommunityDAO.queryArticleLikes(articleNo);
+		}
+		@Override
+		public int addArticleLikes(int articleNo, int idx) throws Exception {
+			Map<String, Integer> map = new HashMap<>();
+			
+			map.put("articleNo", articleNo);
+			map.put("idx", idx);
+			return CommunityDAO.addArticleLikes(map);
+		}
+		
+		@Override
+		public int removeArticleLikes(int articleNo, int idx) throws Exception {
+			Map<String, Integer> map = new HashMap<>();
+			
+			map.put("articleNo", articleNo);
+			map.put("idx", idx);
+			return CommunityDAO.removeArticleLikes(map);
+		}
+		@Override
+		public int queryIfILikeThis(int articleNo, int idx) throws Exception {
+			Map<String, Integer> map = new HashMap<>();
+			
+			map.put("articleNo", articleNo);
+			map.put("idx", idx);
+			return CommunityDAO.queryIfILikeThis(map);
+		}
+	
+	
 
 
 

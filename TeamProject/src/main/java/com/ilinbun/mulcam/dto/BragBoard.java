@@ -18,9 +18,6 @@ public class BragBoard { // 자랑
 	Date date;
 	String content;
 
-	public BragBoard() {
-
-	}
 
 	public BragBoard(int articleNo, int idx, boolean moonpa, String title, String location, 
 			int readCount, Date date, String content) {

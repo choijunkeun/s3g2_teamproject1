@@ -49,4 +49,11 @@ public interface CommService {
       // 댓글삭제
 //      void remCommReply(CommBoard commboard) throws Exception;   
 
+   // 좋아요
+  	int queryArticleLikes(int articleNo) throws Exception;
+  	int addArticleLikes(int articleNo, int idx) throws Exception;
+  	int removeArticleLikes(int articleNo, int idx) throws Exception;
+  	int queryIfILikeThis(int articleNo, int idx) throws Exception;
+      
+      
 }
