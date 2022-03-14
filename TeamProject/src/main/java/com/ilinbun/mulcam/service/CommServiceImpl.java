@@ -239,6 +239,8 @@ public class CommServiceImpl implements CommService {
 		//댓글 삭제
 		@Override
 		public void deleteReply(int commentNo) throws Exception {
+			Map<String, Object> map = new HashMap<>();
+			map.put("commentNo", commentNo);
 			CommunityDAO.deleteReply(commentNo);
 			
 		}

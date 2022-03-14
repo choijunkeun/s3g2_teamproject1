@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,14 +72,23 @@ public class BragServiceImpl implements BragService {
 	}
 	//게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
 	@Override
-	public List<BragBoard> getBragboardList(int page) throws Exception {
-		int startrow=(int) ((page-1)*16+1);
-		List<BragBoard> list = bragDAO.selectBragBoardList(startrow);
+	public List<BragBoard> getBragboardList(int page, int howManyBrag) throws Exception {
+		int startrow=(int) ((page-1)*howManyBrag);
+		Map<String, Integer> map = new HashMap<>();
+		
+		map.put("startrow", startrow);
+		map.put("howManyBrag", howManyBrag);
+		List<BragBoard> list = bragDAO.selectBragBoardList(map);
+		System.out.println("24개가 맞는지?" + list.size());
 		for(int i=0;i<list.size();i++) {
 			String realContent = list.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
 			Document doc=Jsoup.parse(realContent);
-			Elements img= doc.select("img");
-			String src =img.attr("src");
+//			Elements img= doc.select("img");
+			Element img= doc.selectFirst("img");
+			String src = "";
+			if(img !=null) src =img.attr("src");
+			else src = "https://dummyimage.com/200x200/777/ffffff.jpg&text=NoImg";
+			
 			list.get(i).setContent(src);
 		}
 		return list;
@@ -88,7 +98,7 @@ public class BragServiceImpl implements BragService {
 	public PageInfo getPageInfo(PageInfo pageInfo) throws Exception {
 		int listCount=bragDAO.selectBragBoardCount();
 		System.out.println("리스트카운트 :"+listCount);
-		int maxPage=(int)Math.ceil((double)listCount/16);
+		int maxPage=(int)Math.ceil((double)listCount/24);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
 		//table에 있는 모든 row 개수
 		double pagenation = pageInfo.getPage(); //? 새로 추가 
@@ -138,8 +148,11 @@ public class BragServiceImpl implements BragService {
 		for(int i=0;i<best.size();i++) {
 			String realContent = best.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
 			Document doc=Jsoup.parse(realContent);
-			Elements img= doc.select("img");
-			String src =img.attr("src");
+			Element img= doc.selectFirst("img");
+			String src = "";
+			if(img !=null) src =img.attr("src");
+			else src = "https://dummyimage.com/200x200/777/ffffff.jpg&text=NoImg";
+			
 			best.get(i).setContent(src);
 		}
 		return best;

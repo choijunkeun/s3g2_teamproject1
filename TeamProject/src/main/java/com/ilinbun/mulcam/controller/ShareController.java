@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -18,6 +20,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -31,13 +35,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.PageInfo;
+import com.ilinbun.mulcam.dto.ShareReply;
 import com.ilinbun.mulcam.dto.Shareboard;
+import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.ShareService;
 
 @Controller
-@RequestMapping("/share")
+@RequestMapping("/share") // localhost://8090/share~
 public class ShareController {
+	
+	@Autowired
+	HttpSession session;
 	
 	@Autowired
 	ShareService shareService;
@@ -48,18 +57,117 @@ public class ShareController {
 	@Autowired(required=false)
 	Shareboard shareboard;
 	
+	// main.jsp 화면 출력 (현재 공지사항 게시판 + 반찬공유 게시판)
 	@GetMapping("")
 	public String Main(Model model) {
 		try {
-			shareboard = shareService.shareboard();
-			model.addAttribute("shareboard",shareboard);
+			List<Shareboard> shareList = shareService.getShareboardList(1);
+			model.addAttribute("shareList", shareList);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		return "share/main";
 	}
 	
-	// CKEditor 적용파트
+	// listform.jsp (반찬공유 게시판 일반)
+	@GetMapping("/board/listform")
+	public ModelAndView share_list(@RequestParam(value="page", required=false, defaultValue="1") int page) {
+		// User userInfo = (User) session.getAttribute("user"); //User session이 email이 아닌 account(password제외)일때 다시 연결하자
+		ModelAndView mav=new ModelAndView();
+		PageInfo pageInfo=new PageInfo();
+		pageInfo.setPage(page);
+		try {
+			List<Shareboard> shareList=shareService.getShareboardList(page);
+			for(Shareboard share : shareList) {
+				Document doc=Jsoup.parse(share.getContent());
+				Elements img = doc.select("img");
+				String src = img.attr("src");
+				share.setContent(src);
+			}
+			pageInfo=shareService.getPageInfo(pageInfo);
+			// mav.addObject("userInfo", userInfo); //same as above
+			mav.addObject("pageInfo", pageInfo);
+			mav.addObject("shareList", shareList);
+			mav.setViewName("share/board/listform");
+			
+			System.out.println("pageInfo2 check : "+pageInfo);
+			System.out.println("sharelist check : "+ shareList);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			mav.addObject("err", e.getMessage());
+			mav.setViewName("err");
+		}
+		return mav;
+	}
+
+	// 글쓰기 -> CKEditor 결합	
+	
+		@GetMapping("/board/writeform")
+		public String writeform(Model model) {
+			HttpSession session = null; //로그인
+			String test = "km@ilin.bun";
+			model.addAttribute("email", test);
+			return "share/board/writeform";
+		}
+		@PostMapping("/board/sharewrite")
+		public String sharewriteform(@RequestParam String title, 
+				@RequestParam String content,
+				@RequestParam String subway, 
+				@RequestParam int idx, 
+				@RequestParam int headerTag,
+				Model model) {
+			
+			System.out.println("title : "+title); // DB저장
+			System.out.println("content : "+content.trim()); // DB저장, 반드시 trim()
+			System.out.println("subway : "+subway);
+			System.out.println("idx : "+idx);
+			System.out.println("headerTag: "+headerTag);
+			
+			try {
+				Shareboard shareboard = new Shareboard(title, subway, content, idx, headerTag);
+				Document doc=Jsoup.parse(shareboard.getContent());
+				Elements docContentElements = doc.body().children();
+				String result = "";
+				for(org.jsoup.nodes.Element e: docContentElements) {
+					if(e.tagName().equals("figure")) {
+						e = e.selectFirst("img");
+						String src = e.attr("src");
+						String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+						e.attr("src", "/shareupload/"+newSrc);
+					}
+					result += e.toString();
+				}
+				
+//				if (doc.hasAttr("img")) {
+//				Elements img= doc.select("img");
+//				if(img.isEmpty() == false) {
+//					for(org.jsoup.nodes.Element e : img) {
+//						String src = e.attr("src");
+//						/* System.out.println("img tag found : " + src); */
+//						String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+//						e.attr("src", "/shareupload/"+newSrc);
+//						System.out.println(e.attr("src"));
+//					};
+//					shareboard.setContent(doc.select("body > p").toString());
+////					String src = img.attr("src");
+////					String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
+////					doc.select("img").attr("src", "/shareupload/"+newSrc);
+////					shareboard.setContent(doc.select("body > p").toString());
+//				} /*else {*/
+//					model.addAttribute("msg", "사진은 필수야");
+					//return "share/board/writeform";
+					/* } */
+				shareboard.setContent(result);
+				shareService.regShareBoard(shareboard);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			model.addAttribute("title", title);
+			model.addAttribute("content", content.trim());
+			return "redirect:/share/board/listform"; //resultForm다시
+		}
 
 	@ResponseBody
 	@PostMapping("/upload")
@@ -121,89 +229,265 @@ public class ShareController {
 		}
 	}
 
-	// 글쓰기 -> CKEditor 결합	
 	
-	@GetMapping("/board/writeform")
-	public String writeform(Model model) {
-		HttpSession session = null; //로그인
-		String test = "km@ilin.bun";
-		model.addAttribute("email", test);
-		return "share/board/writeform";
-	}
-	@PostMapping("/board/sharewrite")
-	public String sharewriteform(@RequestParam String title, 
-			@RequestParam String content,
-			@RequestParam String subway, 
-			@RequestParam int idx, 
-			Model model) {
-		
-		System.out.println(title); // DB저장
-		System.out.println(content.trim()); // DB저장, 반드시 trim()
-		
-		try {
-			Shareboard shareboard = new Shareboard(title, subway, content, idx);
-			Document doc=Jsoup.parse(shareboard.getContent());
-			if (doc.hasAttr("img")) {
-				Elements img= doc.select("img");
-				String src = img.attr("src");
-				String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
-				doc.select("img").attr("src", "/shareupload/"+newSrc);
-				shareboard.setContent(doc.select("body > p").toString());
-				shareService.regShareBoard(shareboard);
-			} else {
-				model.addAttribute("msg", "사진은 필수야");
-				return "share/board/writeform";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		model.addAttribute("title", title);
-		model.addAttribute("content", content.trim());
-		return "share/main"; //resultForm다시
-	}
 	
 	//글보기
+	@GetMapping("/board/viewform/{articleNo}")
+	public ModelAndView boardDetail(@PathVariable int articleNo,
+			@RequestParam(required=false, defaultValue="1") int page,
+			HttpServletRequest request) {
+//		User userinfo = (User) session.getAttribute("user"); //same
+//		User userinfo = new User(1, "mockup@mock.up", "목업", "", "#", 5, 1); //임시 
+		ModelAndView mav=new ModelAndView();
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPage(page);
+		try {
+			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
+			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
+			mav.addObject("userinfo", userinfo);
+			mav.addObject("shboard", shareboard);
+			mav.addObject("page", page);
+			System.out.println("shareboard check : "+shareboard);
+			
+			Document doc=Jsoup.parse(shareboard.getContent()); //content중에 사진만 가져오기
+			Elements img= doc.select("img"); //우선 무수한 요소 중 img만 추출
+			String src = img.attr("src"); //String으로 변환
+			
+			mav.addObject("imgSrc", src); //mav에 넣기
+			mav.setViewName("share/board/viewform"); //경로이름 설정
+			
+			Integer countComment = shareService.countComment();
+			mav.addObject("countComment", countComment);
+			
+			//댓글 보기
+			//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
+			pageInfo=shareService.getCommentPageInfo(pageInfo);
+			System.out.println("댓글 받아오기 시작");
+			List<ShareReply> commentList = shareService.boardReplyList(articleNo, pageInfo.getStartPage());
+			System.out.println(commentList.size() + "개 받음");
+			List<User> commentUserList = new ArrayList<User>();
+			for(int i=0; i<commentList.size(); i++) {
+				//System.out.println(((BragReply) commentList.get(i)).getIdx());
+				int idx = ((ShareReply) commentList.get(i)).getIdx();
+				User commentUser = shareService.selectUserDetail(idx);
+				commentUserList.add(commentUser);
+			}
+			mav.addObject("commentList", commentList);
+			mav.addObject("commentUserList", commentUserList);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			mav.addObject("err", e.getMessage());
+			mav.setViewName("err");
+		}
+		return mav;
+	}
 	
-	@PostMapping("/board/{id}")
-	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
-		ModelAndView mv = new ModelAndView("share/board/viewform");
-//		shareboard = shareService.shareBoardQueryByID(id);
-		mv.addObject("shareboard", shareboard);
+	/*
+	 * @PostMapping("/board/{id}") public ModelAndView placeInfo(@PathVariable
+	 * String id) throws Exception { ModelAndView mv = new
+	 * ModelAndView("share/board/viewform"); shareboard =
+	 * shareService.shareBoardQueryByID(id); mv.addObject("shareboard", shareboard);
+	 * 
+	 * return mv; }
+	 */
+	
+	// 글수정 (내 글일경우가능)
+		@PostMapping(value = "/modifyform")
+		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, HttpServletRequest request) {
+			ModelAndView mav = new ModelAndView();
+			
+			HttpSession session = request.getSession();
+			User user = (User)session.getAttribute("user");
+			Integer idx = null;
+			if(user !=null) idx = user.getIdx();
+			try {
+				Shareboard shareboard = shareService.getShareboard(articleNo);
+				if(shareboard.getIdx() != idx) throw new Exception("로그인한 사람과 글 작성자가 다릅니다");
+				
+				mav.addObject("shboard", shareboard);
+				mav.setViewName("share/board/modifyform");
+			} catch (Exception e) {
+				e.printStackTrace();
+				mav.addObject("err", e.getMessage());
+				mav.setViewName("/main/err");
+			}
+			return mav;
+		}
 
+		@PostMapping(value = "/sharemodify")
+		public ModelAndView sharemodify(@ModelAttribute Shareboard shareboard) {
+			ModelAndView mav = new ModelAndView();
+			try {
+				shareService.modifyShareBoard(shareboard);
+				mav.addObject("articleNo", shareboard.getArticleNo());
+				mav.setViewName("redirect:/share/board/viewform/" + shareboard.getArticleNo());
+			} catch (Exception e) {
+				e.printStackTrace();
+				mav.addObject("err", e.getMessage());
+				mav.setViewName("main/err");
+			}
+			return mav;
+		}
+//	
+//	@GetMapping(value = "/board/modifyform{articleNo}")
+//	public ModelAndView sharemodifyform(@RequestParam(value = "articleNo") int articleNo) {
+//		ModelAndView mav = new ModelAndView();
+//		try {
+//			Shareboard Shareboard = shareService.getArticleNo(articleNo);
+//			mav.addObject("article", Shareboard);
+//			mav.setViewName("share/board/modifyform");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			mav.addObject("err", e.getMessage());
+//			mav.setViewName("/main/err");
+//		}
+//		return mav;
+//	}
+//
+//	@PostMapping(value = "/board/modifyform/{articleNo}")
+//	public ModelAndView modifyform(@ModelAttribute Shareboard shareboard) {
+//		ModelAndView mav = new ModelAndView();
+//		try {
+//			shareService.modifyShareBoard(shareboard);
+//			mav.addObject("articleNo", shareboard.getArticleNo());
+//			mav.setViewName("redirect:/share/board/viewform/{articleNo}");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			mav.addObject("err", e.getMessage());
+//			mav.setViewName("/main/err");
+//		}
+//		return mav;
+//	}
+	
+	//글 삭제
+	@PostMapping(value = "deleteform")
+	public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			shareService.removeShareBoard(articleNo);
+			mv.addObject("page", page);
+			mv.setViewName("redirect:/share/board/listform");
+		} catch (Exception e) {
+			e.printStackTrace();
+			mv.addObject("err", e.getMessage());
+			mv.setViewName("/main/err");
+		}
 		return mv;
 	}
-	
-	// 글수정
-	
-	@GetMapping(value = "/board/modifyform")
-	public ModelAndView sharemodifyform(@RequestParam(value = "articleNo") int articleNo) {
-		ModelAndView mav = new ModelAndView();
-		try {
-			Shareboard Shareboard = shareService.getArticleNo(articleNo);
-			mav.addObject("article", Shareboard);
-			mav.setViewName("share/modifyForm");
-		} catch (Exception e) {
-			e.printStackTrace();
-			mav.addObject("err", e.getMessage());
-			mav.setViewName("/share/err");
+	 //  좋아요
+		@ResponseBody
+		@PostMapping("/likes")
+		public ResponseEntity<String> toggleLikes(@RequestParam("articleNo") String articleNo, 
+				@RequestParam("idx") String idx) {
+			ResponseEntity<String> result = null;
+			
+			int rNo = Integer.parseInt(articleNo);
+			int useridx = Integer.parseInt(idx);
+			
+			int processed = 0;
+			try {
+				if(shareService.queryIfILikeThis(rNo, useridx)>0) {
+					shareService.removeArticleLikes(rNo, useridx);
+					processed = -1;
+				} else {
+					shareService.addArticleLikes(rNo, useridx);
+					processed = 1;
+				}
+				Integer val = shareService.queryArticleLikes(rNo);
+				JSONObject robj = new JSONObject();
+				robj.put("currentLikes", val);
+				robj.put("processed", processed);
+				
+				result = new ResponseEntity<String>(robj.toString() , HttpStatus.OK);
+//				result = new ResponseEntity<String>("" , HttpStatus.OK);
+			} catch(Exception e) {
+				e.printStackTrace();
+				result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+			}
+			
+			return result;	
 		}
-		return mav;
-	}
-
-	@PostMapping(value = "/board/sharemodify")
-	public ModelAndView sharemodify(@ModelAttribute BragBoard bragboard) {
-		ModelAndView mav = new ModelAndView();
-		try {
-			shareService.modifyShareBoard(shareboard);
-			mav.addObject("articleNo", shareboard.getArticleNo());
-			mav.setViewName("redirect:/share/viewDetail");
-		} catch (Exception e) {
-			e.printStackTrace();
-			mav.addObject("err", e.getMessage());
-			mav.setViewName("share/err");
+		
+		//댓글쓰기 with 비밀댓글 (댓글보기는 글보기 Controller에 추가함)
+		@PostMapping("/comment")
+		public String boardReply(@RequestParam("commentWrite") String comment, 
+				@RequestParam Integer idx, 
+				@RequestParam Integer articleNo, 
+				@RequestParam(required=false) Integer blind ) {
+			System.out.println(comment);
+			System.out.println(idx);
+			System.out.println(articleNo);
+			System.out.println(blind);
+			if(idx == null) {
+				return "default/user/loginForm";
+			} else {
+				try {
+					shareService.boardReply(articleNo.intValue(), idx.intValue(), comment, blind);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return "redirect:/share/board/viewform/"+articleNo;
 		}
-		return mav;
-	}
+		
+		@PostMapping("/reReply")
+		public String commentReply(@RequestParam("commentWrite") String comment, 
+				@RequestParam Integer idx,
+				@RequestParam Integer commentNo,
+				@RequestParam Integer articleNo, 
+				@RequestParam(required=false) Integer blind ) {
+			System.out.println(comment);
+			System.out.println(idx);
+			System.out.println(articleNo);
+			System.out.println(blind);
+			if(idx == null) {
+				return "default/user/loginForm";
+			} else {
+				try {
+					shareService.reReply(commentNo, articleNo.intValue(), idx.intValue(), comment, blind);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+		
+		
+		// 댓글수정 (내 댓글일경우가능)
+		@PostMapping(value="/editReply") // /brag/deleteReply
+		public void editReply(@RequestParam int commentNo, @RequestParam String comment, @RequestParam int articleNo) {
+			try {
+				shareService.editReply(commentNo, comment);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		// 댓글삭제 (내 댓글일경우가능)
+		@PostMapping(value="/deleteReply") // /brag/deleteReply
+		public String deleteReply(@RequestParam int commentNo, @RequestParam int articleNo) {
+			try {
+				shareService.deleteReply(commentNo);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+		
+		//말머리 바꾸기
+		@PostMapping(value="header")
+		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
+			try {
+				shareService.changeHeader(headerTag);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:/share/board/viewform/"+articleNo;
+		}
+	
 	
 }

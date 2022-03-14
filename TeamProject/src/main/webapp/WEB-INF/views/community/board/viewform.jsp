@@ -42,7 +42,20 @@ a {
 	width: 700px;
 	text-align: center;
 }
+
+.btn-container {
+	background: #fff;
+	border-radius: 5px;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+}
+
+.nav_container {
+	background-color: black !important;
+	border: 0 !important;
+}
 </style>
+
 </head>
 
 <body>
@@ -209,22 +222,36 @@ $(function() {
 	
 	/*댓글 삭제버튼 누르면~  */
 	function deleteReply(commentNo, articleNo){
+		let comment = $('#comment'+commentNo).val()
 		if(confirm("게시글을 삭제하시겠습니까?")){
 			let f = document.createElement('form');
 			
-			f.appendChild(mIHObj('commentNo', commentNo));
-		    f.appendChild(mIHObj('articleNo',articleNo));
 		   
 		    f.setAttribute('method', 'post');
 		    f.setAttribute('action', '../deleteReply'); 
 		    document.body.appendChild(f);
 		    f.submit();
+		    
+		    $.ajax({
+				type:"POST",
+				url:"/comm/deleteReply",
+				cache: false,
+				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
+				async:false,
+				complete:function(){
+					console.log(commentNo);
+					window.location.href="/comm/viewform/"+articleNo;
+				}
+				
+			})
 		}
+		
+		
 	}
 </script>
-	<%--댓글달기 한jsp에서 이렇게 ${function) 나만 된다 / 익명댓글 쓰기--%>
+
 <script>
-$(function(){ 
+$(function(){ /* 로그인 해야 댓글 작성 가능 */
 	$("#commentBtn").click(function(){
 		if(${empty user}){
 			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");

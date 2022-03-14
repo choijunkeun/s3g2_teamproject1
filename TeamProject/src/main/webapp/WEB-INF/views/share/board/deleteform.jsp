@@ -22,7 +22,7 @@
 <table>
 <tr>
 	<td>
-		<label>글 비밀번호 : </label>
+		<label>정말 삭제하시겠습니까? </label>
 	</td>
 	<td>
 		<input name="board_pass" type="password">

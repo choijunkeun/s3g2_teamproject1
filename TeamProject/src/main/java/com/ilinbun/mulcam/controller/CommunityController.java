@@ -226,11 +226,11 @@ public class CommunityController {
 		pageInfo.setPage(page);
 		try {
 			commboard = commService.getCommBoard(articleNo); // 게시글 상세정보 // 내가쓴글, 남이쓴글 확인
-			
 			User writerInfo = commService.selectUserDetail(commboard.getIdx()); //작성자 정보 가져오기
 			
 			int likes = commService.queryArticleLikes(articleNo); // 좋아요 수
 			
+			HttpSession session = request.getSession();
 			User userInfo = (User) session.getAttribute("user");
 			if(userInfo != null) {
 				System.out.println("로그인 확인 정보 인식");
@@ -454,6 +454,7 @@ public class CommunityController {
 		// 댓글삭제 (내 댓글일경우가능)
 		@PostMapping(value="/deleteReply") 
 		public String deleteReply(@RequestParam int commentNo, @RequestParam int articleNo) {
+			System.out.println("commentNo"+commentNo);
 			try {
 				commService.deleteReply(commentNo);
 			} catch(Exception e) {

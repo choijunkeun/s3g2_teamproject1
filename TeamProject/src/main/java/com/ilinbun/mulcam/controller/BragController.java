@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -62,7 +63,7 @@ public class BragController {
 	public String Main(Model model) {
 		try {
 			List<BragBoard> bestbragList = bragService.bragBest();
-			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
+			List<BragBoard> bragList=bragService.getBragboardList(1, 8); //첫번째 페이지에서 가져오는 의미
 			model.addAttribute("bragList", bragList); //담아야 가져옴
 			model.addAttribute("bestbragList", bestbragList);
 		} catch (Exception e) {
@@ -77,14 +78,16 @@ public class BragController {
 			ModelAndView mav=new ModelAndView();
 			PageInfo pageInfo=new PageInfo();
 			pageInfo.setPage(page);
+			//한페이지에서 보여줄 게시물 수
+			int howManyBrag = 24;
 			try {
-				List<BragBoard> bragList=bragService.getBragboardList(page);
+				List<BragBoard> bragList=bragService.getBragboardList(page, howManyBrag);
 //				for(BragBoard brag : bragList) {
 //					Document doc=Jsoup.parse(brag.getContent());
 //					System.out.println(doc.toString());
-//					Elements img= doc.select("img");
+//					Element img= doc.selectFirst("img");
 //					String src = img.attr("src");
-//					System.out.println("img src = " + src);
+//					//System.out.println("img src = " + src);
 //					brag.setContent(src);
 //				}
 				pageInfo=bragService.getPageInfo(pageInfo);
@@ -130,15 +133,27 @@ public class BragController {
 				User userInfo = (User) session.getAttribute("user");
 				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 				Document doc=Jsoup.parse(bragboard.getContent());
-				System.out.println("doc.toString :" + doc.toString());
-				Elements img= doc.select("img");
-				String src = img.attr("src");
-				System.out.println("src :" + src);
-				String newSrc =src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
-				System.out.println("newSrc :" + newSrc);
-				doc.select("img").attr("src", "/bragupload/"+newSrc);
-				bragboard.setContent(doc.select("body > p").toString());
-				System.out.println("doc.select body>p :" + doc.select("body > p").toString());
+				System.out.println("doc.body :" + doc.body());
+				Elements bodyChildNodes = doc.children();
+				String result ="";
+				for(Element e : bodyChildNodes) {
+					if(e.tagName().equals("img")) {
+						String src = e.attr("src");
+						String newSrc = src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
+						e.attr("src", "/bragupload/"+newSrc);
+					}
+					result += e.toString();
+				}
+//				Elements img= doc.select("img");
+//				System.out.println("img 여기확인 소:"+ img);
+//				String src = img.attr("src");
+//				System.out.println("src :" + src);
+//				String newSrc =src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
+//				System.out.println("newSrc :" + newSrc);
+//				doc.select("img").attr("src", "/bragupload/"+newSrc);
+//				bragboard.setContent(doc.select("body > p").toString());
+//				System.out.println("doc.select body>p :" + doc.select("body > p").toString());
+				bragboard.setContent(result);
 				articleNo = bragService.regBragBoard(bragboard);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -348,7 +363,7 @@ public class BragController {
 			BragBoard target = bragService.getBragBoard(articleNo);
 			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
 			bragService.deleteWrite(articleNo);
-			String html = "<script>alert('삭제 완료'); window.location = \"/search\"</script>";
+			String html = "<script>alert('삭제 완료'); window.location = \"/brag\"</script>";
 			result = new ResponseEntity<String>(html , HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
