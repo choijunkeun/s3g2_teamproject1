@@ -50,11 +50,11 @@ table {
 <body>
 <!-- 글쓰기 버튼 -->
 	<div>
-		<a href="${pageContext.request.contextPath}/share/board/writeform">
+		<%-- <a href="${pageContext.request.contextPath}/share/board/writeform"> --%>
 			<button class="make_btn btn-outline-secondary" 
 				id="shareMake" name="shareMake" type="button"
 				style="float: right; width: 80px; height:40px;">글쓰기</button>
-		</a>
+		<!-- </a> -->
 	</div>
 
 	<!-- 게시판 리스트 -->
@@ -139,7 +139,7 @@ table {
 			if('${user.idx }' == ''){
 				location.href="/login";
 			} else {
-				location.href="/share/writeform";	
+				location.href="/share/board/writeform";	
 			}
 		});
 	});

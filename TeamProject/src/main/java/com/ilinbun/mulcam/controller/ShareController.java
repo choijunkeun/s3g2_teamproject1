@@ -89,10 +89,6 @@ public class ShareController {
 			mav.addObject("pageInfo", pageInfo);
 			mav.addObject("shareList", shareList);
 			mav.setViewName("share/board/listform");
-			
-			System.out.println("pageInfo2 check : "+pageInfo);
-			System.out.println("sharelist check : "+ shareList);
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
@@ -118,6 +114,7 @@ public class ShareController {
 				@RequestParam int headerTag,
 				Model model) {
 			
+			int articleNo = 0;
 			System.out.println("title : "+title); // DB저장
 			System.out.println("content : "+content.trim()); // DB저장, 반드시 trim()
 			System.out.println("subway : "+subway);
@@ -127,6 +124,7 @@ public class ShareController {
 			try {
 				Shareboard shareboard = new Shareboard(title, subway, content, idx, headerTag);
 				Document doc=Jsoup.parse(shareboard.getContent());
+				System.out.println("doc.body : "+doc.body());
 				Elements docContentElements = doc.body().children();
 				String result = "";
 				for(org.jsoup.nodes.Element e: docContentElements) {
@@ -166,7 +164,7 @@ public class ShareController {
 			
 			model.addAttribute("title", title);
 			model.addAttribute("content", content.trim());
-			return "redirect:/share/board/listform"; //resultForm다시
+			return "redirect:/share/board/viewform"+String.valueOf(articleNo); //resultForm다시
 		}
 
 	@ResponseBody
@@ -244,10 +242,23 @@ public class ShareController {
 		try {
 			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
 			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
+			
+			int likes = shareService.queryArticleLikes(articleNo);
+			
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute("user");
+			if(user != null) {
+				System.out.println("유저 정보 인식");
+				int didILiked = shareService.queryIfILikeThis(articleNo, user.getIdx());
+				System.out.println("이전에 누른 적 있음 : "+didILiked);
+				mav.addObject("didILiked", didILiked);
+			}
+			
+			mav.addObject("likes",likes);
+			
 			mav.addObject("userinfo", userinfo);
 			mav.addObject("shboard", shareboard);
 			mav.addObject("page", page);
-			System.out.println("shareboard check : "+shareboard);
 			
 			Document doc=Jsoup.parse(shareboard.getContent()); //content중에 사진만 가져오기
 			Elements img= doc.select("img"); //우선 무수한 요소 중 img만 추출
@@ -281,6 +292,16 @@ public class ShareController {
 			mav.setViewName("err");
 		}
 		return mav;
+	}
+	
+	// 게시글보기 --> same
+	@PostMapping("/{id}")
+	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
+		ModelAndView mv = new ModelAndView("share/board/view");
+		shareboard = shareService.shareBoardQueryByID(id);
+		mv.addObject("shareboard", shareboard);
+
+		return mv;
 	}
 	
 	/*
@@ -361,21 +382,41 @@ public class ShareController {
 //	}
 	
 	//글 삭제
-	@PostMapping(value = "deleteform")
-	public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
-			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-		ModelAndView mv = new ModelAndView();
+	@ResponseBody
+	@PostMapping(value = "/deleteform")
+	public ResponseEntity<String> deleteform(@RequestParam int articleNo, @RequestParam String idx) {
+		ResponseEntity<String> result = null;
+		
 		try {
+			Shareboard target = shareService.getShareboard(articleNo);
+			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
 			shareService.removeShareBoard(articleNo);
-			mv.addObject("page", page);
-			mv.setViewName("redirect:/share/board/listform");
-		} catch (Exception e) {
+			String html = "<script> alert('삭제 완료'); window.location = \"/share/board/listform\" </script>"; 
+			result = new ResponseEntity<String>(html, HttpStatus.OK);
+		} catch(Exception e) {
 			e.printStackTrace();
-			mv.addObject("err", e.getMessage());
-			mv.setViewName("/main/err");
+			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
 		}
-		return mv;
+		
+		return result;
 	}
+	
+//	@PostMapping(value = "deleteform")
+//	public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
+//			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+//		ModelAndView mv = new ModelAndView();
+//		try {
+//			shareService.removeShareBoard(articleNo);
+//			mv.addObject("page", page);
+//			mv.setViewName("redirect:/share/board/listform");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			mv.addObject("err", e.getMessage());
+//			mv.setViewName("/main/err");
+//		}
+//		return mv;
+//	}
+	
 	 //  좋아요
 		@ResponseBody
 		@PostMapping("/likes")

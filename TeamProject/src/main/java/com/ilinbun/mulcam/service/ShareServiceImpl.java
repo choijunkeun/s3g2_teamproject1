@@ -147,7 +147,7 @@ public class ShareServiceImpl implements ShareService {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("articleNo", articleNo);
 		map.put("idx", idx);
-		return shareDAO.queryIfLikeThis(map);
+		return shareDAO.queryIfILikeThis(map);
 	}
 
 

@@ -240,7 +240,7 @@ a {
 					</c:if>
 				</div>
 				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
-					<form id="replyReply" action="/brag/reReply" method="post">
+					<form id="replyReply" action="/share/board/reReply" method="post">
 						<input type="text" name="commentWrite">
 						<input type="hidden" name="idx" value="${user.idx }">
 						<input type="hidden" name="articleNo" value="${shboard.articleNo}">
