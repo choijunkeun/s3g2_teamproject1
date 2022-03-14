@@ -92,7 +92,7 @@ public class ShareController {
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("err");
+			mav.setViewName("main/err");
 		}
 		return mav;
 	}
@@ -114,7 +114,7 @@ public class ShareController {
 				@RequestParam int headerTag,
 				Model model) {
 			
-			int articleNo = 0;
+//			int articleNo = 0;
 			System.out.println("title : "+title); // DB저장
 			System.out.println("content : "+content.trim()); // DB저장, 반드시 trim()
 			System.out.println("subway : "+subway);
@@ -164,7 +164,7 @@ public class ShareController {
 			
 			model.addAttribute("title", title);
 			model.addAttribute("content", content.trim());
-			return "redirect:/share/board/viewform"+String.valueOf(articleNo); //resultForm다시
+			return "redirect:/share/board/listform"; //resultForm다시
 		}
 
 	@ResponseBody
@@ -314,7 +314,7 @@ public class ShareController {
 	 */
 	
 	// 글수정 (내 글일경우가능)
-		@PostMapping(value = "/modifyform")
+		@GetMapping(value = "/modifyform")
 		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, HttpServletRequest request) {
 			ModelAndView mav = new ModelAndView();
 			
@@ -336,13 +336,13 @@ public class ShareController {
 			return mav;
 		}
 
-		@PostMapping(value = "/sharemodify")
+		@PostMapping(value = "/modifyform")
 		public ModelAndView sharemodify(@ModelAttribute Shareboard shareboard) {
 			ModelAndView mav = new ModelAndView();
 			try {
 				shareService.modifyShareBoard(shareboard);
 				mav.addObject("articleNo", shareboard.getArticleNo());
-				mav.setViewName("redirect:/share/board/viewform/" + shareboard.getArticleNo());
+				mav.setViewName("redirect:/share/board/viewform/{articleNo}");
 			} catch (Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
