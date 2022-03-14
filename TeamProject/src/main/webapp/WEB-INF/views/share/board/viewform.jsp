@@ -392,6 +392,7 @@ a {
 		    f.submit();
 		}
 	}
+	
 	/*댓글 수정버튼 누르면~  */
 	function editReply(commentNo, articleNo){
  		
@@ -470,5 +471,19 @@ function toggleLikes(articleNo){
 	}
 }
 </script>
+<%--댓글달기  / 익명댓글 쓰기--%>
+<script>
+$(function(){ 
+	$("#commentBtn").click(function(){
+		if(${empty user}){
+			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+			return false;
+		}
+		
+	})
+})
+
+</script>
+
 </body>
 </html>
