@@ -60,7 +60,7 @@ public class MainController {
 	public String Main(Model model) {
 		try {
 			List<BragBoard> bestbragList = bragService.bragBest();
-			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
+			List<BragBoard> bragList=bragService.getBragboardList(1, 8); //첫번째 페이지에서 가져오는 의미
 			model.addAttribute("bragList", bragList);
 			model.addAttribute("bestbragList", bestbragList);
 		} catch (Exception e) {

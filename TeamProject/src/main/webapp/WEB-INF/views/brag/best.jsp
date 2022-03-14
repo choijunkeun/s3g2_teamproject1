@@ -11,17 +11,18 @@
 	src="http://code.jquery.com/jquery-latest.min.js"></script>
 <style>
 
-
 /* 400 x 600 size 사진 */
 
 /* 
 /* 200 x 200 size 사진 */
-.200table{
+.200table {
 	width: 800px;
 	table-layout: fixed;
 	border-spacing: 100px;
-} */
-/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */
+}
+
+* /
+	/* 제목 한줄 이상이면 ...으로, 마우스 오버하면 보이게  */ 
 td {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -38,172 +39,77 @@ td {
 				name="bragMake" type="button"
 				style="float: right; width: 80px; height: 40px;">글쓰기</button>
 		</div>
-		
-		
-		
-		
-		<div class="col mt-5">
-			<div class="card p-4" style="width: 400px; height: 600px;">
+
+
+
+
+		<div class="col-sm-6">
+			<div class="card p-4">
 				<h5 class="fw-bolder">이달의혼밥</h5>
+				<div class="card-body">
+					<a href="./viewdetail/${bestbragList[0].articleNo }">
+						${bestbragList[0].title } <br> <img class="card-img-top"
+						src="${bestbragList[0].content}" name="brag_content" width="100%" />
+					</a>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col-sm-6">
+			<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
 			<div class="card-body">
-				<a href="./viewdetail/${bestbragList[0].articleNo }">
-					${bestbragList[0].title } <br> <img class="card-img-top"
-					src="${bestbragList[0].content}" name="brag_content" width="100%"/>
-				</a>
+				<div class="text-center">
+					<c:forEach var="bboard" begin="1" end="6" items="${bestbragList}"
+						varStatus="status">
+						<c:choose>
+							<c:when test="${status.index mod 2 == 1}">
+								<div class="row">
+							</c:when>
+						</c:choose>
+						<div class='col-sm-6'>
+							<a href="./viewdetail/${bboard.articleNo }"> ${bboard.title }
+								<br> <img src="${bboard.content}" name="brag_content"
+								width="200px" height="200px" class="card-img-top" />
+							</a>
+						</div>
+						<c:choose>
+							<c:when test="${status.index mod 2 == 0}">
+								</div>
+				</c:when>
+				</c:choose>
+				</c:forEach>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="col mt-5">
-		<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
+
+	<div class="p-4">
 		<div class="card-body">
-		<div  class="text-center"></div>
-			<table class="200table">
-				<!-- <div class="border mycard" > -->
-				<tr>
-					<c:forEach var="i" begin="1" end="2">
-						<c:choose>
-					<c:when test="${not empty bestbragList[i] }">
-						<td title="${bestbragList[i].title }"><a
-						href="./viewdetail/${bestbragList[i].articleNo }">
-							${bestbragList[i].title } <br> <img
-							src="${bestbragList[i].content}" name="brag_content"
-							width="200px" height="200px" class="card-img-top" />
-					</a></td>
+			<c:forEach var="bboard" begin="7" items="${bestbragList}"
+				varStatus="status">
+				<c:choose>
+					<c:when test="${status.index mod 4 == 3}">
+						<div class="row">
 					</c:when>
-					<c:otherwise>
-					<td title="내용이 없습니다"> <br> 
-						<img src="https://dummyimage.com/200x200/999/ffffff.jpg&text=NoArticle" 
-						name="brag_content" width="200px" height="200px" class="card-img-top" />
-					</td>
-					
-					</c:otherwise>
 				</c:choose>
-					</c:forEach>
-				</tr>
-				<tr>
-					<c:forEach var="i" begin="3" end="4">
-						<c:choose>
-					<c:when test="${not empty bestbragList[i] }">
-						<td title="${bestbragList[i].title }"><a
-						href="./viewdetail/${bestbragList[i].articleNo }">
-							${bestbragList[i].title } <br> <img
-							src="${bestbragList[i].content}" name="brag_content"
-							width="200px" height="200px" class="card-img-top" />
-					</a></td>
-					</c:when>
-					<c:otherwise>
-					<td title="내용이 없습니다"> <br> 
-						<img src="https://dummyimage.com/200x200/999/ffffff.jpg&text=NoArticle" 
-						name="brag_content" width="200px" height="200px" class="card-img-top" />
-					</td>
-					
-					</c:otherwise>
-				</c:choose>
-					</c:forEach>
-				</tr>
-				<tr>
-					<c:forEach var="i" begin="5" end="6">
-						<c:choose>
-					<c:when test="${not empty bestbragList[i] }">
-						<td title="${bestbragList[i].title }"><a
-						href="./viewdetail/${bestbragList[i].articleNo }">
-							${bestbragList[i].title } <br> <img
-							src="${bestbragList[i].content}" name="brag_content"
-							width="200px" height="200px" class="card-img-top" />
-					</a></td>
-					</c:when>
-					<c:otherwise>
-					<td title="내용이 없습니다"> <br> 
-						<img src="https://dummyimage.com/200x200/999/ffffff.jpg&text=NoArticle" 
-						name="brag_content" width="200px" height="200px" class="card-img-top" />
-					</td>
-					
-					</c:otherwise>
-				</c:choose>
-					</c:forEach>
-				</tr>
-			</table>
-			</div>
-
+				<div class='col-sm-3'>
+					<a href="./viewdetail/${bboard.articleNo }"> ${bboard.title } <br>
+						<img src="${bboard.content}" name="brag_content" width="200px"
+						height="200px" class="card-img-top" />
+					</a>
+				</div>
+				<c:choose>
+					<c:when test="${status.index mod 4 == 2}">
 		</div>
-
+		</c:when>
+		</c:choose>
+		</c:forEach>
 	</div>
-	</div>
-	<div class="card-body">
-		<table class="200table">
-			<!-- <div class="border mycard" > -->
-			<tr>
-				<c:forEach var="i" begin="7" end="10">
-				<c:choose>
-					<c:when test="${not empty bestbragList[i] }">
-						<td title="${bestbragList[i].title }"><a
-						href="./viewdetail/${bestbragList[i].articleNo }">
-							${bestbragList[i].title } <br> <img
-							src="${bestbragList[i].content}" name="brag_content"
-							width="200px" height="200px" class="card-img-top" />
-					</a></td>
-					</c:when>
-					<c:otherwise>
-					<td title="내용이 없습니다"> <br> 
-						<img src="https://dummyimage.com/200x200/999/ffffff.jpg&text=NoArticle" 
-						name="brag_content" width="200px" height="200px" class="card-img-top" />
-					</td>
-					
-					</c:otherwise>
-				</c:choose>
-				</c:forEach>
-			</tr>
-			<tr>
-				<c:forEach var="i" begin="11" end="14">
-				<c:choose>
-					<c:when test="${not empty bestbragList[i] }">
-						<td title="${bestbragList[i].title }"><a
-						href="./viewdetail/${bestbragList[i].articleNo }">
-							${bestbragList[i].title } <br> <img
-							src="${bestbragList[i].content}" name="brag_content"
-							width="200px" height="200px" class="card-img-top" />
-					</a></td>
-					</c:when>
-					<c:otherwise>
-					<td title="내용이 없습니다"> <br> 
-						<img src="https://dummyimage.com/200x200/999/ffffff.jpg&text=NoArticle" 
-						name="brag_content" width="200px" height="200px" class="card-img-top" />
-					</td>
-					
-					</c:otherwise>
-				</c:choose>
-				</c:forEach>
-			</tr>
-			<tr>
-				<c:forEach var="i" begin="15" end="18">
-				<c:choose>
-					<c:when test="${not empty bestbragList[i] }">
-						<td title="${bestbragList[i].title }"><a
-						href="./viewdetail/${bestbragList[i].articleNo }">
-							${bestbragList[i].title } <br> <img
-							src="${bestbragList[i].content}" name="brag_content"
-							width="200px" height="200px" class="card-img-top" />
-					</a></td>
-					</c:when>
-					<c:otherwise>
-					<td title="내용이 없습니다"> <br> 
-						<img src="https://dummyimage.com/200x200/999/ffffff.jpg&text=NoArticle" 
-						name="brag_content" width="200px" height="200px" class="card-img-top" />
-					</td>
-					
-					</c:otherwise>
-				</c:choose>
-					
-				</c:forEach>
-			</tr>
-		</table>
-
 	</div>
 
 	<script>
-
-
 		console.log(${pageInfo.page});
  		// $(function(){
 		// 	$("#todayMake").click(function(){

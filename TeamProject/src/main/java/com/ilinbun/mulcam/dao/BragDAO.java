@@ -27,7 +27,7 @@ public interface BragDAO {
 	// [글 목록Service] 게시글 리스트에 작성된 게시글을 넣는 쿼리
 	void insertBragBoard(BragBoard bragboard) throws Exception;
 	// [글 목록Service] 게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
-	List<BragBoard> selectBragBoardList(int startrow) throws Exception;
+	List<BragBoard> selectBragBoardList(Map<String, Integer> map) throws Exception;
 	// [글 목록Service] 전체 게시물 조회 : 게시판 페이지 번호를 만들기 위해 저장된 글의 총 갯수의 정보를 반환하는 DAO
 	int selectBragBoardCount() throws Exception;
 	//[글 목록Service] BEST 게시판 글 목록이 조회수 순으로 정렬 쿼리(수정요. 나중에는 좋아요 순으로)
@@ -78,5 +78,8 @@ public interface BragDAO {
 	Integer countComment() throws Exception;
 	
 	void updateCommentSeq(BragReply br) throws Exception;
+
+
+	List<BragBoard> selectBragBoardList(int startrow, int howManyBrag);
 	
 }
