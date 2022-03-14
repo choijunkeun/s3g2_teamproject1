@@ -42,4 +42,8 @@ public interface PlaceReviewDAO {
 
 	// 마이페이지에 뿌려줄 사용자의 리뷰 게시글 출력 DAO(준근)
 	List<PlaceReview> selectReviewBoardByIdx(int idx) throws Exception;
+	Map<String, Object> isIndexed(int id) throws Exception;
+	Map<String, Object> queryPlaces(int id) throws Exception;
+	void insertPlaces(Map<String, Object> map) throws Exception;
+	void deletePlaces(Map<String, Object> map) throws Exception;
 }

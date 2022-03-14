@@ -156,4 +156,25 @@
 			delete from reviewLikes where reviewNo=#{reviewNo} and idx=#{idx}
 		]]>
 	</delete> 
+	
+	<select id="isIndexed" resultType="Map" parameterType="int">
+		<![CDATA[
+			select * from mapdb where id=#{id}
+		]]>
+	</select>
+	<select id="queryPlaces" resultType="Map" parameterType="int">
+		<![CDATA[
+			select * from mapdb where id=#{id}
+		]]>
+	</select>
+	<insert id="insertPlaces" parameterType="Map">
+		<![CDATA[
+			insert into mapdb value(#{id},#{place_name})
+		]]>
+	</insert>
+	<delete id="deletePlaces" parameterType="Map">
+		<![CDATA[
+			delete from mapdb where id=#{id} and place_name = #{place_name}
+		]]>
+	</delete>
 </mapper>

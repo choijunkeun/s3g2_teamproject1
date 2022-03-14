@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.PlaceRating;
@@ -34,4 +35,9 @@ public interface PlaceReviewService {
 
 	//마이페이지에 사용자의 리뷰 게시글 출력(준근)
 	List<PlaceReview> MyReviewBoard(int idx) throws Exception;
+	
+	Boolean isIndexed(int id) throws Exception;
+	Map<String, Object> queryPlaces(int id) throws Exception;
+	void insertPlaces(int id, String place_name) throws Exception;
+	void deletePlaces(int id, String place_name) throws Exception;
 }
