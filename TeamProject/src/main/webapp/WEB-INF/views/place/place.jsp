@@ -9,7 +9,6 @@
 <meta charset="UTF-8">
 <title>장소 보기</title>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-
 </head>
 <body>
 
@@ -118,22 +117,27 @@
 									<section>
 										<div class="justify-content-between d-flex flex-wrap">
 											<h5><strong>${pr.honbabReason }</strong></h5>
-											<span class="badge ${pr.rejectedCount? "bg-danger":"bg-secondary"} rounded-pill mb-2">
-												${pr.rejectedCount? "혼밥 가능"  : "혼밥 불가능"}</span>
-											<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
 												<div class="if-thisArticle-mine text-end">
-													<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
-													<button class="btn border-dark" onclick="deleteReview(${pr.reviewNo});">삭제</button>
+													<span class="badge ${pr.rejectedCount? "bg-danger":"bg-secondary"} rounded-pill mb-2">
+													${pr.rejectedCount? "혼밥 가능"  : "혼밥 불가능"}</span>
+													<c:if test="${user.idx == pr.user_PK || user.grp == 2 }">
+														<button class="btn border-dark" onclick="editReview(${pr.reviewNo})">수정</button>
+														<button class="btn border-dark" onclick="deleteReview(${pr.reviewNo});">삭제</button>
+													</c:if>
 												</div>
-											</c:if>
+											
 										</div>
 										<p>${pr.reviewContent }</p>
+										<c:if test="${not empty pr.revImgFilepath}">
+											<img src="/revimgupload/${pr.revImgFilepath}" 
+												style="width: 200px; height: 200px; max-width: 200px; max-height: 200px; min-width: 200px; min-height: 200px;">
+										</c:if>
 									</section>
 									<div class="d-flex flex-wrap" style="align-items:center; font-size: 0.9rem;">
 										<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
 											id="likebtn${pr.reviewNo }" onclick="toggleLikes(${pr.reviewNo})">
-											<i class="fa ${didILikedList[pr.reviewNo]>0 ? 'fa-heart' : 'fa-heart-o' }" 
-											aria-hidden="true">${reviewLikesList[pr.reviewNo] }</i>
+											<i class="fa ${didILikedList[pr.reviewNo]>0 ? 'fa-heart' : 'fa-heart-o' }"
+											aria-hidden="true">&nbsp;${reviewLikesList[pr.reviewNo] }</i>
 											</button>
 										<div>
 											&nbsp;
@@ -143,38 +147,48 @@
 											<span style="font-size: 0.9rem;"><i class="bi bi-pencil-square"></i> ${pr.writeTime }</span>
 										</div>
 									</div>
+									
 								</div>
 							</div>
 						</c:forEach>
 					</c:otherwise>
 					</c:choose>
 				</div>
-				<section class="text-center" id="pageList">
+				<nav class="text-center" id="pageList">
+					<ul class="pagination justify-content-center">
 					<c:choose>
 						<c:when test="${pageInfo.page<=1}">
-							[이전]&nbsp;
+							<li class="page-item"><a class="page-link" href="#">이전</a></li>
+							<!-- [이전]&nbsp; -->
 						</c:when>
 						<c:otherwise>
-							<a href="boardlist?page=${pageInfo.page-1}">[이전]</a>&nbsp;
+							<li class="page-item"><a class="page-link" 
+								href="./${place.id }?place_name=${place.place_name }&page=${pageInfo.page-1}">이전</a></li>
 						</c:otherwise>
 					</c:choose>
 					<c:forEach var="i" begin="${pageInfo.startPage }" end="${pageInfo.endPage }">
 						<c:choose>
-							<c:when test="${pageInfo.page==i }">[${i }]</c:when>
+							<c:when test="${pageInfo.page==i }">
+								<li class="page-item active">
+									<a class="page-link" href="#">${i }</a></li> </c:when>
 							<c:otherwise>
-								<a href="boardlist?page=${i}">[${i }]</a>
+								<li class="page-item"><a class="page-link" 
+									href="./${place.id }?place_name=${place.place_name }&page=${pageInfo.page}">${i }</a></li>
+								
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 					<c:choose>
 						<c:when test="${pageInfo.page>=pageInfo.maxPage }">
-							[다음]
+							<li class="page-item"><a class="page-link" href="#">다음</a></li>
 						</c:when>
 						<c:otherwise>
-							<a href="boardlist?page=${pageInfo.page+1}">[다음]</a>
+							<li class="page-item"><a class="page-link" 
+								href="./${place.id }?place_name=${place.place_name }&page=${pageInfo.page+1}">다음</a></li>
 						</c:otherwise>
 					</c:choose>
-				</section>
+					</ul>
+				</nav >
 			</div>
 			
 		</c:when>

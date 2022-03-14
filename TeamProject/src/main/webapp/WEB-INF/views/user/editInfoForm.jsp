@@ -187,7 +187,7 @@ button {
 
 </head>
 <body>
-<form method="POST" action=/infoUpdate enctype="multipart/form-data">
+<form action=/infoUpdate method="POST" enctype="multipart/form-data">
 	<div><input type="file" name="profileImg">
 	</div>
 	<div><img style="border-radius: 200px; width: 150px; height: 150px;"

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
@@ -70,14 +72,23 @@ public class BragServiceImpl implements BragService {
 	}
 	//게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
 	@Override
-	public List<BragBoard> getBragboardList(int page) throws Exception {
-		int startrow=(int) ((page-1)*16+1);
-		List<BragBoard> list = bragDAO.selectBragBoardList(startrow);
+	public List<BragBoard> getBragboardList(int page, int howManyBrag) throws Exception {
+		int startrow=(int) ((page-1)*howManyBrag);
+		Map<String, Integer> map = new HashMap<>();
+		
+		map.put("startrow", startrow);
+		map.put("howManyBrag", howManyBrag);
+		List<BragBoard> list = bragDAO.selectBragBoardList(map);
+		System.out.println("24개가 맞는지?" + list.size());
 		for(int i=0;i<list.size();i++) {
 			String realContent = list.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
 			Document doc=Jsoup.parse(realContent);
-			Elements img= doc.select("img");
-			String src =img.attr("src");
+//			Elements img= doc.select("img");
+			Element img= doc.selectFirst("img");
+			String src = "";
+			if(img !=null) src =img.attr("src");
+			else src = "https://dummyimage.com/200x200/777/ffffff.jpg&text=NoImg";
+			
 			list.get(i).setContent(src);
 		}
 		return list;
@@ -86,6 +97,30 @@ public class BragServiceImpl implements BragService {
 	@Override
 	public PageInfo getPageInfo(PageInfo pageInfo) throws Exception {
 		int listCount=bragDAO.selectBragBoardCount();
+		System.out.println("리스트카운트 :"+listCount);
+		int maxPage=(int)Math.ceil((double)listCount/24);
+		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
+		//table에 있는 모든 row 개수
+		double pagenation = pageInfo.getPage(); //? 새로 추가 
+		//아래에 페이지 이동 버튼도 10개로 구성하고자 하기 위함이다.
+		int startPage=(((int) ((double)pagenation/10+0.9))-1)*10+1;
+		//현재 페이지에 보여줄 시작 페이지 수(1, 11, 21, ...)
+		
+		int endPage=startPage+10-1;
+		//현재 페이지에 보여줄 마지막 페이지 수(10, 20, 30, ...)
+		if(maxPage<endPage) {
+			endPage=maxPage;
+		}
+		pageInfo.setListCount(listCount);
+		pageInfo.setMaxPage(maxPage);
+		pageInfo.setEndPage(endPage);
+		pageInfo.setStartPage(startPage);
+		return pageInfo;
+	}
+	//댓글에 대한 페이지 보기
+	@Override
+	public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
+		int listCount=bragDAO.countComment();
 		System.out.println("리스트카운트 :"+listCount);
 		int maxPage=(int)Math.ceil((double)listCount/16);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
@@ -113,8 +148,11 @@ public class BragServiceImpl implements BragService {
 		for(int i=0;i<best.size();i++) {
 			String realContent = best.get(i).getContent(); // "<p>게시글 내용이 들어있고, <img src=주소 /></p>"
 			Document doc=Jsoup.parse(realContent);
-			Elements img= doc.select("img");
-			String src =img.attr("src");
+			Element img= doc.selectFirst("img");
+			String src = "";
+			if(img !=null) src =img.attr("src");
+			else src = "https://dummyimage.com/200x200/777/ffffff.jpg&text=NoImg";
+			
 			best.get(i).setContent(src);
 		}
 		return best;
@@ -183,7 +221,7 @@ public class BragServiceImpl implements BragService {
 	
 	
 
-	
+	// 좋아요
 	@Override
 	public int queryArticleLikes(int articleNo) throws Exception {
 		// TODO Auto-generated method stub
@@ -214,4 +252,90 @@ public class BragServiceImpl implements BragService {
 		map.put("idx", idx);
 		return bragDAO.queryIfILikeThis(map);
 	}
+
+	
+	//댓글 쓰기
+	@Override
+	public void boardReply(int articleNo, int idx, String comment, Integer blind) throws Exception {
+		Integer commentNo = bragDAO.selectMaxCommentNo();
+		if(commentNo == null) commentNo = 1;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		map.put("comment", comment);
+		map.put("blind", (blind != null? true : false));
+		map.put("refer", commentNo);
+		map.put("lev", 0);
+		map.put("seq", 0);
+		bragDAO.insertReply(map);
+		
+	}
+	
+	//대댓글 쓰기
+	@Override
+	public void reReply(int commentNo, int articleNo, int idx, String comment, Integer blind) throws Exception {
+		System.out.println("src reply getting");
+		BragReply src_reply = (BragReply)bragDAO.selectReply(commentNo);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("articleNo", articleNo);
+		map.put("idx", idx);
+		map.put("comment", comment);
+		map.put("blind", (blind != null? true : false));
+		map.put("refer", src_reply.getRefer());
+		map.put("lev", src_reply.getLev()+1);
+		bragDAO.updateCommentSeq(src_reply);
+		map.put("seq", src_reply.getSeq()+1);
+		bragDAO.insertReply(map);
+		
+	}
+
+	//댓글 보기
+	@Override
+	public List<BragReply> boardReplyList(int articleNo, int page) throws Exception {
+		int startrow=(int) ((page-1)*10+1);
+		Map<String, Integer> map = new HashMap<>();
+		map.put("articleNo", articleNo);
+		map.put("startrow", startrow);
+		return bragDAO.selectReplyList(map);
+	}
+
+	//댓글 삭제
+	@Override
+	public void deleteReply(int commentNo) throws Exception {
+		bragDAO.deleteReply(commentNo);
+		
+	}
+
+	//댓글 수정
+	@Override
+	public void editReply(int commentNo, String comment) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("commentNo", commentNo);
+		map.put("comment", comment);
+		
+		bragDAO.editReply(map);
+	}
+	
+	//익명댓글 처리
+	@Override
+	public void setBlind(int blind, int commentNo) throws Exception{
+		Map<String, Object> map = new HashMap<>();
+		map.put("blind", blind);
+		map.put("commentNo", commentNo);
+		
+		bragDAO.setBlind(map);
+	}
+	
+	@Override
+	public Integer countComment() throws Exception{
+		return bragDAO.countComment();
+	}
+	
+	@Override
+	public void updateCommentSeq(BragReply br) throws Exception{
+		bragDAO.updateCommentSeq(br);
+	}
+	
 }

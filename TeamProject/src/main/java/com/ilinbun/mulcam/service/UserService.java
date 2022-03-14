@@ -5,7 +5,7 @@ import com.ilinbun.mulcam.dto.User;
 public interface UserService {
 	
 	// 회원가입
-	void makeUser(User user) throws Exception;
+	void makeUser(String email, String nickname, String password, int honbabLevel, String profileImgName) throws Exception;
 	
 	//로그인
 	User loginUser(String email, String password) throws Exception;
@@ -21,7 +21,7 @@ public interface UserService {
 	String getUserNick(int idx) throws Exception;
 
 		
-	//회원정보수정(new)
+	//회원정보수정
 	void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel) throws Exception;
 
 	// 회원 삭제

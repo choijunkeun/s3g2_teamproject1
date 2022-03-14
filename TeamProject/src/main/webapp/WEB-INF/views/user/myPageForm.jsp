@@ -43,7 +43,7 @@
 				<div class="card-body p-4">
 					<div class="text-center">
 						<img style="border-radius: 200px; width: 150px; height: 150px;"
-							src="/profile/${user.profileImg}">
+							src="<c:url value='/profile/${user.profileImg}'/>"/>
 						<div id="user_info">${user.nickname}</div>
 						<span class="badge bg-danger rounded-pill" style="font-size: 1.5rem;">Lv.${user.honbabLevel}</span>
 					</div>

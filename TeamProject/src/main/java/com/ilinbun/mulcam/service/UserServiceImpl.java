@@ -25,8 +25,16 @@ public class UserServiceImpl implements UserService {
 
 	// 회원 가입
 	@Override
-	public void makeUser(User user) throws Exception {
+	public void makeUser(String email, String nickname, String password, int honbabLevel, String profileImgName) throws Exception {
+		String profileImg = profileImgName;
+		User user = new User();
+		user.setEmail(email);
+		user.setNickname(nickname);
+		user.setPassword(password);
+		user.setProfileImg(profileImg);
+		user.setHonbabLevel(honbabLevel);
 		userDAO.join(user);
+		
 	}
 	
 	// 닉네임 중복확인

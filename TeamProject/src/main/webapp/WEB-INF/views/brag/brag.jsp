@@ -63,73 +63,35 @@ td {
 						<div class="card p-4">
 							<h5 class="fw-bolder">혼밥자랑</h5>
 							<div class="card-body">
-								<table>
-									<!-- <div class="border mycard" > -->
-									<tr>
-										<c:forEach var="bboard" items="${bragList}" varStatus="status">
-											<c:if test="${status.index<4}">
-												<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
-														<!--타이틀, 사진--> ${bboard.title } <br> <img
-														src="${bboard.content}" name="brag_content" width="200px"
-														height="200px" class="card-img-top" />
-												</a></td>
-											</c:if>
-											<c:if test="${status.index==3}">
-									</tr>
-									<tr>
-										</c:if>
-										<c:if test="${status.index>3 && status.index<8}">
-											<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
-													${bboard.title }<br> <img src="${bboard.content}"
-													name="brag_content" width="200px" height="200px"
-													class="card-img-top" />
-											</a></td>
-										</c:if>
-										<c:if test="${status.index==7}">
-									</tr>
-									<tr>
-										</c:if>
-
-										<c:if test="${status.index>7 && status.index<12}">
-											<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
-													${bboard.title }<br> <img src="${bboard.content}"
-													name="brag_content" width="200px" height="200px"
-													class="card-img-top" />
-											</a></td>
-										</c:if>
-										<c:if test="${status.index==11}">
-									</tr>
-									<tr>
-										</c:if>
-
-										<c:if test="${status.index>11 && status.index<16}">
-											<td title="${bboard.title }" ><a href="./viewdetail/${bboard.articleNo }">
-													${bboard.title }<br> <img src="${bboard.content}"
-													name="brag_content" width="200px" height="200px"
-													class="card-img-top" />
-											</a></td>
-										</c:if>
-
-										</c:forEach>
-									</tr>
+								</div>
 								
-								</table>
+									<!-- <div class="border mycard" > -->
+										<c:forEach var="bboard" items="${bragList}" varStatus="status">
+											<c:choose>
+												<c:when test="${status.index mod 4 == 0}">
+													<div class="row">
+												</c:when>
+											</c:choose>
+												<div class='col-sm-3'>
+												<a href="./viewdetail/${bboard.articleNo }">
+													${bboard.title } <br>
+													<img src="${bboard.content}" name="brag_content" width="200px" height="200px" class="card-img-top" />
+												</a>
+												</div>
+											<c:choose>
+												<c:when test="${status.index mod 4 == 3}">
+													</div>
+												</c:when>
+											</c:choose>
+										</c:forEach>
 							</div>
 						</div>
 					</div>
 				</c:when>
 			</c:choose>
 
-			<!-- 3. 페이징 구현 부분 -->
+		<%-- 	<!-- 3. 페이징 구현 부분 -->
 			<div id="paging">
-				${pageInfo } ${pageInfo.page }
-				<!-- 1 -->
-				${pageInfo.startPage }
-				<!-- 1 -->
-				${pageInfo.endPage }
-				<!-- 10 -->
-				${pageInfo.maxPage }
-				<!-- 1 -->
 				<c:choose>
 					<c:when test="${pageInfo.page<=1}">
 							[이전]&nbsp;
@@ -155,7 +117,51 @@ td {
 						<a href="brag?page=${pageInfo.page+1}">[next]</a>
 					</c:otherwise>
 				</c:choose>
-			</div>
+			</div> --%>
+			
+			
+			<nav id="pageList">
+				<ul class="pagination justify-content-center">
+				<!-- 페이지 목록 -->
+				<!-- if else 랑 같음.  페이지가 1보다 작거나 같으면 이전페이지로 -->
+				<c:choose>
+					<c:when test="${pageInfo.page<=1}">
+					<li class="page-item"><a class="page-link" href="#">이전</a></li>
+				</c:when>
+					<c:otherwise>
+						<li class="page-item"><a class="page-link" 
+								href="brag?page=${pageInfo.page-1}">이전</a></li>
+					</c:otherwise>
+				</c:choose>
+				<c:forEach var="i" begin="${pageInfo.startPage }"
+					end="${pageInfo.endPage }">
+					<!-- end page 마지막 페이지 -->
+					<!-- 현재페이지. 1페이지에서는 현재와 이전페이지 클릭될 필요가없음.-->
+					<!-- 현재페이지를 제외한 나머지페이지 -->
+					<c:choose>
+						<c:when test="${pageInfo.page==i }">
+							<li class="page-item active">
+								<a class="page-link" href="#">${i }</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="page-item"><a class="page-link" 
+									href="brag?page=${i}">${i }</a></li>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				<c:choose>
+					<c:when test="${pageInfo.page>=pageInfo.maxPage }">
+					<li class="page-item"><a class="page-link" href="#">다음</a></li>
+				</c:when>
+					<c:otherwise>
+						<li class="page-item"><a class="page-link" 
+								href="brag?page=${pageInfo.page+1}">다음</a></li>
+					</c:otherwise>
+				</c:choose>
+				<!-- 페이지에 답변 달았으면 그 페이지 목록이 보여야함. -->
+				<!-- 눈에 보이진 않지만 페이지를 달고다님. -->
+				</ul>
+			</nav>
 		</div>
 	</div>
 

@@ -54,20 +54,11 @@ table {
 
 <body>
 
-
-
-
-
-
-
-
-
-
 	<!-- 게시판 리스트 -->
 
 	<table>
 	<tr style="text-align: center;">
-	<th class="fa fa-exclamation-circle" style="font-size: 30px; margin-left: 150px;">커뮤니티</th>
+	<th style="font-size: 30px;"><i class="fa fa-exclamation-circle">&nbsp;</i>커뮤니티</th>
         	<!-- 2. 글쓰기 버튼-->
 		<button class="btn btn-outline-dark" id="commMake" name="commMake" type="button" style="float: right; width: 80px; height: 40px;">글쓰기</button>
 	</tr>
@@ -78,7 +69,7 @@ table {
 	<c:choose>
 		<c:when test="${commList!=null && pageInfo.listCount>0 }">
 			<section id="listForm">
-				<table>
+				<table class="table">
 					<tr id="tr_top">
 						<th>번호</th>
 						<th>제목</th>
@@ -102,16 +93,18 @@ table {
 				
 				
 			</section>
-			<section id="pageList">
+			<nav id="pageList">
+				<ul class="pagination justify-content-center">
 				<!-- 페이지 목록 -->
 				<!-- if else 랑 같음.  페이지가 1보다 작거나 같으면 이전페이지로 -->
 				<c:choose>
 					<c:when test="${pageInfo.page<=1}">
-					[이전]&nbsp;
+					<li class="page-item"><a class="page-link" href="#">이전</a></li>
 				</c:when>
 					<c:otherwise>
-						<a href="listform?page=${pageInfo.page-1}">[이전]</a>&nbsp;
-				</c:otherwise>
+						<li class="page-item"><a class="page-link" 
+								href="listform?page=${pageInfo.page-1}">이전</a></li>
+					</c:otherwise>
 				</c:choose>
 				<c:forEach var="i" begin="${pageInfo.startPage }"
 					end="${pageInfo.endPage }">
@@ -119,23 +112,29 @@ table {
 					<!-- 현재페이지. 1페이지에서는 현재와 이전페이지 클릭될 필요가없음.-->
 					<!-- 현재페이지를 제외한 나머지페이지 -->
 					<c:choose>
-						<c:when test="${pageInfo.page==i }">[${i }]</c:when>
+						<c:when test="${pageInfo.page==i }">
+							<li class="page-item active">
+								<a class="page-link" href="#">${i }</a></li>
+						</c:when>
 						<c:otherwise>
-							<a href="listform?page=${i}">[${i }]</a>
+							<li class="page-item"><a class="page-link" 
+									href="listform?page=${i}">${i }</a></li>
 						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 				<c:choose>
 					<c:when test="${pageInfo.page>=pageInfo.maxPage }">
-					[다음]
+					<li class="page-item"><a class="page-link" href="#">다음</a></li>
 				</c:when>
 					<c:otherwise>
-						<a href="listform?page=${pageInfo.page+1}">[다음]</a>
+						<li class="page-item"><a class="page-link" 
+								href="listform?page=${pageInfo.page+1}">다음</a></li>
 					</c:otherwise>
 				</c:choose>
 				<!-- 페이지에 답변 달았으면 그 페이지 목록이 보여야함. -->
 				<!-- 눈에 보이진 않지만 페이지를 달고다님. -->
-			</section>
+				</ul>
+			</nav>
 		</c:when>
 		<c:otherwise>
 			<section id="emptyArea">등록된 글이 없습니다.</section>

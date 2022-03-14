@@ -368,6 +368,7 @@
 			        "user_PK":$('#user_PK').val(),
 			        "rejectedCount":($('input[name="rejectedCount"]:checked').val() != null)? $('input[name="rejectedCount"]:checked').val() : "false",
 			        "honbabReason":$('#honbabReason').val(),
+			        "reviewContent":$('#reviewContent').val(),
 			        "honbabLv":$('input[name="honbabLv"]:checked').val(),
 			        "interiorRate":$('input[name="interiorRate"]:checked').val(),
 			        "serviceRate":$('input[name="serviceRate"]:checked').val(),

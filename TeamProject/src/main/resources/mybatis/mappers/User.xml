@@ -7,8 +7,8 @@
 <!--회원가입-->
 	<insert id="join" parameterType="User">
 		<![CDATA[
-	    INSERT INTO user(email, nickname, password, honbabLevel)
-	                  VALUES(#{email}, #{nickname}, #{password}, #{honbabLevel})
+	    INSERT INTO user(email, nickname, password, profileImg, honbabLevel)
+	                  VALUES(#{email}, #{nickname}, #{password}, #{profileImg}, #{honbabLevel})
 	    ]]>
     </insert>
 <!-- 닉네임 중복확인 쿼리 -->
@@ -63,7 +63,7 @@
 <!--idx가지고 화면에 출력할 email, nickname, hblv가져오기-->
 	<select id="selectUserDetail" resultType="User" parameterType="int">
     	<![CDATA[
-			select idx, email, nickname, honbabLevel from User where idx=#{idx} 
+			select idx, email, nickname, honbabLevel, profileImg from User where idx=#{idx} 
     	]]>
 	</select>
 

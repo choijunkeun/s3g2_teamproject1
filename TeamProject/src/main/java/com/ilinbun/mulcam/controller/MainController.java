@@ -5,26 +5,20 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,7 +69,7 @@ public class MainController {
 	public String Main(Model model) {
 		try {
 			List<BragBoard> bestbragList = bragService.bragBest();
-			List<BragBoard> bragList=bragService.getBragboardList(1); //첫번째 페이지에서 가져오는 의미
+			List<BragBoard> bragList=bragService.getBragboardList(1, 8); //첫번째 페이지에서 가져오는 의미
 			model.addAttribute("bragList", bragList);
 			model.addAttribute("bestbragList", bestbragList);
 		} catch (Exception e) {
@@ -114,29 +108,54 @@ public class MainController {
 
 	// 회원가입 기능 컨트롤러
 	@PostMapping("/join")
-	public String postJoin(@Valid User user, BindingResult bindingResult, Model model) throws Exception {
-//		System.out.println("postJoin()");
-		if (bindingResult.hasErrors()) {
-//			System.out.println("에러");
-
-			List<FieldError> list = bindingResult.getFieldErrors();
-			Map<String, String> errorMsg = new HashMap<>();
-
-			for (int i = 0; i < list.size(); i++) {
-				String field = list.get(i).getField();
-				String message = list.get(i).getDefaultMessage();
-
-//				System.out.println("field = " + field);
-//				System.out.println("message = " + message);
-
-				errorMsg.put(field, message); 
-			}
-			model.addAttribute("errorMsg", errorMsg);
-			return "default/user/joinForm";
+	public String postJoin(String email, String nickname, String password, int honbabLevel, MultipartFile profileImg, Model model,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		System.out.println("postJoin() join");
+//		if (bindingResult.hasErrors()) {
+//			System.out.println("if join");
+//			List<FieldError> list = bindingResult.getFieldErrors();
+//			Map<String, String> errorMsg = new HashMap<>();
+//
+//			for (int i = 0; i < list.size(); i++) {
+//				System.out.println("for join");
+//				String field = list.get(i).getField();
+//				String message = list.get(i).getDefaultMessage();
+//				errorMsg.put(field, message); 
+//			}
+//			model.addAttribute("errorMsg", errorMsg);
+//			System.out.println(errorMsg);
+//			return "default/user/joinForm";
+//		}
+		String profileImgName = profileImg.getOriginalFilename();
+		System.out.println(profileImgName);
+		//프로필 이미지 첨부가 있다면
+		if(!profileImgName.equals("")){
+			System.out.println("프로필 이미지가 Null이 아니면");
+			String path = servletContext.getRealPath("/profile/");
+			String filename = profileImg.getOriginalFilename();
+			File destFile = new File(path + filename);
+			System.out.println(profileImg.isEmpty());
+			System.out.println(destFile);
+			PrintWriter writer = null;
+			JSONObject json = new JSONObject();
+			
+			profileImg.transferTo(destFile);
+			writer = response.getWriter();
+			response.setContentType("text/html;charset=utf-8");
+			response.setCharacterEncoding("utf-8");
+			json.append("uploaded", 1);
+			json.append("filename", filename);
+			json.append("url", "/profile/" + filename);
+			writer.println(json);
+		} else if(profileImgName.equals("")) {
+			System.out.println("프로필 이미지가 널이면");
+			profileImgName = "DEFAULT.png";
 		}
-		userService.makeUser(user);
+		System.out.println(email +", "+nickname +", "+ password +", "+ honbabLevel +", "+ profileImgName);
+		userService.makeUser(email,nickname,password,honbabLevel,profileImgName);
 		return "redirect:/loginSuccess";
 	}
+	
+	
 
 	// 회원가입 완료 폼
 	@GetMapping("/loginSuccess")
@@ -255,9 +274,10 @@ public class MainController {
 					profileImgName = user.getProfileImg();
 				} else {
 					String path = servletContext.getRealPath("/profile/");
-					String filename = UUID.randomUUID().toString()+"."+profileImg.getOriginalFilename().substring(profileImg.getOriginalFilename().lastIndexOf('.')+1);
+					String filename = profileImg.getOriginalFilename();
 					File destFile = new File(path + filename);
 					System.out.println(profileImg.isEmpty());
+					System.out.println(destFile);
 					PrintWriter writer = null;
 					JSONObject json = new JSONObject();
 					
@@ -267,8 +287,11 @@ public class MainController {
 					response.setCharacterEncoding("utf-8");
 					json.append("uploaded", 1);
 					json.append("filename", filename);
-					json.append("url", "/fileview/"+ filename);
+					json.append("url", "/profile/"+ filename);
 					writer.println(json);
+					
+					System.out.println(writer);
+					System.out.println(json);
 					
 					System.out.println(path);
 					System.out.println(destFile);
@@ -285,10 +308,10 @@ public class MainController {
 			e.printStackTrace();
 			System.out.println("오류발생");
 		}
-		return"redirect:/editInfo";
+		return"redirect:/myPage";
 	}
 	
-	@GetMapping("/fileview/{filename}")
+	@GetMapping("/profile/{filename}")
 	public void fileview(@PathVariable String filename, HttpServletRequest request, HttpServletResponse response) {
 		String path = servletContext.getRealPath("/profile/");
 		File file = new File(path + filename);

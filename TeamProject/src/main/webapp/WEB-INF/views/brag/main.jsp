@@ -100,9 +100,9 @@ height : 300px !important;
 			
 				<!-- 2. 글쓰기 버튼-->
 	<div>
-		<button class="make_btn m-2 btn-outline-secondary" id="bragMake"
+		<button class="btn m-2 btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
-			style="float: right; width: 80px; height: 40px;">글쓰기</button>
+			style="float: right; ">글쓰기</button>
 	</div>
 			
 		</div>
@@ -118,75 +118,28 @@ height : 300px !important;
 					<a href="/brag/brag"><h5 class="fw-bolder">혼밥자랑</h5></a>
 				</div>
 				<div class="card-body">
-					<table class="200table">
-						<!-- <div class="border mycard" > -->
-						<tr>
-							<c:forEach var="bboard" items="${bragList}" varStatus="status">
-								<c:if test="${status.index<4}">
-									<td title="${bboard.title }"><a
-										href="brag/viewdetail/${bboard.articleNo }"> <!--타이틀, 사진-->
-											${bboard.title } <br> <img src="${bboard.content}"
-											name="brag_content" width="200px" height="200px"
-											class="card-img-top img-latest" />
-									</a></td>
-								</c:if>
-								<c:if test="${status.index==3}">
-						</tr>
-						<tr>
-							</c:if>
-							<c:if test="${status.index>3 && status.index<8}">
-								<td title="${bboard.title }"><a
-									href="brag/viewdetail/${bboard.articleNo }"> ${bboard.title }<br>
-										<img src="${bboard.content}" name="brag_content" width="200px"
-										height="200px" class="card-img-top img-latest" />
-								</a></td>
-							</c:if>
-							<c:if test="${status.index==7}">
-							</c:if>
-							</c:forEach>
-						</tr>
-					</table>
-
+					<c:forEach var="bboard" items="${bragList}" varStatus="status">
+						<c:choose>
+							<c:when test="${status.index mod 4 == 0}">
+								<div class="row">
+							</c:when>
+						</c:choose>
+							<div class='col-sm-3'>
+							<a href="/brag/viewdetail/${bboard.articleNo }">
+								${bboard.title } <br>
+								<img src="${bboard.content}" name="brag_content" width="200px" height="200px" class="card-img-top" />
+							</a>
+							</div>
+						<c:choose>
+							<c:when test="${status.index mod 4 == 3}">
+								</div>
+							</c:when>
+						</c:choose>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
 
-		<!-- 4. 페이징 구현 부분 -->
-		<div id="paging">
-			${pageInfo } ${pageInfo.page }
-			<!-- 1 -->
-			${pageInfo.startPage }
-			<!-- 1 -->
-			${pageInfo.endPage }
-			<!-- 10 -->
-			${pageInfo.maxPage }
-			<!-- 1 -->
-			<c:choose>
-				<c:when test="${pageInfo.page<=1}">
-							[이전]&nbsp;
-						</c:when>
-				<c:otherwise>
-					<a href="brag?page=${pageInfo.page-1}">[이전]</a>&nbsp;
-						</c:otherwise>
-			</c:choose>
-			<c:forEach var="i" begin="${pageInfo.startPage }"
-				end="${pageInfo.endPage }">
-				<c:choose>
-					<c:when test="${pageInfo.page==i }">[${i }]</c:when>
-					<c:otherwise>
-						<a href="brag?page=${i}">[${i }]</a>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
-			<c:choose>
-				<c:when test="${pageInfo.page>=pageInfo.maxPage }">
-						[next]
-						</c:when>
-				<c:otherwise>
-					<a href="brag?page=${pageInfo.page+1}">[next]</a>
-				</c:otherwise>
-			</c:choose>
-		</div>
 	</div>
 
 

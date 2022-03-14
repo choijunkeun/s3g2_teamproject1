@@ -168,6 +168,7 @@
 			<input type="hidden" name="user_PK" id="user_PK" value="${review.user_PK }"> <!-- 목업 유저정보 코드 -->
 			<input type="hidden" name="id" id="id" value="${review.id }"> <!-- 장소값 코드 -->
 			<input type="hidden" name="reviewNo" id="reviewNo" value="${review.reviewNo }">
+			${review.reviewContent }
 			<table class="justify-content-center" style="width:100%;">
 				<tr>
 					<td>
@@ -190,6 +191,7 @@
 						<textarea name="reviewContent" id="reviewContent" placeholder="상세 내용을 입력해주세요"
 						style="width: 100%; height: auto; margin: 10px 0" rows=10>${review.reviewContent }</textarea>
 					</td>
+					
 				</tr>
 				<tr>
 					<td>혼밥레벨</td>
