@@ -52,7 +52,7 @@ a {
 	<section id="articleContentArea">
 	<section id="basicInfoArea">
 			제 목 : ${cboard.title}<br>
-			작성자 : ${nickname}  작성일 : ${cboard.date} 조회수 : ${cboard.views}
+			작성자 : <a href="../../myPage">${nickname}</a> 작성일 : ${cboard.date} 조회수 : ${cboard.views}
 			<!-- 좋아요 -->
 	<button class="btn-sm border-danger rounded-pill bg-white text-danger" 
 		id="likebtn${cboard.articleNo }" onclick="toggleLikes(${cboard.articleNo})">
@@ -126,3 +126,4 @@ function toggleLikes(articleNo){
 }
 </script>
 </html>
+
