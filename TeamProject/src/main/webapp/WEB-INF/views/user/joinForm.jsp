@@ -284,7 +284,7 @@ button {
 		</div>
 		</div>
 		<!-- 회원 가입 -->
-		<div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div>
+		<%-- <div id="msg" class="msg">${URLDecoder.decode(param.msg, "utf-8")}</div> --%>
 		<button type="submit" id="joinBtn" class="join-btn" disabled="disabled">회원가입하기</button>
 	</form>
 		

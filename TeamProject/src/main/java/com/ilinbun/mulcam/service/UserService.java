@@ -20,11 +20,18 @@ public interface UserService {
 
 	String getUserNick(int idx) throws Exception;
 
-	
-	//회원정보수정
-	void userUpdate(User user) throws Exception;
+		
+	//회원정보수정(new)
+	void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel) throws Exception;
 
 	// 회원 삭제
 	void userDelete(User user) throws Exception;
+	
+	//비밀번호 가져오기
+	String getPwd(String email) throws Exception;
+
+
+	
+	
 	
 }

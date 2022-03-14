@@ -16,14 +16,14 @@
 }
 
 form {
-	width: 1000px;
+	width: 800px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -20%);
 	border: 1px solid #d3d3d3;
 	border-radius: 10px;
 }
@@ -187,8 +187,8 @@ button {
 
 </head>
 <body>
-<form method="POST" action="/upload" enctype="multipart/form-data">
-	<div><input type="file" name="uploadfiled">
+<form method="POST" action=/infoUpdate enctype="multipart/form-data">
+	<div><input type="file" name="profileImg">
 	</div>
 	<div><img style="border-radius: 200px; width: 150px; height: 150px;"
 							src="/profile/${user.profileImg }">
@@ -203,12 +203,16 @@ button {
 		<span class="nickname_msg"></span>
 	</div>
 	<div class="form-group has-feedback">
-		<label class="control-label" for="password">패스워드</label>
-		<input class="form-control" type="password" id="password" name="password"/>
+		<label class="control-label" for="originPass">패스워드</label>
+		<input class="form-control" type="password" id="originPass" name="originPass"/>
+	</div>
+	<div class="form-group has-feedback">
+		<label class="control-label" for="password">변경 할 패스워드</label>
+		<input class="form-control" type="password" id="password"name="password"/>
 		<span class="password_msg"></span>
 	</div>
 	<div class="form-group has-feedback">
-		<label class="control-label" for="password2">패스워드 확인</label>
+		<label class="control-label" for="password2">변경 할 패스워드 확인</label>
 		<input class="form-control" type="password" id="password2"/>
 	</div>
 	<div>

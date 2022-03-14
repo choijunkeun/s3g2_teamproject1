@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
@@ -89,18 +88,31 @@ public class UserServiceImpl implements UserService {
 		return userDAO.getUserNick(idx);
 	}
 
-	//회원정보 수정
-	@Override
-	public void userUpdate(User user) throws Exception {
-		userDAO.userUpdate(user);
-	
-	}
-
+	// 회원 탈퇴
 	@Override
 	public void userDelete(User user) throws Exception {
 		userDAO.remove(user);
+	}
+
+	//비밀번호 DB에서 가져오기
+	@Override
+	public String getPwd(String email) throws Exception {
+		String getpass = userDAO.getPwd(email);
+		return getpass;
+	}
+
+	@Override
+	public void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel)
+			throws Exception {
+		String profileImg = profileImgName;
+		System.out.println("updateInfo ServiceImpl");
+		User user = new User();
+		user.setEmail(email);
+		user.setNickname(nickname);
+		user.setPassword(password);
+		user.setProfileImg(profileImg);
+		user.setHonbabLevel(honbabLevel);
+		userDAO.updateInfo(user);
 		
 	}
-	
-	
 }

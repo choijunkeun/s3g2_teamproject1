@@ -24,13 +24,17 @@ public interface UserDAO {
 	
 	//로그인
 	User login(String nickname) throws Exception;
-	
-	//회원정보수정
-	
-	void userUpdate(User user) throws Exception;
+	 
+	// 회원정보수정
+	void updateInfo(User user) throws Exception;
 	
 	//회원 탈퇴
 	void remove(User user) throws Exception;
+	//이메일을 이용해 비밀번호 가져오기
+	String getPwd(String email) throws Exception;
+	
+	
+	
 	
 	// 혼밥자랑 게시글 출력
 	List<BragBoard> bragPosting(BragBoard bragBoard) throws Exception;
@@ -41,6 +45,11 @@ public interface UserDAO {
 	User selectUserDetail(int idx) throws Exception;
 	//(종현)
 	String getUserNick(int idx) throws Exception;
+
+
+	
+
+	
 
 	
 	
