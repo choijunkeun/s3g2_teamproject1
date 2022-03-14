@@ -100,9 +100,9 @@ height : 300px !important;
 			
 				<!-- 2. 글쓰기 버튼-->
 	<div>
-		<button class="make_btn m-2 btn-outline-secondary" id="bragMake"
+		<button class="btn m-2 btn-outline-secondary" id="bragMake"
 			name="bragMake" type="button"
-			style="float: right; width: 80px; height: 40px;">글쓰기</button>
+			style="float: right; ">글쓰기</button>
 	</div>
 			
 		</div>

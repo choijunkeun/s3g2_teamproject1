@@ -34,9 +34,10 @@ public interface UserDAO {
 	
 	
 
-	//user 불러오기
+	//user 불러오기(소연)
 	User selectUserDetail(int idx) throws Exception;
 
+	//UserNick 불러오기(종현)
 	String getUserNick(int idx) throws Exception;
 
 	

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.ilinbun.mulcam.dto.BragBoard;
+import com.ilinbun.mulcam.dto.BragReply;
 
 @Mapper
 @Repository
@@ -55,4 +56,27 @@ public interface BragDAO {
 	int addArticleLikes(Map<String, Integer> map) throws Exception;
 	int removeArticleLikes(Map<String, Integer> map) throws Exception;
 	int queryIfILikeThis(Map<String, Integer> map) throws Exception;
+
+	//댓글쓰기
+	void insertReply(Map<String, Object> map) throws Exception;
+
+	//댓글보기
+	List<BragReply> selectReplyList(Map<String, Integer> map) throws Exception;
+	//해당 댓글 1개 조회
+	BragReply selectReply(int commentNo) throws Exception;
+	//가장 마지막 댓글번호 조회
+	Integer selectMaxCommentNo() throws Exception;
+	//댓글삭제
+	void deleteReply(int commentNo) throws Exception;
+
+	//댓글 수정
+	void editReply(Map<String, Object> map) throws Exception;
+	
+	//익명댓글 처리
+	void setBlind(Map<String, Object> map) throws Exception;
+	
+	Integer countComment() throws Exception;
+	
+	void updateCommentSeq(BragReply br) throws Exception;
+	
 }
