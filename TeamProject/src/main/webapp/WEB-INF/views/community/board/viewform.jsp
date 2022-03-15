@@ -111,7 +111,8 @@ display: inline-block;
 							style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
 							${nickname}님</div></a>
 							
-					</a><br> <a href="#" class="btn btn-primary">팔로우</a>
+					</a><br> <button class="btn btn-primary text-white align-self-center" style="height: fit-content;" 
+					id="follow${user.idx}" onclick="togglefollow(${user.idx});">${didILiked>0? "언팔로우": "팔로우"}</button>
 				</div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-2"></div>
@@ -124,7 +125,7 @@ display: inline-block;
 				<article id="boardContent">${cboard.content }</article>
 
 			</div>
-		</div>
+		
 
 		<div class="card-footer">
 			<div class="row">
@@ -149,60 +150,21 @@ display: inline-block;
 				</div>
 
 			</div>
-		</div>
-	</div>
-
+		
+	
+	
+	<hr>
 
 
 	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-	<!-- 게시판 -->
-	<section id="articleForm">
-		<h2>커뮤니티</h2>
-		<table>
 
-			<td>
-				<section id="articleContentArea">
-					<section id="basicInfoArea">
-						제 목 : ${cboard.title}<br> 작성자 : <a
-							href="../../userInfo/${cboard.idx}">${nickname}</a> 작성일 :
-						${cboard.date} 조회수 : ${cboard.views}
-						<!-- 좋아요 -->
-						<button
-							class="btn-sm border-danger rounded-pill bg-white text-danger"
-							id="likebtn${cboard.articleNo }"
-							onclick="toggleLikes(${cboard.articleNo})">
-							<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
-								aria-hidden="true">${likes }</i>
-						</button>
-						<br>
 
-					</section>
-					<br>
-					<br> ${cboard.content}
-				</section>
-				</section>
-			</td>
-		</table>
-		<td>
 
-			<section id="commandList">
-				<%-- <a href="/comm/replyform?articleNo=${cboard.articleNo}&page=${page}"> [답변] </a>  --%>
-				<a class="onlyWriter"
-					href="/comm/modifyform?articleNo=${cboard.articleNo}"> [수정] </a> <a
-					class="onlyWriter"
-					href="/comm/deleteform?articleNo=${cboard.articleNo}&page=${page}">
-					[삭제] </a> <a href="/comm/listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
-			</section>
-		</td>
+	
 
 		<!-- 댓글 보기 -->
 		<!-- 프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼  -->
 		<!--commentUserList commentList-->
-
-
-
-
-
 
 		<div class="container">
 			<c:forEach var="reply" items="${commentList}" varStatus="status">
@@ -227,8 +189,8 @@ display: inline-block;
 										</c:choose>
 										<div class="text-center px-2">
 											<img style="border-radius: 50px; width: 30px; height: 30px;"
-												src=/profile/${commentUserList[status.index].profileImg}>
-											<p class="m-0">${commentUserList[status.index].nickname }</p>
+												src=/profile/${commentUserList[status.index].profileImg} >
+											<a href="../../userInfo/${commentUserList[status.index].idx}"><p class="m-0">${commentUserList[status.index].nickname }</p></a>
 										</div>
 										<div class="px-2">
 											<p style="width: 500px" id="comm${reply.commentNo}">${reply.comment }</p>
@@ -282,15 +244,17 @@ display: inline-block;
 
 		</div>
 	</div>
+	</div>
+	</div>
 	<div class="row">
 		<div class="col" style="text-align: center;">
 			<c:if test="${user.idx == cboard.idx || user.grp == 2}">
 				<c:if test="${user.idx == cboard.idx }">
-					<button class="btn border-dark"
-						onclick="editWrite(${cboard.articleNo});">수정</button>
+					<a class="btn border-dark onlyWriter" style="color: black;"
+						href="/comm/modifyform?articleNo=${cboard.articleNo}">수정</a>
 				</c:if>
-				<button class="btn border-dark"
-					onclick="deleteWrite(${cboard.articleNo});">삭제</button>
+				<a class="btn border-dark onlyWriter" style="color: black;"
+					href="/comm/deleteform?articleNo=${cboard.articleNo}&page=${page}">삭제</a>
 			</c:if>
 		</div>
 	</div>
@@ -299,14 +263,14 @@ display: inline-block;
 
 	<div class="row">
 		<div class="col" style="text-align: left;">
-			<button type="button" id="btnList" class="btn btn-default">이전</button>
+			<a type="button" id="btnList" class="btn btn-default" href="/comm/viewform/${articleNo+1}">이전</a>
 		</div>
 		<div class='col' style="text-align: center;">
-			<button type="button" id="btnList" class="btn btn-default">목록</button>
+			<a type="button" id="btnList" class="btn btn-default" href="/comm/listform?page=${page}">목록</a>
 		</div>
 
 		<div class='col' style="text-align: right;">
-			<button type="button" id="btnList" class="btn btn-default">다음</button>
+			<a type="button" id="btnList" class="btn btn-default" href="/comm/viewform/${articleNo-1}">다음</a>
 		</div>
 	</div>
 
@@ -318,86 +282,6 @@ display: inline-block;
 
 
 
-
-
-
-	<div class="container">
-		<c:forEach var="reply" items="${commentList}" varStatus="status">
-			<c:choose>
-				<c:when
-					test="${reply.blind eq false || reply.idx eq user.idx || cboard.idx eq user.idx}">
-					<div class="row">
-						<div class="col">
-							<img style="border-radius: 50px; width: 30px; height: 30px;"
-								src=/profile/${commentUserList[status.index].profileImg}>
-							<a href="../../userInfo/${commentUserList[status.index].idx }"><p>${commentUserList[status.index].nickname }</p>
-							</a>
-						</div>
-						<div class="col">
-							<input type="text" id="comment${reply.commentNo}"
-								value="${reply.comment }" readOnly></input>
-						</div>
-						<div class="col">
-							<p>${reply.date }</p>
-						</div>
-						<div class="col">
-							<c:if test="${user!=null}">
-								<div class="if-thisArticle-mine text-end">
-									<button class="btn border-dark"
-										onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">
-										대댓글쓰기</button>
-								</div>
-							</c:if>
-							<c:if test="${user.idx == reply.idx}">
-								<div class="if-thisArticle-mine text-end">
-									<button class="btn border-dark"
-										onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
-
-									<button class="btn border-dark"
-										onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
-								</div>
-							</c:if>
-							<c:if test="${user.grp == 2 }">
-								<div class="if-thisArticle-mine text-end">
-									<button class="btn border-dark"
-										onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
-								</div>
-							</c:if>
-						</div>
-						<div class="row" id="replyReply${reply.commentNo }"
-							style="display: none;">
-							<form id="replyReply" action="/comm/reReply" method="post">
-								<input type="text" name="commentWrite"> <input
-									type="hidden" name="idx" value="${user.idx }"> <input
-									type="hidden" name="articleNo" value="${cboard.articleNo}">
-								<input type="hidden" name="commentNo" value="${reply.commentNo}">
-								<input type="checkbox" name="blind"
-									id="blind${reply.commentNo }" value="1"> <label
-									for="blind${reply.commentNo }">비밀댓글</label> <input
-									type="submit" value="답글쓰기">
-							</form>
-
-						</div>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<div class="row">
-						<span>해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.</span>
-					</div>
-				</c:otherwise>
-			</c:choose>
-		</c:forEach>
-	</div>
-	<br>
-	<!--댓글 작성  -->
-	<form id="" action="/comm/comment" method="post"
-		style="text-align: center">
-		<input name="articleNo" type="hidden" value=${cboard.articleNo }></input>
-		<input name="idx" type="hidden" value=${user.idx }></input>
-		<textarea name="commentWrite"></textarea>
-		<input id="blind" name="blind" type="checkbox" value="1">익명댓글
-		<input id="commentBtn" type="submit" value="댓글작성">
-	</form>
 
 
 </body>
@@ -427,9 +311,10 @@ $(function() {
 /*댓글 수정버튼 누르면~  */
 	function editReply(commentNo, articleNo){
  		
-		let isReadOnly = $('#comment'+commentNo).attr("readOnly")
-		if(isReadOnly){
-			$('#comment'+commentNo).attr("readOnly", false) 
+		if($('#comment'+commentNo).attr("type") == 'hidden'){
+			$('#comment'+commentNo).attr("type", "text")
+			$('#comm'+commentNo).hide();
+			return false;
 		} else{
 			let comment = $('#comment'+commentNo).val()
 			
@@ -494,6 +379,8 @@ $(function(){ /* 로그인 해야 댓글 작성 가능 */
 </script>
 
 <script>
+
+
 <!-- 좋아요 -->
 function toggleLikes(articleNo){
 	if(${empty user}){
@@ -523,6 +410,36 @@ function toggleLikes(articleNo){
 		})
 	}
 }
+</script>
+
+<script>
+/* 팔로우 기능 */
+	function togglefollow(idx){
+		if(${empty user}){
+			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+			return false;
+		} else {
+			$.ajax({
+				type:"POST",
+				url:"/follow/",
+				cache: false,
+				data:{"idx": ${user.idx}},
+				async:false,
+				success: function(data){
+					result = JSON.parse(data);
+					if(result.didIFollowed >0){ // 팔로우를 한 적이 없는 경우
+						$('#follow' + idx).text('언팔로우');
+						
+					} else if(result.didIFollowed <=0){ // 팔로우를 이미 한 경우
+						$('#follow' + idx).text('팔로우');
+					}
+				},
+				error:function(data){
+					alert('팔로잉을 처리하는 동안 문제가 있었습니다. 나중에 다시 시도해주세요.');
+				}
+			})
+		}
+	}
 </script>
 </html>
 
