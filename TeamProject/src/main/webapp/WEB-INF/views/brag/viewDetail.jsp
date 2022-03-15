@@ -87,19 +87,12 @@ display: inline-block;
 			<div style="width:200px; height: 200px;">이미지 파일명: ${imgSrc }</div>
 		</article>
 	</div>
-	<%-- 로그인한 유저 번호 : ${user.idx }
-	<br> 로그인한 유저 이메일 : ${user.email }
-	<br> 로그인한 유저 별명 : ${user.nickname }
-<<<<<<< HEAD
+
 	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title }
 	<br> 글 내용 : ${bboard.content }
 	<br>
-	<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
-=======
-	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title } 글 내용 : ${bboard.content }
-	<br>${userinfo.nickname } --%>
-	<!-- <div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div> -->
->>>>>>> branch 'dev' of https://github.com/choijunkeun/s3g2_teamproject1.git
+	<div style="width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
+
 
 
 	<!-- 좋아요 -->
