@@ -136,6 +136,7 @@ display: inline-block;
 								</form>
 							</div>
 							<div class="col-4">
+								<!-- 좋아요 -->
 								<button class="btn-sm border-danger rounded-pill bg-white text-danger" id="likebtn${bboard.articleNo }" onclick="toggleLikes(${bboard.articleNo})">
 								<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
 									aria-hidden="true">${likes }</i>
@@ -145,14 +146,7 @@ display: inline-block;
 				</div>
 				
 				<hr>
-	<!-- 좋아요 -->
-	<button class="btn-sm border-danger rounded-pill bg-white text-danger"
-		id="likebtn${bboard.articleNo }"
-		onclick="toggleLikes(${bboard.articleNo})">
-		<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
-			aria-hidden="true">${likes }</i>
-	</button>
-	<br>
+
 	<!-- 댓글 보기 -->
 	<!-- 프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼  -->
 	<!--commentUserList commentList-->
