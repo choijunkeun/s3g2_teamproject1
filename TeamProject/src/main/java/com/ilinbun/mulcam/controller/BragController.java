@@ -154,6 +154,7 @@ public class BragController {
 //				bragboard.setContent(doc.select("body > p").toString());
 //				System.out.println("doc.select body>p :" + doc.select("body > p").toString());
 				bragboard.setContent(result);
+					System.out.println(result);
 				articleNo = bragService.regBragBoard(bragboard);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -250,7 +251,7 @@ public class BragController {
 				
 				mav.addObject("likes", likes);
 				
-				mav.addObject("userinfo", userinfo);
+				mav.addObject("userInfo", userinfo);
 				mav.addObject("bboard", bragboard);
 				
 				Document doc=Jsoup.parse(bragboard.getContent()); //content중에 사진만 가져오기

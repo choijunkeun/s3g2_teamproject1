@@ -42,9 +42,9 @@
 }
 
 .ck-editor__editable {
+	min-height: 550px;
+
 	max-width: 100%;
-	font-weight: bolder;
-	min-height: 350px;
 }
 </style>
 
@@ -199,10 +199,12 @@ h4>strong {
 							</ul>
 							
 						</div> 
-						
+						<h2 class="fw-bolder" style="text-align:left;">
+       					 <br> <strong>반찬공유 글쓰기</strong></h2>
 							<!-- ckEditor -->
+						
 						<div class="writeform">
-							<input name="title" id="title" style="display: inline-block; width: 100%;" value='${title }' placeholder="제목을 입력해주세요!" required="required">
+							<input name="title" id="title" style="display: inline-block;width:100%;" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
 							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							<span></span>
 						    <div id="classic">
