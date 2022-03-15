@@ -127,7 +127,7 @@ public class BragController {
 				@RequestParam String location,
 				@RequestParam int idx,
 				Model model) {
-			
+
 			int articleNo=0; //모르겠다
 			try {
 				User userInfo = (User) session.getAttribute("user");

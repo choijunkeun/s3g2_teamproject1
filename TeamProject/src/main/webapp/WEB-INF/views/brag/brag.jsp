@@ -44,6 +44,11 @@ td {
 	width: 100px;
 	height: 20px;
 }
+#ellipsis{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 </style>
 </head>
 <body>
@@ -74,7 +79,7 @@ td {
 											</c:choose>
 												<div class='col-sm-3'>
 												<a href="./viewdetail/${bboard.articleNo }">
-													${bboard.title } <br>
+													<div id="ellipsis">${bboard.title }</div> <br>
 													<img src="${bboard.content}" name="brag_content" width="200px" height="200px" class="card-img-top" />
 												</a>
 												</div>
