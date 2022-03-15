@@ -2,13 +2,12 @@ package com.ilinbun.mulcam.service;
 
 import java.util.List;
 
-import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
 public interface UserService {
 	
 	// 회원가입
-	void makeUser(User user) throws Exception;
+	void makeUser(String email, String nickname, String password, int honbabLevel, String profileImgName) throws Exception;
 	
 	//로그인
 	User loginUser(String email, String password) throws Exception;
@@ -23,9 +22,16 @@ public interface UserService {
 
 	String getUserNick(int idx) throws Exception;
 
-	
+		
 	//회원정보수정
-	void userUpdate(User user) throws Exception;
+	void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel) throws Exception;
+
+	// 회원 삭제
+	void userDelete(User user) throws Exception;
+	
+	//비밀번호 가져오기
+	String getPwd(String email) throws Exception;
+	
 
 	//유저닉네임 게시판 불러오기(종현)
 	User getUserinfo(int writerIdx) throws Exception;

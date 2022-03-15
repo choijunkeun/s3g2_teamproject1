@@ -231,9 +231,9 @@ h4>strong {
 		function headerChange(arg) {
 			document.getElementById('headerTag').value=arg; 
 			
-			if(arg == '0')
+			if(arg == 0)
 				document.getElementById('sortDropdown').innerText='공유중';
-			else if (arg == '1')
+			else if (arg == 1)
 				document.getElementById('sortDropdown').innerText='공유완료';
 		}
 		

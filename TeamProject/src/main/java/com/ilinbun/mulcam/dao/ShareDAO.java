@@ -37,7 +37,7 @@ public interface ShareDAO {
 	public int queryArticleLikes(int articleNo) throws Exception;
 	public int addArticleLikes(Map<String, Integer> map) throws Exception;
 	public int removeArticleLikes(Map<String, Integer> map) throws Exception;
-	public int queryIfLikeThis(Map<String, Integer> map) throws Exception;
+	public int queryIfILikeThis(Map<String, Integer> map) throws Exception;
 	public int countComment() throws Exception;
 	public Integer selectMaxCommentNo() throws Exception;
 	public void insertReply(Map<String, Object> map) throws Exception;

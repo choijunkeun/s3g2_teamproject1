@@ -9,12 +9,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+    <title>일인분</title>
     <style>
         * { box-sizing:border-box; }
 
         form {
             width:800px;
-            height:500px;
+            height:700px;
             display : flex;
             flex-direction: column;
             align-items:center;
@@ -94,7 +96,6 @@
 		.nickname_already{color:#6A82FB; display: none;}
 	        
     </style>
-    <title>일인분</title>
 </head>
 <body>
    <form action="<c:url value="/loginSuccess"/>" method="POST" onsubmit="return formCheck(this)">
@@ -112,16 +113,21 @@
     <hr style="width:700px">
    	
     <div>
-    <p>가입하신 이메일 주소를 입력하세요.
-    <p>이메일 주소로 비밀번호 변경 링크를 보내드립니다.
+    <p>가입하신 이메일 주소와 닉네임을 입력하세요.
+    <p>이메일 주소로 임시비밀번호를 발급해드립니다.
     <div>
-
-    <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요.">
+    <label for="nickname">닉네임</label>
+    <input class="input-field" type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요." required>
     </div>
+    <div>
+    <label for="email">이메일</label>
+    <input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요." required>
+    </div>
+    
     </div>
       
-    <button type="button" class="join-btn">비밀번호 찾기</button>
+    <button type="button" class="join-btn" id="searchBtn">비밀번호 찾기</button>
+    <button type="button" class="join-btn" onclick="history.go(-1);">돌아가기</button>
     <a href="/join">아직 계정이 없으신가요? 가입하기</a>
       
    </form> 

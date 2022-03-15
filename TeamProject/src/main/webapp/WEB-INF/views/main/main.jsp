@@ -68,7 +68,7 @@
 						<h5 class="fw-bolder">반찬공유 최신글 제목</h5>
 						<c:forEach var="i" begin="0" end="2">
 							<a title="${shareList[i].title }"
-								href="brag/viewdetail/${shareList[i].articleNo }">${shareList[i].title }</a>
+								href="share/board/viewform/${shareList[i].articleNo }">${shareList[i].title }</a>
 							<br>
 						</c:forEach>
 					</div>
@@ -124,9 +124,7 @@
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card p-4">
-				<div class="text-center">
-					<h5 class="fw-bolder">혼밥자랑 BEST 제목</h5>
-				</div>
+					<h3 class="fw-bolder">이달의혼밥</h3>
 				<div class="card-body">
 					<a href="brag/viewdetail/${bestbragList[0].articleNo }">
 						${bestbragList[0].title } <br> <img class="card-img-top"
@@ -136,13 +134,14 @@
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<!-- + 클릭 시 상세보기로 이동 -->
-					<a class="btn btn-outline-dark mt-auto" href="/brag/best">+</a>
+					<a class="btn btn-outline-dark mt-auto" href="/brag">+</a>
 				</div>
 			</div>
 		</div>
 
 		<div class="col mt-5">
 			<div class="card p-4">
+			<h5 class="fw-bolder">혼밥자랑 BEST</h5>
 				<div class="card-body">
 					<table>
 						<!-- <div class="border mycard" > -->

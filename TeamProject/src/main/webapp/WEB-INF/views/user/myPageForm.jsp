@@ -37,28 +37,69 @@
 	</style>
 </head>
 <body>
+	<!-- Modal -->
+	<div class="modal fade" id="ModalFollower" tabindex="-1" aria-labelledby="ModalFollower" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-scrollable">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">팔로워</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+	            </div>
+	            <div class="modal-body">
+	            	<ul class="list-group" id="ListFollower">
+
+			    	</ul>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="ModalFollowing" tabindex="-1" aria-labelledby="ModalFollower" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-scrollable">
+	        <div class="modal-content">
+	        	<div class="modal-header">
+	                <h5 class="modal-title">팔로잉</h5>
+	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+	            </div>
+	            <div class="modal-body">
+	            	<ul class="list-group" id="ListFollowing">
+	            	
+			    	</ul>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
 					<div class="text-center">
 						<img style="border-radius: 200px; width: 150px; height: 150px;"
-							src="/profile/${user.profileImg }">
+							src="<c:url value='/profile/${user.profileImg}'/>"/>
 						<div id="user_info">${user.nickname}</div>
 						<span class="badge bg-danger rounded-pill" style="font-size: 1.5rem;">Lv.${user.honbabLevel}</span>
 					</div>
 				</div>
-				<div class="card-body p-4">
+				
 					<div class="text-center">
-						<h5 class="fw-bolder">팔로워 0 &emsp;&emsp;&emsp; 팔로잉 0</h5>
+						<button class="btn fs-5" id="btnFollower" data-bs-toggle="modal" 
+						data-bs-target="#ModalFollower">팔로워 
+							<span class="fw-bolder" id="follower">${follower}</span></button>
+					 	&emsp;&emsp;&emsp; 
+					 	<button class="btn fs-5" id="btnFollowing" data-bs-toggle="modal" 
+					 		data-bs-target="#ModalFollowing">팔로잉
+							<span class="fw-bolder" id="following">${following}</span></button>
+					</div>
+				
+				<div>
+					<div style="text-align:center;">
+					<a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a>
+					<a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/deleteUserForm">회원탈퇴</a>
 					</div>
 				</div>
-				<div>
-					<div style="text-align:center;"><a class="btn btn-outline-dark mt-auto mx-3" id="search-nav" href="/editInfo">정보수정</a></div>
-				</div>
-
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-					
 				</div>
 			</div>
 		</div>
@@ -66,13 +107,11 @@
 		
 		<div class="col mt-5">
 			<div class="card">
-				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">내가 작성한 리뷰</h5>
-					</div>
+				<div class="text-center">
+					<h5 class="fw-bolder">내가 작성한 리뷰</h5>
 				</div>
 				<div class="card-body p-4">
-					<div class="text-center" >
+					<div class="text-center table-responsive">
 						<table class="table table-striped">
 							<thead>
 							<tr>
@@ -85,10 +124,11 @@
 							</tbody>										
 						</table>					
 					</div>
-				</div>																			
-			</div>
+				</div>	
+			</div>																		
 		</div>
-		</div>	
+	</div>
+		
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card p-4" style="height:500px">
@@ -206,7 +246,7 @@ $(function() {
 		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
-				$("#myCommunity").append("<tr><td><a href=/comm/boardlist/"+item.articleNo+">"
+				$("#myCommunity").append("<tr><td><a href=/comm/community/viewform/"+item.articleNo+">"
 				+item.title + "</a></td><td>"
 				+item.views + "</td></tr><br>");
 				});
@@ -237,7 +277,71 @@ $(function() {
 
 			}
       })
-})
+      
+		
+		$('#btnFollower').click(function(){getFollowerList()});
+		$('#btnFollowing').click(function(){getFollowingList()});
+		
+		function getFollowerList(){
+			$('#ListFollower').html('');
+			$.ajax({
+				type:"post",
+				url:"/followerList",
+				async:false,
+				data:{"idx":${user.idx}, "page" : $('#followerpage').val()},
+				success:function(data){
+					var l = JSON.parse(data);
+					var f = l.followerList;
+					var obj = "";
+					if(f.length <1){
+						obj = '팔로워가 없습니다.';
+					} else{
+						for(let i = 0; i<f.length; i++){
+							obj = '<li class="list-group-item">';
+							obj += '<a href="/userInfo/' + f[i].idx + '"><img src="/profile/'+ f[i].profileImg + '" width="30px" height="30px">&nbsp;'
+								+ '<span>' + f[i].nickname + '</span></a></li>';
+							
+							
+						}
+					}
+					$('#ListFollower').html($('#ListFollower').html()+obj); 
+				},
+				error: function(){
+					$('#ListFollower').html('<li class="list-group-item">정보를 가져올 수 없습니다. 나중에 다시 시도해주세요.</li>'); 
+				}
+			})
+		}
+		function getFollowingList(){
+			$('#ListFollowing').html(''); 
+			$.ajax({
+				type:"post",
+				url:"/followingList",
+				async:false,
+				data:{"idx":${user.idx}, },
+				success:function(data){
+					var l = JSON.parse(data);
+					var f = l.followingList;
+					console.log(f);
+					var obj = "";
+					if(f.length <1){
+						obj = '팔로잉이 없습니다.';
+					} else{
+						for(let i = 0; i<f.length; i++){
+							obj = '<li class="list-group-item">';
+							obj += '<a href="/userInfo/' + f[i].idx + '"><img src="/profile/'+ f[i].profileImg + '" width="30px" height="30px">&nbsp;'
+								+ '<span>' + f[i].nickname + '</span></a></li>';
+						}
+					}
+					$('#ListFollowing').html($('#ListFollowing').html()+obj);
+				},
+				error: function(){
+					$('#ListFollowing').html('<li class="list-group-item">정보를 가져올 수 없습니다. 나중에 다시 시도해주세요.</li>'); 
+				}
+			})
+		}
+	})
+      
+
 
 
 </script>
