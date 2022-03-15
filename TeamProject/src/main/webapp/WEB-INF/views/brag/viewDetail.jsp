@@ -173,7 +173,8 @@ body>div>p>img {
 	로그인한 유저 번호 : ${user.idx }
 	<br> 로그인한 유저 이메일 : ${user.email }
 	<br> 로그인한 유저 별명 : ${user.nickname }
-	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title } 글 내용 : ${bboard.content }
+	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title }
+	<br> 글 내용 : ${bboard.content }
 	<br>
 	<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
 
