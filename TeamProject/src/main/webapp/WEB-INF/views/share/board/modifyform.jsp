@@ -66,7 +66,7 @@ h5 {
 			    <div class="btn-group-sort float-end" style="width: fit-content; display: inline-block; float: right;">
 					<button type="button"
 						class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
-						data-bs-toggle="dropdown" aria-expanded="false">위치를 골라주세요</button>
+						data-bs-toggle="dropdown" aria-expanded="false">${shboard.subway }</button>
 					<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 						<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
 							onclick="subwayChange('용산역')">용산역</button></li>
@@ -127,15 +127,45 @@ h5 {
 		</div>
 	</div>
 	</section>
-<!-- <script>
-function headerChange(arg) {
+<script>
+/* function headerChange(arg) {
 	document.getElementById('headerTag').value=arg; 
 	if(arg == 0) {
 		document.getElementById('sortDropdown').innerText='공유중';
 	} else if (arg == 1) {
 		document.getElementById('sortDropdown').innerText='공유완료';
 	}	
+} */
+function subwayChange(sub) {
+	document.getElementById('subway').value=sub;
+	if(sub == '용산역') {
+		document.getElementById('sortDropdownSub').innerText='용산역';
+	} else if(sub == '신용산역') {
+		document.getElementById('sortDropdownSub').innerText='신용산역';
+	} else if(sub == '이촌역') {
+		document.getElementById('sortDropdownSub').innerText='이촌역';
+	} else if(sub == '서빙고역') {
+		document.getElementById('sortDropdownSub').innerText='서빙고역';
+	} else if(sub == '한남역') {
+		document.getElementById('sortDropdownSub').innerText='한남역';
+	} else if(sub == '한강진역') {
+		document.getElementById('sortDropdownSub').innerText='한강진역';
+	} else if(sub == '이태원역') {
+		document.getElementById('sortDropdownSub').innerText='이태원역';
+	} else if(sub == '녹사평역') {
+		document.getElementById('sortDropdownSub').innerText='녹사평역';
+	} else if(sub == '삼각지역') {
+		document.getElementById('sortDropdownSub').innerText='삼각지역';
+	} else if(sub == '숙대입구역') {
+		document.getElementById('sortDropdownSub').innerText='숙대입구역';
+	} else if(sub == '남영역') {
+		document.getElementById('sortDropdownSub').innerText='남영역';
+	} else if(sub == '효창공원앞역') {
+		document.getElementById('sortDropdownSub').innerText='효창공원앞역';
+	} else {
+		document.getElementById('sortDropdownSub').innerText='지역을 골라주세요!';
+	}
 }
-</script> -->
+</script>
 </body>
 </html>
