@@ -256,6 +256,7 @@ public class BragController {
 				Document doc=Jsoup.parse(bragboard.getContent()); //content중에 사진만 가져오기
 				Elements img= doc.select("img"); //우선 무수한 요소 중 img만 추출
 				String src = img.attr("src"); //String으로 변환
+				img.attr("style", "max-width: 600px, height: auto;");
 				
 				mav.addObject("imgSrc", src); //mav에 넣기
 				mav.setViewName("brag/viewDetail"); //경로이름 설정

@@ -169,13 +169,22 @@ body>div>p>img {
 </style>
 <body>
 
-
-	로그인한 유저 번호 : ${user.idx }
+	<div class="containter bg-light p-4 border rounded">
+		<div>
+			<h2 class="fw-bolder">${bboard.title }</h2>
+			<span>작성자 : ${userinfo.nickname }</span>&nbsp;|&nbsp;<span>작성일 : ${bboard.date }</span>&nbsp;|&nbsp;<span>조회수 : ${bboard.readCount }</span>
+		</div>
+		<article>
+			${bboard.content }
+			<div style="width:200px; height: 200px;">이미지 파일명: ${imgSrc }</div>
+		</article>
+	</div>
+	<%-- 로그인한 유저 번호 : ${user.idx }
 	<br> 로그인한 유저 이메일 : ${user.email }
 	<br> 로그인한 유저 별명 : ${user.nickname }
 	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title } 글 내용 : ${bboard.content }
-	<br>
-	<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
+	<br>${userinfo.nickname } --%>
+	<!-- <div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div> -->
 
 
 	<!-- 좋아요 -->
