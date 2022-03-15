@@ -69,8 +69,9 @@
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
 				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
 			<!-- <form id="bwForm"> -->
-			<input type="hidden" name="idx" id="idx" value="${user.idx }"> 
-			<!-- 목업 유저정보 코드 -> ??? -->
+			<input type="hidden" name="idx" id="idx" value="${user.idx }">
+					
+					<!-- 목업 유저정보 코드 -> ??? -->
 					<div>
 						<div class="row p-2 ">
 							<div class="col text-center ">
@@ -89,12 +90,18 @@
 														<ul class="dropdown-menu text-center"
 															aria-labelledby="sortDropdown">
 															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('true')">사먹파</button></li>
+																	onclick="moonpaChange('true')" >사먹파</button></li>
 															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('false')">해먹파</button></li>
+																	onclick="moonpaChange('false')" >해먹파</button></li>
 														</ul>
 													</div>
 													<!--2. 위치 선택 (문파 기반) -->
+													<div class="input-group" id="cookingDiv" style="max-width: auto; flex-shrink: 1; display: none;">
+														<input type="text" class="form-control"
+															name="location" placeholder="위치를 직접 입력해 보세요!" aria-label="위치">
+														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+													</div>
+													
 													<div class="input-group" id="locationDiv" style="max-width: auto; flex-shrink: 1; display: none;">
 														<input type="hidden" id="locationId">
 														<input type="text" class="form-control" id="location"
@@ -168,11 +175,13 @@
 			if(arg == 'true'){
 				document.getElementById('sortDropdown').innerText='사먹파';
 				document.getElementById('locationDiv').style.display="flex";
+				document.getElementById('cookingDiv').style.display="none";
 				/* document.getElementById('location'). */
 			}
 			else{
 				document.getElementById('sortDropdown').innerText='해먹파';
 				document.getElementById('locationDiv').style.display="none";
+				document.getElementById('cookingDiv').style.display="flex";
 			}
 		}
 
