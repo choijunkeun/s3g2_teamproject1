@@ -20,12 +20,14 @@
 /* ckEditor 넓이 높이 조절 */
 
 
-
+.d-inline-flex{
+	justify-content: space-around;
+}
 #top {
 	margin-top: 20px;
 }
 
-.image > img {
+#boardContent img {
 	width: 450px;
 }
 
@@ -118,7 +120,6 @@ display: inline-block;
   			<div class="row">
 	  			<article id="boardContent">
 					${bboard.content }
-					
 				</article>
   			
   			</div>
@@ -153,49 +154,69 @@ display: inline-block;
 	<div class="container">
 		<c:forEach var="reply" items="${commentList}" varStatus="status">
 		<c:choose>
-		<c:when test="${reply.blind eq false || reply.idx eq user.idx || bboard.idx eq user.idx}">
-			<div class="row">
-				<div class="col-2">
-					<img style="border-radius: 50px; width: 30px; height: 30px;" src=/profile/${commentUserList[status.index].profileImg}>
-					<p>${commentUserList[status.index].nickname }</p>
-				</div>
-				<div class="col-4">
-					<input type="text" id="comment${reply.commentNo}" value="${reply.comment }" readOnly></input>
-				</div>
-				<div class="col-2">
-					<p>${reply.date }</p>
-				</div>
-				<div class="col-4">
-					<c:if test="${user!=null}">
-						<button class="btn border-dark" onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">대댓글쓰기</button>							
-					</c:if>
-					<c:if test="${user.idx == reply.idx || user.grp == 2}">
-						<c:if test="${user.idx == reply.idx }">
-							<button class="btn border-dark" onclick="editReply(${reply.commentNo},${reply.articleNo});">수정</button>
-						</c:if>
-						<button class="btn border-dark" onclick="deleteReply(${reply.commentNo},${reply.articleNo});">삭제</button>
-					</c:if>
-				</div>
-				<div class="row mb-5" id="replyReply${reply.commentNo }" style="display:none;">
-					<form id="replyReply" action="/brag/reReply" method="post">
-						<input type="text" name="commentWrite">
-						<input type="hidden" name="idx" value="${user.idx }">
-						<input type="hidden" name="articleNo" value="${bboard.articleNo}">
-						<input type="hidden" name="commentNo" value="${reply.commentNo}">
-						<input type="checkbox" name="blind" id="blind${reply.commentNo }" value="1">
-						<label for="blind${reply.commentNo }">비밀댓글</label>
-						<input type="submit" value="답글쓰기">
-					</form>
-				</div>
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="row">
-				<span>해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.</span>
-			</div>
-		</c:otherwise>
+			<c:when test="${status.end == 0}">
+				댓글이 없습니다. 1빠를 선점하세요
+			</c:when>
+			<c:otherwise>
+			<c:choose>
+				<c:when test="${reply.blind eq false || reply.idx eq user.idx || bboard.idx eq user.idx}">
+					<!--다 보여주고 댓쓴이는 수정 삭제 보여줘(관리자는 삭제) + 대댓-->
+					<div class="row my-3" style="text-align: left;"">
+						<div class="d-inline-flex" style="align-items: center">
+							<c:choose>
+								<c:when test="${reply.lev != 0 }">
+										<c:forEach var="i" begin="1" end="${reply.lev*5}">
+											&nbsp;
+										</c:forEach>
+										
+								</c:when>
+							</c:choose>
+							<div class="text-center px-2">
+								<img style="border-radius: 50px; width: 30px; height: 30px;" src=/profile/${commentUserList[status.index].profileImg}>
+								<p class="m-0">${commentUserList[status.index].nickname }</p>
+							</div>
+							<div class="px-2">
+								<p style="width:500px" id="comm${reply.commentNo}">${reply.comment }</p>
+								<input type="hidden" style="width:500px" id="comment${reply.commentNo}" value="${reply.comment }"></input>
+							</div>
+							<div class="px-2">
+								<p class="m-0">${reply.date }</p>
+							</div>
+							<div class="px-2 float-right">
+								<c:if test="${user!=null}">
+									<button class="btn border-dark" onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">대댓글쓰기</button>							
+								</c:if>
+								<c:if test="${user.idx == reply.idx || user.grp == 2}">
+									<c:if test="${user.idx == reply.idx }">
+										<button class="btn border-dark" onclick="editReply(${reply.commentNo},${reply.articleNo});">수정</button>
+									</c:if>
+									<button class="btn border-dark" onclick="deleteReply(${reply.commentNo},${reply.articleNo});">삭제</button>
+								</c:if>
+							</div>
+						</div>
+						<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
+							<form id="replyReply" action="/brag/reReply" method="post">
+								<input type="text" name="commentWrite">
+								<input type="hidden" name="idx" value="${user.idx }">
+								<input type="hidden" name="articleNo" value="${bboard.articleNo}">
+								<input type="hidden" name="commentNo" value="${reply.commentNo}">
+								<input type="checkbox" name="blind" id="blind${reply.commentNo }" value="1">
+								<label for="blind${reply.commentNo }">비밀댓글</label>
+								<input type="submit" value="답글쓰기">
+							</form>
+						</div>
+					</div>
+				</c:when>
+				
+				<c:otherwise>
+					<div class="row">
+						<span>해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.</span>
+					</div>
+				</c:otherwise>
+				</c:choose>
+			</c:otherwise>
 		</c:choose>
-		</c:forEach>
+	</c:forEach>
 					
 		
   </div>
@@ -214,9 +235,13 @@ display: inline-block;
 	</div>
 
 <!-- 이전 목록 다음 -->
+				
 	<div class="row">
 		<div class="col" style="text-align: left;">
 			<button type="button" id="btnList" class="btn btn-default">이전</button>
+		</div>
+		<div class='col' style="text-align: center;">
+			<button type="button" id="btnList" class="btn btn-default">목록</button>
 		</div>
 
 		<div class='col' style="text-align: right;">
@@ -295,9 +320,10 @@ display: inline-block;
 	/*댓글 수정버튼 누르면~  */
 	function editReply(commentNo, articleNo){
  		
-		let isReadOnly = $('#comment'+commentNo).attr("readOnly")
-		if(isReadOnly){
-			$('#comment'+commentNo).attr("readOnly", false) 
+		if($('#comment'+commentNo).attr("type") == 'hidden'){
+			$('#comment'+commentNo).attr("type", "text")
+			$('#comm'+commentNo).hide();
+			return false;
 		} else{
 			let comment = $('#comment'+commentNo).val()
 			
