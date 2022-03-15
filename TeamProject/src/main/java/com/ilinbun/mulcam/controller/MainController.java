@@ -191,8 +191,10 @@ public class MainController {
 	// 마이 페이지 폼
 	@GetMapping("/myPage")
 	public String myPage(HttpSession session, Model model) throws Exception {
-
+		User user = (User)session.getAttribute("user");
 		session.getAttribute("email");
+		model.addAttribute("following", userService.getFollowingCount(user.getIdx()));
+		model.addAttribute("follower", userService.getFollowerCount(user.getIdx()));
 		return "user/myPageForm";
 	}
 
@@ -257,7 +259,6 @@ public class MainController {
 	public String userInfoPage(@PathVariable int idx, HttpSession session, Model model) throws Exception {
 		User user = userService.getUserDetail(idx);
 		User currentUser = (User) session.getAttribute("user");
-		int page=1;
 		session.getAttribute("email");
 		model.addAttribute("userinfo", user);
 		model.addAttribute("following", userService.getFollowingCount(idx));
