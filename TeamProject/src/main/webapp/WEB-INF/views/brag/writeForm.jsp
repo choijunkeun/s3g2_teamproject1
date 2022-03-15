@@ -153,6 +153,14 @@
 		src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 	<script>
+	$(function() {
+		let idx = ${user.idx }
+		if (idx == false) {
+			location.href = "/login"
+		}
+	})
+	
+	
 	/*1-1. 문파선택 : dropbox에서 선택 시 그 문파이름으로 고정되게 하는 코드  */
 		function moonpaChange(arg) {
 			document.getElementById('moonpa').value=arg; 
