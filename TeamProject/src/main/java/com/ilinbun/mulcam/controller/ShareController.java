@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -77,22 +78,31 @@ public class ShareController {
 		PageInfo pageInfo=new PageInfo();
 		pageInfo.setPage(page);
 		try {
-			List<Shareboard> shareList=shareService.getShareboardList(page);
-			for(Shareboard share : shareList) {
-				Document doc=Jsoup.parse(share.getContent());
+//			List<Shareboard> shareList=shareService.getShareboardList(page);
+//			List<User> userList = shareService.getShareboardListUserList(page);
+//			for(Shareboard share : shareList) {
+//				Document doc=Jsoup.parse(share.getContent());
+//				Elements img = doc.select("img");
+//				String src = img.attr("src");
+//				share.setContent(src);
+//			}
+			List<Map<String, Object>> shareList=shareService.getShareboardListMap(page);
+			for(Map<String, Object> share : shareList) {
+				Document doc=Jsoup.parse((String)share.get("content"));
 				Elements img = doc.select("img");
 				String src = img.attr("src");
-				share.setContent(src);
+				share.replace("content", src);
 			}
 			pageInfo=shareService.getPageInfo(pageInfo);
 			// mav.addObject("userInfo", userInfo); //same as above
 			mav.addObject("pageInfo", pageInfo);
 			mav.addObject("shareList", shareList);
+//			mav.addObject("userList", userList);
 			mav.setViewName("share/board/listform");
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("main/err");
+			mav.setViewName("/main/err");
 		}
 		return mav;
 	}
@@ -101,9 +111,6 @@ public class ShareController {
 	
 		@GetMapping("/board/writeform")
 		public String writeform(Model model) {
-			HttpSession session = null; //로그인
-			String test = "km@ilin.bun";
-			model.addAttribute("email", test);
 			return "share/board/writeform";
 		}
 		@PostMapping("/board/sharewrite")
@@ -124,7 +131,6 @@ public class ShareController {
 			try {
 				Shareboard shareboard = new Shareboard(title, subway, content, idx, headerTag);
 				Document doc=Jsoup.parse(shareboard.getContent());
-				System.out.println("doc.body : "+doc.body());
 				Elements docContentElements = doc.body().children();
 				String result = "";
 				for(org.jsoup.nodes.Element e: docContentElements) {
@@ -242,7 +248,6 @@ public class ShareController {
 		try {
 			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
 			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
-			
 			int likes = shareService.queryArticleLikes(articleNo);
 			
 			HttpSession session = request.getSession();
@@ -289,33 +294,16 @@ public class ShareController {
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("err");
+			mav.setViewName("/main/err");
 		}
 		return mav;
 	}
 	
-	// 게시글보기 --> same
-	@PostMapping("/{id}")
-	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
-		ModelAndView mv = new ModelAndView("share/board/view");
-		shareboard = shareService.shareBoardQueryByID(id);
-		mv.addObject("shareboard", shareboard);
-
-		return mv;
-	}
-	
-	/*
-	 * @PostMapping("/board/{id}") public ModelAndView placeInfo(@PathVariable
-	 * String id) throws Exception { ModelAndView mv = new
-	 * ModelAndView("share/board/viewform"); shareboard =
-	 * shareService.shareBoardQueryByID(id); mv.addObject("shareboard", shareboard);
-	 * 
-	 * return mv; }
-	 */
 	
 	// 글수정 (내 글일경우가능)
-		@GetMapping(value = "/board/modifyform")
-		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, HttpServletRequest request) {
+		@PostMapping(value = "/board/modifyform")
+		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, 
+				HttpServletRequest request) {
 			ModelAndView mav = new ModelAndView();
 			
 			HttpSession session = request.getSession();
@@ -336,7 +324,7 @@ public class ShareController {
 			return mav;
 		}
 
-		@PostMapping(value = "/board/modifyform")
+		@PostMapping(value = "/board/modify")
 		public ModelAndView sharemodify(@ModelAttribute Shareboard shareboard) {
 			ModelAndView mav = new ModelAndView();
 			try {
@@ -346,7 +334,7 @@ public class ShareController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
-				mav.setViewName("main/err");
+				mav.setViewName("/main/err");
 			}
 			return mav;
 		}
@@ -523,7 +511,7 @@ public class ShareController {
 		@PostMapping(value="/header")
 		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
 			try {
-				shareService.changeHeader(headerTag);
+				shareService.changeHeader(articleNo, headerTag);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

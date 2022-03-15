@@ -59,7 +59,7 @@
 			<div class="container pb-3 bg-light outer  border rounded">
 				<h5 class="fw-bolder pt-3 pb-2" style="margin-left: 0%;">혼밥자랑</h5>
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
-				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
+				<form action="bragwrite" method="post" name="bragform" id="bwForm">
 			<!-- <form id="bwForm"> -->
 			<input type="hidden" name="idx" id="idx" value="${user.idx }"> 
 			<!-- 목업 유저정보 코드 -> ??? -->
@@ -86,14 +86,14 @@
 													<!--2. 위치 선택 (문파 기반) -->
 													<div class="input-group" id="locationDiv" style="max-width: auto; flex-shrink: 1; display: none;">
 														<input type="hidden" id="locationId">
-														<input type="text" class="form-control" id="location"
+														<input type="text" class="form-control" id="location" maxlength="40"
 															name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
 														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
 													</div>
 												</div> 
 												<!--3. 제목  -->
 												<div class="input-group">
-													<input type="text" name="title" id="title" class="form-control"
+													<input type="text" name="title" id="title" class="form-control" maxlength="40"
 														placeholder="제목을 입력해주세요!" required="required">
 												</div>
 												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
@@ -131,12 +131,20 @@
 		src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 	<script>
-	$(function() {
-		let idx = ${user.idx }
+		let idx = ${not empty user.idx? user.idx : false };
 		if (idx == false) {
+			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
 			location.href = "/login"
 		}
-	})
+	
+		$('#writeFormSubmit').click(function(){
+			if($('#moonpa').val() == null || $('#moonpa').val() == "" ){
+				alert('문파를 선택해주세요!');
+				return false;
+			} else if($('#')){
+				
+			}
+		});
 	
 	
 	/*1-1. 문파선택 : dropbox에서 선택 시 그 문파이름으로 고정되게 하는 코드  */
@@ -154,7 +162,7 @@
 			}
 		}
 
-/* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
+	/* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
 	$(function(){
 		ClassicEditor
 		.create(document.querySelector("#editor"), {

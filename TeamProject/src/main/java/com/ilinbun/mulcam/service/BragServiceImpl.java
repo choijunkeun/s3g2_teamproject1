@@ -73,7 +73,7 @@ public class BragServiceImpl implements BragService {
 	//게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
 	@Override
 	public List<BragBoard> getBragboardList(int page, int howManyBrag) throws Exception {
-		int startrow=(int) ((page-1)*howManyBrag);
+		int startrow=(int) ((page-1)*howManyBrag)+1;
 		Map<String, Integer> map = new HashMap<>();
 		
 		map.put("startrow", startrow);
