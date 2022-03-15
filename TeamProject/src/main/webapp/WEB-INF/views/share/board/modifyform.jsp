@@ -62,7 +62,7 @@ h5 {
 		<div class="container pb-3 bg-light" class="outer" >
 			<h5 class="fw-bolder" >반찬공유 글수정</h5>
 
-			<form action="sharemodify" method="post" enctype="multipart/form-data" name="modifyform" >
+			<form action="/share/modify" method="post" enctype="multipart/form-data" name="modifyform" >
 				<div>
 					<input type="hidden" id="articleNo" name ="articleNo" value="${shboard.articleNo}">
 					<div class="container p-2 ">

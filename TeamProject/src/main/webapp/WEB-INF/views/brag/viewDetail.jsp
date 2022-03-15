@@ -87,13 +87,22 @@ display: inline-block;
 </style>
 <body>
 
-
-	로그인한 유저 번호 : ${user.idx }
+	<div class="containter bg-light p-4 border rounded">
+		<div>
+			<h2 class="fw-bolder">${bboard.title }</h2>
+			<span>작성자 : ${userinfo.nickname }</span>&nbsp;|&nbsp;<span>작성일 : ${bboard.date }</span>&nbsp;|&nbsp;<span>조회수 : ${bboard.readCount }</span>
+		</div>
+		<article>
+			${bboard.content }
+			<div style="width:200px; height: 200px;">이미지 파일명: ${imgSrc }</div>
+		</article>
+	</div>
+	<%-- 로그인한 유저 번호 : ${user.idx }
 	<br> 로그인한 유저 이메일 : ${user.email }
 	<br> 로그인한 유저 별명 : ${user.nickname }
 	<br> 지금 보려는 글 정보 글 제목 : ${bboard.title } 글 내용 : ${bboard.content }
-	<br>
-	<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
+	<br>${userinfo.nickname } --%>
+	<!-- <div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div> -->
 
 
 	<!-- 좋아요 -->
@@ -125,28 +134,22 @@ display: inline-block;
 					<p>${reply.date }</p>
 				</div>
 				<div class="col">
+					<div class="if-thisArticle-mine text-end">
 					<c:if test="${user!=null}">
-						<div class="if-thisArticle-mine text-end">
-							<button class="btn border-dark"
-								onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">
-								대댓글쓰기</button>							
-						</div>
+						<button class="btn border-dark"
+							onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">
+							대댓글쓰기</button>							
 					</c:if>
-					<c:if test="${user.idx == reply.idx}">
-						<div class="if-thisArticle-mine text-end">
-							<button class="btn border-dark"
-								onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
-
-							<button class="btn border-dark"
-								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
-						</div>
+					<c:if test="${user.idx == reply.idx || user.grp == 2}">
+						<c:if test="${user.idx == reply.idx }">
+						<button class="btn border-dark"
+							onclick="editReply(${reply.commentNo},${reply.articleNo});">수정</button>
+						</c:if>
+						<button class="btn border-dark"
+							onclick="deleteReply(${reply.commentNo},${reply.articleNo});">삭제</button>
+						
 					</c:if>
-					<c:if test="${user.grp == 2 }">
-						<div class="if-thisArticle-mine text-end">
-							<button class="btn border-dark"
-								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
-						</div>
-					</c:if>
+					</div>
 				</div>
 				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
 					<form id="replyReply" action="/brag/reReply" method="post">
@@ -172,7 +175,7 @@ display: inline-block;
 	</div>
 	<br>
 	<!--댓글 작성  -->
-	<form id="" action="/brag/comment" method="post">
+	<form action="/brag/comment" method="post">
 		<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
 		<input name="idx" type="hidden" value=${user.idx }></input>
 		<textarea name="commentWrite"></textarea>
@@ -187,16 +190,12 @@ display: inline-block;
 	<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
 	<div class="row py-3">
 		<div class="col text-center">
-			<c:if test="${user.idx == bboard.idx}">
+			<c:if test="${user.idx == bboard.idx || user.grp == 2}">
 				<div class="if-thisArticle-mine text-end">
+					<c:if test="${user.idx == bboard.idx }">
 					<button class="btn border-dark"
 						onclick="editWrite(${bboard.articleNo});">수정</button>
-					<button class="btn border-dark"
-						onclick="deleteWrite(${bboard.articleNo});">삭제</button>
-				</div>
-			</c:if>
-			<c:if test="${user.grp == 2 }">
-				<div class="if-thisArticle-mine text-end">
+					</c:if>
 					<button class="btn border-dark"
 						onclick="deleteWrite(${bboard.articleNo});">삭제</button>
 				</div>

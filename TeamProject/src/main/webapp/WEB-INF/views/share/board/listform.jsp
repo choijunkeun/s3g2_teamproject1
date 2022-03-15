@@ -98,7 +98,7 @@ table {
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.title }</a>
 								</td>
 								<td>${shboard.subway }</td>
-								<td>${user.nickname }</td>
+								<td>${shboard.nickname }</td>
 								<td>${shboard.date }</td>
 								<td>${shboard.readCount }</td>
 							</tr>
