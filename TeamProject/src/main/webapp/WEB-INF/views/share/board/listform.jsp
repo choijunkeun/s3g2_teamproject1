@@ -82,7 +82,7 @@ table {
 					<section id="listForm">
 						<table class="table">
 							<tr id="tr_top">
-								
+								<td>글종류</td>
 								<td>말머리</td>
 								<td>제목</td>
 								<td>위치</td>

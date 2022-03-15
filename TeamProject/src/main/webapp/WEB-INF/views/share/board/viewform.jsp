@@ -273,14 +273,19 @@ display: inline-block;
 				
 	<div class="row">
 		<div class="col" style="text-align: left;">
-			<button type="button" id="btnList" class="btn btn-default">이전</button>
+			<a href="/share/board/viewform/${shboard.articleNo-1}">
+				<button type="button" id="btnList" class="btn btn-default">이전</button>
+			</a>
 		</div>
 		<div class='col' style="text-align: center;">
-			<button type="button" id="btnList" class="btn btn-default">목록</button>
+			<a href="/share/board/listform">
+				<button type="button" id="btnList" class="btn btn-default">목록</button>
+			</a>
 		</div>
-
 		<div class='col' style="text-align: right;">
-			<button type="button" id="btnList" class="btn btn-default">다음</button>
+			<a href="/share/board/viewform/${shboard.articleNo+1}">
+				<button type="button" id="btnList" class="btn btn-default">다음</button>
+			</a>
 		</div>
 	</div>
 	
@@ -302,6 +307,14 @@ display: inline-block;
 			</div>
 		</form>		
 		</c:if> --%>
+		<c:if test="${user.idx eq shboard.idx}">
+		<form id="headerChange" action="/share/board/header" method="post">
+		<input type="hidden" name="headerTag" id="headerTag" value=${shboard.headerTag}>
+		<input type="hidden" name="articleNo" value=${shboard.articleNo}>
+		
+		<button class="btn border-dark" onclick="headerChange(${shboard.articleNo},${shboard.headerTag});">말머리 수정</button>
+		</form>		
+		</c:if> 
 		
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
@@ -341,12 +354,12 @@ display: inline-block;
 			let comment = $('#comment'+commentNo).val()
 			$.ajax({
 				type:"POST",
-				url:"/brag/editReply",
+				url:"/share/board/editReply",
 				cache: false,
 				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
 				async:false,
 				complete:function(){
-					window.location.href="/brag/viewdetail/"+articleNo;
+					window.location.href="/share/board/viewform/"+articleNo;
 				}
 			})
 		}
@@ -380,7 +393,7 @@ display: inline-block;
 	}
 	
 	/* 말머리 변경 */
-	function headerChange(arg) {
+	/* function headerChange(arg) {
 			document.getElementsByName('headerTag').value=arg; 
 			
 			if (arg == 0)
@@ -399,10 +412,46 @@ display: inline-block;
 				async: false,
 				complete:function() {
 					console.log(headerTag);
-					windiw.location.href="share/board/viewform/"+articleNo;
+					window.location.href="share/board/viewform/"+articleNo;
 				}
 			})
-		}
+		} */
+	
+	/* $(function(){
+		$("#headerTagBtn").click(function(){
+			$.ajax({
+				type:"POST",
+				url:"share/board/header",
+				cache: false,
+				data: {
+					"articleNo":articleNo,
+					"headerTag":headerTag
+				},
+				async: false,
+				complete:function() {
+					console.log(headerTag);
+				}
+			})
+				
+		})
+	}) */
+	
+	function headerChange(articleNo1, headerTag1){
+			$.ajax({
+				type:"POST",
+				url:"/share/board/header",
+				cache: false,
+				data:{"articleNo":articleNo1,
+					"headerTag":headerTag1
+					},
+				}
+				async:false,
+				complete:function(){
+					// window.location.href="/share/board/viewform/"+articleNo;
+				}
+			})
+		
+	}
 	// 댓글 로그인 알림
 	$(function(){ 
 		$("#commentBtn").click(function(){
