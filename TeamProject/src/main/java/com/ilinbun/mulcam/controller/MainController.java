@@ -154,7 +154,7 @@ public class MainController {
 		System.out.println(email +", "+nickname +", "+ password +", "+ honbabLevel +", "+ profileImgName);
 		userService.makeUser(email,nickname,password,honbabLevel,profileImgName);
 		return "redirect:/loginSuccess";
-	}
+	} 
 	
 	
 
