@@ -193,7 +193,7 @@ button {
 
 </head>
 <body>
-	<form action="<c:url value="/join"/>" method="POST" name="joinform">
+	<form action="/join" method="POST" enctype="multipart/form-data">
 	<div class="title-top">
 		<div class="title">
 			<div align="center">
@@ -207,6 +207,15 @@ button {
 
 		<hr style="width: 500px">
 		<div>
+			
+			<div style="height:60px">
+				<p class="p">
+				<input class="input-field" type="text" id="email" name="email" autocomplete="email" required/>
+				<label for="id"><span>이메일</span></label> 
+				<span class="email_msg"></span>
+				</p>				
+			</div>
+			
 			<div style="height:60px">
 				<p class="p">
 				<input class="input-field" type="text" id="nickname" name="nickname" autocomplete="nickname"  required/>
@@ -215,14 +224,6 @@ button {
 				</p>
 			
 							
-			</div>
-			
-			<div style="height:60px">
-				<p class="p">
-				<input class="input-field" type="text" id="email" name="email" autocomplete="email" required/>
-				<label for="id"><span>이메일</span></label> 
-				<span class="email_msg"></span>
-				</p>				
 			</div>
 
 			
@@ -246,6 +247,10 @@ button {
 		</div>
 		
 		<hr style="width: 500px">
+		
+		<div>
+			<input type="file" id="profileImg" name="profileImg">
+		</div>
 
 		
 		<div style="margin: 0 50px ">

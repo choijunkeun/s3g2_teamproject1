@@ -271,9 +271,11 @@
 								+item.honbabLv + "</span></td><td><a href=/place/"+item.id+">"
 								+item.honbabReason + "</a></td><td>"+index+"</td></a></tr>");
 								}); 
-		
 					}
 		      })
+		
+		
+		
 		
 			$('#btnFollower').click(function(){getFollowerList()});
 			$('#btnFollowing').click(function(){getFollowingList()});

@@ -7,8 +7,8 @@
 <!--회원가입-->
 	<insert id="join" parameterType="User">
 		<![CDATA[
-	    INSERT INTO user(email, nickname, password, honbabLevel)
-	                  VALUES(#{email}, #{nickname}, #{password}, #{honbabLevel})
+	    INSERT INTO user(email, nickname, password, profileImg, honbabLevel)
+	                  VALUES(#{email}, #{nickname}, #{password}, #{profileImg}, #{honbabLevel})
 	    ]]>
     </insert>
 <!-- 닉네임 중복확인 쿼리 -->
@@ -32,21 +32,33 @@
     	]]>
     </select>
     
+<!-- 이메일을 통해 비밀번호 가져오기 -->
+	<select id="getPwd" resultType="String" parameterType="String">
+    	<![CDATA[
+    	SELECT password FROM user WHERE email=#{email}      	
+    	]]>
+    </select>     
+
+    
     <select id="getUserNick" resultType="String" parameterType="int">
     	<![CDATA[
     	select nickname from user where idx=#{idx}     	
     	]]>
     </select>
 <!-- 회원정보수정-->
-	<update id="userUpdate">
+	<update id="updateInfo" parameterType="User">
 		<![CDATA[
     	UPDATE user SET 
     	nickname=#{nickname},
     	password=#{password},
+    	profileImg=#{profileImg},
     	honbabLevel=#{honbabLevel} 
     	WHERE email=#{email}      	
     	]]>
 	</update>
+
+	
+	
 	
 <!--idx가지고 화면에 출력할 email, nickname, hblv가져오기-->
 	<select id="selectUserDetail" resultType="User" parameterType="int">
@@ -61,7 +73,13 @@
 			select count(*) from user_follow where idx=#{follow}
 		]]>
 	</select>
-    
+
+	<!-- 회원탈퇴 -->
+	<delete id="remove">
+		<![CDATA[
+			delete from user where email=#{email}
+		]]>
+	</delete>
     
 <!-- 해당 회원의 팔로잉 수 가져오기 -->
 	<select id="getFollowingCount" resultType="Integer" parameterType="int">
