@@ -31,7 +31,6 @@ public class ShareServiceImpl implements ShareService {
 		shareDAO.updateReadCount(articleNo);
 		return shareDAO.selectShareboard(articleNo);
 	}
-	
 
 	@Override
 	public void regShareBoard(Shareboard shareboard) throws Exception {
@@ -40,13 +39,6 @@ public class ShareServiceImpl implements ShareService {
 		else articleNo+=1;
 		shareboard.setArticleNo(articleNo);
 		shareDAO.insertShareBoard(shareboard);
-	}
-
-	@Override
-	public Shareboard shareBoardQueryByID(String id) throws Exception {
-		Shareboard viewDetail = shareDAO.shareBoardQueryByID(id);
-		return viewDetail;
-//		return null; //shareboardquery오류로 임시수정
 	}
 
 	@Override
@@ -59,6 +51,16 @@ public class ShareServiceImpl implements ShareService {
 	public List<Shareboard> getShareboardList(int page) throws Exception {
 		int startrow=(int) ((page-1)*15+1);
 		return shareDAO.selectShareBoardList(startrow);
+	}
+	@Override
+	public List<Map<String, Object>> getShareboardListMap(int page) throws Exception {
+		int startrow=(int) ((page-1)*15+1);
+		return shareDAO.selectShareBoardListMap(startrow);
+	}
+	@Override
+	public List<User> getShareboardListUserList(int page) throws Exception {
+		int startrow=(int) ((page-1)*15+1);
+		return shareDAO.selectShareBoardListUserList(startrow);
 	}
 
 	@Override
@@ -264,11 +266,10 @@ public class ShareServiceImpl implements ShareService {
 
 
 	@Override
-	public void changeHeader(int headerTag) throws Exception {
-		shareDAO.changeHeaderTag(headerTag);
-		
+	public void changeHeader(int articleNo, int headerTag) throws Exception {
+		Map<String, Integer> map = new HashMap();
+		map.put("articleNo", articleNo);
+		map.put("headerTag", headerTag);
+		shareDAO.changeHeaderTag(map);
 	}
-
-
-	
 }

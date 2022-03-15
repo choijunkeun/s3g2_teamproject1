@@ -46,7 +46,6 @@ h5 {
 /* @@@@@@  ck에디터   @@@@@@@ */
 .ck-editor__editable {
 	min-height: 550px;
-
 	max-width: 100%;
 }
 
@@ -66,7 +65,7 @@ h5 {
 
 	<div >
 		<div class="container pb-3 bg-light" class="outer" >
-			<h5 class="fw-bolder" >커뮤니티</h5>
+			<h5 class="fw-bolder" >커뮤니티 글쓰기</h5>
 
 			<form action="./boardwrite" method="post" enctype="multipart/form-data" name="boardform" >
 				<div>

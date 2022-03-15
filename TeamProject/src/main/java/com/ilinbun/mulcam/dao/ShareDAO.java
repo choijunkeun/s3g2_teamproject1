@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.ShareReply;
 import com.ilinbun.mulcam.dto.Shareboard;
+import com.ilinbun.mulcam.dto.User;
 
 @Mapper
 @Repository
@@ -18,6 +19,8 @@ public interface ShareDAO {
 	
 	Integer selectMaxArticleNo() throws Exception;
 	List<Shareboard> selectShareBoardList(int startrow) throws Exception;
+	List<User> selectShareBoardListUserList(int startrow) throws Exception;
+	List<Map<String, Object>> selectShareBoardListMap(int startrow) throws Exception;
 	
 	int selectShareBoardCount() throws Exception;
 	Shareboard selectShareboard() throws Exception;
@@ -48,5 +51,5 @@ public interface ShareDAO {
 	public void editReply(Map<String, Object> map) throws Exception;
 	public void setBlind(Map<String, Object> map) throws Exception;
 
-	public void changeHeaderTag(int headerTag) throws Exception;
+	public void changeHeaderTag(Map map) throws Exception;
 }
