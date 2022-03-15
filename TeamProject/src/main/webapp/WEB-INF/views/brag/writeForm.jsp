@@ -133,7 +133,7 @@
 	<script>
 		let idx = ${not empty user.idx? user.idx : false };
 		if (idx == false) {
-			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+			alert("로그인을 하셔야 글 작성을 하실 수 있습니다. 로그인 해주세요.");
 			location.href = "/login"
 		}
 	
