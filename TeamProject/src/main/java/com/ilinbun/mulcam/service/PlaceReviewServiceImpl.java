@@ -197,9 +197,33 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 	}
 	
 	// 마이페이지에 뿌려줄 사용자의 리뷰 게시글(준근) 
-		@Override
-		public List<PlaceReview> MyReviewBoard(int idx) throws Exception {
-			return placeReviewDAO.selectReviewBoardByIdx(idx);
-		}
+	@Override
+	public List<PlaceReview> MyReviewBoard(int idx) throws Exception {
+		return placeReviewDAO.selectReviewBoardByIdx(idx);
+	}
+	
+	@Override
+	public Boolean isIndexed(int id) throws Exception{
+		Map<String, Object> result = placeReviewDAO.isIndexed(id);
+		return result != null && result.size() >0? true: false;
+	}
+	@Override
+	public Map<String, Object> queryPlaces(int id) throws Exception{
+		return placeReviewDAO.queryPlaces(id);
+	}
+	@Override
+	public void insertPlaces(int id, String place_name) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id",  id);
+		map.put("place_name", place_name);
+		placeReviewDAO.insertPlaces(map);
+	}
+	@Override
+	public void deletePlaces(int id, String place_name) throws Exception{
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id",  id);
+		map.put("place_name", place_name);
+		placeReviewDAO.deletePlaces(map);
+	}
 
 }

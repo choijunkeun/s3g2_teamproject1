@@ -63,25 +63,66 @@
 <!--idx가지고 화면에 출력할 email, nickname, hblv가져오기-->
 	<select id="selectUserDetail" resultType="User" parameterType="int">
     	<![CDATA[
-			select idx, email, nickname, honbabLevel, profileImg from User where idx=#{idx} 
+			select idx, email, nickname, honbabLevel, profileImg, grp from User where idx=#{idx} 
     	]]>
 	</select>
 
-    
- <!-- 글쓰기 수정 -->
-    <!-- <update id="updateBoard" parameterType="commboard">
+<!-- 해당 회원의 팔로워 수 가져오기 -->
+	<select id="getFollowerCount" resultType="Integer" parameterType="int">
 		<![CDATA[
-			update Comm_board set title=#{title},content=#{content}
-			where articleNo=#{articleNo}
+			select count(*) from user_follow where idx=#{follow}
 		]]>
-	</update>  -->
-	
+	</select>
+
 	<!-- 회원탈퇴 -->
 	<delete id="remove">
 		<![CDATA[
 			delete from user where email=#{email}
 		]]>
 	</delete>
+    
+<!-- 해당 회원의 팔로잉 수 가져오기 -->
+	<select id="getFollowingCount" resultType="Integer" parameterType="int">
+		<![CDATA[
+			select count(*) from user_follow where follow=#{idx}
+		]]>
+	</select>
 	
-
+<!-- 팔로우 추가 -->
+	<insert id="follow" parameterType="Map">
+		<![CDATA[
+			insert into user_follow values(#{idx},#{follow})
+		]]>
+	</insert>
+	
+<!-- 언팔로우 -->
+	<delete id="unfollow" parameterType="Map">
+		<![CDATA[
+			delete from user_follow where idx=#{idx} and follow=#{follow}
+		]]>
+	</delete>
+	
+<!-- 팔로우 했는지 확인 -->
+	<select id="didIFollowed" resultType="Integer" parameterType="Map">
+		<![CDATA[
+			select count(*) from user_follow where idx=#{idx} and follow=#{follow}
+		]]>
+	</select>    
+	
+<!-- 팔로워들 목록 가져오기 -->
+	<select id="getFollowerList" resultType="User" parameterType="int">
+		<![CDATA[
+			select u.idx as idx, u.email as email, u.nickname as nickname, u.password as password, 
+				u.profileImg as profileImg, u.honbabLevel as honbabLevel, u.grp as grp
+				from user_follow f, user u where f.idx=#{idx} and f.follow = u.idx
+		]]>
+	</select>
+<!-- 팔로잉들 목록 가져오기 -->
+	<select id="getFollowingList" resultType="User" parameterType="int">
+		<![CDATA[
+			select u.idx as idx, u.email as email, u.nickname as nickname, u.password as password, 
+				u.profileImg as profileImg, u.honbabLevel as honbabLevel, u.grp as grp
+				from user_follow f, user u where f.follow=#{idx} and f.idx = u.idx
+		]]>
+	</select>	
 </mapper>

@@ -56,7 +56,7 @@ public class PlaceController {
 	
 	@GetMapping("/{id}")
 	public ModelAndView placeInfo(@PathVariable String id,
-			@RequestParam("place_name") String place_name,
+			@RequestParam(value="place_name", required=false) String place_name,
 			@RequestParam(required=false, defaultValue="1") int page,
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
@@ -68,6 +68,12 @@ public class PlaceController {
 		HttpURLConnection conn = null;
 		StringBuffer response = new StringBuffer();
 		try {
+			if(place_name == null) {
+				if(placeReviewService.isIndexed(Integer.parseInt(id))) {
+					place_name = (String)
+							((Map<String, Object>)placeReviewService.queryPlaces(Integer.parseInt(id))).get("place_name");
+				} else throw new Exception("장소값 없음");
+			}
 			URL url = new URL("https://dapi.kakao.com/v2/local/search/keyword.json" + "?" + "query=" + URLEncoder.encode(place_name, "UTF-8"));
 			
 			conn = (HttpURLConnection) url.openConnection();
@@ -136,7 +142,8 @@ public class PlaceController {
 				if(idx != null) { 
 					mv.addObject("didILikedList", didILikedList);
 				}
-		        
+
+				mv.addObject("reviewLikesList",reviewLikesList);
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("reviewAmount", placeReviewService.getReviewAmount(place.getId()));
 				mv.addObject("prList", reviewList);
@@ -179,7 +186,7 @@ public class PlaceController {
 		HttpSession session = request.getSession();
 		Integer idx = null;
 		if(session.getAttribute("user") != null ) idx = ((User)session.getAttribute("user")).getIdx();
-		
+				
 		Place place = new Place(Integer.parseInt(id), 
 				place_name,
 				category_name,
@@ -296,7 +303,12 @@ public class PlaceController {
 			}
 			
 			placeReviewService.writeBoard(pr);
-			result = new ResponseEntity<String>("success", HttpStatus.OK);
+			
+			if(!placeReviewService.isIndexed(pr.getId())) {
+				placeReviewService.insertPlaces(Integer.parseInt(param.get("id")), 
+						(String)param.get("place_name"));
+			}
+			result = new ResponseEntity<String>("<script>alert('주의 : 해당 방식으로 접속한 경우 DB가 정확하지 않을 수도 있습니다.')</script>", HttpStatus.OK);
 			//boardService.regBoard(board);
 			//mv.setViewName("redirect:/board/boardlist");
 		} catch(Exception e) {

@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -16,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -216,11 +217,14 @@ public class MainController {
 	}
 
 	// 마이 페이지 폼
-	@GetMapping("/myPage")
-	public String myPage(HttpSession session, Model model) throws Exception {
-		session.getAttribute("email");
-		return "user/myPageForm";
-	}
+		@GetMapping("/myPage")
+		public String myPage(HttpSession session, Model model) throws Exception {
+			User user = (User) session.getAttribute("user");
+			session.getAttribute("email");
+			model.addAttribute("following", userService.getFollowingCount(user.getIdx()));
+			model.addAttribute("follower", userService.getFollowerCount(user.getIdx()));
+			return "user/myPageForm";
+		}
 
 	// 정보 수정 페이지 폼
 	@GetMapping("/editInfo")
@@ -350,97 +354,122 @@ public class MainController {
 	
 	//마이페이지에 혼밥자랑 게시글 출력
 	@ResponseBody
-	@PostMapping("/MybragPosting")
-	public List<BragBoard> bragPosting() throws Exception {
-		User user = (User) session.getAttribute("user");
-		List<BragBoard> myBragList = bragService.MyBragBoard(user.getIdx());
+	@PostMapping("/bragPosting")
+	public List<BragBoard> bragPosting(@RequestParam int idx) throws Exception {
+		//User user = (User) session.getAttribute("user");
+		List<BragBoard> myBragList = bragService.MyBragBoard(idx);
+		System.out.println("bragboardlist");
 		return myBragList;
 	}
 	
 	//마이페이지에 반찬공유 게시글 출력
+	@ResponseBody
+	@PostMapping("/sharePosting")
+	public List<Shareboard> sharePosting(@RequestParam int idx) throws Exception {
+		//User user = (User) session.getAttribute("user");
+		List<Shareboard> myShareList = shareService.MyShareBoard(idx);
+		System.out.println("shareBoardlist");
+		return myShareList;
+	}
+	
+	//마이페이지에 커뮤니티 게시글 출력
+	@ResponseBody
+	@PostMapping("/communityPosting")
+	public List<CommBoard> communityPosting(@RequestParam int idx) throws Exception {
+		//User user = (User) session.getAttribute("user");
+		List<CommBoard> myCommunityList = commService.MyCommunityBoard(idx);
+		System.out.println("communityboardlist");
+		return myCommunityList;
+	}
+	
+	//마이페이지에 리뷰 게시글 출력
+	@ResponseBody
+	@PostMapping("/reviewPosting")
+	public List<PlaceReview> reviewPosting(@RequestParam int idx) throws Exception {
+		//User user = (User) session.getAttribute("user");
+		List<PlaceReview> myReviewList = placeReviewService.MyReviewBoard(idx);
+		System.out.println("Review Board List");
+		return myReviewList;
+	}
+	
+	//남의페이지 보기(훈)
+	@GetMapping("/userInfo/{idx}")
+	public String userInfoPage(@PathVariable int idx, HttpSession session, Model model) throws Exception {
+		User user = userService.getUserDetail(idx);
+		User currentUser = (User) session.getAttribute("user");
+		int page=1;
+		session.getAttribute("email");
+		model.addAttribute("userinfo", user);
+		model.addAttribute("following", userService.getFollowingCount(idx));
+		model.addAttribute("follower", userService.getFollowerCount(idx));
+//		model.addAttribute("followerList", userService.getFollowerList(idx, page));
+//		model.addAttribute("followingList", userService.getFollowingList(idx, page));
+		if(currentUser != null) 
+			model.addAttribute("didIFollowed", userService.didIFollowed(idx, currentUser.getIdx()));
+		return "/user/userInfoPageForm";
+	}
+	
+	//팔로우 토글(훈)
+	@ResponseBody
+	@PostMapping("/follow")
+	public ResponseEntity<String> follow(@RequestParam int idx, HttpSession session, Model model) throws Exception {
+		ResponseEntity<String> result = null;
+		int page=1;
+		//현재 유저와 대상 유저를 가져온다
+		Integer currentUserIdx = ((User)session.getAttribute("user")).getIdx();
+		
+		try {
+			if(currentUserIdx == null) throw new Exception("유저 정보를 찾을 수 없음");
+			
+			userService.toggleFollow(idx, currentUserIdx.intValue());
+			
+			JSONObject jobj = new JSONObject();
+			jobj.put("didIFollowed", userService.didIFollowed(idx, currentUserIdx.intValue()));
+			jobj.put("follower", userService.getFollowerCount(idx));
+//			jobj.put("followerList", userService.getFollowerList(idx, page));
+//			jobj.put("followingList", userService.getFollowingList(idx, page));
+			result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		return result;
+	}
+
+	//팔로워 리스트 가져오기(훈)
+	@ResponseBody
+	@PostMapping("/followerList")
+	public ResponseEntity<String> followerList(@RequestParam int idx, 
+			HttpSession session, Model model) throws Exception {
+		ResponseEntity<String> result = null;
+		try {
+			List<User> followerlist = userService.getFollowerList(idx);
+			JSONObject jobj = new JSONObject();
+			jobj.put("followerList", followerlist);
+			System.out.println(jobj.toString());
+			result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
+		}
+		return result;
+	}
+	//팔로잉 리스트 가져오기(훈)
 		@ResponseBody
-		@PostMapping("/MysharePosting")
-		public List<Shareboard> sharePosting() throws Exception {
-			User user = (User) session.getAttribute("user");
-			List<Shareboard> myShareList = shareService.MyShareBoard(user.getIdx());
-			return myShareList;
-		}
-		
-		//마이페이지에 커뮤니티 게시글 출력
-		@ResponseBody
-		@PostMapping("/MycommunityPosting")
-		public List<CommBoard> communityPosting() throws Exception {
-			User user = (User) session.getAttribute("user");
-			List<CommBoard> myCommunityList = commService.MyCommunityBoard(user.getIdx());
-			return myCommunityList;
-		}
-		
-		//마이페이지에 혼밥리뷰 게시글 출력
-		@ResponseBody
-		@PostMapping("/MyreviewPosting")
-		public List<PlaceReview> reviewPosting() throws Exception {
-			User user = (User) session.getAttribute("user");
-			List<PlaceReview> myReviewList = placeReviewService.MyReviewBoard(user.getIdx());
-			return myReviewList;
-		}
-		//회원삭제 폼
-		@GetMapping("/deleteUserForm")
-		public String deleteUserForm() throws Exception {
-			return "default/user/deleteUserForm";
-		}
-		
-		//회원 탈퇴 기능
-		@PostMapping("/deleteUser")
-		public String deleteUser(User user,HttpSession session) throws Exception {
-			System.out.println("deleteUser() Join");
-			
-			//현재 세션에 저장되있는 유저객체(실제 로그인 되어있는 사용자의 객체정보)를 얻어와 변수에 저장
-			User user2 = (User)session.getAttribute("user");
-			String oldPass = userService.getPwd(user.getEmail());
-			
-			System.out.println("세션에 저장된 유저 객체 : "+user2);
-			System.out.println("탈퇴 폼에 입력된 이메일 : " + user.getEmail());
-			System.out.println("탈퇴 폼에 입력된 비밀번호 : " + user.getPassword());
-			System.out.println("세션 유저의 이메일 " + user2.getEmail());
-			System.out.println("세션 유저의 비밀번호(DB에서 추출) " + oldPass);
-			System.out.println(Optional.ofNullable(user2.getPassword()).isPresent());
-			
-			//문제점 .. 로그인 할 때 password를 null로 바꿨기 때문에 세션에서 비밀번호를 얻어올 수 없음..
-			// 일단 로그인에서 setPassword(null)을 뺴서 해결하겠습니다..
-		
-			//회원탈퇴에서 넘어온 비밀번호를 변수에 저장
-			String newPass = user.getPassword();
-			
-			
-			if((user.getEmail().equals(user2.getEmail())) ) {
-				System.out.println("이메일 일치");
-				if(oldPass.equals(newPass)) {
-					System.out.println("비밀번호도 일치");
-					userService.userDelete(user);
-					session.invalidate();
-					System.out.println("회원탈퇴성공");
-					return "redirect:/";
-				} else {
-					System.out.println("이메일은 일치하나 비밀번호는 불일치");
-					String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8"); 
-					return "redirect:/deleteUserForm?msg=" + msg;
-				}
-			} else {
-				System.out.println("이메일이 불일치해서 비밀번호까진 확인도 못함");
-				String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8");
-				return "redirect:/deleteUserForm?msg=" + msg;
+		@PostMapping("/followingList")
+		public ResponseEntity<String> followingList(@RequestParam int idx, 
+				HttpSession session, Model model) throws Exception {
+			ResponseEntity<String> result = null;
+			try {
+				List<User> followingList = userService.getFollowingList(idx);
+				JSONObject jobj = new JSONObject();
+				jobj.put("followingList", followingList);
+				System.out.println(jobj.toString());
+				result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
+			}catch (Exception e) {
+				e.printStackTrace();
+				result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
 			}
-			
+			return result;
 		}
-		
-		
-		
-		
-		
-
-		
-		
-		
-		
-
 }

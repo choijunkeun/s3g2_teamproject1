@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ilinbun.mulcam.dao.CommunityDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
 import com.ilinbun.mulcam.dto.CommBoard;
+import com.ilinbun.mulcam.dto.CommReply;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
@@ -71,7 +72,8 @@ public class CommServiceImpl implements CommService {
 	// 게시글 목록 : 15개가 화면에 띄워지게 하는 DAO
 	@Override
 	public List<CommBoard> getCommBoardList(int page) throws Exception {
-		int startrow = (int) ((page - 1) * 15 + 1);
+		int startrow = (int) ((page - 1) * 15);
+		System.out.println(startrow);
 		return CommunityDAO.selectCommBoardList(startrow);
 	}
 
@@ -106,6 +108,33 @@ public class CommServiceImpl implements CommService {
 		return CommunityDAO.selectCommunityBoardByIdx(idx);
 	}
 
+	
+	//댓글에 대한 페이지 보기
+		@Override
+		public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
+			int listCount=CommunityDAO.countComment();
+			System.out.println("리스트카운트 :"+listCount);
+			int maxPage=(int)Math.ceil((double)listCount/10);
+			//그 개수를 10으로 나누고 올림처리하여 페이지 수 계산
+			//table에 있는 모든 row 개수
+			double pagenation = pageInfo.getPage(); //? 새로 추가  0
+			//아래에 페이지 이동 버튼도 10개로 구성하고자 하기 위함이다.
+			int startPage=(((int) ((double)pagenation/10+0.9))-1)*10+1;
+			//현재 페이지에 보여줄 시작 페이지 수(1, 11, 21, ...)
+			
+			int endPage=startPage+10-1;
+			//현재 페이지에 보여줄 마지막 페이지 수(10, 20, 30, ...)
+			if(maxPage<endPage) {
+				endPage=maxPage;
+			}
+			pageInfo.setListCount(listCount); // 30
+			pageInfo.setMaxPage(maxPage); // 3
+			pageInfo.setEndPage(endPage); // 0
+			pageInfo.setStartPage(startPage); // -9
+			return pageInfo;
+		}
+	
+	
 	// 여기서 부터는 구현 전
 	// 글수정
 	@Override
@@ -160,8 +189,95 @@ public class CommServiceImpl implements CommService {
 		}
 	
 	
+		//댓글 쓰기
+		@Override
+		public void boardReply(int articleNo, int idx, String comment, Integer blind) throws Exception {
+			Integer commentNo = CommunityDAO.selectMaxCommentNo();
+			if(commentNo == null) commentNo = 1;
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("articleNo", articleNo);
+			map.put("idx", idx);
+			map.put("comment", comment);
+			map.put("blind", (blind != null? true : false));
+			map.put("refer", commentNo);
+			map.put("lev", 0);
+			map.put("seq", 0);
+			CommunityDAO.insertReply(map);
+			
+		}
+		
+		//대댓글 쓰기
+		@Override
+		public void reReply(int commentNo, int articleNo, int idx, String comment, Integer blind) throws Exception {
+			System.out.println("src reply getting");
+			CommReply src_reply = (CommReply)CommunityDAO.selectReply(commentNo);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("articleNo", articleNo);
+			map.put("idx", idx);
+			map.put("comment", comment);
+			map.put("blind", (blind != null? true : false));
+			map.put("refer", src_reply.getRefer());
+			map.put("lev", src_reply.getLev()+1);
+			CommunityDAO.updateCommentSeq(src_reply);
+			map.put("seq", src_reply.getSeq()+1);
+			CommunityDAO.insertReply(map);
+			
+		}
+
+		//댓글 보기
+		@Override
+		public List<CommReply> boardReplyList(int articleNo, int page) throws Exception {
+			int startrow=(int) ((page-1)*10+1);
+			Map<String, Integer> map = new HashMap<>();
+			map.put("articleNo", articleNo);
+			map.put("startrow", startrow);
+			return CommunityDAO.selectReplyList(map);
+		}
+
+		//댓글 삭제
+		@Override
+		public void deleteReply(int commentNo) throws Exception {
+			Map<String, Object> map = new HashMap<>();
+			map.put("commentNo", commentNo);
+			CommunityDAO.deleteReply(commentNo);
+			
+		}
+
+		//댓글 수정
+		@Override
+		public void editReply(int commentNo, String comment) throws Exception {
+			Map<String, Object> map = new HashMap<>();
+			map.put("commentNo", commentNo);
+			map.put("comment", comment);
+			
+			CommunityDAO.editReply(map);
+		}
+		
+		//익명댓글 처리
+		@Override
+		public void setBlind(int blind, int commentNo) throws Exception{
+			Map<String, Object> map = new HashMap<>();
+			map.put("blind", blind);
+			map.put("commentNo", commentNo);
+			
+			CommunityDAO.setBlind(map);
+		}
+		
+		@Override
+		public Integer countComment() throws Exception{
+			return CommunityDAO.countComment();
+		}
+		
+		@Override
+		public void updateCommentSeq(CommReply br) throws Exception{
+			CommunityDAO.updateCommentSeq(br);
+		}
 
 
+
+		
 
 
 //아마 댓글   
