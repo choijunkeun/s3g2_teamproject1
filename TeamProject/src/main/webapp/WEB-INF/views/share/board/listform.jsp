@@ -93,14 +93,29 @@ table {
 					<c:forEach var="shboard" items="${shareList }">
 					<tr class=${userMap[article.idx].grp == 2 ? "noti" : "normal" }>
 						<%-- <c:if test="${status.index<15}"> --%>
-								<td>${shboard.headerTag eq 0? "공유중": shboard.headerTag eq 1? "공유완료":"알 수 없음" }</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">
+									${userMap[article.idx].grp == 2 ? "공지글" : "일반글" }</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">
+										${shboard.headerTag eq 0? "공유중": shboard.headerTag eq 1? "공유완료":"알 수 없음" }</a>
+								</td>
 								<td>
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.title }</a>
 								</td>
-								<td>${shboard.subway }</td>
-								<td>${shboard.nickname }</td>
-								<td>${shboard.date }</td>
-								<td>${shboard.readCount }</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}"> ${shboard.subway }</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.nickname }</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.date }</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.readCount }</a>
+								</td>
 							</tr>
 					<%-- 	</c:if>	 --%>
 					</c:forEach>

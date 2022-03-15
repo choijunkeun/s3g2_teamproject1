@@ -62,10 +62,21 @@ h5 {
 		<div class="container pb-3 bg-light" class="outer" >
 			<h5 class="fw-bolder" >반찬공유 글수정</h5>
 
-			<form action="/share/modify" method="post" enctype="multipart/form-data" name="modifyform" >
+			<form action="./modifyform" method="post" enctype="multipart/form-data" name="modifyform" >
 				<div>
 					<input type="hidden" id="articleNo" name ="articleNo" value="${shboard.articleNo}">
 					<div class="container p-2 ">
+					<!-- <input type="hidden" name="headerTag">
+						<div>
+							<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+								data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
+									<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+										<li><button class="dropdown-item" type="button"
+											onclick="headerChange(0)">공유중</button></li>
+										<li><button class="dropdown-item" type="button"
+											onclick="headerChange(1)">공유완료</button></li>
+									</ul>
+						</div> -->
 						<div class="row p-1 text-center ">
 							<div class="col">
 								<input name="title" id="title" style="display: inline-block;width:100%;" value='${shboard.title}' placeholder="제목을 입력해주세요!" required="required">
@@ -89,6 +100,15 @@ h5 {
 		</div>
 	</div>
 	</section>
-
+<!-- <script>
+function headerChange(arg) {
+	document.getElementById('headerTag').value=arg; 
+	if(arg == 0) {
+		document.getElementById('sortDropdown').innerText='공유중';
+	} else if (arg == 1) {
+		document.getElementById('sortDropdown').innerText='공유완료';
+	}	
+}
+</script> -->
 </body>
 </html>

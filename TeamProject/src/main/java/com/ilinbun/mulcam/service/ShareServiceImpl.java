@@ -267,7 +267,7 @@ public class ShareServiceImpl implements ShareService {
 
 	@Override
 	public void changeHeader(int articleNo, int headerTag) throws Exception {
-		Map<String, Integer> map = new HashMap();
+		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("articleNo", articleNo);
 		map.put("headerTag", headerTag);
 		shareDAO.changeHeaderTag(map);

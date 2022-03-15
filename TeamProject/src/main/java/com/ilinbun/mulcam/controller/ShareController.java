@@ -301,7 +301,7 @@ public class ShareController {
 	
 	
 	// 글수정 (내 글일경우가능)
-		@PostMapping(value = "/board/modifyform")
+		@GetMapping(value = "/board/modifyform")
 		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, 
 				HttpServletRequest request) {
 			ModelAndView mav = new ModelAndView();
@@ -324,8 +324,8 @@ public class ShareController {
 			return mav;
 		}
 
-		@PostMapping(value = "/board/modify")
-		public ModelAndView sharemodify(@ModelAttribute Shareboard shareboard) {
+		@PostMapping(value = "/board/modifyform")
+		public ModelAndView modifyform(@ModelAttribute Shareboard shareboard) {
 			ModelAndView mav = new ModelAndView();
 			try {
 				shareService.modifyShareBoard(shareboard);
@@ -440,7 +440,7 @@ public class ShareController {
 		}
 		
 		//댓글쓰기 with 비밀댓글 (댓글보기는 글보기 Controller에 추가함)
-		@PostMapping("/comment")
+		@PostMapping("/board/comment")
 		public String boardReply(@RequestParam("commentWrite") String comment, 
 				@RequestParam Integer idx, 
 				@RequestParam Integer articleNo, 
@@ -459,7 +459,7 @@ public class ShareController {
 				}
 			}
 			
-			return "redirect:/share/viewform/"+articleNo;
+			return "redirect:/share/board/viewform/"+articleNo;
 		}
 		
 		@PostMapping("/reReply")
@@ -508,14 +508,15 @@ public class ShareController {
 		}
 		
 		//말머리 바꾸기
-		@PostMapping(value="/header")
+		@PostMapping(value="/board/header")
 		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
 			try {
 				shareService.changeHeader(articleNo, headerTag);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-			return "redirect:/share/board/viewform/"+articleNo;
+//			return "redirect:/share/board/viewform/"+articleNo;
+			return "redirect:/share/board/listform";
 		}
 	
 	

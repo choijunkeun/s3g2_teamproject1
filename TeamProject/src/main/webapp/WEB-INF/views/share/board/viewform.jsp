@@ -41,7 +41,7 @@ a {
 	background:  #f6f3f3;
 	margin-top: 10px;
 	width: 710px;
-	height: auto;
+	height: 100%;
 	text-align: center;
 	overflow: auto;
 }
@@ -100,6 +100,8 @@ a {
 					<p>${commentUserList[status.index].nickname }</p>
 				</div>
 				<div class="col">
+					<img style="border-radius: 50px; width: 30px; height: 30px; float: left;"
+						src=/icon/reply-ico.png>
 					<input type="text" id="comment${reply.commentNo}"
 						value="${reply.comment }" readOnly></input>
 				</div>
@@ -146,7 +148,11 @@ a {
 		</c:when>
 		<c:otherwise>
 			<div class="row">
-				<span>해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.</span>
+				<span>
+					<img style="border-radius: 50px; width: 30px; height: 30px; float: left;"
+						src=/icon/reply-ico.png>
+					해당 댓글은 비밀댓글입니다. 글 작성자와 댓글 작성자만 볼 수 있습니다.
+				</span>
 			</div>
 		</c:otherwise>
 		</c:choose>
@@ -154,7 +160,7 @@ a {
 	</div>
 	<br>
 	<!--댓글 작성  -->
-	<form id="comment" action="/share/comment" method="post">
+	<form id="comment" action="/share/board/comment" method="post">
 		<input name="articleNo" type="hidden" value=${shboard.articleNo }></input>
 		<input name="idx" type="hidden" value=${user.idx }></input>
 		<textarea name="commentWrite"></textarea>
@@ -163,11 +169,11 @@ a {
 	</form>
 		<!-- 말머리 바꾸기 -->
 		<c:if test="${user.idx eq shboard.idx}">
-		<form id="headerChange" action="/share/header" method="post">
-			<input type="hidden" name="headerTag">
+		<form id="headerChange" action="/share/board/header" method="post">
+			<input type="hidden" name="headerTag" id="headerTag">
 			<input type="hidden" name="articleNo" value=${shboard.articleNo}>
 			<div class="if-thisArticle-mine text-end">
-				<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+				<button type="button" class="btn btn-secondary dropdown-toggle" id="sortDropdown"
 					data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 					<li><button class="dropdown-item" type="button"
@@ -175,6 +181,7 @@ a {
 					<li><button class="dropdown-item" type="button"
 						onclick="headerChange(1)">공유완료</button></li>
 				</ul>
+			<input id="headerChange" type="submit" value="말머리 변경"> 
 			</div>
 		</form>		
 		</c:if>
@@ -185,11 +192,20 @@ a {
 			<c:if test="${user.idx eq shboard.idx || user.grp eq 2}">
 				<div class="if-thisArticle-mine text-end">
 					<c:if test="${user.idx eq shboard.idx}">
-						<button class="btn border-dark" onclick="editWrite(${shboard.articleNo});">수정</button>
+						<a href="/share/board/modifyform?articleNo=${shboard.articleNo}">
+							<button class="btn border-dark">수정</button>
+						</a>	
 					</c:if>
-					<button class="btn border-dark" onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+						<a href="/share/board/deleteform?articleNo=${shboard.articleNo}&page=${page}">
+							<button class="btn border-dark">삭제</button>
+						</a>
 				</div>
 			</c:if>
+			<div class="if-thisArticle-mine text-end">
+				<a href="/share/board/listform">
+					<button class="btn border-dark">목록</button>
+				</a>
+			</div>
 		</div>
 	</div>
 	</section>
@@ -215,33 +231,6 @@ a {
 	    return obj;
 	}
 	
-	/*수정버튼 누르면~  */
-	function editWrite(articleNo){
-		let f = document.createElement('form');
-		
-		f.appendChild(mIHObj('articleNo', articleNo));
-	    
-	    f.setAttribute('method', 'post');
-	    f.setAttribute('action', '/share/board/modifyform');
-	    document.body.appendChild(f);
-	    f.submit();
-	}
-	
-	/*삭제버튼 누르면~  */
-	function deleteWrite(articleNo){
-		if(confirm("게시글을 삭제하시겠습니까?")){
-			let f = document.createElement('form');
-			
-			f.appendChild(mIHObj('articleNo', articleNo));
-		    f.appendChild(mIHObj('idx','${user.idx}'));
-		   
-		    f.setAttribute('method', 'post');
-		    f.setAttribute('action', '/share/board/deleteform'); // /brag/deleteWrite
-		    document.body.appendChild(f);
-		    f.submit();
-		}
-	}
-	
 	/*댓글 수정버튼 누르면~  */
 	function editReply(commentNo, articleNo){
  		
@@ -258,7 +247,7 @@ a {
 				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
 				async:false,
 				complete:function(){
-					window.location.href="/share/board/viewform/"+articleNo;
+					window.location.href="/share/board/modifyform/"+articleNo;
 				}
 				
 			})
@@ -287,18 +276,37 @@ a {
 				complete:function(){
 					console.log(commentNo);
 					window.location.href="/share/board/viewform/"+articleNo;
+				})
+			}
+		
 		}
 	}
+	
 	/* 말머리 변경 */
 	function headerChange(arg) {
-			document.getElementsByName('headerTag')[0].value=arg; 
+			document.getElementsByName('headerTag').value=arg; 
 			
-			if(arg == '0')
+			if (arg == 0)
 				document.getElementById('sortDropdown').innerText='공유중';
-			else if (arg == '1')
+			else if (arg == 1)
 				document.getElementById('sortDropdown').innerText='공유완료';
+			
 			$('#headerChange').submit();
+			$.ajax({
+				type:"POST",
+				url:"/share/board/header",
+				cache: false,
+				data: {
+					"headerTag": headerTag
+					},
+				async: false,
+				complete:function() {
+					console.log(headerTag);
+					windiw.location.href="share/board/viewform/"+articleNo;
+				}
+			})
 		}
+			
 	</script>
 	<!-- 좋아요 -->
 	<script>
