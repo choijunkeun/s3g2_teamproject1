@@ -127,12 +127,12 @@ display: inline-block;
   <div class="card-footer">
   				<div class="row">
   							<div class="col-8">
-						  		<form id="" action="/brag/comment" method="post">
-								<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
-								<input name="idx" type="hidden" value=${user.idx }></input>
-								<textarea name="commentWrite" cols=80></textarea>
-								<input id="blind" name="blind" type="checkbox" value="1">익명댓글
-								<input id="commentBtn" type="submit" value="댓글작성">
+						  		<form action="/brag/comment" method="post">
+									<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
+									<input name="idx" type="hidden" value=${user.idx }></input>
+									<textarea name="commentWrite" cols=80></textarea>
+									<input id="blind" name="blind" type="checkbox" value="1">익명댓글
+									<input id="commentBtn" type="submit" value="댓글작성">
 								</form>
 							</div>
 							<div class="col-4">
@@ -200,15 +200,6 @@ display: inline-block;
 		
   </div>
 </div>
-	<form action="/brag/comment" method="post">
-		<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
-		<input name="idx" type="hidden" value=${user.idx }></input>
-		<textarea name="commentWrite"></textarea>
-		<input id="blind" name="blind" type="checkbox" value="1">익명댓글
-		<input id="commentBtn" type="submit" value="댓글작성">
-	</form>
-
-
 	<div class="row">
 		<div class="col" style="text-align: center;">
 		<c:if test="${user.idx == bboard.idx || user.grp == 2}">
