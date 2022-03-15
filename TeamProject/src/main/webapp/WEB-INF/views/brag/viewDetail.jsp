@@ -18,14 +18,8 @@
 
 <style>
 /* ckEditor 넓이 높이 조절 */
-.ck.ck-editor {
-	max-width: 500px;
-	font-weight: bolder;
-}
 
-.ck-editor__editable {
-	min-height: 300px;
-}
+
 
 #top {
 	margin-top: 20px;
@@ -69,11 +63,7 @@ h4>strong {
 	border-color: #ff3f3f !important;
 }
 
-.ck-editor__editable {
-	min-height: 550px;
-	min-width: 550px;
-	max-width: 100%;
-}
+
 
 body>div>p>img {
 	max-width: 500px;

@@ -16,15 +16,6 @@
 <title>게시글 작성</title>
 
 <style>
-/* ckEditor 넓이 높이 조절 */
-.ck.ck-editor {
-	max-width: 100%;
-	font-weight: bolder;
-}
-
-.ck-editor__editable {
-	min-height: 300px;
-}
 
 #top {
 	margin-top: 20px;
@@ -51,9 +42,10 @@
 }
 </style>
 <style>
+/* ckEditor 넓이 높이 조절 */
 .ck-editor__editable {
 	min-height: 550px;
-	min-width: 550px;
+
 	max-width: 100%;
 }
 </style>
@@ -74,10 +66,7 @@
 					<div>
 						<div class="row p-2 ">
 							<div class="col text-center ">
-								<div class="d-flex flex-wrap" >
-									<table style="width: 100%; min-width: 100%; max-width: 100%;">
-										<tr>
-											<td>
+								<!-- <div class="d-flex flex-wrap" > 자동조절 안되서 지움 (종현)-->
 												<!--1. 문파선택  -->
 												<div class="d-flex" style="flex-wrap: nowrap;">
 													<input type="hidden" name="moonpa" id="moonpa">
@@ -102,28 +91,17 @@
 														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
 													</div>
 												</div> 
-											</td>
-										</tr>
-										<tr>
-											<td>
 												<!--3. 제목  -->
 												<div class="input-group">
 													<input type="text" name="title" id="title" class="form-control"
 														placeholder="제목을 입력해주세요!" required="required">
 												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
 												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
-												<div>
+												<div >
 													<textarea id="editor" name="content"
 														placeholder="내용을 입력해주세요!"></textarea>
 												</div>
-											</td>
-										</tr>
-									</table>
-								</div>
+								<!-- </div> 자동조절 안되서 지움 (종현)-->
 							</div>
 
 							<!-- 5. 취소, 전송 버튼 -->
