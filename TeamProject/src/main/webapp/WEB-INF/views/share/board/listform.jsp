@@ -44,16 +44,30 @@ table {
 	width: 950px;
 	text-align: center;
 }
+/* 공시사항 게시글 배경색깔 */
+.noti {
+	background-color: black;
+	opacity:0.8;
+	color: black !important;
+	font-weight: bold;
+}
 </style>
 </head>
 
 <body>
 <!-- 글쓰기 버튼 -->
 	<div>
-		<%-- <a href="${pageContext.request.contextPath}/share/board/writeform"> --%>
-			<button class="btn btn-outline-dark" 
+	<table>
+	<tr style="text-align: center;">
+	<th style="font-size: 30px;"><i class="fa fa-exclamation-circle">&nbsp;</i>반찬공유 게시판</th>
+        <button class="btn btn-outline-dark" 
 				id="shareMake" name="shareMake" type="button"
 				style="float: right; width: 80px; height:40px;">글쓰기</button>
+		
+	</tr>
+	</table><br>
+		<%-- <a href="${pageContext.request.contextPath}/share/board/writeform"> --%>
+			
 		<!-- </a> -->
 	</div>
 
@@ -63,12 +77,12 @@ table {
 		<div class="content">
 			<c:choose>
 				<c:when test="${shareList!=null && pageInfo.listCount>0 }">
-					<h2 class="fw-bolder">반찬공유 게시판</h2> 
+					
 					<hr>
 					<section id="listForm">
-						<table>
+						<table class="table">
 							<tr id="tr_top">
-								<td>번호</td>
+								
 								<td>말머리</td>
 								<td>제목</td>
 								<td>위치</td>
@@ -77,9 +91,8 @@ table {
 								<td>조회수</td>
 							</tr>
 					<c:forEach var="shboard" items="${shareList }">
+					<tr class=${userMap[article.idx].grp == 2 ? "noti" : "normal" }>
 						<%-- <c:if test="${status.index<15}"> --%>
-							<tr>
-								<td>${shboard.articleNo }</td>
 								<td>${shboard.headerTag eq 0? "공유중": shboard.headerTag eq 1? "공유완료":"알 수 없음" }</td>
 								<td>
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.title }</a>
