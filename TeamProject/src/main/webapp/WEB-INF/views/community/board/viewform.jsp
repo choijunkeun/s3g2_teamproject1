@@ -107,12 +107,16 @@ display: inline-block;
 						style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;"
 						src='/profile/${user.profileImg }'> <br> <span
 						class="badge bg-danger rounded-pill mb-2">Lv.${userinfo.honbabLevel}</span>
+						
+						
 						<div class="border pb-2 pt-1 m-2 mx-auto rounded"
 							style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
 							${nickname}님</div></a>
 							
-					</a><br> <button class="btn btn-primary text-white align-self-center" style="height: fit-content;" 
-					id="follow${user.idx}" onclick="togglefollow(${user.idx});">${didILiked>0? "언팔로우": "팔로우"}</button>
+					<br> <button class="btn btn-primary text-white align-self-center" style="height: fit-content;" 
+					id="follow${cboard.idx}" onclick="togglefollow(${cboard.idx});">${didILiked>0? "언팔로우": "팔로우"}</button>
+				
+					
 				</div>
 				<div class="col-sm-4"></div>
 				<div class="col-sm-2"></div>
