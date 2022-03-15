@@ -96,7 +96,7 @@ display: inline-block;
 					<div class="border pb-2 pt-1 mx-1 rounded" style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
 						${userInfo.nickname }님
 					</div>
-					<span class="badge bg-danger rounded-pill m-2">Lv.${userInfo.honbabLevel }</span>
+					<span class="badge bg-danger rounded-pill m-2">Lv. ${userInfo.honbabLevel }</span>
 				</a>
 				<a href="#" class="btn btn-primary text-white align-self-center" style="height: fit-content;">팔로우</a>
 			</div>
