@@ -125,7 +125,7 @@ public class BragServiceImpl implements BragService {
 		int maxPage=(int)Math.ceil((double)listCount/16);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
 		//table에 있는 모든 row 개수
-		double pagenation = pageInfo.getPage(); //? 새로 추가 
+		double pagenation = pageInfo.getPage(); //? 새로 추가
 		//아래에 페이지 이동 버튼도 10개로 구성하고자 하기 위함이다.
 		int startPage=(((int) ((double)pagenation/10+0.9))-1)*10+1;
 		//현재 페이지에 보여줄 시작 페이지 수(1, 11, 21, ...)

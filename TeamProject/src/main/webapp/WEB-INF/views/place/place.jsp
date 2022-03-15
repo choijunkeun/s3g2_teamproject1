@@ -109,9 +109,11 @@
 						<c:forEach var="pr" items="${prList }">
 							<div class="row bg-white my-1 p-3 border ">
 								<div class="justify-content-center text-center border-right" style="width:120px;">
-									<img style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;" src='/profile/${pr.profileImg }'><br>
-									<span class="badge bg-danger rounded-pill mb-2">Lv .${pr.honbabLevel }</span>
-									<div class="border pb-2 pt-1 m-2 mx-auto rounded" style="display: inline; text-overflow: ellipsis; overflow:hidden; white-space: nowrap;">${pr.nickname } 님</div>
+									<a href="/userInfo/${pr.user_PK }">
+										<img style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;" src='/profile/${pr.profileImg }'><br>
+										<span class="badge bg-danger rounded-pill mb-2">Lv .${pr.honbabLevel }</span>
+										<div class="border pb-2 pt-1 m-2 mx-auto rounded" style="display: inline; text-overflow: ellipsis; overflow:hidden; white-space: nowrap;">${pr.nickname } 님</div>
+									</a>
 								</div>
 								<div class="col" >
 									<section>

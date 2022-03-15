@@ -169,9 +169,10 @@
 // 혼밥자랑 게시글
 $(function() {
 	$.ajax({
-		url:'/MybragPosting',		
+		url:'/bragPosting',		
 		type: 'POST',
 		datatype : "json",
+		data: {"idx": ${user.idx}},
 		success: function(data) {
 			/* $("#myBrag").text(data[0].title); */
 			$.each(data, function(index, item) { 
@@ -184,9 +185,10 @@ $(function() {
 	
 //반찬공유 게시글
 	$.ajax({
-		url:'/MysharePosting',		
+		url:'/sharePosting',		
 		type: 'POST',
 		datatype:"json",
+		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
 				$("#myShare").append("<tr><td><a href=/brag/viewdetail/"+item.articleNo+">"
@@ -198,9 +200,10 @@ $(function() {
 	}),
 //커뮤니티 게시글
 	$.ajax({
-		url:'/MycommunityPosting',		
+		url:'/communityPosting',		
 		type: 'POST',
 		datatype:"json",
+		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
 				$("#myCommunity").append("<tr><td><a href=/comm/boardlist/"+item.articleNo+">"
@@ -211,25 +214,26 @@ $(function() {
 	}),
 	// 리뷰 게시글
 	$.ajax({
-		url:'/MyreviewPosting',		
+		url:'/reviewPosting',		
 		type: 'POST',
 		datatype : "json",
+		data: {"idx": ${user.idx}},
 		success: function(data) {			
 			$.each(data, function(index, item) { 
 				var index = (item.serviceRate+item.interiorRate+item.priceRate+item.tasteRate)/4;
 				/* console.log(index); */
 				
-				$("#myReview").append("<tr><td><span class='badge bg-danger rounded-pill' style='font-size:0.75rem'>Lv."+
+				/* $("#myReview").append("<tr><td><span class='badge bg-danger rounded-pill' style='font-size:0.75rem'>Lv."+
 						+item.honbabLv + "</span></td><td>"
 						+item.honbabReason + "</td><td>"+index+"</td></a></tr>");
-						});
+						}); */
 			
 			
-			//url 경로연결은 카카오API 경로 지원 문제 떄문에 사용하지 못함.
-			/* $("#myReview").append("<tr><td><span class='badge bg-danger rounded-pill' style='font-size:0.75rem'>Lv."+
+				//url 경로연결은 카카오API 경로 지원 문제 떄문에 사용하지 못함.
+				$("#myReview").append("<tr><td><span class='badge bg-danger rounded-pill' style='font-size:0.75rem'>Lv."+
 					+item.honbabLv + "</span></td><td><a href=/place/"+item.id+">"
 					+item.honbabReason + "</a></td><td>"+index+"</td></a></tr>");
-					}); */
+					});
 
 			}
       })

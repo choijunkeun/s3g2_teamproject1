@@ -361,9 +361,10 @@
 				alert('서비스 평점을 입력해주세요')
 			} else if($('input[name="interiorRate"]:checked').val() == null){
 				alert('멋(인테리어) 평점을 입력해주세요')
-			} else{
+			} else {
 				var formData = new FormData();
 				var data = {
+					"place_name":"${place.place_name}",
 			        "id":$('#id').val(),
 			        "user_PK":$('#user_PK').val(),
 			        "rejectedCount":($('input[name="rejectedCount"]:checked').val() != null)? $('input[name="rejectedCount"]:checked').val() : "false",
@@ -373,8 +374,7 @@
 			        "interiorRate":$('input[name="interiorRate"]:checked').val(),
 			        "serviceRate":$('input[name="serviceRate"]:checked').val(),
 			        "priceRate":$('input[name="priceRate"]:checked').val(),
-			        "tasteRate":$('input[name="tasteRate"]:checked').val(),
-			        
+			        "tasteRate":$('input[name="tasteRate"]:checked').val()
 			    };
 	
 			    formData.append("file",$('#file')[0].files[0]);
