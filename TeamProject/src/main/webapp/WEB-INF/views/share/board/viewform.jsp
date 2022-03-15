@@ -179,12 +179,13 @@ a {
 			<hr>
 			
 			<br>글 내용 : ${shboard.content }
+			<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
 			
 			
 			</section>
 			</div>
 		</section>
-		<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
+		
 
 
 	<!-- 좋아요 -->
@@ -240,7 +241,7 @@ a {
 					</c:if>
 				</div>
 				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
-					<form id="replyReply" action="/brag/reReply" method="post">
+					<form id="replyReply" action="/share/board/reReply" method="post">
 						<input type="text" name="commentWrite">
 						<input type="hidden" name="idx" value="${user.idx }">
 						<input type="hidden" name="articleNo" value="${shboard.articleNo}">
@@ -263,7 +264,7 @@ a {
 	</div>
 	<br>
 	<!--댓글 작성  -->
-	<form id="comment" action="/share/board/comment" method="post">
+	<form id="comment" action="/share/comment" method="post">
 		<input name="articleNo" type="hidden" value=${shboard.articleNo }></input>
 		<input name="idx" type="hidden" value=${user.idx }></input>
 		<textarea name="commentWrite"></textarea>
@@ -272,7 +273,7 @@ a {
 	</form>
 		<!-- 말머리 바꾸기 -->
 		<c:if test="${user.idx == shboard.idx}">
-		<form id="headerChange" action="/share/board/header" method="post">
+		<form id="headerChange" action="/share/header" method="post">
 			<div class="if-thisArticle-mine text-end">
 				<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
 					data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
@@ -295,10 +296,12 @@ a {
 		<div class="col text-center">
 			<c:if test="${user.idx == shboard.idx}">
 				<div class="if-thisArticle-mine text-end">
-					<button class="btn border-dark"
-						onclick="editWrite(${shboard.articleNo});">수정</button>
-					<button class="btn border-dark"
-						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+				<a class="onlyWriter" href="/share/board/modifyform?articleNo=${shboard.articleNo}"> [수정] </a>
+				<a class="onlyWriter" href="/share/board/deleteform?articleNo=${shboard.articleNo}&page=${page}"> [삭제] </a>
+					<%-- <button class="btn border-dark"
+						onclick="editWrite(${shboard.articleNo});">수정</button> --%>
+					<%-- <button class="btn border-dark"
+						onclick="deleteWrite(${shboard.articleNo});">삭제</button> --%>
 				</div>
 			</c:if>
 			<c:if test="${user.grp == 2 }">
@@ -373,7 +376,7 @@ a {
 	    
 	    //f.setAttribute('enctype','application/json');
 	    f.setAttribute('method', 'post');
-	    f.setAttribute('action', '/share/board/modifyform');
+	    f.setAttribute('action', '../modifyform?articleNo=');
 	    document.body.appendChild(f);
 	    f.submit();
 	}
@@ -387,7 +390,7 @@ a {
 		    f.appendChild(mIHObj('idx','${user.idx}'));
 		   
 		    f.setAttribute('method', 'post');
-		    f.setAttribute('action', '/share/board/deleteform'); // /brag/deleteWrite
+		    f.setAttribute('action', '../deleteform?articleNo='); // /brag/deleteWrite
 		    document.body.appendChild(f);
 		    f.submit();
 		}
@@ -404,7 +407,7 @@ a {
 			
 			$.ajax({
 				type:"POST",
-				url:"/share/board/editReply",
+				url:"/share/editReply",
 				cache: false,
 				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
 				async:false,
@@ -449,7 +452,7 @@ function toggleLikes(articleNo){
 	} else {
 		$.ajax({
 			type:"POST",
-			url:"/share/board/likes/",
+			url:"/share/likes/",
 			cache: false,
 			data:{"articleNo": articleNo, "idx":${not empty user.idx? user.idx:"0"}},
 			async:false,

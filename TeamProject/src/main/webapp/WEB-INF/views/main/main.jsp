@@ -68,7 +68,7 @@
 						<h5 class="fw-bolder">반찬공유 최신글 제목</h5>
 						<c:forEach var="i" begin="0" end="2">
 							<a title="${shareList[i].title }"
-								href="brag/viewdetail/${shareList[i].articleNo }">${shareList[i].title }</a>
+								href="share/board/viewform/${shareList[i].articleNo }">${shareList[i].title }</a>
 							<br>
 						</c:forEach>
 					</div>

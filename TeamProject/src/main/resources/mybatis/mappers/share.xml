@@ -61,7 +61,7 @@
 	 <update id="updateShareBoard" parameterType="ShareBoard">
       <![CDATA[
      
-      update shareBOARD set title=#{title},content=#{content},headerTag=#{headerTag} where articleNo=#{articleNo}
+      update shareBOARD set title=#{title},content=#{content} where articleNo=#{articleNo}
        ]]>
    </update>
    <!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
