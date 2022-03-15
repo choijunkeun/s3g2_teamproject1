@@ -21,6 +21,9 @@ public interface UserService {
 	String emailCheck(String email) throws Exception;
 
 	String getUserNick(int idx) throws Exception;
+	
+	//비밀번호 체크
+	public String passCheck(String email) throws Exception;
 
 		
 	//회원정보수정

@@ -169,6 +169,7 @@ $(document).ready(function(){
 	$('#bragMake').on('click',function(){
 		if('${user.idx }' == ''){
 			location.href="/login";
+			alert("회원이 아닙니다. 로그인을 해주세요!");
 		} else {
 			location.href="/brag/writeform";	
 		}

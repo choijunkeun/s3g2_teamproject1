@@ -80,6 +80,20 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
+	//비밀번호 확인(정보수정에서 이용)
+		@Override
+		public String passCheck(String email) throws Exception {
+			String msg = "";
+			User user = new User();
+			if(userDAO.getPwd(email) == user.getPassword()) {
+				msg = "비밀번호가 일치합니다.";
+			} else {
+				msg = "비밀번호가 틀렸습니다.";
+			}
+			return msg;
+		}
+	
+	
 // 로그인
 	@Override
 	public User loginUser(String email, String password) throws Exception {

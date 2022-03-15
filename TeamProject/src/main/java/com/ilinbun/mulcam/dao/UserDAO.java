@@ -32,6 +32,8 @@ public interface UserDAO {
 	//이메일을 이용해 비밀번호 가져오기
 	String getPwd(String email) throws Exception;
 	
+	
+	
 	// 혼밥자랑 게시글 출력
 	List<BragBoard> bragPosting(BragBoard bragBoard) throws Exception;
 	

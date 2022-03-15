@@ -89,10 +89,10 @@ public class MainController {
 	@PostMapping("/nickCheck")
 	@ResponseBody
 	public String nickCheck(@RequestParam("nickname") String nickname) throws Exception {
-		System.out.println("nickCheck 진입");
-		System.out.println("전달받은 nickname : " + nickname);
+//		System.out.println("nickCheck 진입");
+//		System.out.println("전달받은 nickname : " + nickname);
 		String msg = userService.nickCheck(nickname);
-		System.out.println("확인 결과 : " + msg);
+//		System.out.println("확인 결과 : " + msg);
 		return msg;
 	}
 
@@ -100,9 +100,19 @@ public class MainController {
 	@PostMapping("/emailCheck")
 	@ResponseBody
 	public String emailCheck(@RequestParam("email") String email) throws Exception {
-		System.out.println("emailCheck 진입");
-		System.out.println("전달받은 email : " + email);
+//		System.out.println("emailCheck 진입");
+//		System.out.println("전달받은 email : " + email);
 		String msg = userService.emailCheck(email);
+//		System.out.println("확인 결과 : " + msg);
+		return msg;
+	}
+	
+	// 패스워드 체크
+	@PostMapping("/passCheck")
+	@ResponseBody
+	public String passCheck(@RequestParam("password") String email) throws Exception {
+		System.out.println("passcheck 진입");
+		String msg = userService.passCheck(email);
 		System.out.println("확인 결과 : " + msg);
 		return msg;
 	}
@@ -110,7 +120,7 @@ public class MainController {
 	// 회원가입 기능 컨트롤러
 	@PostMapping("/join")
 	public String postJoin(String email, String nickname, String password, int honbabLevel, MultipartFile profileImg, Model model,HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("postJoin() join");
+//		System.out.println("postJoin() join");
 //		if (bindingResult.hasErrors()) {
 //			System.out.println("if join");
 //			List<FieldError> list = bindingResult.getFieldErrors();
@@ -240,11 +250,6 @@ public class MainController {
 		User user = (User)session.getAttribute("user");
 		String dbPass = userService.getPwd(user.getEmail());
 		
-		
-//		String path = this.servletContext.getRealPath("/profile/");
-//		File destFile = new File(path + profileImg);
-//		System.out.println(path);
-//		System.out.println(destFile);
 		String profileImgName = profileImg.getOriginalFilename();
 		
 		System.out.println("변경 할 닉네임 : " + nickname);
