@@ -33,7 +33,7 @@ a {
 	margin-top: 10px;
 	width: 710px;
 	height: auto;
-	text-align: center;
+	text-align: left;
 	overflow: auto;
 }
 
@@ -104,7 +104,7 @@ a {
 				<div class="col">
 					<img style="border-radius: 50px; width: 30px; height: 30px;"
 						src=/profile/${commentUserList[status.index].profileImg}>
-					<p>${commentUserList[status.index].nickname }</p>
+					<a href="../../userInfo/${commentUserList[status.index].idx }"><p>${commentUserList[status.index].nickname }</p> </a>
 				</div>
 				<div class="col">
 					<input type="text" id="comment${reply.commentNo}"
