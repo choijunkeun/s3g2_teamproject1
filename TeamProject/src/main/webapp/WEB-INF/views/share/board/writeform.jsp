@@ -145,7 +145,7 @@ h4>strong {
 <body>
 <section id="./writeform"> 
     <div class="container pb-3 bg-light" class="outer"> 
-        
+        <h2 class="fw-bolder" style="text-align:center;"><strong>반찬공유 글쓰기</strong></h2>
 		<form action="./sharewrite" method="post" enctype="multipart/form-data" name="shareform" id="shform"> 
 			<div>
 			<input type="hidden" id="idx" name="idx" value=${user.idx }>
@@ -153,7 +153,7 @@ h4>strong {
 				<div class="row p-1 text-center">
 					<div class="col">
 						<input type="hidden" name="headerTag" id="headerTag">
-						<div class="btn-group-sort" style="width: fit-content; ">
+						<div class="btn-group-sort" style="width: fit-content; display: inline-block; float: left">
 							<button type="button"
 								class="btn btn-secondary dropdown-toggle" id="sortDropdown"
 								data-bs-toggle="dropdown" aria-expanded="false">말머리 선택</button>
@@ -165,7 +165,7 @@ h4>strong {
 							</ul>
 						</div> <br>
 						<input type="hidden" name="subway" id="subway">
-					    <div class="btn-group-sort" style="width: fit-content;">
+					    <div class="btn-group-sort" style="width: fit-content; display: inline-block; float: right;">
 							<button type="button"
 								class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
 								data-bs-toggle="dropdown" aria-expanded="false">위치를 골라주세요</button>
@@ -199,13 +199,10 @@ h4>strong {
 							</ul>
 							
 						</div> 
-						<h2 class="fw-bolder" style="text-align:center;">
-       					 <br> <strong>반찬공유 글쓰기</strong></h2>
+						
 							<!-- ckEditor -->
 						<div class="writeform">
-							<input name="title" id="title" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
-						</div>
-						<div class="writeform">
+							<input name="title" id="title" style="display: inline-block; width: 100%;" value='${title }' placeholder="제목을 입력해주세요!" required="required">
 							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							<span></span>
 						    <div id="classic">
