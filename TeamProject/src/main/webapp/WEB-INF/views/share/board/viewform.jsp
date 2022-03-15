@@ -172,19 +172,20 @@ a {
 			<section id="basicInfoArea">
 			
 			<div><h2> [ ${shboard.headerTag eq 0? "공유중" : shboard.headerTag eq 1? "공유완료" : "알 수 없음"} ] ${shboard.title }</h2></div>
-			<div>작성자 : ${user.nickname} </div>
+			<div>작성자 : ${userinfo.nickname} </div>
 			<div>작성일 : ${shboard.date} </div>
 			<div>조회수 : ${shboard.readCount} </div>
 			<div>위치 : ${shboard.subway }</div>
 			<hr>
 			
 			<br>글 내용 : ${shboard.content }
+			<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
 			
 			
 			</section>
 			</div>
 		</section>
-		<div "style=width:200px; height: 200px;"글이미지파일명: ${imgSrc }></div>
+		
 
 
 	<!-- 좋아요 -->
@@ -240,7 +241,7 @@ a {
 					</c:if>
 				</div>
 				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
-					<form id="replyReply" action="/brag/reReply" method="post">
+					<form id="replyReply" action="/share/reReply" method="post">
 						<input type="text" name="commentWrite">
 						<input type="hidden" name="idx" value="${user.idx }">
 						<input type="hidden" name="articleNo" value="${shboard.articleNo}">
@@ -263,7 +264,7 @@ a {
 	</div>
 	<br>
 	<!--댓글 작성  -->
-	<form id="comment" action="/share/board/comment" method="post">
+	<form id="comment" action="/share/comment" method="post">
 		<input name="articleNo" type="hidden" value=${shboard.articleNo }></input>
 		<input name="idx" type="hidden" value=${user.idx }></input>
 		<textarea name="commentWrite"></textarea>
@@ -271,8 +272,10 @@ a {
 		<input id="commentBtn" type="submit" value="댓글작성">
 	</form>
 		<!-- 말머리 바꾸기 -->
-		<c:if test="${user.idx == shboard.idx}">
-		<form id="headerChange" action="/share/board/header" method="post">
+		<c:if test="${user.idx eq shboard.idx}">
+		<form id="headerChange" action="/share/header" method="post">
+			<input type="hidden" name="headerTag">
+			<input type="hidden" name="articleNo" value=${shboard.articleNo}>
 			<div class="if-thisArticle-mine text-end">
 				<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
 					data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
@@ -282,59 +285,23 @@ a {
 					<li><button class="dropdown-item" type="button"
 						onclick="headerChange(1)">공유완료</button></li>
 				</ul>
-			<input id="headerBtn" type="submit" value="말머리 변경">
 			</div>
 		</form>		
 		</c:if>
-
-	<%-- 	<br> 글 작성자 번호 : ${bboard.idx }
-	<br> ${bboard.idx == user.idx ? "수정, 삭제" : "안보여"} --%>
-
+		
 	<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
 	<div class="row py-3">
 		<div class="col text-center">
-			<c:if test="${user.idx == shboard.idx}">
+			<c:if test="${user.idx eq shboard.idx || user.grp eq 2}">
 				<div class="if-thisArticle-mine text-end">
-					<button class="btn border-dark"
-						onclick="editWrite(${shboard.articleNo});">수정</button>
-					<button class="btn border-dark"
-						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
-				</div>
-			</c:if>
-			<c:if test="${user.grp == 2 }">
-				<div class="if-thisArticle-mine text-end">
-					<button class="btn border-dark"
-						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+					<c:if test="${user.idx eq shboard.idx}">
+						<button class="btn border-dark" onclick="editWrite(${shboard.articleNo});">수정</button>
+					</c:if>
+					<button class="btn border-dark" onclick="deleteWrite(${shboard.articleNo});">삭제</button>
 				</div>
 			</c:if>
 		</div>
 	</div>
-		<%-- <div>
-			<section id="commandList">
-				<a href="replyform?board_num=${articleNo}&page=${page}"> [답변] </a> 
-				<!--idx 매칭, 수정, 삭제 버튼 나타나게 하는 부분  -->
-	<div class="row py-3">
-		<div class="col text-center">
-			<c:if test="${user.idx == shboard.idx || user.grp == 2 }">
-				<div class="if-thisArticle-mine text-end">
-					<button class="btn border-dark"
-						onclick="editWrite(${shboard.articleNo});">수정</button>
-					<button class="btn border-dark"
-						onclick="deleteWrite(${shboard.articleNo});">삭제</button>
-				</div>
-			</c:if>
-		</div>
-	</div>
-				<c:if test="${user.idx eq shboard.idx}">
-				<a href="../modifyform?articleNo=${articleNo}"> [수정] </a>
-				</c:if>
-				<c:if test="${user.idx eq shboard.idx || user.grp == 2 }"> 
-				<a href="../deleteform?articleNo=${articleNo}"> [삭제] </a>
-				</c:if>
-				
-				<a href="../listform?page=${page}"> [목록]</a>&nbsp;&nbsp;
-			</section>
-		</div> --%>
 	</section>
 
 	<script>
@@ -363,15 +330,7 @@ a {
 		let f = document.createElement('form');
 		
 		f.appendChild(mIHObj('articleNo', articleNo));
-	    f.appendChild(mIHObj('idx','${user.idx}'));
-	    /* f.appendChild(mIHObj('place_name','${place.place_name}'));
-	    f.appendChild(mIHObj('address_name','${place.address_name}'));
-	    f.appendChild(mIHObj('road_address_name','${place.road_address_name}'));
-	    f.appendChild(mIHObj('x','${place.x}'));
-	    f.appendChild(mIHObj('y','${place.y}')); */
 	    
-	    
-	    //f.setAttribute('enctype','application/json');
 	    f.setAttribute('method', 'post');
 	    f.setAttribute('action', '/share/board/modifyform');
 	    document.body.appendChild(f);
@@ -404,7 +363,7 @@ a {
 			
 			$.ajax({
 				type:"POST",
-				url:"/share/board/editReply",
+				url:"/share/editReply",
 				cache: false,
 				data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
 				async:false,
@@ -432,12 +391,13 @@ a {
 	}
 	/* 말머리 변경 */
 	function headerChange(arg) {
-			document.getElementById('headerTag').value=arg; 
+			document.getElementsByName('headerTag')[0].value=arg; 
 			
 			if(arg == '0')
 				document.getElementById('sortDropdown').innerText='공유중';
 			else if (arg == '1')
 				document.getElementById('sortDropdown').innerText='공유완료';
+			$('#headerChange').submit();
 		}
 	</script>
 	<!-- 좋아요 -->
@@ -449,7 +409,7 @@ function toggleLikes(articleNo){
 	} else {
 		$.ajax({
 			type:"POST",
-			url:"/share/board/likes/",
+			url:"/share/likes/",
 			cache: false,
 			data:{"articleNo": articleNo, "idx":${not empty user.idx? user.idx:"0"}},
 			async:false,

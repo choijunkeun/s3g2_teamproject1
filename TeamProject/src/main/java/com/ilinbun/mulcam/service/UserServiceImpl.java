@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ilinbun.mulcam.dao.BragDAO;
 import com.ilinbun.mulcam.dao.UserDAO;
-import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 
 @Service
@@ -22,11 +22,22 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	BragDAO bragDAO;
+	
+	@Autowired
+	SqlSessionTemplate sqlSession;
 
 	// 회원 가입
 	@Override
-	public void makeUser(User user) throws Exception {
+	public void makeUser(String email, String nickname, String password, int honbabLevel, String profileImgName) throws Exception {
+		String profileImg = profileImgName;
+		User user = new User();
+		user.setEmail(email);
+		user.setNickname(nickname);
+		user.setPassword(password);
+		user.setProfileImg(profileImg);
+		user.setHonbabLevel(honbabLevel);
 		userDAO.join(user);
+		
 	}
 	
 	// 닉네임 중복확인
@@ -88,11 +99,32 @@ public class UserServiceImpl implements UserService {
 		return userDAO.getUserNick(idx);
 	}
 
-	//회원정보 수정
+	// 회원 탈퇴
 	@Override
-	public void userUpdate(User user) throws Exception {
-		userDAO.userUpdate(user);
-	
+	public void userDelete(User user) throws Exception {
+		userDAO.remove(user);
+	}
+
+	//비밀번호 DB에서 가져오기
+	@Override
+	public String getPwd(String email) throws Exception {
+		String getpass = userDAO.getPwd(email);
+		return getpass;
+	}
+
+	@Override
+	public void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel)
+			throws Exception {
+		String profileImg = profileImgName;
+		System.out.println("updateInfo ServiceImpl");
+		User user = new User();
+		user.setEmail(email);
+		user.setNickname(nickname);
+		user.setPassword(password);
+		user.setProfileImg(profileImg);
+		user.setHonbabLevel(honbabLevel);
+		userDAO.updateInfo(user);
+		
 	}
 
 	//유저 닉네임 게시판 불러오기 (종현)

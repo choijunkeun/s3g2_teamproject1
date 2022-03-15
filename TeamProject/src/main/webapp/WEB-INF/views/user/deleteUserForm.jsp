@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.net.URLDecoder"%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +11,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
-
-    <title>일인분</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         * { box-sizing:border-box; }
-
         form {
             width:800px;
-            height:700px;
+            height:500px;
             display : flex;
             flex-direction: column;
             align-items:center;
@@ -24,7 +24,7 @@
             top:50%;
             left:50%;
             transform: translate(-50%, -50%) ;
-            border: 1px solid rgb(89,117,196);
+            border: 1px solid #d3d3d3;
             border-radius: 10px;
              
             
@@ -96,12 +96,13 @@
 		.nickname_already{color:#6A82FB; display: none;}
 	        
     </style>
+    <title>일인분</title>
 </head>
 <body>
-   <form action="<c:url value="/loginSuccess"/>" method="POST" onsubmit="return formCheck(this)">
+  <form action="/deleteUser" method="POST">
    	
-    <div class="title">
-    	<div>
+    <div class="title d-flex">
+    	<div class="justify-content-center text-center">
     		<img src="https://placehold.co/30">일인분
     	</div>
     	<div class="title-text">
@@ -110,30 +111,25 @@
     	</div>
     </div>
     
+    <div>계정 삭제를 원하시면 이메일과 비밀번호를 입력해주세요</div>
     <hr style="width:700px">
-   	
-    <div>
-    <p>가입하신 이메일 주소와 닉네임을 입력하세요.
-    <p>이메일 주소로 임시비밀번호를 발급해드립니다.
-    <div>
-    <label for="nickname">닉네임</label>
-    <input class="input-field" type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요." required>
-    </div>
-    <div>
-    <label for="email">이메일</label>
-    <input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요." required>
-    </div>
     
-    </div>
-      
-    <button type="button" class="join-btn" id="searchBtn">비밀번호 찾기</button>
-    <button type="button" class="join-btn" onclick="history.go(-1);">돌아가기</button>
-    <a href="/join">아직 계정이 없으신가요? 가입하기</a>
+   	<table>
+   		<tr>
+   			<td><label for="email">이메일</label></td>
+   			<td><input class="input-field" type="email" id="email" name="email" placeholder="이메일을 입력해주세요."></td>
+   		</tr>
+		<tr>
+			<td><label for="password">비밀번호</label></td>
+			<td><input class="input-field" type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요."></td>
+		</tr>   	
+   	</table>
+   	
+   	<button class="btn btn-success" type="submit" id="submit">회원탈퇴</button>
+	<button class="cancle btn btn-danger" type="button" onclick="history.go(-1);">취소</button>
+   	
+	
       
    </form> 
 </body>
- <script>
-      
-       
-   </script>
 </html>

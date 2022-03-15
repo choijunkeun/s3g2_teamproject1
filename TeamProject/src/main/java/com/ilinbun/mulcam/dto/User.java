@@ -1,11 +1,16 @@
 package com.ilinbun.mulcam.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class User {
+	
+
 	private int idx;
 	private String email;
 	private String nickname;
 	private String password;
 	private String profileImg;
+	private MultipartFile file;
 	private int honbabLevel;
 	private int grp;
 
@@ -79,5 +84,32 @@ public class User {
 		this.honbabLevel = honbabLevel;
 		this.grp = grp;
 	}
+	
+	
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
+	
+	
+	public User(int idx, String email, String nickname, String password, String profileImg, MultipartFile file,
+			int honbabLevel, int grp) {
+		super();
+		this.idx = idx;
+		this.email = email;
+		this.nickname = nickname;
+		this.password = password;
+		this.profileImg = profileImg;
+		this.file = file;
+		this.honbabLevel = honbabLevel;
+		this.grp = grp;
+	}
+
+
+	
 
 }

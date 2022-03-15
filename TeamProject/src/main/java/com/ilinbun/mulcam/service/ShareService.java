@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.ShareReply;
@@ -10,11 +11,12 @@ import com.ilinbun.mulcam.dto.User;
 public interface ShareService {
 	
 	void regShareBoard(Shareboard shareboard) throws Exception;
-	Shareboard shareBoardQueryByID(String id) throws Exception;
 	Shareboard getArticleNo(int articleNo) throws Exception;
 	void modifyShareBoard(Shareboard shareboard) throws Exception;
 	void setInputList(Shareboard shareboard) throws Exception;
 	List<Shareboard> getShareboardList(int page) throws Exception;
+	List<User> getShareboardListUserList(int page) throws Exception;
+	List<Map<String, Object>> getShareboardListMap(int page) throws Exception;
 	PageInfo getPageInfo(PageInfo pageInfo) throws Exception;
 	Shareboard getShareboard(int articleNo) throws Exception;
 	
@@ -56,5 +58,5 @@ public interface ShareService {
 
 	void updateCommentSeq(ShareReply shr) throws Exception;
 	
-	void changeHeader(int headerTag) throws Exception;
+	void changeHeader(int articleNo, int headerTag) throws Exception;
 }

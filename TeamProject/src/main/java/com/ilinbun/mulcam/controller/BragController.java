@@ -127,14 +127,14 @@ public class BragController {
 				@RequestParam String location,
 				@RequestParam int idx,
 				Model model) {
-			
+
 			int articleNo=0; //모르겠다
 			try {
 				User userInfo = (User) session.getAttribute("user");
 				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
 				Document doc=Jsoup.parse(bragboard.getContent());
 				System.out.println("doc.body :" + doc.body());
-				Elements bodyChildNodes = doc.children();
+				Elements bodyChildNodes = doc.body().children();
 				String result ="";
 				for(Element e : bodyChildNodes) {
 					if(e.tagName().equals("img")) {
