@@ -17,7 +17,7 @@
 
 <style type="text/css">
 #articleForm {
-	width: 700px;
+	max-width: 1200px;
 	height: 500px;
 	/* border: 1px solid red; */
 	margin: auto;
@@ -40,8 +40,8 @@ a {
 #articleContentArea {
 	background:  #f6f3f3;
 	margin-top: 10px;
-	width: 710px;
-	height: auto;
+	max-width: 1200px;
+	height: 100%;
 	text-align: center;
 	overflow: auto;
 }
@@ -61,7 +61,7 @@ a {
 			<div>
 			<section id="basicInfoArea">
 			
-			<div><h2> [ ${shboard.headerTag eq 0? "공유중" : shboard.headerTag eq 1? "공유완료" : "알 수 없음"} ] ${shboard.title }</h2></div>
+			<div><h2> [ ${shboard.headerTag eq 0? "공유중" : shboard.headerTag eq 1? "공유완료" : shboard.headerTag eq 2? "공지글": "알 수 없음"} ] ${shboard.title }</h2></div>
 			<div>작성자 : ${userinfo.nickname} </div>
 			<div>작성일 : ${shboard.date} </div>
 			<div>조회수 : ${shboard.readCount} </div>
@@ -114,21 +114,17 @@ a {
 								대댓글쓰기</button>							
 						</div>
 					</c:if>
-					<c:if test="${user.idx == reply.idx}">
+					<c:if test="${user.idx == reply.idx || user.grp == 2 }">
 						<div class="if-thisArticle-mine text-end">
+							<c:if test="${user.idx == reply.idx }">
 							<button class="btn border-dark"
-								onclick="editReply(${reply.commentNo},${reply.articleNo});">댓글수정</button>
-
+								onclick="editReply(${reply.commentNo},${reply.articleNo});">수정</button>
+							</c:if>
 							<button class="btn border-dark"
-								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
+								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">삭제</button>
 						</div>
 					</c:if>
-					<c:if test="${user.grp == 2 }">
-						<div class="if-thisArticle-mine text-end">
-							<button class="btn border-dark"
-								onclick="deleteReply(${reply.commentNo},${reply.articleNo});">댓글삭제</button>
-						</div>
-					</c:if>
+					
 				</div>
 				<div class="row" id="replyReply${reply.commentNo }" style="display:none;">
 					<form id="replyReply" action="/share/reReply" method="post">
@@ -162,13 +158,13 @@ a {
 		<input id="commentBtn" type="submit" value="댓글작성">
 	</form>
 		<!-- 말머리 바꾸기 -->
-		<c:if test="${user.idx eq shboard.idx}">
+		<c:if test="${user.idx eq shboard.idx && user.grp eq 1}">
 		<form id="headerChange" action="/share/header" method="post">
 			<input type="hidden" name="headerTag">
 			<input type="hidden" name="articleNo" value=${shboard.articleNo}>
 			<div class="if-thisArticle-mine text-end">
 				<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-					data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
+					data-bs-tosggle="dropdown" aria-expanded="false">말머리 변경</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 					<li><button class="dropdown-item" type="button"
 						onclick="headerChange(0)">공유중</button></li>

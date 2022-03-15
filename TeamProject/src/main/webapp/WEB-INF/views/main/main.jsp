@@ -6,6 +6,16 @@
 <head>
 <meta charset="UTF-8">
 <title>일인분 : 혼밥 정보가 필요할 땐, 일인분</title>
+<style>
+	.mainShortcut>a {
+		max-width: auto;
+		display: inline-block;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+
+	}
+</style>
 </head>
 <body>
 	<!-- <div class="container mb-2">
@@ -64,11 +74,11 @@
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">반찬공유 최신글 제목</h5>
+					<div class="text-center mainShortcut">
+						<h5 class="fw-bolder">반찬공유 최신글</h5>
 						<c:forEach var="i" begin="0" end="2">
 							<a title="${shareList[i].title }"
-								href="share/board/viewform/${shareList[i].articleNo }">${shareList[i].title }</a>
+								href="/share/board/viewform/${shareList[i].articleNo }">${shareList[i].title }</a>
 							<br>
 						</c:forEach>
 					</div>
@@ -85,8 +95,8 @@
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">혼밥자랑</h5>
+					<div class="text-center mainShortcut">
+						<h5 class="fw-bolder">혼밥자랑 최신글</h5>
 						<c:forEach var="i" begin="0" end="2">
 							<a title="${bragList[i].title }"
 								href="brag/viewdetail/${bragList[i].articleNo }">${bragList[i].title }</a>
@@ -106,15 +116,20 @@
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">커뮤니티 최신글 제목</h5>
-						커뮤니티 최신글 내용
+					<div class="text-center mainShortcut">
+						<h5 class="fw-bolder">커뮤니티 최신글</h5>
+						<c:forEach var="i" begin="0" end="2">
+							<a title="${commList[i].title }"
+								href="/comm/viewform/${commList[i].articleNo }">${commList[i].title }</a>
+							
+							<br>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<div>
 						<!-- + 클릭 시 상세보기로 이동 -->
-						<a class="btn btn-outline-dark mt-auto" href="#">+</a>
+						<a class="btn btn-outline-dark mt-auto" href="/comm/listform">+</a>
 					</div>
 				</div>
 			</div>

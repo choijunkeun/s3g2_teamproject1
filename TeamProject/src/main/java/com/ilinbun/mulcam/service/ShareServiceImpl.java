@@ -1,5 +1,6 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,16 @@ public class ShareServiceImpl implements ShareService {
 	@Override
 	public List<Map<String, Object>> getShareboardListMap(int page) throws Exception {
 		int startrow=(int) ((page-1)*15+1);
-		return shareDAO.selectShareBoardListMap(startrow);
+		List<Map<String, Object>> share = shareDAO.selectShareBoardListMap(startrow);
+		List<Map<String, Object>> noti = shareDAO.selectShareNotiListMap();
+		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		noti.forEach((e)->{
+			result.add(e);
+		});
+		share.forEach((e)->{
+			result.add(e);
+		});
+		return result;
 	}
 	@Override
 	public List<User> getShareboardListUserList(int page) throws Exception {

@@ -262,12 +262,12 @@ public class BragController {
 				mav.addObject("imgSrc", src); //mav에 넣기
 				mav.setViewName("brag/viewDetail"); //경로이름 설정
 				
-				Integer countComment = bragService.countComment();
+				Integer countComment = bragService.countComment(articleNo);
 				mav.addObject("countComment", countComment);
 				
 				//댓글 보기
 				//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
-				pageInfo=bragService.getCommentPageInfo(pageInfo);
+				pageInfo=bragService.getCommentPageInfo(pageInfo, articleNo);
 				System.out.println("댓글 받아오기 시작");
 				List<BragReply> commentList = bragService.boardReplyList(articleNo, pageInfo.getStartPage());
 				System.out.println(commentList.size() + "개 받음");

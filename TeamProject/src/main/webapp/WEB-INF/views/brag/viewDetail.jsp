@@ -82,70 +82,64 @@ display: inline-block;
 <body>
 
 <div class="card justify-content-center text-center border-right">
-  <div class="card-header">
-  	<button type="button" class="btn btn-secondary" style="display: flex;">${bboard.moonpa ? "사먹파" : "해먹파"}</button>
-  	<h2 class="card-title fw-bolder">${bboard.title }</h2>
-  </div>
-  
-  <div class="card-body">
-		  	<div class="row">
-		  		<div class="col-sm-2">
-		  			<a href="/myPage/${userInfo.idx }">
-						<img style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;" src='/profile/${userInfo.profileImg }'>
-						<br>
-						<span class="badge bg-danger rounded-pill mb-2">Lv.${userInfo.honbabLevel }</span>
-						<div class="border pb-2 pt-1 m-2 mx-auto rounded" style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-							${userInfo.nickname }님
-						</div>
-					</a><br>
-					<a href="#" class="btn btn-primary">팔로우</a>
-		  		</div>
-		  		<div class="col-sm-4">
-		  		</div>
-		  		<div class="col-sm-2">
-		  		</div>
-		  		<div class="col-sm-2">
-		  			조회수 : ${bboard.readCount }
-		  		</div>
-		  		<div class="col-sm-2">
-		  			작성일 : ${bboard.date }
-		  		</div>
-		  	</div>
-  			<hr>
-  			<div class="row" style="display: block"> 
-  				잡수신 곳 : ${bboard.location }
+	<div class="card-header d-flex justify-content-between">
+		<button type="button" class="btn btn-secondary" style="display: flex; height: fit-content;">${bboard.moonpa ? "사먹파" : "해먹파"}</button>
+		<h2 class="fw-bolder my-auto">${bboard.title }</h2>
+		<a href="/brag/brag" class="my-auto"><i class="fa fa-times-circle fa-2x" aria-hidden="true"></i></a>
+	</div>
+	  
+	<div class="card-body">
+		<div class="row mb-2">
+			<div class="col-sm-6 d-flex align-self-center">
+				<a href="/myPage/${userInfo.idx }">
+					<img style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;" src='/profile/${userInfo.profileImg }'>
+					<div class="border pb-2 pt-1 mx-1 rounded" style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+						${userInfo.nickname }님
+					</div>
+					<span class="badge bg-danger rounded-pill m-2">Lv.${userInfo.honbabLevel }</span>
+				</a>
+				<a href="#" class="btn btn-primary text-white align-self-center" style="height: fit-content;">팔로우</a>
 			</div>
-  			<div class="row">
-	  			<article id="boardContent">
-					${bboard.content }
-					
-				</article>
-  			
-  			</div>
-  </div>
+			<div class="col-sm-6 d-flex justify-content-end text-end align-self-center">
+				조회수 : ${bboard.readCount } | 작성일 : ${bboard.date }
+			</div>
+		</div>
+		<div class="row">
+			<i class="fa fa-map-marker m-2" aria-hidden="true">&nbsp;${bboard.location }</i>
+		</div>
+		<div class="row">
+			<article id="boardContent">${bboard.content }</article>
+		</div>
+		<div class="row">
+			<div class="col d-flex justify-content-end align-items-center">
+				<!-- 좋아요 border-danger rounded-pill bg-white  -->
+				<button class="btn-sm border-0 bg-transparent text-danger mx-2" id="likebtn${bboard.articleNo }" onclick="toggleLikes(${bboard.articleNo})">
+					<i class="fa fa-lg ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
+						aria-hidden="true">${likes }</i>
+				</button>
+				<div><i class="fa fa-commenting fa-lg mx-2" aria-hidden="true">${countComment }</i> </div>
+			</div>
+		</div>
+	</div>
   
-  <div class="card-footer">
-  				<div class="row">
-  							<div class="col-8">
-						  		<form action="/brag/comment" method="post">
-									<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
-									<input name="idx" type="hidden" value=${user.idx }></input>
-									<textarea name="commentWrite" cols=80></textarea>
-									<input id="blind" name="blind" type="checkbox" value="1">익명댓글
-									<input id="commentBtn" type="submit" value="댓글작성">
-								</form>
-							</div>
-							<div class="col-4">
-								<!-- 좋아요 -->
-								<button class="btn-sm border-danger rounded-pill bg-white text-danger" id="likebtn${bboard.articleNo }" onclick="toggleLikes(${bboard.articleNo})">
-								<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
-									aria-hidden="true">${likes }</i>
-								</button>
-							</div>
-  		
-				</div>
+	<div class="card-footer">
+		<div class="row">
+			<div class="col-8">
+		  		<form action="/brag/comment" method="post">
+					<input name="articleNo" type="hidden" value=${bboard.articleNo }></input>
+					<input name="idx" type="hidden" value=${user.idx }></input>
+					<textarea name="commentWrite" cols=80></textarea>
+					<input id="blind" name="blind" type="checkbox" value="1">익명댓글
+					<input id="commentBtn" type="submit" value="댓글작성">
+				</form>
+			</div>
+			<div class="col-4">
 				
-				<hr>
+			</div>
+		
+		</div>
+		
+		<hr>
 
 	<!-- 댓글 보기 -->
 	<!-- 프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼  -->

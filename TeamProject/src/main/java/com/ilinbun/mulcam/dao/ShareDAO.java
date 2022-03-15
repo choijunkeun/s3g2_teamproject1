@@ -21,7 +21,8 @@ public interface ShareDAO {
 	List<Shareboard> selectShareBoardList(int startrow) throws Exception;
 	List<User> selectShareBoardListUserList(int startrow) throws Exception;
 	List<Map<String, Object>> selectShareBoardListMap(int startrow) throws Exception;
-	
+	List<Map<String, Object>> selectShareNotiListMap() throws Exception;
+		
 	int selectShareBoardCount() throws Exception;
 	Shareboard selectShareboard() throws Exception;
 	

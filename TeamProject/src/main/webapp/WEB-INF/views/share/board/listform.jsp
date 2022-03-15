@@ -91,9 +91,9 @@ table {
 								<td>조회수</td>
 							</tr>
 					<c:forEach var="shboard" items="${shareList }">
-					<tr class=${userMap[article.idx].grp == 2 ? "noti" : "normal" }>
+					<tr class=${shboard.grp == 2 ? "noti" : "normal" }>
 						<%-- <c:if test="${status.index<15}"> --%>
-								<td>${shboard.headerTag eq 0? "공유중": shboard.headerTag eq 1? "공유완료":"알 수 없음" }</td>
+								<td>${shboard.headerTag eq 0? "공유중" : shboard.headerTag eq 1? "공유완료": shboard.headerTag eq 2? "공지글" :"알 수 없음" }</td>
 								<td>
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.title }</a>
 								</td>

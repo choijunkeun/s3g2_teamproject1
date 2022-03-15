@@ -75,7 +75,7 @@ public interface BragDAO {
 	//익명댓글 처리
 	void setBlind(Map<String, Object> map) throws Exception;
 	
-	Integer countComment() throws Exception;
+	Integer countComment(int articleNo) throws Exception;
 	
 	void updateCommentSeq(BragReply br) throws Exception;
 

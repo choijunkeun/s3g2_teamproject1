@@ -119,8 +119,8 @@ public class BragServiceImpl implements BragService {
 	}
 	//댓글에 대한 페이지 보기
 	@Override
-	public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
-		int listCount=bragDAO.countComment();
+	public PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception {
+		int listCount=bragDAO.countComment(articleNo);
 		System.out.println("리스트카운트 :"+listCount);
 		int maxPage=(int)Math.ceil((double)listCount/16);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
@@ -329,8 +329,8 @@ public class BragServiceImpl implements BragService {
 	}
 	
 	@Override
-	public Integer countComment() throws Exception{
-		return bragDAO.countComment();
+	public Integer countComment(int articleNo) throws Exception{
+		return bragDAO.countComment(articleNo);
 	}
 	
 	@Override

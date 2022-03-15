@@ -87,12 +87,7 @@ public class ShareController {
 //				share.setContent(src);
 //			}
 			List<Map<String, Object>> shareList=shareService.getShareboardListMap(page);
-			for(Map<String, Object> share : shareList) {
-				Document doc=Jsoup.parse((String)share.get("content"));
-				Elements img = doc.select("img");
-				String src = img.attr("src");
-				share.replace("content", src);
-			}
+			
 			pageInfo=shareService.getPageInfo(pageInfo);
 			// mav.addObject("userInfo", userInfo); //same as above
 			mav.addObject("pageInfo", pageInfo);
@@ -459,7 +454,7 @@ public class ShareController {
 				}
 			}
 			
-			return "redirect:/share/viewform/"+articleNo;
+			return "redirect:/share/board/viewform/"+articleNo;
 		}
 		
 		@PostMapping("/reReply")
