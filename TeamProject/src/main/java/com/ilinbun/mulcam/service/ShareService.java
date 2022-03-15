@@ -35,7 +35,7 @@ public interface ShareService {
 	int queryIfILikeThis(int articleNo, int idx) throws Exception;
 	
 	//  댓글 리스트 관련 페이지
-	PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception;
+	PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception;
 	
 	//댓글쓰기
 	void boardReply(int articleNo, int idx, String comment, Integer blind) throws Exception;
@@ -54,9 +54,8 @@ public interface ShareService {
 	//익명댓글 처리
 	void setBlind(int blind, int commentNo) throws Exception;
 
-	Integer countComment() throws Exception;
-
 	void updateCommentSeq(ShareReply shr) throws Exception;
 	
 	void changeHeader(int articleNo, int headerTag) throws Exception;
+	Integer countComment(int articleNo) throws Exception;
 }

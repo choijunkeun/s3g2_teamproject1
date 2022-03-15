@@ -31,21 +31,18 @@ td {
 </style>
 </head>
 <body>
+	<!-- 1. 글쓰기 버튼 -->
+	<div class="row d-flex flex-row justify-content-between">
+		<h2 class="fw-bolder float-start"><a href="./"><i class="px-3 fa fa-angle-left"></i></a></h2>
+		<button class="btn btn-outline-secondary float-end" id="bragMake"
+			name="bragMake" type="button"
+			style="float: right; width: 80px; height: 40px;">글쓰기</button>
+	</div>
 	<!-- <a></a> BEST게시판 이동 링크 -->
 	<div class="row justify-content-center">
-		<!-- 1. 글쓰기 버튼 -->
-		<div>
-			<button class="make_btn btn-outline-secondary" id="bragMake"
-				name="bragMake" type="button"
-				style="float: right; width: 80px; height: 40px;">글쓰기</button>
-		</div>
-
-
-
-
 		<div class="col-sm-6">
 			<div class="card p-4">
-				<h5 class="fw-bolder">이달의혼밥</h5>
+				<h5 class="fw-bolder">이 달의 혼밥</h5>
 				<div class="card-body">
 					<a href="./viewdetail/${bestbragList[0].articleNo }">
 						${bestbragList[0].title } <br> <img class="card-img-top"
@@ -58,6 +55,7 @@ td {
 
 		<div class="col-sm-6">
 			<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
+			
 			<div class="card-body">
 				<div class="text-center">
 					<c:forEach var="bboard" begin="1" end="6" items="${bestbragList}"
@@ -83,9 +81,7 @@ td {
 			</div>
 		</div>
 	</div>
-
-
-	<div class="p-4">
+	<div>
 		<div class="card-body">
 			<c:forEach var="bboard" begin="7" items="${bestbragList}"
 				varStatus="status">

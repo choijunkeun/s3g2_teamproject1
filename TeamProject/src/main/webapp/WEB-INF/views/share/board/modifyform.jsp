@@ -60,24 +60,51 @@ h5 {
 
 	<div >
 		<div class="container pb-3 bg-light" class="outer" >
-			<h5 class="fw-bolder" >반찬공유 글수정</h5>
+			<div class="p-2 border-rounded d-flex justify-content-between">
+				<h5 class="fw-bolder float-start" >반찬공유 글수정</h5>
+				<c:if test="${user.grp eq 1 }">
+			    <div class="btn-group-sort float-end" style="width: fit-content; display: inline-block; float: right;">
+					<button type="button"
+						class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
+						data-bs-toggle="dropdown" aria-expanded="false">위치를 골라주세요</button>
+					<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+						<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
+							onclick="subwayChange('용산역')">용산역</button></li>
+						<li><button class="dropdown-item" type="button" name="신용산역" value='${subway }'
+							onclick="subwayChange('신용산역')">신용산역</button></li>
+						<li><button class="dropdown-item" type="button" name="이촌역" value='${subway }'
+							onclick="subwayChange('이촌역')">이촌역</button></li>
+						<li><button class="dropdown-item" type="button" name="서빙고역" value='${subway }'
+							onclick="subwayChange('서빙고역')">서빙고역</button></li>
+						<li><button class="dropdown-item" type="button" name="한남역" value='${subway }'
+							onclick="subwayChange('한남역')">한남역</button></li>
+						<li><button class="dropdown-item" type="button" name="한강진역" value='${subway }'
+							onclick="subwayChange('한강진역')">한강진역</button></li>
+						<li><button class="dropdown-item" type="button" name="이태원역" value='${subway }'
+							onclick="subwayChange('이태원역')">이태원역</button></li>
+						<li><button class="dropdown-item" type="button" name="녹사평역" value='${subway }'
+							onclick="subwayChange('녹사평역')">녹사평역</button></li>
+						<li><button class="dropdown-item" type="button" name="삼각지역" value='${subway }'
+							onclick="subwayChange('삼각지역')">삼각지역</button></li>
+						<li><button class="dropdown-item" type="button" name="숙대입구역" value='${subway }'
+							onclick="subwayChange('숙대입구역')">숙대입구역</button></li>
+						<li><button class="dropdown-item" type="button" name="남영역" value='${subway }'
+							onclick="subwayChange('남영역')">남영역</button></li>
+						<li><button class="dropdown-item" type="button" name="효창공원앞역" value='${subway }'
+							onclick="subwayChange('효창공원앞역')">효창공원앞역</button></li>
+						<li><button class="dropdown-item" type="button" name="null" value='${subway }'
+							onclick="subwayChange('')">지역을 골라주세요!</button></li>
+					</ul>
+				</div> 
+				</c:if>
+			</div>
 
 			<form action="./modifyform" method="post" enctype="multipart/form-data" name="modifyform" >
+				<input type="hidden" name="subway" id="subway">
 				<div>
 					<input type="hidden" id="articleNo" name ="articleNo" value="${shboard.articleNo}">
 					<div class="container p-2 ">
-					<!-- <input type="hidden" name="headerTag">
-						<div>
-							<button type="button"class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-								data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
-									<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-										<li><button class="dropdown-item" type="button"
-											onclick="headerChange(0)">공유중</button></li>
-										<li><button class="dropdown-item" type="button"
-											onclick="headerChange(1)">공유완료</button></li>
-									</ul>
-						</div> -->
-						<div class="row p-1 text-center ">
+						<div class="row p-1 text-center">
 							<div class="col">
 								<input name="title" id="title" style="display: inline-block;width:100%;" value='${shboard.title}' placeholder="제목을 입력해주세요!" required="required">
 									<!-- ckEditor -->	

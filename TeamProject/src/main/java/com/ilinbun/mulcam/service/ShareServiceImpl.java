@@ -164,8 +164,8 @@ public class ShareServiceImpl implements ShareService {
 
 
 	@Override
-	public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
-		int listCount=shareDAO.countComment();
+	public PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception {
+		int listCount=shareDAO.countComment(articleNo);
 		System.out.println("리스트카운트 :"+listCount);
 		int maxPage=(int)Math.ceil((double)listCount/16);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
@@ -263,8 +263,8 @@ public class ShareServiceImpl implements ShareService {
 
 
 	@Override
-	public Integer countComment() throws Exception {
-		return shareDAO.countComment();
+	public Integer countComment(int articleNo) throws Exception {
+		return shareDAO.countComment(articleNo);
 	}
 
 

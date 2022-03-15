@@ -41,6 +41,7 @@ import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
+import com.ilinbun.mulcam.service.UserService;
 
 
 @Controller
@@ -54,6 +55,9 @@ public class BragController {
 	
 	@Autowired
 	private BragService bragService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired(required = false) // 매개변수 없어도 OK. 나중에 고쳐야?
 	BragBoard bragboard;
@@ -247,6 +251,7 @@ public class BragController {
 					int didILiked = bragService.queryIfILikeThis(articleNo, user.getIdx());
 					System.out.println("이전에 누른 적 있음 : " +didILiked);
 					mav.addObject("didILiked", didILiked);  //좋아요 유지
+					mav.addObject("didIFollowed",userService.didIFollowed(bragboard.getIdx(), user.getIdx()));
 				}
 				
 				mav.addObject("likes", likes);

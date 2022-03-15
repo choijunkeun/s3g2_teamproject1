@@ -177,9 +177,9 @@
 		 ]]>
 	</update>
 	
-	<select id="countComment" resultType="Integer">
+	<select id="countComment" resultType="Integer" parameterType="int">
 		<![CDATA[
-			select count(*) from sharecomment
+			select count(*) from sharecomment where articleNo = #{articleNo}
 		]]>
 	</select>
 	
