@@ -113,7 +113,7 @@
 				</div>
 			</div>
     
-    		<div align="center">계정 삭제를 원하시면 이메일과 비밀번호를 입력해주세요</div>
+    		<div align="center" style="color:red;">계정 삭제를 원하시면 비밀번호를 입력해주세요</div>
     		<hr style="width:500px">
     		<div style="padding:20px">
 	   			<div style="padding:20px">

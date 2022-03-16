@@ -163,8 +163,6 @@ public class MainController {
 		return "redirect:/loginSuccess";
 	} 
 	
-	
-
 	// 회원가입 완료 폼
 	@GetMapping("/loginSuccess")
 	public String loginSuccess() {
@@ -506,14 +504,10 @@ public class MainController {
 				return "redirect:/";
 			} else {
 				System.out.println("이메일은 일치하나 비밀번호는 불일치");
-				String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8"); 
+				String msg = URLEncoder.encode("비밀번호를 다시 확인해주세요", "utf-8"); 
 				return "redirect:/deleteUserForm?msg=" + msg;
 			}
-		} else {
-			System.out.println("이메일이 불일치해서 비밀번호까진 확인도 못함");
-			String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8");
-			return "redirect:/deleteUserForm?msg=" + msg;
 		}
-		
+		return null;
 	}
 }
