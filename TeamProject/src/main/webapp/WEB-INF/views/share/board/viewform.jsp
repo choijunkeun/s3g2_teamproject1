@@ -118,7 +118,7 @@
 			<!-- 게시글 제목 -->
 			<div class="card justify-content-center text-center border-right">
 				<div class="card-header d-flex justify-content-between">
-					<button type="button" class="btn btn-secondary" style="display: flex;">${shboard.headerTag eq 0 ?
+					<button type="button" class="btn btn-secondary" style="display: flex;" >${shboard.headerTag eq 0 ?
 						"공유중" : shboard.headerTag eq 1 ? "공유완료" : shboard.headerTag eq 2? "공지글" :"알 수 없음" }</button>
 					<h2 class="fw-bolder my-auto">${shboard.title }</h2>
 					<a href="/share/board/listform" class="my-auto"><i class="fa fa-times-circle fa-2x"
