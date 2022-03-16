@@ -29,12 +29,14 @@ td {
 	white-space: nowrap;
 }
 </style>
+<link rel="stylesheet" href="/css/brag.css">
 </head>
 <body>
 	<!-- 1. 글쓰기 버튼 -->
-	<div class="row d-flex flex-row justify-content-between">
-		<h2 class="fw-bolder float-start"><a href="./"><i class="px-3 fa fa-angle-left"></i></a></h2>
-		<button class="btn btn-outline-secondary float-end" id="bragMake"
+	<div class="row d-flex justify-content-between">
+		<h2 class="fw-bolder align-self-start w-auto"><a href="./"><i class="px-3 fa fa-angle-left"></i></a></h2>
+		<h2 class="align-self-center w-auto"><a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a></h2>
+		<button class="btn btn-outline-secondary align-self-end d-inline" id="bragMake"
 			name="bragMake" type="button"
 			style="float: right; width: 80px; height: 40px;">글쓰기</button>
 	</div>
@@ -45,8 +47,11 @@ td {
 				<h5 class="fw-bolder">이 달의 혼밥</h5>
 				<div class="card-body">
 					<a href="./viewdetail/${bestbragList[0].articleNo }">
-						${bestbragList[0].title } <br> <img class="card-img-top"
-						src="${bestbragList[0].content}" name="brag_content" width="100%" />
+						${bestbragList[0].title } 
+						<div class="img-container  mx-auto d-block position-relative overflow-hidden" 
+							style="vertical-align:middle; object-fit:cover; max-width: 600px; width: inherit;">
+							<img class="img-item" src="${bestbragList[0].content}" name="brag_content" />
+						</div>
 					</a>
 				</div>
 			</div>
@@ -54,12 +59,11 @@ td {
 
 
 		<div class="col-sm-6">
-			<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
+			<!-- <a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a> -->
 			
 			<div class="card-body">
 				<div class="text-center">
-					<c:forEach var="bboard" begin="1" end="6" items="${bestbragList}"
-						varStatus="status">
+					<c:forEach var="bboard" begin="1" end="6" items="${bestbragList}" varStatus="status">
 						<c:choose>
 							<c:when test="${status.index mod 2 == 1}">
 								<div class="row">
@@ -67,8 +71,10 @@ td {
 						</c:choose>
 						<div class='col-sm-6'>
 							<a href="./viewdetail/${bboard.articleNo }"> ${bboard.title }
-								<br> <img src="${bboard.content}" name="brag_content"
-								width="200px" height="200px" class="card-img-top" />
+								<div class="img-container table240  mx-auto d-block position-relative overflow-hidden" 
+									style="vertical-align:middle; object-fit:cover; width: inherit">
+									<img src="${bboard.content}" name="brag_content" class="img-item table200-item" />
+								</div>
 							</a>
 						</div>
 						<c:choose>
@@ -91,9 +97,11 @@ td {
 					</c:when>
 				</c:choose>
 				<div class='col-sm-3'>
-					<a href="./viewdetail/${bboard.articleNo }"> ${bboard.title } <br>
-						<img src="${bboard.content}" name="brag_content" width="200px"
-						height="200px" class="card-img-top" />
+					<a href="./viewdetail/${bboard.articleNo }"> ${bboard.title }
+						<div class="img-container table240  mx-auto d-block position-relative overflow-hidden" 
+							style="vertical-align:middle; object-fit:cover; width: inherit">
+							<img src="${bboard.content}" name="brag_content" class="img-item table200-item" />
+						</div>
 					</a>
 				</div>
 				<c:choose>

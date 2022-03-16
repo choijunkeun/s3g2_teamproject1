@@ -311,25 +311,132 @@
 		</c:if>
 		</div>
 
-<!-- 이전 목록 다음 -->
-				
-	<div class="row">
-		<div class="col" style="text-align: left;">
-			<a href="/share/board/viewform/${shboard.articleNo-1}">
-				<button type="button" id="btnList" class="btn btn-default">이전</button>
-			</a>
+		<div class="row">
+			<div class="col" style="text-align: left;">
+				<a href="/share/board/viewform/${shboard.articleNo-1}">
+					<button type="button" id="btnList" class="btn btn-default">이전</button>
+				</a>
+			</div>
+			<div class='col' style="text-align: center;">
+				<a href="/share/board/listform">
+					<button type="button" id="btnList" class="btn btn-default">목록</button>
+				</a>
+			</div>
+			<div class='col' style="text-align: right;">
+				<a href="/share/board/viewform/${shboard.articleNo+1}">
+					<button type="button" id="btnList" class="btn btn-default">다음</button>
+				</a>
+			</div>
 		</div>
-		<div class='col' style="text-align: center;">
-			<a href="/share/board/listform">
-				<button type="button" id="btnList" class="btn btn-default">목록</button>
-			</a>
-		</div>
-		<div class='col' style="text-align: right;">
-			<a href="/share/board/viewform/${shboard.articleNo+1}">
-				<button type="button" id="btnList" class="btn btn-default">다음</button>
-			</a>
-		</div>
-	</div>
+
+			<%-- <!-- 말머리 바꾸기 -->
+				<c:if test="${user.idx eq shboard.idx}">
+					<form id="headerChange" action="/share/board/header" method="post">
+						<input type="hidden" name="headerTag" id="headerTag">
+						<input type="hidden" name="articleNo" value=${shboard.articleNo}>
+						<div class="if-thisArticle-mine text-end">
+							<button type="button" class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+								data-bs-toggle="dropdown" aria-expanded="false">말머리 변경</button>
+							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+								<li><button class="dropdown-item" type="button" onclick="headerChange(0)">공유중</button>
+								</li>
+								<li><button class="dropdown-item" type="button" onclick="headerChange(1)">공유완료</button>
+								</li>
+							</ul>
+							<input id="headerChange" type="submit" value="말머리 변경">
+						</div>
+					</form>
+				</c:if> --%>
+
+				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+				<script>
+
+					//목록 버튼
+					$("#btnList").click(function () {
+						location.href = "/share/board/listform";
+					});
+
+					/* -1. ekEditor -내용(content)부분 : img 이동경로 지정 코드 */
+					$(function () {
+						ClassicEditor.create(document.querySelector("#editor"), {
+							initialData: '${viewdetail.content}'
+						}).then(editor => {
+							window.editor = editor;
+						})
+							.catch((error) => {
+								console.error(error);
+							});
+					});
+
+					function mIHObj(key, value) { // makeInputHiddenObject : form 형식 만들기 귀찮아서 만듦
+						let obj = document.createElement('input');
+						obj.setAttribute('type', 'hidden');
+						obj.setAttribute('name', key);
+						obj.setAttribute('value', value);
+						return obj;
+					}
+					
+					function deleteWrite(articleNo){
+						if(confirm("게시글을 삭제하시겠습니까?")){
+							let f = document.createElement('form');
+							
+							f.appendChild(mIHObj('articleNo', articleNo));
+						    f.appendChild(mIHObj('idx','${user.idx}'));
+						   
+						    f.setAttribute('method', 'post');
+						    f.setAttribute('action', '/share/board/deleteform'); // /brag/deleteWrite
+						    document.body.appendChild(f);
+						    f.submit();
+						}
+					}
+					
+					// editWrite deleteWrite -> a tag href로 수정
+					/*댓글 수정버튼 누르면~  */
+					function editReply(commentNo, articleNo) {
+						if ($('#comment' + commentNo).attr("type") == 'hidden') {
+							$('#comment' + commentNo).attr("type", "text")
+							$('#comm' + commentNo).hide();
+							return false;
+						} else {
+							let comment = $('#comment' + commentNo).val()
+							$.ajax({
+								type: "POST",
+								url: "/share/editReply",
+								cache: false,
+								data: { "commentNo": commentNo, "articleNo": articleNo, "comment": comment },
+								async: false,
+								complete: function () {
+									window.location.href = "/share/board/viewform/" + articleNo;
+								}
+							})
+						}
+					}
+
+					/*댓글 삭제버튼 누르면~  */
+					function deleteReply(commentNo, articleNo) {
+						if (confirm("게시글을 삭제하시겠습니까?")) {
+							let f = document.createElement('form');
+
+							f.appendChild(mIHObj('commentNo', commentNo));
+							f.appendChild(mIHObj('articleNo', articleNo));
+
+							f.setAttribute('method', 'post');
+							f.setAttribute('action', '../deleteReply'); // /brag/deleteReply
+							document.body.appendChild(f);
+							f.submit();
+
+							/* $.ajax({
+								type:"POST",
+								url:"/share/board/deleteReply",
+								cache: false,
+								data:{"commentNo": commentNo,"articleNo": articleNo, "comment":comment},
+								async:false,
+								complete:function(){
+									console.log(commentNo);
+									window.location.href="/share/board/viewform/"+articleNo;
+								}) */
+						}
+					}
 	
 		
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -492,7 +599,7 @@
 								type: "POST",
 								url: "/follow/",
 								cache: false,
-								data: { "idx": ${ userinfo.idx }},
+								data: { "idx": idx },
 						async: false,
 							success: function(data) {
 								result = JSON.parse(data);

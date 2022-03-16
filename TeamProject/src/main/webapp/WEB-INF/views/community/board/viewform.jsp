@@ -55,6 +55,10 @@ a {
 	border: 0 !important;
 }
 
+.white {
+	color: white;
+}
+
 .imgupload {
 	color: #1e2832;
 	padding-top: 40px;
@@ -97,64 +101,90 @@ display: inline-block;
 <body>
 
 	<div class="card justify-content-center text-center border-right">
-		<div class="card-header">
+		<div class="card-header d-flex justify-content-between">
+		<button type="button" class="btn btn-secondary" style="display: flex;">제목</button>
 			<h2 class="card-title fw-bolder">${cboard.title }</h2>
+			<a href="/comm/listform" class="my-auto"><i class="fa fa-times-circle fa-2x"
+							aria-hidden="true"></i></a>
 		</div>
 		<div class="card-body">
-			<div class="row">
-				<div class="col-sm-2">
+			<div class="row mb-2">
+				<div class="col-sm-4 d-flex align-self-center">
 					<a href="../../userInfo/${cboard.idx}"> <img
-						style="border-radius: 50px; width: 60px; height: 60px; margin: 0 auto;"
-						src='/profile/${user.profileImg }'> <br> <span
-						class="badge bg-danger rounded-pill mb-2">Lv.${userinfo.honbabLevel}</span>
-						
-						
-						<div class="border pb-2 pt-1 m-2 mx-auto rounded"
+						style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;"
+						src='/profile/${user.profileImg }'>
+						<div class="border pb-2 pt-1 mx-1 rounded"
 							style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-							${nickname}님</div></a>
-							
-					<br> <button class="btn btn-primary text-white align-self-center" style="height: fit-content;" 
-					id="follow${cboard.idx}" onclick="togglefollow(${cboard.idx});">${didILiked>0? "언팔로우": "팔로우"}</button>
+							${nickname}님</div>
+						<span class="badge bg-danger rounded-pill m-2">Lv.${userinfo.honbabLevel}</span>
+					</a>
+					
+					<c:if test="${not empty user && !(cboard.idx eq user.idx) }">
+					<button class="btn btn-primary text-white align-self-center" style="height: fit-content;" 
+					id="follow${cboard.idx}" onclick="togglefollow(${cboard.idx});">${didIFollowed>0? "언팔로우": "팔로우"}</button>
+					</c:if>
 				
 					
 				</div>
-				<div class="col-sm-4"></div>
-				<div class="col-sm-2"></div>
-				<div class="col-sm-2">조회수 : ${cboard.views}</div>
-				<div class="col-sm-2">작성일 : ${cboard.date}</div>
+				<div class="col-sm-4 d-flex justify-content-center align-self-center">
+					<strong style="font-size: 30px">🐻</strong>
+				</div>
+				<div class="col-sm-4 d-flex justify-content-end text-end align-self-center">
+						조회수 : ${cboard.views } | 작성일 : ${cboard.date }</div>
+				
 			</div>
 			<hr>
-			
+			<!-- 게시글 본문 -->
+			<div class="row">&nbsp;</div>
 			<div class="row">
 				<article id="boardContent">${cboard.content }</article>
 
 			</div>
 		
 
-		<div class="card-footer">
+		
 			<div class="row">
-				<div class="col-8">
-					<form action="/comm/comment" method="post">
-						<input name="articleNo" type="hidden" value=${cboard.articleNo }></input>
-						<input name="idx" type="hidden" value=${user.idx }></input>
-						<textarea name="commentWrite" cols=80></textarea>
-						<input id="blind" name="blind" type="checkbox" value="1">익명댓글
-						<input id="commentBtn" type="submit" value="댓글작성">
-					</form>
-				</div>
-				<div class="col-4">
+				<div class="col d-flex justify-content-end align-items-center">
 					<!-- 좋아요 -->
 					<button
-						class="btn-sm border-danger rounded-pill bg-white text-danger"
-						id="likebtn${cboard.articleNo }"
-						onclick="toggleLikes(${cboard.articleNo})">
-						<i class="fa ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
-							aria-hidden="true">${likes }</i>
+						class="btn-sm border-0 bg-transparent text-danger mx-2"
+						id="likebtn${cboard.articleNo }" onclick="toggleLikes(${cboard.articleNo})">
+						<i class="fa fa-lg ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" aria-hidden="true">${likes }</i>
 					</button>
+					<div>
+						<i class="fa fa-commenting fa-lg mx-2" aria-hidden="true">${countComment }</i>
+					</div>
 				</div>
-
+				
 			</div>
-		
+			<div class="row"> <!-- 글 수정, 삭제 -->
+				<div class="col" style="text-align: center;">
+					<c:if test="${user.idx == cboard.idx || user.grp == 2}">
+						<c:if test="${user.idx == cboard.idx }">
+							<a class="btn border-dark onlyWriter" style="color: black;"
+								href="/comm/modifyform?articleNo=${cboard.articleNo}">수정</a>
+						</c:if>
+						<a class="btn border-dark onlyWriter" style="color: black;"
+							href="/comm/deleteform?articleNo=${cboard.articleNo}&page=${page}">삭제</a>
+					</c:if>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer">
+				<form class="d-flex" action="/comm/comment" method="post">
+					<div class="p-3 align-items-center">
+						<input name="articleNo" type="hidden" value=${cboard.articleNo }></input>
+						<input name="idx" type="hidden" value=${user.idx }></input>
+					</div>
+					<div class="flex-grow-1">
+						<textarea style="width: 100%;" name="commentWrite"></textarea>
+					</div>
+					<div class="p-2">
+						<label class="d-block"><input id="blind" name="blind" type="checkbox" value="1">비밀댓글</label>
+						<input class="d-block btn btn-danger" id="commentBtn" type="submit" value="댓글작성">
+					</div>
+				</form>
+			</div>
 	
 	
 	<hr>
@@ -174,65 +204,87 @@ display: inline-block;
 			<c:forEach var="reply" items="${commentList}" varStatus="status">
 				<c:choose>
 					<c:when test="${status.end == 0}">
-				댓글이 없습니다. 1빠를 선점하세요
+				댓글이 없습니다. 첫 댓글을 작성해 주세요!
 			</c:when>
 					<c:otherwise>
 						<c:choose>
 							<c:when
 								test="${reply.blind eq false || reply.idx eq user.idx || cboard.idx eq user.idx}">
 								<!--다 보여주고 댓쓴이는 수정 삭제 보여줘(관리자는 삭제) + 대댓-->
-								<div class="row my-3" style="text-align: left;"">
-									<div class="d-inline-flex" style="align-items: center">
+								<div class="row my-3" style="text-align: left;">
+								<div class=" d-flex" style="align-items: center">
+									<div class="d-flex flex-grow-1">
+									<div>
 										<c:choose>
 											<c:when test="${reply.lev != 0 }">
-												<c:forEach var="i" begin="1" end="${reply.lev*5}">
-											&nbsp;
-										</c:forEach>
-
+												<c:forEach var="i" begin="1" end="${reply.lev*8}">&nbsp;
+												</c:forEach>
+											<i class="bi bi-arrow-return-right"></i>
 											</c:when>
 										</c:choose>
-										<div class="text-center px-2">
+									</div>
+										<div class="text-center px-2 style="width: fit-content;">
+											<a href="../../userInfo/${commentUserList[status.index].idx}">
 											<img style="border-radius: 50px; width: 30px; height: 30px;"
-												src=/profile/${commentUserList[status.index].profileImg} >
-											<a href="../../userInfo/${commentUserList[status.index].idx}"><p class="m-0">${commentUserList[status.index].nickname }</p></a>
+												src="/profile/${commentUserList[status.index].profileImg}" >
+											<p class="m-0">${commentUserList[status.index].nickname }</p></a>
 										</div>
-										<div class="px-2">
+										<div class="px-2 flex-grow-1">
 											<p style="width: 500px" id="comm${reply.commentNo}">${reply.comment }</p>
 											<input type="hidden" style="width: 500px"
 												id="comment${reply.commentNo}" value="${reply.comment }"></input>
 										</div>
-										<div class="px-2">
-											<p class="m-0">${reply.date }</p>
+									</div>
+									<div>
+										<div class="px-2 float-end">
+											<p class="m-0 float-right">${reply.date }</p>
 										</div>
-										<div class="px-2 float-right">
+										<div class="px-2">
 											<c:if test="${user!=null}">
-												<button class="btn border-dark"
+												<button class="btn btn-sm border-dark"
 													onclick="document.getElementById('replyReply${reply.commentNo}').style.display='flex';">대댓글쓰기</button>
 											</c:if>
 											<c:if test="${user.idx == reply.idx || user.grp == 2}">
 												<c:if test="${user.idx == reply.idx }">
-													<button class="btn border-dark"
-														onclick="editReply(${reply.commentNo},${reply.articleNo});">수정</button>
+													<button class="btn btn-sm border-dark"
+														onclick="editReply(${reply.commentNo},${reply.articleNo});">
+														<i class="bi bi-pencil-square"></i>
+														</button>
 												</c:if>
-												<button class="btn border-dark"
-													onclick="deleteReply(${reply.commentNo},${reply.articleNo});">삭제</button>
+												<button class="btn btn-sm border-dark"
+													onclick="deleteReply(${reply.commentNo},${reply.articleNo});">
+													<i class="bi bi-trash"></i>
+													</button>
 											</c:if>
 										</div>
 									</div>
-									<div class="row" id="replyReply${reply.commentNo }"
-										style="display: none;">
-										<form id="replyReply" action="/comm/reReply" method="post">
-											<input type="text" name="commentWrite"> <input
-												type="hidden" name="idx" value="${user.idx }"> <input
-												type="hidden" name="articleNo" value="${cboard.articleNo}">
-											<input type="hidden" name="commentNo"
-												value="${reply.commentNo}"> <input type="checkbox"
-												name="blind" id="blind${reply.commentNo }" value="1">
-											<label for="blind${reply.commentNo }">비밀댓글</label> <input
-												type="submit" value="답글쓰기">
+								</div>
+									<div class="row" id="replyReply${reply.commentNo }" style="display: none;">
+										<form class="d-flex"id="replyReply" action="/comm/reReply" method="post">
+										<div class="p-2" style="">
+											<c:choose>
+												<c:when test="${reply.lev != 0 }">
+													<c:forEach var="i" begin="1" end="${reply.lev*8}">&nbsp;
+													</c:forEach>
+												</c:when>
+											</c:choose>
+										</div>
+										<div class="p-2 flex-grow-1">
+											<textarea name="commentWrite" style="width: 100%;"></textarea>
+										</div>
+										<div class="p-2">
+											<input type="hidden" name="idx" value="${user.idx }">
+											<input type="hidden" name="articleNo" value="${cboard.articleNo}">
+											<input type="hidden" name="commentNo" value="${reply.commentNo}">
+											<label class="d-block"><input type="checkbox" name="blind"
+															id="blind${reply.commentNo }" value="1">비밀댓글</label> 
+											<input class="btn btn-sm bg-danger text-white d-block" type="submit"
+														value="답글쓰기">
+										</div>
 										</form>
 									</div>
 								</div>
+								<c:if test="${not status.last }"><hr></c:if>
 							</c:when>
 
 							<c:otherwise>
@@ -250,22 +302,11 @@ display: inline-block;
 	</div>
 	</div>
 	</div>
-	<div class="row">
-		<div class="col" style="text-align: center;">
-			<c:if test="${user.idx == cboard.idx || user.grp == 2}">
-				<c:if test="${user.idx == cboard.idx }">
-					<a class="btn border-dark onlyWriter" style="color: black;"
-						href="/comm/modifyform?articleNo=${cboard.articleNo}">수정</a>
-				</c:if>
-				<a class="btn border-dark onlyWriter" style="color: black;"
-					href="/comm/deleteform?articleNo=${cboard.articleNo}&page=${page}">삭제</a>
-			</c:if>
-		</div>
-	</div>
+	
 
 	<!-- 이전 목록 다음 -->
 
-	<div class="row">
+	<%-- <div class="row">
 		<div class="col" style="text-align: left;">
 			<a type="button" id="btnList" class="btn btn-default" href="/comm/viewform/${articleNo+1}">이전</a>
 		</div>
@@ -277,7 +318,7 @@ display: inline-block;
 			<a type="button" id="btnList" class="btn btn-default" href="/comm/viewform/${articleNo-1}">다음</a>
 		</div>
 	</div>
-
+ --%>
 
 
 
@@ -313,7 +354,7 @@ $(function() {
 
 <script>
 /*댓글 수정버튼 누르면~  */
-	function editReply(commentNo, articleNo){
+	function editReply(commentNo, articleNo) {
  		
 		if($('#comment'+commentNo).attr("type") == 'hidden'){
 			$('#comment'+commentNo).attr("type", "text")
@@ -427,7 +468,7 @@ function toggleLikes(articleNo){
 				type:"POST",
 				url:"/follow/",
 				cache: false,
-				data:{"idx": ${user.idx}},
+				data:{"idx": idx},
 				async:false,
 				success: function(data){
 					result = JSON.parse(data);

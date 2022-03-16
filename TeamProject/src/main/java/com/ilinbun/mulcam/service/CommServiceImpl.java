@@ -132,8 +132,8 @@ public class CommServiceImpl implements CommService {
 	
 	//댓글에 대한 페이지 보기
 		@Override
-		public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
-			int listCount=CommunityDAO.countComment();
+		public PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception {
+			int listCount=CommunityDAO.countComment(articleNo);
 			System.out.println("리스트카운트 :"+listCount);
 			int maxPage=(int)Math.ceil((double)listCount/10);
 			//그 개수를 10으로 나누고 올림처리하여 페이지 수 계산
@@ -287,8 +287,8 @@ public class CommServiceImpl implements CommService {
 		}
 		
 		@Override
-		public Integer countComment() throws Exception{
-			return CommunityDAO.countComment();
+		public Integer countComment(int articleNo) throws Exception{
+			return CommunityDAO.countComment(articleNo);
 		}
 		
 		@Override

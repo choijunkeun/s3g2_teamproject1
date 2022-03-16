@@ -50,7 +50,7 @@ table {
 
 /* 공시사항 게시글 배경색깔 */
 .noti {
-	background-color: black;
+	background-color: #E3E3E3;
 	opacity:0.8;
 	color: black !important;
 	font-weight: bold;
