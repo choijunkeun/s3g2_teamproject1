@@ -16,15 +16,6 @@
 <title>게시글 작성</title>
 
 <style>
-/* ckEditor 넓이 높이 조절 */
-.ck.ck-editor {
-	max-width: 100%;
-	font-weight: bolder;
-}
-
-.ck-editor__editable {
-	min-height: 300px;
-}
 
 #top {
 	margin-top: 20px;
@@ -51,9 +42,10 @@
 }
 </style>
 <style>
+/* ckEditor 넓이 높이 조절 */
 .ck-editor__editable {
 	min-height: 550px;
-	min-width: 550px;
+
 	max-width: 100%;
 }
 </style>
@@ -67,17 +59,15 @@
 			<div class="container pb-3 bg-light outer  border rounded">
 				<h5 class="fw-bolder pt-3 pb-2" style="margin-left: 0%;">혼밥자랑</h5>
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
-				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
+				<form action="bragwrite" method="post" name="bragform" id="bwForm">
 			<!-- <form id="bwForm"> -->
-			<input type="hidden" name="idx" id="idx" value="${user.idx }"> 
-			<!-- 목업 유저정보 코드 -> ??? -->
+			<input type="hidden" name="idx" id="idx" value="${user.idx }">
+					
+					<!-- 목업 유저정보 코드 -> ??? -->
 					<div>
 						<div class="row p-2 ">
 							<div class="col text-center ">
-								<div class="d-flex flex-wrap" >
-									<table style="width: 100%; min-width: 100%; max-width: 100%;">
-										<tr>
-											<td>
+								<!-- <div class="d-flex flex-wrap" > 자동조절 안되서 지움 (종현)-->
 												<!--1. 문파선택  -->
 												<div class="d-flex" style="flex-wrap: nowrap;">
 													<input type="hidden" name="moonpa" id="moonpa">
@@ -89,41 +79,36 @@
 														<ul class="dropdown-menu text-center"
 															aria-labelledby="sortDropdown">
 															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('true')">사먹파</button></li>
+																	onclick="moonpaChange('true')" >사먹파</button></li>
 															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('false')">해먹파</button></li>
+																	onclick="moonpaChange('false')" >해먹파</button></li>
 														</ul>
 													</div>
 													<!--2. 위치 선택 (문파 기반) -->
+													<div class="input-group" id="cookingDiv" style="max-width: auto; flex-shrink: 1; display: none;">
+														<input type="text" class="form-control"
+															name="location" placeholder="위치를 직접 입력해 보세요!" aria-label="위치">
+														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+													</div>
+													
 													<div class="input-group" id="locationDiv" style="max-width: auto; flex-shrink: 1; display: none;">
 														<input type="hidden" id="locationId">
-														<input type="text" class="form-control" id="location"
+														<input type="text" class="form-control" id="location" maxlength="40"
 															name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
 														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
 													</div>
 												</div> 
-											</td>
-										</tr>
-										<tr>
-											<td>
 												<!--3. 제목  -->
 												<div class="input-group">
-													<input type="text" name="title" id="title" class="form-control"
+													<input type="text" name="title" id="title" class="form-control" maxlength="40"
 														placeholder="제목을 입력해주세요!" required="required">
 												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
 												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
-												<div>
+												<div >
 													<textarea id="editor" name="content"
 														placeholder="내용을 입력해주세요!"></textarea>
 												</div>
-											</td>
-										</tr>
-									</table>
-								</div>
+								<!-- </div> 자동조절 안되서 지움 (종현)-->
 							</div>
 
 							<!-- 5. 취소, 전송 버튼 -->
@@ -153,12 +138,20 @@
 		src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 	<script>
-	$(function() {
-		let idx = ${user.idx }
+		let idx = ${not empty user.idx? user.idx : false };
 		if (idx == false) {
+			alert("로그인을 하셔야 글 작성을 하실 수 있습니다. 로그인 해주세요.");
 			location.href = "/login"
 		}
-	})
+	
+		$('#writeFormSubmit').click(function(){
+			if($('#moonpa').val() == null || $('#moonpa').val() == "" ){
+				alert('문파를 선택해주세요!');
+				return false;
+			} else if($('#')){
+				
+			}
+		});
 	
 	
 	/*1-1. 문파선택 : dropbox에서 선택 시 그 문파이름으로 고정되게 하는 코드  */
@@ -168,15 +161,17 @@
 			if(arg == 'true'){
 				document.getElementById('sortDropdown').innerText='사먹파';
 				document.getElementById('locationDiv').style.display="flex";
+				document.getElementById('cookingDiv').style.display="none";
 				/* document.getElementById('location'). */
 			}
 			else{
 				document.getElementById('sortDropdown').innerText='해먹파';
 				document.getElementById('locationDiv').style.display="none";
+				document.getElementById('cookingDiv').style.display="flex";
 			}
 		}
 
-/* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
+	/* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
 	$(function(){
 		ClassicEditor
 		.create(document.querySelector("#editor"), {

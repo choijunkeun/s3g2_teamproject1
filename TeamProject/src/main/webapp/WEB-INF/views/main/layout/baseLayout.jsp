@@ -24,17 +24,23 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 	<style>
-		#headertitle:link {
-		  color : white;
+		#headertitle:link, #headertitle:visited , #headertitle:hover , #headertitle:active {
+		  color : black;
 		}
-		#headertitle:visited {
-		  color : white;
+		@font-face {
+		    font-family: 'Yeongdo-Rg';
+		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/Yeongdo-Rg.woff') format('woff');
+		    font-weight: normal;
+		    font-style: normal;
 		}
-		#headertitle:hover {
-		  color : white;
+		@font-face {
+		    font-family: 'SUIT-Regular';
+		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+		    font-weight: normal;
+		    font-style: normal;
 		}
-		#headertitle:active {
-		  color : white;
+		body {
+			font-family: 'SUIT-Regular';
 		}
 	</style>
 </head>

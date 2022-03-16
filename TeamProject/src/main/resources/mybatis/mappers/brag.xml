@@ -40,7 +40,13 @@
 	<select id="selectBragBoardList" resultType="Bragboard"
 		parameterType="Map">
  		<![CDATA[
- 			select * from honbab limit #{startrow}, #{howManyBrag}
+ 			select articleNo, idx, moonpa, title, location, readCount, date, content
+				from (select @rownum:=@rownum+1 rnum, tot.*
+					from (select * from honbab order by articleNo desc) tot,
+							(select @rownum:=0) temp) sub
+				where rnum between #{startrow} and #{startrow}+#{howManyBrag}-1
+ 		
+ 			
  		]]>
 	</select>
 	<!-- 글목록 : 전체게시물 조회하기 -->
@@ -166,9 +172,9 @@
 		 ]]>
 	</update>
 	
-	<select id="countComment" resultType="Integer">
+	<select id="countComment" resultType="Integer" parameterType="int">
 		<![CDATA[
-			select count(*) from honbabcomment
+			select count(*) from honbabcomment where articleNo=#{articleNo}
 		]]>
 	</select>
 	

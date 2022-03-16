@@ -1,5 +1,6 @@
 package com.ilinbun.mulcam.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,6 @@ public class ShareServiceImpl implements ShareService {
 		shareDAO.updateReadCount(articleNo);
 		return shareDAO.selectShareboard(articleNo);
 	}
-	
 
 	@Override
 	public void regShareBoard(Shareboard shareboard) throws Exception {
@@ -40,13 +40,6 @@ public class ShareServiceImpl implements ShareService {
 		else articleNo+=1;
 		shareboard.setArticleNo(articleNo);
 		shareDAO.insertShareBoard(shareboard);
-	}
-
-	@Override
-	public Shareboard shareBoardQueryByID(String id) throws Exception {
-		Shareboard viewDetail = shareDAO.shareBoardQueryByID(id);
-		return viewDetail;
-//		return null; //shareboardquery오류로 임시수정
 	}
 
 	@Override
@@ -59,6 +52,25 @@ public class ShareServiceImpl implements ShareService {
 	public List<Shareboard> getShareboardList(int page) throws Exception {
 		int startrow=(int) ((page-1)*15+1);
 		return shareDAO.selectShareBoardList(startrow);
+	}
+	@Override
+	public List<Map<String, Object>> getShareboardListMap(int page) throws Exception {
+		int startrow=(int) ((page-1)*15+1);
+		List<Map<String, Object>> share = shareDAO.selectShareBoardListMap(startrow);
+		List<Map<String, Object>> noti = shareDAO.selectShareNotiListMap();
+		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
+		noti.forEach((e)->{
+			result.add(e);
+		});
+		share.forEach((e)->{
+			result.add(e);
+		});
+		return result;
+	}
+	@Override
+	public List<User> getShareboardListUserList(int page) throws Exception {
+		int startrow=(int) ((page-1)*15+1);
+		return shareDAO.selectShareBoardListUserList(startrow);
 	}
 
 	@Override
@@ -152,8 +164,8 @@ public class ShareServiceImpl implements ShareService {
 
 
 	@Override
-	public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
-		int listCount=shareDAO.countComment();
+	public PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception {
+		int listCount=shareDAO.countComment(articleNo);
 		System.out.println("리스트카운트 :"+listCount);
 		int maxPage=(int)Math.ceil((double)listCount/16);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
@@ -251,8 +263,8 @@ public class ShareServiceImpl implements ShareService {
 
 
 	@Override
-	public Integer countComment() throws Exception {
-		return shareDAO.countComment();
+	public Integer countComment(int articleNo) throws Exception {
+		return shareDAO.countComment(articleNo);
 	}
 
 
@@ -264,11 +276,10 @@ public class ShareServiceImpl implements ShareService {
 
 
 	@Override
-	public void changeHeader(int headerTag) throws Exception {
-		shareDAO.changeHeaderTag(headerTag);
-		
+	public void changeHeader(int articleNo, int headerTag) throws Exception {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("articleNo", articleNo);
+		map.put("headerTag", headerTag);
+		shareDAO.changeHeaderTag(map);
 	}
-
-
-	
 }

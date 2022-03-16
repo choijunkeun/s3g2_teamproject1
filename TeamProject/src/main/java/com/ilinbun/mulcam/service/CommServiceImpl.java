@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.service;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,9 +73,29 @@ public class CommServiceImpl implements CommService {
 	// 게시글 목록 : 15개가 화면에 띄워지게 하는 DAO
 	@Override
 	public List<CommBoard> getCommBoardList(int page) throws Exception {
-		int startrow = (int) ((page - 1) * 15);
+		int startrow = (int) ((page - 1) * 15)+1;
 		System.out.println(startrow);
-		return CommunityDAO.selectCommBoardList(startrow);
+		
+		List<CommBoard> NotiBoard = CommunityDAO.commNotice();
+		List<CommBoard> normalBoard = CommunityDAO.selectCommBoardList(startrow);
+		List<CommBoard> result = new ArrayList<CommBoard>();
+		NotiBoard.forEach((e)->{
+			result.add(e);
+		});
+		normalBoard.forEach((e)->{
+			result.add(e);
+		});
+		return result;
+	}
+	
+	@Override
+	public List<CommBoard> getCommBoardNormalList(int page) throws Exception {
+		int startrow = (int) ((page - 1) * 15)+1;
+		System.out.println(startrow);
+		
+		List<CommBoard> normalBoard = CommunityDAO.selectCommBoardList(startrow);
+		
+		return normalBoard;
 	}
 
 	// 게시글 목록 아래의 이전/목록/다음 리스트가 10개가 되도록 구성하는 쿼리(PageInfo DTO와 연결, DAO필요X)

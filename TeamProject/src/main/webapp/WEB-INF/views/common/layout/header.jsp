@@ -22,22 +22,7 @@
 		}
 		#headertitle:active {
 		  color : black;
-		}
-		@font-face {
-		    font-family: 'Yeongdo-Rg';
-		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/Yeongdo-Rg.woff') format('woff');
-		    font-weight: normal;
-		    font-style: normal;
-		}
-		@font-face {
-		    font-family: 'SUIT-Regular';
-		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
-		    font-weight: normal;
-		    font-style: normal;
-		}
-		body {
-			font-family: 'SUIT-Regular';
-		}
+		}	
 		
 	</style>
 </head>

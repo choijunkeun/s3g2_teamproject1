@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -40,6 +41,7 @@ import com.ilinbun.mulcam.dto.ShareReply;
 import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.ShareService;
+import com.ilinbun.mulcam.service.UserService;
 
 @Controller
 @RequestMapping("/share") // localhost://8090/share~
@@ -50,6 +52,9 @@ public class ShareController {
 	
 	@Autowired
 	ShareService shareService;
+	
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	ServletContext servletContext;
@@ -77,22 +82,26 @@ public class ShareController {
 		PageInfo pageInfo=new PageInfo();
 		pageInfo.setPage(page);
 		try {
-			List<Shareboard> shareList=shareService.getShareboardList(page);
-			for(Shareboard share : shareList) {
-				Document doc=Jsoup.parse(share.getContent());
-				Elements img = doc.select("img");
-				String src = img.attr("src");
-				share.setContent(src);
-			}
+//			List<Shareboard> shareList=shareService.getShareboardList(page);
+//			List<User> userList = shareService.getShareboardListUserList(page);
+//			for(Shareboard share : shareList) {
+//				Document doc=Jsoup.parse(share.getContent());
+//				Elements img = doc.select("img");
+//				String src = img.attr("src");
+//				share.setContent(src);
+//			}
+			List<Map<String, Object>> shareList=shareService.getShareboardListMap(page);
+			
 			pageInfo=shareService.getPageInfo(pageInfo);
 			// mav.addObject("userInfo", userInfo); //same as above
 			mav.addObject("pageInfo", pageInfo);
 			mav.addObject("shareList", shareList);
+//			mav.addObject("userList", userList);
 			mav.setViewName("share/board/listform");
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("main/err");
+			mav.setViewName("/main/err");
 		}
 		return mav;
 	}
@@ -101,9 +110,6 @@ public class ShareController {
 	
 		@GetMapping("/board/writeform")
 		public String writeform(Model model) {
-			HttpSession session = null; //로그인
-			String test = "km@ilin.bun";
-			model.addAttribute("email", test);
 			return "share/board/writeform";
 		}
 		@PostMapping("/board/sharewrite")
@@ -124,7 +130,6 @@ public class ShareController {
 			try {
 				Shareboard shareboard = new Shareboard(title, subway, content, idx, headerTag);
 				Document doc=Jsoup.parse(shareboard.getContent());
-				System.out.println("doc.body : "+doc.body());
 				Elements docContentElements = doc.body().children();
 				String result = "";
 				for(org.jsoup.nodes.Element e: docContentElements) {
@@ -242,7 +247,6 @@ public class ShareController {
 		try {
 			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
 			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
-			
 			int likes = shareService.queryArticleLikes(articleNo);
 			
 			HttpSession session = request.getSession();
@@ -252,6 +256,7 @@ public class ShareController {
 				int didILiked = shareService.queryIfILikeThis(articleNo, user.getIdx());
 				System.out.println("이전에 누른 적 있음 : "+didILiked);
 				mav.addObject("didILiked", didILiked);
+				mav.addObject("didIFollowed",userService.didIFollowed(shareboard.getIdx(), user.getIdx()));
 			}
 			
 			mav.addObject("likes",likes);
@@ -267,12 +272,12 @@ public class ShareController {
 			mav.addObject("imgSrc", src); //mav에 넣기
 			mav.setViewName("share/board/viewform"); //경로이름 설정
 			
-			Integer countComment = shareService.countComment();
+			Integer countComment = shareService.countComment(articleNo);
 			mav.addObject("countComment", countComment);
 			
 			//댓글 보기
 			//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
-			pageInfo=shareService.getCommentPageInfo(pageInfo);
+			pageInfo=shareService.getCommentPageInfo(pageInfo, articleNo);
 			System.out.println("댓글 받아오기 시작");
 			List<ShareReply> commentList = shareService.boardReplyList(articleNo, pageInfo.getStartPage());
 			System.out.println(commentList.size() + "개 받음");
@@ -289,33 +294,16 @@ public class ShareController {
 		} catch(Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());
-			mav.setViewName("err");
+			mav.setViewName("/main/err");
 		}
 		return mav;
 	}
 	
-	// 게시글보기 --> same
-	@PostMapping("/{id}")
-	public ModelAndView placeInfo(@PathVariable String id) throws Exception {
-		ModelAndView mv = new ModelAndView("share/board/view");
-		shareboard = shareService.shareBoardQueryByID(id);
-		mv.addObject("shareboard", shareboard);
-
-		return mv;
-	}
-	
-	/*
-	 * @PostMapping("/board/{id}") public ModelAndView placeInfo(@PathVariable
-	 * String id) throws Exception { ModelAndView mv = new
-	 * ModelAndView("share/board/viewform"); shareboard =
-	 * shareService.shareBoardQueryByID(id); mv.addObject("shareboard", shareboard);
-	 * 
-	 * return mv; }
-	 */
 	
 	// 글수정 (내 글일경우가능)
 		@GetMapping(value = "/board/modifyform")
-		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, HttpServletRequest request) {
+		public ModelAndView modifyform(@RequestParam(value = "articleNo") int articleNo, 
+				HttpServletRequest request) {
 			ModelAndView mav = new ModelAndView();
 			
 			HttpSession session = request.getSession();
@@ -337,7 +325,7 @@ public class ShareController {
 		}
 
 		@PostMapping(value = "/board/modifyform")
-		public ModelAndView sharemodify(@ModelAttribute Shareboard shareboard) {
+		public ModelAndView modifyform(@ModelAttribute Shareboard shareboard) {
 			ModelAndView mav = new ModelAndView();
 			try {
 				shareService.modifyShareBoard(shareboard);
@@ -346,7 +334,7 @@ public class ShareController {
 			} catch (Exception e) {
 				e.printStackTrace();
 				mav.addObject("err", e.getMessage());
-				mav.setViewName("main/err");
+				mav.setViewName("/main/err");
 			}
 			return mav;
 		}
@@ -452,7 +440,7 @@ public class ShareController {
 		}
 		
 		//댓글쓰기 with 비밀댓글 (댓글보기는 글보기 Controller에 추가함)
-		@PostMapping("/comment")
+		@PostMapping("/board/comment")
 		public String boardReply(@RequestParam("commentWrite") String comment, 
 				@RequestParam Integer idx, 
 				@RequestParam Integer articleNo, 
@@ -471,7 +459,7 @@ public class ShareController {
 				}
 			}
 			
-			return "redirect:/share/viewform/"+articleNo;
+			return "redirect:/share/board/viewform/"+articleNo;
 		}
 		
 		@PostMapping("/reReply")
@@ -520,14 +508,15 @@ public class ShareController {
 		}
 		
 		//말머리 바꾸기
-		@PostMapping(value="/header")
+		@PostMapping(value="/board/header")
 		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
 			try {
-				shareService.changeHeader(headerTag);
+				shareService.changeHeader(articleNo, headerTag);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-			return "redirect:/share/board/viewform/"+articleNo;
+//			return "redirect:/share/board/viewform/"+articleNo;
+			return "redirect:/share/board/listform";
 		}
 	
 	

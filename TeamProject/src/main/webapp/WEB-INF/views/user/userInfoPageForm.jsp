@@ -295,7 +295,7 @@
 							obj = '팔로워가 없습니다.';
 						} else{
 							for(let i = 0; i<f.length; i++){
-	 							obj = '<li class="list-group-item">';
+	 							obj += '<li class="list-group-item">';
 	 							obj += '<a href="/userInfo/' + f[i].idx + '"><img src="/profile/'+ f[i].profileImg + '" width="30px" height="30px">&nbsp;'
 	 								+ '<span>' + f[i].nickname + '</span></a></li>';
 	 							
@@ -325,7 +325,7 @@
 							obj = '팔로잉이 없습니다.';
 						} else{
 							for(let i = 0; i<f.length; i++){
-	 							obj = '<li class="list-group-item">';
+	 							obj += '<li class="list-group-item">';
 	 							obj += '<a href="/userInfo/' + f[i].idx + '"><img src="/profile/'+ f[i].profileImg + '" width="30px" height="30px">&nbsp;'
 	 								+ '<span>' + f[i].nickname + '</span></a></li>';
 	 						}
@@ -364,14 +364,15 @@
 				async:false,
 				success: function(data){
 					result = JSON.parse(data);
-					if(result.didIFollowed >0){
+					if(result.didIFollowed >0){ // 팔로우를 한 적이 없는 경우
 						$('#follow' + idx).children('i').removeClass('fa-plus');
 						$('#follow' + idx).children('i').addClass('fa-minus');
-						$('#follow' + idx).children('i').text('팔로우');
-					} else if(result.didIFollowed <=0){
+						$('#follow' + idx).children('i').text('언팔로우');
+						
+					} else if(result.didIFollowed <=0){ // 팔로우를 이미 한 경우
 						$('#follow' + idx).children('i').removeClass('fa-minus');
 						$('#follow' + idx).children('i').addClass('fa-plus');
-						$('#follow' + idx).children('i').text('언팔로우');
+						$('#follow' + idx).children('i').text('팔로우');
 					}
 					$('#follower').text(result.follower);
 				},

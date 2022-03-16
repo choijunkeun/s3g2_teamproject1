@@ -30,17 +30,17 @@ public class BragServiceImpl implements BragService {
 
 	//[글쓰기Service]
 	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
-		@Override
-		public int regBragBoard(BragBoard bragboard) throws Exception {
-			Integer articleNo = bragDAO.selectMaxArticleNo();
-			if(articleNo==null) articleNo = 1;
-			else articleNo+=1;
-			bragboard.setArticleNo(articleNo);
-			//bragboard.setDate(Date); 지울까 말까
-		
-			bragDAO.insertBragBoard(bragboard);	
-			return articleNo;
-		}
+	@Override
+	public int regBragBoard(BragBoard bragboard) throws Exception {
+		Integer articleNo = bragDAO.selectMaxArticleNo();
+		if(articleNo==null) articleNo = 1;
+		else articleNo+=1;
+		bragboard.setArticleNo(articleNo);
+		//bragboard.setDate(Date); 지울까 말까
+	
+		bragDAO.insertBragBoard(bragboard);	
+		return articleNo;
+	}
 
 		
 	//[글 보기Service]
@@ -52,10 +52,11 @@ public class BragServiceImpl implements BragService {
 	}
 	//글보기 시 조회수 올리는 기능
 	@Override
-	public BragBoard getArticleNo(int articleNo) throws Exception {
+	public BragBoard getBragBoard(int articleNo) throws Exception {
 		bragDAO.updateReadCount(articleNo);
 		return bragDAO.selectBragBoard(articleNo);
 	}
+	
 	//글보기, 글목록시 유저의 정보 가져오는거 
 	@Override
 	public User selectUserDetail(int idx) throws  Exception {
@@ -73,7 +74,7 @@ public class BragServiceImpl implements BragService {
 	//게시글 목록 : 16개가 화면에 띄워지게 하는 DAO
 	@Override
 	public List<BragBoard> getBragboardList(int page, int howManyBrag) throws Exception {
-		int startrow=(int) ((page-1)*howManyBrag);
+		int startrow=(int) ((page-1)*howManyBrag)+1;
 		Map<String, Integer> map = new HashMap<>();
 		
 		map.put("startrow", startrow);
@@ -119,8 +120,8 @@ public class BragServiceImpl implements BragService {
 	}
 	//댓글에 대한 페이지 보기
 	@Override
-	public PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception {
-		int listCount=bragDAO.countComment();
+	public PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception {
+		int listCount=bragDAO.countComment(articleNo);
 		System.out.println("리스트카운트 :"+listCount);
 		int maxPage=(int)Math.ceil((double)listCount/16);
 		//그 개수를 16으로 나누고 올림처리하여 페이지 수 계산
@@ -157,11 +158,7 @@ public class BragServiceImpl implements BragService {
 		}
 		return best;
 	}
-
 	
-	
-	
-
 	//여기서 부터는 구현 전 
 	//글수정
 	@Override
@@ -170,8 +167,7 @@ public class BragServiceImpl implements BragService {
 	}
 	//글수정(modifyForm) 시 하나의 글 정보를 select하는 쿼리문	
 	@Override
-	public BragBoard getBragBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
+	public BragBoard getArticleNo(int articleNo) throws Exception {
 		return bragDAO.selectBragBoard(articleNo);
 	}
 	//글삭제
@@ -329,8 +325,8 @@ public class BragServiceImpl implements BragService {
 	}
 	
 	@Override
-	public Integer countComment() throws Exception{
-		return bragDAO.countComment();
+	public Integer countComment(int articleNo) throws Exception{
+		return bragDAO.countComment(articleNo);
 	}
 	
 	@Override

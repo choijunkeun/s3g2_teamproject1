@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.ShareReply;
@@ -10,11 +11,12 @@ import com.ilinbun.mulcam.dto.User;
 public interface ShareService {
 	
 	void regShareBoard(Shareboard shareboard) throws Exception;
-	Shareboard shareBoardQueryByID(String id) throws Exception;
 	Shareboard getArticleNo(int articleNo) throws Exception;
 	void modifyShareBoard(Shareboard shareboard) throws Exception;
 	void setInputList(Shareboard shareboard) throws Exception;
 	List<Shareboard> getShareboardList(int page) throws Exception;
+	List<User> getShareboardListUserList(int page) throws Exception;
+	List<Map<String, Object>> getShareboardListMap(int page) throws Exception;
 	PageInfo getPageInfo(PageInfo pageInfo) throws Exception;
 	Shareboard getShareboard(int articleNo) throws Exception;
 	
@@ -33,7 +35,7 @@ public interface ShareService {
 	int queryIfILikeThis(int articleNo, int idx) throws Exception;
 	
 	//  댓글 리스트 관련 페이지
-	PageInfo getCommentPageInfo(PageInfo pageInfo) throws Exception;
+	PageInfo getCommentPageInfo(PageInfo pageInfo, int articleNo) throws Exception;
 	
 	//댓글쓰기
 	void boardReply(int articleNo, int idx, String comment, Integer blind) throws Exception;
@@ -52,9 +54,8 @@ public interface ShareService {
 	//익명댓글 처리
 	void setBlind(int blind, int commentNo) throws Exception;
 
-	Integer countComment() throws Exception;
-
 	void updateCommentSeq(ShareReply shr) throws Exception;
 	
-	void changeHeader(int headerTag) throws Exception;
+	void changeHeader(int articleNo, int headerTag) throws Exception;
+	Integer countComment(int articleNo) throws Exception;
 }

@@ -233,9 +233,7 @@ a:hover { color: black; text-decoration: underline;}
 					<div align="center" class="col">
 					<label for="checkbox"><input type="checkbox" id="checkbox" name="rememberEmail" style="padding:20px" value="on" ${empty cookie.email.value ? "":"checked"}>로그인 저장</label>
 					</div>
-					<div align="center" class="col">
-					<a href="searchPwd" style="padding:20px; align:right;">비밀번호 찾기</a>
-					</div> 
+					 
 				</div>
 			</div>
 			<div align="center" class="d-grid gap-2 col-6 mx-auto" style="padding:0px 0px 15px 0px">

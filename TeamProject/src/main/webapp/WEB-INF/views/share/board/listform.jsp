@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.*"%>
-<%@ page import="java.text.SimpleDateFormat"%>
+<%-- <%@ page import="java.text.SimpleDateFormat"%> --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -44,16 +45,30 @@ table {
 	width: 950px;
 	text-align: center;
 }
+/* 공시사항 게시글 배경색깔 */
+.noti {
+	background-color: #E3E3E3;
+	opacity:0.8;
+	color: black !important;
+	font-weight: bold;
+}
 </style>
 </head>
 
 <body>
 <!-- 글쓰기 버튼 -->
 	<div>
-		<%-- <a href="${pageContext.request.contextPath}/share/board/writeform"> --%>
-			<button class="btn btn-outline-dark" 
+	<table>
+	<tr style="text-align: center;">
+	<th style="font-size: 30px;"><i class="fa fa-exclamation-circle">&nbsp;</i>반찬공유 게시판</th>
+        <button class="btn btn-outline-dark" 
 				id="shareMake" name="shareMake" type="button"
 				style="float: right; width: 80px; height:40px;">글쓰기</button>
+		
+	</tr>
+	</table><br>
+		<%-- <a href="${pageContext.request.contextPath}/share/board/writeform"> --%>
+			
 		<!-- </a> -->
 	</div>
 
@@ -63,12 +78,12 @@ table {
 		<div class="content">
 			<c:choose>
 				<c:when test="${shareList!=null && pageInfo.listCount>0 }">
-					<h2 class="fw-bolder">반찬공유 게시판</h2> 
+					
 					<hr>
 					<section id="listForm">
-						<table>
+						<table class="table">
 							<tr id="tr_top">
-								<td>번호</td>
+								
 								<td>말머리</td>
 								<td>제목</td>
 								<td>위치</td>
@@ -77,17 +92,28 @@ table {
 								<td>조회수</td>
 							</tr>
 					<c:forEach var="shboard" items="${shareList }">
+					<tr class=${shboard.grp == 2 ? "noti" : "normal" }>
 						<%-- <c:if test="${status.index<15}"> --%>
-							<tr>
-								<td>${shboard.articleNo }</td>
-								<td>${shboard.headerTag eq 0? "공유중": shboard.headerTag eq 1? "공유완료":"알 수 없음" }</td>
+								<td>${shboard.headerTag eq 0? "공유중" : shboard.headerTag eq 1? "공유완료": shboard.headerTag eq 2? "공지글" :"알 수 없음" }</td>
+
 								<td>
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.title }</a>
 								</td>
-								<td>${shboard.subway }</td>
-								<td>${user.nickname }</td>
-								<td>${shboard.date }</td>
-								<td>${shboard.readCount }</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}"> ${shboard.subway }</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.nickname }</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">
+										<fmt:parseDate value="${shboard.date }" type="date" pattern="yyyy-MM-dd'T'HH:mm" var="formatDate"/>
+										<fmt:formatDate value="${formatDate }" type="date" pattern="yyyy-MM-dd HH:mm"/>
+									</a>
+								</td>
+								<td>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.readCount }</a>
+								</td>
 							</tr>
 					<%-- 	</c:if>	 --%>
 					</c:forEach>
