@@ -160,8 +160,7 @@
 							<!-- 좋아요 border-danger rounded-pill bg-white  -->
 							<button class="btn-sm border-0 bg-transparent text-danger mx-2"
 								id="likebtn${shboard.articleNo }" onclick="toggleLikes(${shboard.articleNo})">
-								<i class="fa fa-lg ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" aria-hidden="true">${likes
-									}</i>
+								<i class="fa fa-lg ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }" aria-hidden="true">${likes }</i>
 							</button>
 							<div>
 								<i class="fa fa-commenting fa-lg mx-2" aria-hidden="true">${countComment }</i>
@@ -177,7 +176,7 @@
 										<input type="hidden" name="headerTag" id="headerTag" value=${shboard.headerTag}>
 										<input type="hidden" name="articleNo" value=${shboard.articleNo}>
 										<button class="btn border-dark" style="display: inline-block;"
-											onclick="headerChange(${shboard.articleNo},${shboard.headerTag});">말머리 수정</button>
+											onclick="return confirm('말머리를 ${shboard.headerTag eq 0? '공유완료' : '공유중으'}로 변경하시겠습니까?');">말머리 수정</button>
 									</form>
 									<button class="btn border-dark" style="display: inline-block;"
 										onclick="javascript:window.location.href='/share/board/modifyform?articleNo=${shboard.articleNo }'">수정</button>
@@ -420,8 +419,10 @@
 	}
 					
 	
-	function headerChange(articleNo1, headerTag1){
-		if(confirm("말머리를 ${shboard.headerTag eq 0? '공유완료':'공유중으'}로 변경하시겠습니까?")){
+	/* function headerChange(articleNo1, headerTag1){
+		var is = confirm("말머리를 ${shboard.headerTag eq 0? '공유완료':'공유중으'}로 변경하시겠습니까?")
+
+		if(is == true){
 			$.ajax({
 				type:"POST",
 				url:"/share/board/header",
@@ -429,14 +430,14 @@
 				data:{"articleNo":articleNo1, "headerTag":headerTag1},
 				async:false,
 				success:function(){
-					window.location.href="/share/board/viewform/"+articleNo;
+					location.replace("/share/board/viewform/"+articleNo);
 				},
 				error:function(){
 					alert('말머리를 변경하는 데에 오류가 있었습니다. 나중에 다시 시도해주세요.');
 				}
 			})
 		} else return false;
-	}
+	} */
 	// 댓글 로그인 알림
 	$(function(){ 
 		$("#commentBtn").click(function(){
