@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +16,11 @@
 		overflow: hidden;
 
 	}
+/*배너 이미지 사이즈 조절 코드 크롬에서만 됨  */	
+	.banner{ 
+  object-fit: cover;
+  width: 100%; height: 100%;
+}
 </style>
 </head>
 <body>
@@ -51,25 +57,25 @@
 		data-bs-ride="carousel" style="max-width: 100%; height: 300px;">
 		<div class="carousel-inner">
 			<div class="carousel-item active">
-				<img
-					src="https://dummyimage.com/1200x300/777/ff99ff.jpg&text=explain"
-					class="d-block w-100" alt="...">
+				<img src="${path}/banner/1.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 			<div class="carousel-item">
-				<img
-					src="https://dummyimage.com/1200x300/555/99ffff.jpg&text=explain"
-					class="d-block w-100" alt="...">
+				<img src="${path}/banner/banner1.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 			<div class="carousel-item">
-				<img
-					src="https://dummyimage.com/1200x300/999/ffff99.jpg&text=explain"
-					class="d-block w-100" alt="...">
+				<img src="${path}/banner/banner2.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
+			</div>
+			<div class="carousel-item">
+				<img src="${path}/banner/banner3.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
+			</div>
+			<div class="carousel-item">
+				<img src="${path}/banner/banner4.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 		</div>
 	</div>
 	<!-- https://getbootstrap.com/docs/5.1/components/carousel/ -->
 
-
+<br><br><br><br><br><br><br>
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card">
