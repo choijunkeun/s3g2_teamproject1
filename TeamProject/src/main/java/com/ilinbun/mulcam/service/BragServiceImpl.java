@@ -30,17 +30,17 @@ public class BragServiceImpl implements BragService {
 
 	//[글쓰기Service]
 	//글쓰기 시 글 쓸때, 마지막 articleNo+1해주는 DAO
-		@Override
-		public int regBragBoard(BragBoard bragboard) throws Exception {
-			Integer articleNo = bragDAO.selectMaxArticleNo();
-			if(articleNo==null) articleNo = 1;
-			else articleNo+=1;
-			bragboard.setArticleNo(articleNo);
-			//bragboard.setDate(Date); 지울까 말까
-		
-			bragDAO.insertBragBoard(bragboard);	
-			return articleNo;
-		}
+	@Override
+	public int regBragBoard(BragBoard bragboard) throws Exception {
+		Integer articleNo = bragDAO.selectMaxArticleNo();
+		if(articleNo==null) articleNo = 1;
+		else articleNo+=1;
+		bragboard.setArticleNo(articleNo);
+		//bragboard.setDate(Date); 지울까 말까
+	
+		bragDAO.insertBragBoard(bragboard);	
+		return articleNo;
+	}
 
 		
 	//[글 보기Service]
@@ -52,10 +52,11 @@ public class BragServiceImpl implements BragService {
 	}
 	//글보기 시 조회수 올리는 기능
 	@Override
-	public BragBoard getArticleNo(int articleNo) throws Exception {
+	public BragBoard getBragBoard(int articleNo) throws Exception {
 		bragDAO.updateReadCount(articleNo);
 		return bragDAO.selectBragBoard(articleNo);
 	}
+	
 	//글보기, 글목록시 유저의 정보 가져오는거 
 	@Override
 	public User selectUserDetail(int idx) throws  Exception {
@@ -157,11 +158,7 @@ public class BragServiceImpl implements BragService {
 		}
 		return best;
 	}
-
 	
-	
-	
-
 	//여기서 부터는 구현 전 
 	//글수정
 	@Override
@@ -170,8 +167,7 @@ public class BragServiceImpl implements BragService {
 	}
 	//글수정(modifyForm) 시 하나의 글 정보를 select하는 쿼리문	
 	@Override
-	public BragBoard getBragBoard(int articleNo) throws Exception {
-		// TODO Auto-generated method stub
+	public BragBoard getArticleNo(int articleNo) throws Exception {
 		return bragDAO.selectBragBoard(articleNo);
 	}
 	//글삭제

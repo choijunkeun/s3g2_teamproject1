@@ -22,7 +22,7 @@ public interface UserDAO {
 	int emailCheck(String email) throws Exception;
 	
 	//로그인
-	User login(String nickname) throws Exception;
+	User login(String email) throws Exception;
 	 
 	// 회원정보수정
 	void updateInfo(User user) throws Exception;
@@ -31,6 +31,8 @@ public interface UserDAO {
 	void remove(User user) throws Exception;
 	//이메일을 이용해 비밀번호 가져오기
 	String getPwd(String email) throws Exception;
+	
+	
 	
 	// 혼밥자랑 게시글 출력
 	List<BragBoard> bragPosting(BragBoard bragBoard) throws Exception;

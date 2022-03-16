@@ -17,16 +17,14 @@
 </head>
 <body>
 <section id = "passForm">
-<form name="deleteForm" action="boarddelete?board_num=${board_num}" method="post">
+<form name="deleteForm" action="sharedelete?articleNo=${articleNo}" method="post">
 <input type = "hidden" name = "page" value = '${page }'/>
 <table>
 <tr>
 	<td>
-		<label>정말 삭제하시겠습니까? </label>
+		<label>정말 삭제하시겠습니까?<br>삭제된 글은 복구 할 수 없습니다. </label>
 	</td>
-	<td>
-		<input name="board_pass" type="password">
-	</td>
+	
 </tr>
 <tr>
 	<td>

@@ -50,7 +50,7 @@ td {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-/* .card-img-top {
+/* .img-item {
 	width: 200px;
 	height: 200px;
 	min-width: 200px;
@@ -58,7 +58,22 @@ td {
 	max-width: 200px;
 	max-height: 200px;
 } */
+.img-item {
+	width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(1.0);
+    transition: all 0.3s ease-in-out;
+}
+.img-item:hover{
+	transform:scale(1.1);
+}
+.img-container {
+	max-width:auto;
+	height:auto;
+}
 </style>
+<link rel="stylesheet" href="/css/brag.css">
 </head>
 <body>
 	<!-- 1. 글쓰기 버튼 -->
@@ -86,10 +101,12 @@ td {
 							</c:when>
 							</c:choose>
 								<div class='col-sm-3'>
-									<a href="./viewdetail/${bboard.articleNo }">
+									<a href="/brag/viewdetail/${bboard.articleNo }">
 										<div id="ellipsis">${bboard.title }</div> 
-										<img src="${bboard.content}" name="brag_content" 
-											width="200px" height="200px" class="card-img-top" />
+										<div class="img-container table200 mx-auto d-block position-relative overflow-hidden" 
+											style="vertical-align:middle; object-fit:cover; width: inherit;">
+										<img src="${bboard.content}" name="brag_content" class="img-item table200-item" />
+										</div>
 									</a>
 								</div>
 							<c:choose>
@@ -175,78 +192,6 @@ td {
 			<!-- 눈에 보이진 않지만 페이지를 달고다님. -->
 		</ul>
 	</nav>
-
-
-
-	<!-- 기존 4X4 더미코드
-		<div class="col mt-5">
-			<div class="card p-4">
-				<a href="/brag/best"><h5 class="fw-bolder">혼밥자랑</h5></a>
-				<div class="card-body">
-					<table>
-						<tr>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-						</tr>
-						<tr>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-						</tr>
-						<tr>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-						</tr>
-						<tr>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-							<td><img width="200px" height="200px" class="card-img-top"
-								src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-							</td>
-						</tr>
-					</table>
-				</div>
-
-			</div>
-		</div> -->
-
-
 
 
 	<!-- JavaScript -->

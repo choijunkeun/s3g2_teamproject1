@@ -246,7 +246,7 @@ $(function() {
 		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
-				$("#myCommunity").append("<tr><td><a href=/comm/community/viewform/"+item.articleNo+">"
+				$("#myCommunity").append("<tr><td><a href=/comm/viewform/"+item.articleNo+">"
 				+item.title + "</a></td><td>"
 				+item.views + "</td></tr><br>");
 				});

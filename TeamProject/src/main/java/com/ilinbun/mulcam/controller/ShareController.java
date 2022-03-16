@@ -338,73 +338,35 @@ public class ShareController {
 			}
 			return mav;
 		}
-//	
-//	@GetMapping(value = "/board/modifyform{articleNo}")
-//	public ModelAndView sharemodifyform(@RequestParam(value = "articleNo") int articleNo) {
-//		ModelAndView mav = new ModelAndView();
-//		try {
-//			Shareboard Shareboard = shareService.getArticleNo(articleNo);
-//			mav.addObject("article", Shareboard);
-//			mav.setViewName("share/board/modifyform");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			mav.addObject("err", e.getMessage());
-//			mav.setViewName("/main/err");
-//		}
-//		return mav;
-//	}
-//
-//	@PostMapping(value = "/board/modifyform/{articleNo}")
-//	public ModelAndView modifyform(@ModelAttribute Shareboard shareboard) {
-//		ModelAndView mav = new ModelAndView();
-//		try {
-//			shareService.modifyShareBoard(shareboard);
-//			mav.addObject("articleNo", shareboard.getArticleNo());
-//			mav.setViewName("redirect:/share/board/viewform/{articleNo}");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			mav.addObject("err", e.getMessage());
-//			mav.setViewName("/main/err");
-//		}
-//		return mav;
-//	}
 	
 	//글 삭제
-	@ResponseBody
-	@PostMapping(value = "/board/deleteform")
-	public ResponseEntity<String> deleteform(@RequestParam int articleNo, @RequestParam String idx) {
-		ResponseEntity<String> result = null;
-		
-		try {
-			Shareboard target = shareService.getShareboard(articleNo);
-			if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
-			shareService.removeShareBoard(articleNo);
-			String html = "<script> alert('삭제 완료'); window.location = \"/share/board/listform\" </script>"; 
-			result = new ResponseEntity<String>(html, HttpStatus.OK);
-		} catch(Exception e) {
-			e.printStackTrace();
-			result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+		@GetMapping(value = "/board/deleteform")
+		public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
+				@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+			ModelAndView mv = new ModelAndView();
+			mv.addObject("articleNo", articleNo);
+			mv.addObject("page", page);
+			mv.setViewName("/share/board/deleteform");
+			return mv;
 		}
-		
-		return result;
-	}
-	
-//	@PostMapping(value = "deleteform")
-//	public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
-//			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
-//		ModelAndView mv = new ModelAndView();
-//		try {
-//			shareService.removeShareBoard(articleNo);
-//			mv.addObject("page", page);
-//			mv.setViewName("redirect:/share/board/listform");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			mv.addObject("err", e.getMessage());
-//			mv.setViewName("/main/err");
-//		}
-//		return mv;
-//	}
-	
+
+		@PostMapping(value = "/board/sharedelete")
+		public ModelAndView sharedelete(@RequestParam(value = "articleNo") int articleNo,
+				/* @RequestParam(value = "board_pass") String boardPass, */
+				@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+			ModelAndView mv = new ModelAndView();
+			try {
+				shareService.removeShareBoard(articleNo);
+				mv.addObject("page", page);
+				mv.setViewName("redirect:/share/board/listform");
+			} catch (Exception e) {
+				e.printStackTrace();
+				mv.addObject("err", e.getMessage());
+				mv.setViewName("/main/err");
+			}
+			return mv;
+		}	
+
 	 //  좋아요
 		@ResponseBody
 		@PostMapping("/likes")
@@ -508,16 +470,95 @@ public class ShareController {
 		}
 		
 		//말머리 바꾸기
+		
 		@PostMapping(value="/board/header")
-		public String headerChange(@RequestParam int headerTag, @RequestParam int articleNo) {
+		public String headerChange(@RequestParam(required=false) Integer headerTag, 
+				@RequestParam(required=false) Integer articleNo) {
 			try {
+				System.out.println("headerTag test : "+headerTag);
+				System.out.println("articleNo test : "+articleNo);
+				if(headerTag == 0) {
+					headerTag++;
+					System.out.println("headerTag change : "+headerTag);
+				} else if(headerTag == 1) {
+					headerTag--;
+					System.out.println("headerTag change : "+headerTag);
+				} 
 				shareService.changeHeader(articleNo, headerTag);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-//			return "redirect:/share/board/viewform/"+articleNo;
-			return "redirect:/share/board/listform";
+			return "redirect:/share/board/viewform/"+articleNo;
 		}
 	
 	
 }
+
+
+// 삭제 폼 (지울 것)
+//@ResponseBody
+//@PostMapping(value = "/board/deleteform")
+//public ResponseEntity<String> deleteform(@RequestParam int articleNo, @RequestParam String idx) {
+//ResponseEntity<String> result = null;
+//
+//try {
+//	Shareboard target = shareService.getShareboard(articleNo);
+//	if(target == null) throw new Exception("삭제 대상을 찾을 수 없습니다");
+//	shareService.removeShareBoard(articleNo);
+//	String html = "<script> alert('삭제 완료'); window.location = \"/share/board/listform\" </script>"; 
+//	result = new ResponseEntity<String>(html, HttpStatus.OK);
+//} catch(Exception e) {
+//	e.printStackTrace();
+//	result = new ResponseEntity<String>("failed", HttpStatus.BAD_REQUEST);
+//}
+//
+//return result;
+//}
+
+//@PostMapping(value = "deleteform")
+//public ModelAndView deleteform(@RequestParam(value = "articleNo") int articleNo,
+//	@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+//ModelAndView mv = new ModelAndView();
+//try {
+//	shareService.removeShareBoard(articleNo);
+//	mv.addObject("page", page);
+//	mv.setViewName("redirect:/share/board/listform");
+//} catch (Exception e) {
+//	e.printStackTrace();
+//	mv.addObject("err", e.getMessage());
+//	mv.setViewName("/main/err");
+//}
+//return mv;
+//}
+
+// 수정 폼 
+//@GetMapping(value = "/board/modifyform{articleNo}")
+//public ModelAndView sharemodifyform(@RequestParam(value = "articleNo") int articleNo) {
+//	ModelAndView mav = new ModelAndView();
+//	try {
+//		Shareboard Shareboard = shareService.getArticleNo(articleNo);
+//		mav.addObject("article", Shareboard);
+//		mav.setViewName("share/board/modifyform");
+//	} catch (Exception e) {
+//		e.printStackTrace();
+//		mav.addObject("err", e.getMessage());
+//		mav.setViewName("/main/err");
+//	}
+//	return mav;
+//}
+//
+//@PostMapping(value = "/board/modifyform/{articleNo}")
+//public ModelAndView modifyform(@ModelAttribute Shareboard shareboard) {
+//	ModelAndView mav = new ModelAndView();
+//	try {
+//		shareService.modifyShareBoard(shareboard);
+//		mav.addObject("articleNo", shareboard.getArticleNo());
+//		mav.setViewName("redirect:/share/board/viewform/{articleNo}");
+//	} catch (Exception e) {
+//		e.printStackTrace();
+//		mav.addObject("err", e.getMessage());
+//		mav.setViewName("/main/err");
+//	}
+//	return mav;
+//}
+

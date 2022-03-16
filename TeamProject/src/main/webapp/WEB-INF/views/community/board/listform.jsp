@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>MVC 게시판</title>
+<title>커뮤니티 게시판</title>
 
 <style type="text/css">
 h2 {
@@ -50,7 +50,7 @@ table {
 
 /* 공시사항 게시글 배경색깔 */
 .noti {
-	background-color: black;
+	background-color: #E3E3E3;
 	opacity:0.8;
 	color: black !important;
 	font-weight: bold;
@@ -90,7 +90,7 @@ table {
 
 					<c:forEach var="article" items="${commList }">
 						<tr class=${userMap[article.idx].grp == 2 ? "noti" : "normal"}>
-							<td><a href="./viewform/${article.articleNo}">${userMap[article.idx].grp == 2 ? "공지글" : "일반글"}</a></td>
+							<td style="color: black important;">${userMap[article.idx].grp == 2 ? "공지글" : "일반글"}</td>
 							<td><a href="./viewform/${article.articleNo}">${article.title}</a></td>
 							<td><a href="./viewform/${article.articleNo}">${userMap[article.idx].nickname}</a></td>
 							<td><a href="./viewform/${article.articleNo}">${article.date}</a></td>

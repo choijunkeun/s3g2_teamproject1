@@ -25,6 +25,9 @@
 			WHERE email = #{email}
 		]]>
 	</select>
+
+	
+	
 <!-- 로그인 -->
 	<select id="login" resultType="User" parameterType="String">
     	<![CDATA[
@@ -50,7 +53,6 @@
 		<![CDATA[
     	UPDATE user SET 
     	nickname=#{nickname},
-    	password=#{password},
     	profileImg=#{profileImg},
     	honbabLevel=#{honbabLevel} 
     	WHERE email=#{email}      	

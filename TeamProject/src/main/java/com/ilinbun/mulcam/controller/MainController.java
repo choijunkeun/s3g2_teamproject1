@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -93,10 +94,10 @@ public class MainController {
 	@PostMapping("/nickCheck")
 	@ResponseBody
 	public String nickCheck(@RequestParam("nickname") String nickname) throws Exception {
-		System.out.println("nickCheck 진입");
-		System.out.println("전달받은 nickname : " + nickname);
+//		System.out.println("nickCheck 진입");
+//		System.out.println("전달받은 nickname : " + nickname);
 		String msg = userService.nickCheck(nickname);
-		System.out.println("확인 결과 : " + msg);
+//		System.out.println("확인 결과 : " + msg);
 		return msg;
 	}
 
@@ -104,17 +105,19 @@ public class MainController {
 	@PostMapping("/emailCheck")
 	@ResponseBody
 	public String emailCheck(@RequestParam("email") String email) throws Exception {
-		System.out.println("emailCheck 진입");
-		System.out.println("전달받은 email : " + email);
+//		System.out.println("emailCheck 진입");
+//		System.out.println("전달받은 email : " + email);
 		String msg = userService.emailCheck(email);
-		System.out.println("확인 결과 : " + msg);
+//		System.out.println("확인 결과 : " + msg);
 		return msg;
 	}
+	
+
 
 	// 회원가입 기능 컨트롤러
 	@PostMapping("/join")
 	public String postJoin(String email, String nickname, String password, int honbabLevel, MultipartFile profileImg, Model model,HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("postJoin() join");
+//		System.out.println("postJoin() join");
 //		if (bindingResult.hasErrors()) {
 //			System.out.println("if join");
 //			List<FieldError> list = bindingResult.getFieldErrors();
@@ -176,9 +179,8 @@ public class MainController {
 
 	// 로그인 기능 컨트롤러
 	@PostMapping("/login")
-	public String login(String email, String nickname, String password, boolean rememberEmail, Model model, HttpServletRequest request,
+	public String login(String email, String password, boolean rememberEmail, Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		System.out.println("login() join");
 		try {
 			User user = userService.loginUser(email, password);
 			user.setPassword(null);
@@ -238,48 +240,34 @@ public class MainController {
 	
 	// 정보수정
 	@PostMapping("/infoUpdate")
-	public String infoUpdate(MultipartFile profileImg, String email, String nickname, String originPass, String password, int honbabLevel, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String infoUpdate(@RequestParam(required = false)MultipartFile profileImg, String email, int imgChange, String nickname, int honbabLevel, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String msg = "";
 		System.out.println("infoUpdate() join");
 		User user = (User)session.getAttribute("user");
-		String dbPass = userService.getPwd(user.getEmail());
-		
-		
-//		String path = this.servletContext.getRealPath("/profile/");
-//		File destFile = new File(path + profileImg);
-//		System.out.println(path);
-//		System.out.println(destFile);
+//		String dbPass = userService.getPwd(user.getEmail());
+		System.out.println(imgChange);
 		String profileImgName = profileImg.getOriginalFilename();
 		
 		System.out.println("변경 할 닉네임 : " + nickname);
-		System.out.println("기존패스워드 : " + originPass);
-		System.out.println("db패스워드 : " + dbPass);
-		System.out.println("변경할 패스 : " + password);
+//		System.out.println("기존패스워드 : " + originPass);
+//		System.out.println("db패스워드 : " + dbPass);
+//		System.out.println("변경할 패스 : " + password);
 		System.out.println("새로운 프로필 이미지 : " + profileImgName);
 		System.out.println("혼밥레벨 : " + honbabLevel);
 		// 입력패스워드와 DB에 있는 사용자의 패스워드가 같다면 
 		try {
-			if(originPass.equals(dbPass)) {
-				// 사용중이던 비밀번호로 변경하려는 멍청이라면, 에러메시지와 함께 redirect
-				if (dbPass.equals(password)) {
-					System.out.println("1");
-					msg = URLEncoder.encode("기존 비밀번호와 같습니다. 다른 비밀번호로 설정해주세요.", "utf-8");
-					return "redirect:/editInfo?msg=" + msg;
-				}
-				// 새로운 비밀번호를 입력하지 않았다면, 기존비밀번호로 설정
-				if  (password.equals("")) {
-					System.out.println("2");
-					password = dbPass;
-				}
+			if(true) {
 				// 공백으로 닉네임이 넘어간다면, 기존 닉네임으로 설정 (닉네임 글자수 및 동일닉네임 체크는 ajax로 해결)
 				if (nickname.equals("")) {
 					System.out.println("3");
 					nickname = user.getNickname();
 				}
 				// 프로필 이미지가 비어있으면, 기존 프로필사진 그대로 유지// 프로필 이미지가 변경되었으면 변경된 이미지 저장
-				if (profileImgName.equals("")) {
+				if (imgChange==1) {
 					System.out.println("4");
 					profileImgName = user.getProfileImg();
+				} else if (imgChange==2){
+					profileImgName="DEFAULT.png";
 				} else {
 					String path = servletContext.getRealPath("/profile/");
 					String filename = profileImg.getOriginalFilename();
@@ -305,17 +293,21 @@ public class MainController {
 					System.out.println(destFile);
 				}
 				System.out.println("5");
+				userService.updateInfo(email, nickname, profileImgName, honbabLevel);
 				
-				userService.updateInfo(email, nickname, password, profileImgName, honbabLevel);	
+//				session.invalidate();
+				
+				user = userService.getUserDetail(user.getIdx());
+				user.setPassword(null);
+				session.setAttribute("user", user);
+				
 			// DB에 있는 비밀번호와 입력패스워드가 다르다면
-			} else {
-				msg = URLEncoder.encode("기존 비밀번호가 틀렸습니다. 다시 확인해주세요.", "utf-8");
-				return "redirect:/editInfo?msg=" + msg;
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("오류발생");
 		}
+		
 		return"redirect:/myPage";
 	}
 	
@@ -362,7 +354,6 @@ public class MainController {
 	public List<BragBoard> bragPosting(@RequestParam int idx) throws Exception {
 		//User user = (User) session.getAttribute("user");
 		List<BragBoard> myBragList = bragService.MyBragBoard(idx);
-		System.out.println("bragboardlist");
 		return myBragList;
 	}
 	
@@ -372,7 +363,6 @@ public class MainController {
 	public List<Shareboard> sharePosting(@RequestParam int idx) throws Exception {
 		//User user = (User) session.getAttribute("user");
 		List<Shareboard> myShareList = shareService.MyShareBoard(idx);
-		System.out.println("shareBoardlist");
 		return myShareList;
 	}
 	
@@ -382,7 +372,6 @@ public class MainController {
 	public List<CommBoard> communityPosting(@RequestParam int idx) throws Exception {
 		//User user = (User) session.getAttribute("user");
 		List<CommBoard> myCommunityList = commService.MyCommunityBoard(idx);
-		System.out.println("communityboardlist");
 		return myCommunityList;
 	}
 	
@@ -392,7 +381,6 @@ public class MainController {
 	public List<PlaceReview> reviewPosting(@RequestParam int idx) throws Exception {
 		//User user = (User) session.getAttribute("user");
 		List<PlaceReview> myReviewList = placeReviewService.MyReviewBoard(idx);
-		System.out.println("Review Board List");
 		return myReviewList;
 	}
 	
@@ -458,21 +446,74 @@ public class MainController {
 		return result;
 	}
 	//팔로잉 리스트 가져오기(훈)
-		@ResponseBody
-		@PostMapping("/followingList")
-		public ResponseEntity<String> followingList(@RequestParam int idx, 
-				HttpSession session, Model model) throws Exception {
-			ResponseEntity<String> result = null;
-			try {
-				List<User> followingList = userService.getFollowingList(idx);
-				JSONObject jobj = new JSONObject();
-				jobj.put("followingList", followingList);
-				System.out.println(jobj.toString());
-				result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
-			}catch (Exception e) {
-				e.printStackTrace();
-				result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
-			}
-			return result;
+	@ResponseBody
+	@PostMapping("/followingList")
+	public ResponseEntity<String> followingList(@RequestParam int idx, 
+			HttpSession session, Model model) throws Exception {
+		ResponseEntity<String> result = null;
+		try {
+			List<User> followingList = userService.getFollowingList(idx);
+			JSONObject jobj = new JSONObject();
+			jobj.put("followingList", followingList);
+			System.out.println(jobj.toString());
+			result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
 		}
+		return result;
+	}
+	
+	
+	@GetMapping("/deleteUserForm")
+	public String deleteUserForm() {
+		return "user/deleteUserForm";
+	}
+	
+	
+
+	
+	//회원 탈퇴 기능
+	@PostMapping("/deleteUser")
+	public String deleteUser(User user,HttpSession session) throws Exception {
+		System.out.println("deleteUser() Join");
+		
+		//현재 세션에 저장되있는 유저객체(실제 로그인 되어있는 사용자의 객체정보)를 얻어와 변수에 저장
+		User user2 = (User)session.getAttribute("user");
+		String oldPass = userService.getPwd(user.getEmail());
+		
+		System.out.println("세션에 저장된 유저 객체 : "+user2);
+		System.out.println("탈퇴 폼에 입력된 이메일 : " + user.getEmail());
+		System.out.println("탈퇴 폼에 입력된 비밀번호 : " + user.getPassword());
+		System.out.println("세션 유저의 이메일 " + user2.getEmail());
+		System.out.println("세션 유저의 비밀번호(DB에서 추출) " + oldPass);
+		System.out.println(Optional.ofNullable(user2.getPassword()).isPresent());
+		
+		//문제점 .. 로그인 할 때 password를 null로 바꿨기 때문에 세션에서 비밀번호를 얻어올 수 없음..
+		// 일단 로그인에서 setPassword(null)을 뺴서 해결하겠습니다..
+	
+		//회원탈퇴에서 넘어온 비밀번호를 변수에 저장
+		String newPass = user.getPassword();
+		
+		
+		if((user.getEmail().equals(user2.getEmail())) ) {
+			System.out.println("이메일 일치");
+			if(oldPass.equals(newPass)) {
+				System.out.println("비밀번호도 일치");
+				userService.userDelete(user);
+				session.invalidate();
+				System.out.println("회원탈퇴성공");
+				return "redirect:/";
+			} else {
+				System.out.println("이메일은 일치하나 비밀번호는 불일치");
+				String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8"); 
+				return "redirect:/deleteUserForm?msg=" + msg;
+			}
+		} else {
+			System.out.println("이메일이 불일치해서 비밀번호까진 확인도 못함");
+			String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8");
+			return "redirect:/deleteUserForm?msg=" + msg;
+		}
+		
+	}
 }

@@ -47,7 +47,7 @@
  		<![CDATA[
  			select *
 				from (select @rownum:=@rownum+1 rnum, tot.*
-					from (select * from shareBOARD where idx in (select idx from user where grp = 1)order by articleNo desc) tot,
+					from (select * from shareBOARD where idx in (select idx from user where grp = 1) order by articleNo desc) tot,
 							(select @rownum:=0) temp) sub
 				where rnum between #{startrow} and #{startrow}+14
  		]]>

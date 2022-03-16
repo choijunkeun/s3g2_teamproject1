@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.CommBoard;
 import com.ilinbun.mulcam.dto.CommReply;
 import com.ilinbun.mulcam.dto.PageInfo;
@@ -237,7 +236,9 @@ public class CommunityController {
 				int didILiked = commService.queryIfILikeThis(articleNo, userInfo.getIdx());
 				System.out.println("이전에 누른 적 있음 : " +didILiked);
 				mav.addObject("didILiked", didILiked);  //좋아요 유지
+				mav.addObject("didIFollowed", userService.didIFollowed(commboard.getIdx(), userInfo.getIdx()));
 			}
+			
 			
 			mav.addObject("likes", likes);
 			
@@ -254,13 +255,13 @@ public class CommunityController {
 			
 			mav.addObject("nickname", writerInfo.getNickname());
 			
-//			Integer countComment = commService.countComment();
-//			mav.addObject("countComment", countComment);
+			Integer countComment = commService.countComment(articleNo);
+			mav.addObject("countComment", countComment);
 		
 			//댓글 보기
 			//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
 			
-			pageInfo=commService.getCommentPageInfo(pageInfo);
+			pageInfo=commService.getCommentPageInfo(pageInfo, countComment);
 			System.out.println(pageInfo.getEndPage());
 			System.out.println(pageInfo.getStartPage());
 			System.out.println(pageInfo.getMaxPage());
@@ -443,12 +444,16 @@ public class CommunityController {
 		
 		// 댓글수정 (내 댓글일경우가능)
 		@PostMapping(value="/editReply") 
-		public void editReply(@RequestParam int commentNo, @RequestParam String comment, @RequestParam int articleNo) {
+		public ResponseEntity<String> editReply(@RequestParam int commentNo, @RequestParam String comment, @RequestParam int articleNo) {
+			ResponseEntity<String> result = null;
 			try {
 				commService.editReply(commentNo, comment);
+				result = new ResponseEntity<String>("Success", HttpStatus.OK);
 			} catch(Exception e) {
 				e.printStackTrace();
+				result = new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST);
 			}
+			return result;
 			
 		}
 		// 댓글삭제 (내 댓글일경우가능)
