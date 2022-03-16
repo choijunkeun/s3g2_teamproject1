@@ -231,7 +231,7 @@ $(function() {
 		data: {"idx": ${user.idx}},
 		success: function(data){
 			$.each(data, function(index, item) { 
-				$("#myShare").append("<tr><td><a href=/brag/viewdetail/"+item.articleNo+">"
+				$("#myShare").append("<tr><td><a href=/share/board/viewform/"+item.articleNo+">"
 				+item.title + "</a></td><td>"
 				+item.readCount + "</td></tr><br>");
 				});
@@ -297,7 +297,7 @@ $(function() {
 						obj = '팔로워가 없습니다.';
 					} else{
 						for(let i = 0; i<f.length; i++){
-							obj = '<li class="list-group-item">';
+							obj += '<li class="list-group-item">';
 							obj += '<a href="/userInfo/' + f[i].idx + '"><img src="/profile/'+ f[i].profileImg + '" width="30px" height="30px">&nbsp;'
 								+ '<span>' + f[i].nickname + '</span></a></li>';
 							
@@ -340,9 +340,7 @@ $(function() {
 			})
 		}
 	})
-      
-
-
-
 </script>
+
+
 </html>
