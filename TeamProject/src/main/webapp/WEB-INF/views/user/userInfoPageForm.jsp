@@ -228,7 +228,7 @@
 				data: {"idx": ${userinfo.idx}},
 				success: function(data){
 					$.each(data, function(index, item) { 
-						$("#myShare").append("<tr><td><a href=/brag/viewdetail/"+item.articleNo+">"
+						$("#myShare").append("<tr><td><a href=/share/board/viewform/"+item.articleNo+">"
 						+item.title + "</a></td><td>"
 						+item.readCount + "</td></tr><br>");
 						});
@@ -243,7 +243,7 @@
 				data: {"idx": ${userinfo.idx}},
 				success: function(data){
 					$.each(data, function(index, item) { 
-						$("#myCommunity").append("<tr><td><a href=/comm/boardlist/"+item.articleNo+">"
+						$("#myCommunity").append("<tr><td><a href=/comm/viewform/"+item.articleNo+">"
 						+item.title + "</a></td><td>"
 						+item.views + "</td></tr><br>");
 						});
