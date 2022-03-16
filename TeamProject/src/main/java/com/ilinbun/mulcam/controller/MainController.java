@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -458,21 +459,65 @@ public class MainController {
 		return result;
 	}
 	//팔로잉 리스트 가져오기(훈)
-		@ResponseBody
-		@PostMapping("/followingList")
-		public ResponseEntity<String> followingList(@RequestParam int idx, 
-				HttpSession session, Model model) throws Exception {
-			ResponseEntity<String> result = null;
-			try {
-				List<User> followingList = userService.getFollowingList(idx);
-				JSONObject jobj = new JSONObject();
-				jobj.put("followingList", followingList);
-				System.out.println(jobj.toString());
-				result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
-			}catch (Exception e) {
-				e.printStackTrace();
-				result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
-			}
-			return result;
+	@ResponseBody
+	@PostMapping("/followingList")
+	public ResponseEntity<String> followingList(@RequestParam int idx, 
+			HttpSession session, Model model) throws Exception {
+		ResponseEntity<String> result = null;
+		try {
+			List<User> followingList = userService.getFollowingList(idx);
+			JSONObject jobj = new JSONObject();
+			jobj.put("followingList", followingList);
+			System.out.println(jobj.toString());
+			result = new ResponseEntity<String>(jobj.toString(), HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			result = new ResponseEntity<String>("", HttpStatus.BAD_REQUEST);
 		}
+		return result;
+	}
+	
+	//회원 탈퇴 기능
+	@PostMapping("/deleteUser")
+	public String deleteUser(User user,HttpSession session) throws Exception {
+		System.out.println("deleteUser() Join");
+		
+		//현재 세션에 저장되있는 유저객체(실제 로그인 되어있는 사용자의 객체정보)를 얻어와 변수에 저장
+		User user2 = (User)session.getAttribute("user");
+		String oldPass = userService.getPwd(user.getEmail());
+		
+		System.out.println("세션에 저장된 유저 객체 : "+user2);
+		System.out.println("탈퇴 폼에 입력된 이메일 : " + user.getEmail());
+		System.out.println("탈퇴 폼에 입력된 비밀번호 : " + user.getPassword());
+		System.out.println("세션 유저의 이메일 " + user2.getEmail());
+		System.out.println("세션 유저의 비밀번호(DB에서 추출) " + oldPass);
+		System.out.println(Optional.ofNullable(user2.getPassword()).isPresent());
+		
+		//문제점 .. 로그인 할 때 password를 null로 바꿨기 때문에 세션에서 비밀번호를 얻어올 수 없음..
+		// 일단 로그인에서 setPassword(null)을 뺴서 해결하겠습니다..
+	
+		//회원탈퇴에서 넘어온 비밀번호를 변수에 저장
+		String newPass = user.getPassword();
+		
+		
+		if((user.getEmail().equals(user2.getEmail())) ) {
+			System.out.println("이메일 일치");
+			if(oldPass.equals(newPass)) {
+				System.out.println("비밀번호도 일치");
+				userService.userDelete(user);
+				session.invalidate();
+				System.out.println("회원탈퇴성공");
+				return "redirect:/";
+			} else {
+				System.out.println("이메일은 일치하나 비밀번호는 불일치");
+				String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8"); 
+				return "redirect:/deleteUserForm?msg=" + msg;
+			}
+		} else {
+			System.out.println("이메일이 불일치해서 비밀번호까진 확인도 못함");
+			String msg = URLEncoder.encode("이메일과 비밀번호를 다시 확인해주세요", "utf-8");
+			return "redirect:/deleteUserForm?msg=" + msg;
+		}
+		
+	}
 }
