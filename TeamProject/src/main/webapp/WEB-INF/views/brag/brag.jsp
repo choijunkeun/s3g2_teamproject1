@@ -101,10 +101,10 @@ td {
 							</c:when>
 							</c:choose>
 								<div class='col-sm-3'>
-									<a href="./viewdetail/${bboard.articleNo }">
+									<a href="/brag/viewdetail/${bboard.articleNo }">
 										<div id="ellipsis">${bboard.title }</div> 
 										<div class="img-container table200 mx-auto d-block position-relative overflow-hidden" 
-										style="vertical-align:middle; object-fit:cover; width: inherit;">
+											style="vertical-align:middle; object-fit:cover; width: inherit;">
 										<img src="${bboard.content}" name="brag_content" class="img-item table200-item" />
 										</div>
 									</a>

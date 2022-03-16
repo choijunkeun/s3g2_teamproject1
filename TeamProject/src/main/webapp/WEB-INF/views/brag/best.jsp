@@ -43,7 +43,7 @@ td {
 	<!-- <a></a> BEST게시판 이동 링크 -->
 	<div class="row justify-content-center">
 		<div class="col-sm-6">
-			<div class="card p-4">
+			<div class="card p-4 h-100">
 				<h5 class="fw-bolder">이 달의 혼밥</h5>
 				<div class="card-body">
 					<a href="./viewdetail/${bestbragList[0].articleNo }">
