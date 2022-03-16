@@ -188,13 +188,11 @@ hr {
 a:link {text-decoration: none;}
 a:visited { color: black; text-decoration: none;}
 a:hover { color: black; text-decoration: underline;}
-
-
- 
-    
-
-
-
+/*배너 이미지 사이즈 조절 코드 크롬에서만 됨  */
+.logo {
+	width: 40%;
+	height: auto;
+}
 </style>    
 	<title>일인분</title>
 </head>
@@ -205,12 +203,12 @@ a:hover { color: black; text-decoration: underline;}
 			<div class="title">
 				<div align="center">
 					<h1 class="display-4 fw-bolder">
-					<a href="/" id="headertitle" style="text-decoration: none; text-color:black;">일인분</a>
+					<a href="/" id="headertitle" style="text-decoration: none; text-color:black;"><img src="${path}/banner/logo.gif" class="logo" /></a>
 					</h1>
 				</div>
 				<div class="title-text">
 					<p align="center">혼밥 정보가 필요할 땐,</p>
-					<p align="center">일인분</p>
+					<p align="center">혼산족들의 공간!</p>
 				</div>
 			</div>
     		<hr style="width:500px">
