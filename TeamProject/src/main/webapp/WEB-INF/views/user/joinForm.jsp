@@ -519,10 +519,10 @@ function readInputFile(input) {
     if(input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            $('#preview').html("<img src="+ e.target.result +" style='border-radius: 200px; width: 150px; height: 150px;'>");
+            $('#default_image').attr("src", e.target.result);
         }
         reader.readAsDataURL(input.files[0]);
-        document.getElementById("default_image").style.display="none";
+        // document.getElementById("default_image").style.display="none";
     }
 }
  
@@ -548,7 +548,7 @@ $(".btn-delete").click(function(event) {
     var $input = $(".inp-img");
     var $preview = $('#preview');
     resetInputFile($input, $preview);
-    document.getElementById("default_image").style.display="block";
+    $('#default_image').attr("src", "<c:url value='/profile/DEFAULT.png'/>");
     
 });
 

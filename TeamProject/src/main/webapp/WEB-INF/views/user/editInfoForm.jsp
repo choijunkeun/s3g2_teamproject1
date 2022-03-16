@@ -44,9 +44,7 @@
 
 .card {
 	position : absolute;
-	top : 45%;
-	left : 50%;
-	transform: translate(-50%, -50%);
+	
 	z-index: 1;
 	width : 500px;
 }
@@ -75,7 +73,7 @@
 	border: 0; 
 	}
 
-#cancelImg {
+#cancelImg, #defaultImg{
 	display: inline-block; 
 	padding: .5em .75em; 
 	
@@ -99,20 +97,23 @@
 
 </head>
 <body>
-<div class="container" >
+<div class="row justify-content-center">
 <form action=/infoUpdate method="POST" enctype="multipart/form-data" >
+<div class="col-md-6" style="float:none; margin:0 auto;">
 	<div class="card" style="padding:30px">
 	
 	<div align="center">
-	<img style="border-radius: 200px; width: 150px; height: 150px;"	src="/profile/${user.profileImg }">
+	<img id="profileImg_view" style="border-radius: 200px; width: 150px; height: 150px;"	src="/profile/${user.profileImg }">
 	</div>
 	
-	<div id="preview" align="center"></div>
+	<input type="hidden" name="imgChange" id="imgChange" value=0>
 	
 	<div align="center" class="filebox" style="padding:10px">
-		<label for="profileImg">사진 등록</label>
+		<label for="profileImg">사진 선택</label>
 		<input type="file" id="profileImg" name="profileImg" class="inp-img" accept=".gif, .jpg, .png">
-		<button type="button" id="cancelImg" name="cancelImg" class="btn-delete">사진 삭제</button>
+		<button type="button" id="cancelImg" name="cancelImg" class="btn-delete">초기화</button>
+		<button type="button" id="defaultImg" name="defaultImg" class="btn-delete">기본이미지</button>
+	
 	</div>
 	
 	
@@ -123,15 +124,9 @@
 		</div>
 		<div class="form-group has-feedback">
 			<label class="control-label" for="nickname">닉네임</label>
-			<input class="form-control" type="text" id="nickname" name="nickname"/>
+			<input class="form-control" type="text" id="nickname" name="nickname" value="${user.nickname}"/>
 			<span class="nickname_msg"></span>
 		</div>
-		<div class="form-group has-feedback">
-			<label class="control-label" for="password">비밀번호</label>
-			<input class="form-control" type="password" id="password" name="password"/>
-			<span class="password_msg"></span>
-		</div>
-		
 	</div>
 		
 		<div align="center" style="font-size:20px">혼밥레벨설정</div>
@@ -150,9 +145,10 @@
 		</div>
 		
 	<div align="center">		
-		<button class="btn btn-success" type="submit" id="joinBtn" name="joinBtn" disabled="disabled">수정</button>
-		<button class="cancle btn btn-danger" type="button">취소</button>
+		<button class="btn btn-success" type="submit" id="joinBtn" name="joinBtn">수정</button>
+		<button class="cancle btn btn-danger" onclick="history.back()" type="button">취소</button>
 	</div>
+</div>
 </div>
 </form>
 </div>
@@ -160,15 +156,10 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 
-function check(){
-	if(user_nick==1) {	
-		$("#joinBtn").attr("disabled",false)
-	}
-}
+
 
 //닉네임 체크
 $('#nickname').focusout(function(){
-	$("#joinBtn").attr("disabled",true);
 	var nickname = $('#nickname').val(); //id값이 "nickname"인 입력란의 값을 저장
         if (nickname != "" || nickname != null) {
 	        $.ajax({
@@ -177,14 +168,10 @@ $('#nickname').focusout(function(){
 	            data:{nickname:nickname},
 	            success:function(data){ //컨트롤러에서 넘어온 cnt 값을 받는다.
 	                if (data != "사용가능한 닉네임입니다.") {
-	                	$("#joinBtn").attr("disabled",true)
-	                	user_nick = 0;
-	                }
-	                else{
-		            	/* $("#joinBtn").attr("disabled",false) */
-	                	user_nick = 1;
-	                	check();
-	                } 
+	                	$("#joinBtn").attr("disabled",true)	  
+	                } else if(data == "사용가능한 닉네임입니다.") {
+	                	$("#joinBtn").attr("disabled",false)	
+	                }     
 	                $('.nickname_msg').text(data);
 	            },
 	            error:function(){
@@ -197,46 +184,22 @@ $('#nickname').focusout(function(){
         }
 });
 
-$('#password').keyup(function() {
-	$("#joinBtn").attr("disabled",true);
-	var password = $('#password').val();
-		if(password !="" || password != null) {
-			$.ajax({
-				url:'/passCheck',
-				type:'POST',
-				data:{password:password},
-				success:function(data) {
-					let data2 = "";
-					if(data != "비밀번호가 일치합니다."){
-						$("#joinBtn").attr("disabled",false);
-						console.log(data);
-					} else {
-						data2 = "비밀번호가 다릅니다.";
-						console.log(data);
-					}
-					$('.password_msg').text(data2);
-				}
-				
-			})
-		}
-})
-
-
 
 //등록 이미지 등록 미리보기
 function readInputFile(input) {
   if(input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function (e) {
-          $('#preview').html("<img src="+ e.target.result +" style='border-radius: 200px; width: 150px; height: 150px;'>");
+          $('#profileImg_view').attr("src", e.target.result);
       }
       reader.readAsDataURL(input.files[0]);
-      document.getElementById("default_image").style.display="none";
+      /* document.getElementById("default_image").style.display="none"; */
   }
 }
 
 $(".inp-img").on('change', function(){
   readInputFile(this);
+  console.log(this);
 });
 
 
@@ -253,16 +216,27 @@ function resetInputFile($input, $preview) {
       $preview.empty();
   }       
 }
-$(".btn-delete").click(function(event) {
+$("#cancelImg").click(function(event) {
   var $input = $(".inp-img");
-  var $preview = $('#preview');
+  $("#imgChange").val(1);
+  var $preview = $('#profileImg_view');
   resetInputFile($input, $preview);
-  document.getElementById("default_image").style.display="block";
-  
+  /* document.getElementById("default_image").style.display="block"; */
+     $('#profileImg_view').attr("src", "/profile/${user.profileImg}");
+
 });
 
 
 
+$("#defaultImg").click(function(event) {
+	  var $input = $(".inp-img");
+	  $("#imgChange").val(2);
+	  var $preview = $('#profileImg_view');
+	
+	  /*resetInputFile($input, $preview);
+	  document.getElementById("default_image").style.display="block"; */
+	     $('#profileImg_view').attr("src", "/profile/DEFAULT.png");  
+});
 </script>
 
 

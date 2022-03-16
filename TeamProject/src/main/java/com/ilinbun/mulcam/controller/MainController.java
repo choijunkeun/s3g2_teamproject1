@@ -107,15 +107,7 @@ public class MainController {
 		return msg;
 	}
 	
-	// 패스워드 체크
-	@PostMapping("/passCheck")
-	@ResponseBody
-	public String passCheck(@RequestParam("password") String email) throws Exception {
-		System.out.println("passcheck 진입");
-		String msg = userService.passCheck(email);
-		System.out.println("확인 결과 : " + msg);
-		return msg;
-	}
+
 
 	// 회원가입 기능 컨트롤러
 	@PostMapping("/join")
@@ -182,7 +174,7 @@ public class MainController {
 
 	// 로그인 기능 컨트롤러
 	@PostMapping("/login")
-	public String login(String email, String nickname, String password, boolean rememberEmail, Model model, HttpServletRequest request,
+	public String login(String email, String password, boolean rememberEmail, Model model, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		System.out.println("login() join");
 		try {
@@ -244,43 +236,34 @@ public class MainController {
 	
 	// 정보수정
 	@PostMapping("/infoUpdate")
-	public String infoUpdate(MultipartFile profileImg, String email, String nickname, String originPass, String password, int honbabLevel, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String infoUpdate(MultipartFile profileImg, String email, int imgChange, String nickname, int honbabLevel, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String msg = "";
 		System.out.println("infoUpdate() join");
 		User user = (User)session.getAttribute("user");
-		String dbPass = userService.getPwd(user.getEmail());
-		
+//		String dbPass = userService.getPwd(user.getEmail());
+		System.out.println(imgChange);
 		String profileImgName = profileImg.getOriginalFilename();
 		
 		System.out.println("변경 할 닉네임 : " + nickname);
-		System.out.println("기존패스워드 : " + originPass);
-		System.out.println("db패스워드 : " + dbPass);
-		System.out.println("변경할 패스 : " + password);
+//		System.out.println("기존패스워드 : " + originPass);
+//		System.out.println("db패스워드 : " + dbPass);
+//		System.out.println("변경할 패스 : " + password);
 		System.out.println("새로운 프로필 이미지 : " + profileImgName);
 		System.out.println("혼밥레벨 : " + honbabLevel);
 		// 입력패스워드와 DB에 있는 사용자의 패스워드가 같다면 
 		try {
-			if(originPass.equals(dbPass)) {
-				// 사용중이던 비밀번호로 변경하려는 멍청이라면, 에러메시지와 함께 redirect
-				if (dbPass.equals(password)) {
-					System.out.println("1");
-					msg = URLEncoder.encode("기존 비밀번호와 같습니다. 다른 비밀번호로 설정해주세요.", "utf-8");
-					return "redirect:/editInfo?msg=" + msg;
-				}
-				// 새로운 비밀번호를 입력하지 않았다면, 기존비밀번호로 설정
-				if  (password.equals("")) {
-					System.out.println("2");
-					password = dbPass;
-				}
+			if(true) {
 				// 공백으로 닉네임이 넘어간다면, 기존 닉네임으로 설정 (닉네임 글자수 및 동일닉네임 체크는 ajax로 해결)
 				if (nickname.equals("")) {
 					System.out.println("3");
 					nickname = user.getNickname();
 				}
 				// 프로필 이미지가 비어있으면, 기존 프로필사진 그대로 유지// 프로필 이미지가 변경되었으면 변경된 이미지 저장
-				if (profileImgName.equals("")) {
+				if (imgChange==1) {
 					System.out.println("4");
 					profileImgName = user.getProfileImg();
+				} else if (imgChange==2){
+					profileImgName="DEFAULT.png";
 				} else {
 					String path = servletContext.getRealPath("/profile/");
 					String filename = profileImg.getOriginalFilename();
@@ -306,17 +289,21 @@ public class MainController {
 					System.out.println(destFile);
 				}
 				System.out.println("5");
+				userService.updateInfo(email, nickname, profileImgName, honbabLevel);
 				
-				userService.updateInfo(email, nickname, password, profileImgName, honbabLevel);	
+//				session.invalidate();
+				
+				user = userService.getUserDetail(user.getIdx());
+				user.setPassword(null);
+				session.setAttribute("user", user);
+				
 			// DB에 있는 비밀번호와 입력패스워드가 다르다면
-			} else {
-				msg = URLEncoder.encode("기존 비밀번호가 틀렸습니다. 다시 확인해주세요.", "utf-8");
-				return "redirect:/editInfo?msg=" + msg;
-			}
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("오류발생");
 		}
+		
 		return"redirect:/myPage";
 	}
 	
@@ -477,4 +464,10 @@ public class MainController {
 			}
 			return result;
 		}
+		
+		@GetMapping("/deleteUserForm")
+		public String deleteUserForm() {
+			return "user/deleteUserForm";
+		}
+		
 }
