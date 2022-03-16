@@ -21,7 +21,8 @@ public interface ShareDAO {
 	List<Shareboard> selectShareBoardList(int startrow) throws Exception;
 	List<User> selectShareBoardListUserList(int startrow) throws Exception;
 	List<Map<String, Object>> selectShareBoardListMap(int startrow) throws Exception;
-	
+	List<Map<String, Object>> selectShareNotiListMap() throws Exception;
+		
 	int selectShareBoardCount() throws Exception;
 	Shareboard selectShareboard() throws Exception;
 	
@@ -41,7 +42,7 @@ public interface ShareDAO {
 	public int addArticleLikes(Map<String, Integer> map) throws Exception;
 	public int removeArticleLikes(Map<String, Integer> map) throws Exception;
 	public int queryIfILikeThis(Map<String, Integer> map) throws Exception;
-	public int countComment() throws Exception;
+	public int countComment(int articleNo) throws Exception;
 	public Integer selectMaxCommentNo() throws Exception;
 	public void insertReply(Map<String, Object> map) throws Exception;
 	public ShareReply selectReply(int commentNo) throws Exception;

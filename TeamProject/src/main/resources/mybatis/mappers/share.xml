@@ -39,7 +39,7 @@
 	<!-- 글목록 : 전체게시물 조회하기 -->
 	<select id="selectShareBoardCount" resultType="int">
  		<![CDATA[
- 			select count(*) from team2.shareBOARD
+ 			select count(*) from team2.shareBOARD where idx in (select idx from user where grp = 1)
  		]]>
  	</select>
  	<!-- 글목록 : 게시판 글 목록에 15개 출력 쿼리문 -->
@@ -47,7 +47,7 @@
  		<![CDATA[
  			select *
 				from (select @rownum:=@rownum+1 rnum, tot.*
-					from (select * from shareBOARD order by articleNo desc) tot,
+					from (select * from shareBOARD where idx in (select idx from user where grp = 1)order by articleNo desc) tot,
 							(select @rownum:=0) temp) sub
 				where rnum between #{startrow} and #{startrow}+14
  		]]>
@@ -66,12 +66,18 @@
  			select *
 				from (select @rownum:=@rownum+1 rnum, tot.*
 					from (select s.*, u.email, u.nickname, u.profileImg, u.honbabLevel, u.grp
-							from shareBOARD s, user u where s.idx = u.idx order by articleNo desc) tot,
+							from shareBOARD s, user u where s.idx = u.idx and u.grp = 1 order by articleNo desc) tot,
 							(select @rownum:=0) temp) sub
 				where rnum between #{startrow} and #{startrow}+14
  		]]>
  	</select>
- 	
+ 	<select id="selectShareNotiListMap" resultType="Map" parameterType="int">
+ 		<![CDATA[
+ 			select s.*, u.email, u.nickname, u.profileImg, u.honbabLevel, u.grp 
+ 			from shareBOARD s, user u where s.idx = u.idx and u.grp = 2
+				order by articleNo desc limit 3
+ 		]]>
+ 	</select>
  	<!-- 사용자의 혼밥자랑 게시글을 아이디(idx)를 이용해 게시물을 조회하여 마이페이지에 뿌려준다.(준근) -->
 	<select id="selectShareBoardByIdx" resultType="Shareboard" parameterType="int">
  		<![CDATA[
@@ -83,7 +89,7 @@
 	 <update id="updateShareBoard" parameterType="ShareBoard">
       <![CDATA[
      
-      update shareBOARD set title=#{title},content=#{content} where articleNo=#{articleNo}
+      update shareBOARD set title=#{title}, content=#{content}, subway=#{subway} where articleNo=#{articleNo}
        ]]>
    </update>
    <!-- 게시물 삭제 : articleNo를 가지고 게시글을 조회해서 삭제함 ***글 삭제하면 목록 빵꾸나는 issue 어떻게 
@@ -171,9 +177,9 @@
 		 ]]>
 	</update>
 	
-	<select id="countComment" resultType="Integer">
+	<select id="countComment" resultType="Integer" parameterType="int">
 		<![CDATA[
-			select count(*) from sharecomment
+			select count(*) from sharecomment where articleNo = #{articleNo}
 		]]>
 	</select>
 	

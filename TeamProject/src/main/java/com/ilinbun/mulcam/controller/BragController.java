@@ -41,6 +41,7 @@ import com.ilinbun.mulcam.dto.BragReply;
 import com.ilinbun.mulcam.dto.PageInfo;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.BragService;
+import com.ilinbun.mulcam.service.UserService;
 
 
 @Controller
@@ -54,6 +55,9 @@ public class BragController {
 	
 	@Autowired
 	private BragService bragService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired(required = false) // 매개변수 없어도 OK. 나중에 고쳐야?
 	BragBoard bragboard;
@@ -247,6 +251,7 @@ public class BragController {
 					int didILiked = bragService.queryIfILikeThis(articleNo, user.getIdx());
 					System.out.println("이전에 누른 적 있음 : " +didILiked);
 					mav.addObject("didILiked", didILiked);  //좋아요 유지
+					mav.addObject("didIFollowed",userService.didIFollowed(bragboard.getIdx(), user.getIdx()));
 				}
 				
 				mav.addObject("likes", likes);
@@ -262,12 +267,12 @@ public class BragController {
 				mav.addObject("imgSrc", src); //mav에 넣기
 				mav.setViewName("brag/viewDetail"); //경로이름 설정
 				
-				Integer countComment = bragService.countComment();
+				Integer countComment = bragService.countComment(articleNo);
 				mav.addObject("countComment", countComment);
 				
 				//댓글 보기
 				//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
-				pageInfo=bragService.getCommentPageInfo(pageInfo);
+				pageInfo=bragService.getCommentPageInfo(pageInfo, articleNo);
 				System.out.println("댓글 받아오기 시작");
 				List<BragReply> commentList = bragService.boardReplyList(articleNo, pageInfo.getStartPage());
 				System.out.println(commentList.size() + "개 받음");

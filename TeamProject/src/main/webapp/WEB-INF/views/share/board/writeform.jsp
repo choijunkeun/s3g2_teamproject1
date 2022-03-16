@@ -146,65 +146,68 @@ h4>strong {
 <section id="./writeform"> 
     <div class="container pb-3 bg-light" class="outer"> 
         <h2 class="fw-bolder" style="text-align:center;"><strong>반찬공유 글쓰기</strong></h2>
-		<form action="./sharewrite" method="post" enctype="multipart/form-data" name="shareform" id="shform"> 
+		<form action="sharewrite" method="post" enctype="multipart/form-data" 
+			name="shareform" id="shform"> 
 			<div>
 			<input type="hidden" id="idx" name="idx" value=${user.idx }>
 			<div class="container"> 
 				<div class="row p-1 text-center">
 					<div class="col">
-						<input type="hidden" name="headerTag" id="headerTag">
-						<div class="btn-group-sort" style="width: fit-content; display: inline-block; float: left">
-							<button type="button"
-								class="btn btn-secondary dropdown-toggle" id="sortDropdown"
-								data-bs-toggle="dropdown" aria-expanded="false">말머리 선택</button>
-							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-								<li><button class="dropdown-item" type="button"
-									onclick="headerChange(0)">공유중</button></li>
-								<li><button class="dropdown-item" type="button"
-									onclick="headerChange(1)">공유완료</button></li>
-							</ul>
-						</div> <br>
-						<input type="hidden" name="subway" id="subway">
-					    <div class="btn-group-sort" style="width: fit-content; display: inline-block; float: right;">
-							<button type="button"
-								class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
-								data-bs-toggle="dropdown" aria-expanded="false">위치를 골라주세요</button>
-							<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
-								<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
-									onclick="subwayChange('용산역')">용산역</button></li>
-								<li><button class="dropdown-item" type="button" name="신용산역" value='${subway }'
-									onclick="subwayChange('신용산역')">신용산역</button></li>
-								<li><button class="dropdown-item" type="button" name="이촌역" value='${subway }'
-									onclick="subwayChange('이촌역')">이촌역</button></li>
-								<li><button class="dropdown-item" type="button" name="서빙고역" value='${subway }'
-									onclick="subwayChange('서빙고역')">서빙고역</button></li>
-								<li><button class="dropdown-item" type="button" name="한남역" value='${subway }'
-									onclick="subwayChange('한남역')">한남역</button></li>
-								<li><button class="dropdown-item" type="button" name="한강진역" value='${subway }'
-									onclick="subwayChange('한강진역')">한강진역</button></li>
-								<li><button class="dropdown-item" type="button" name="이태원역" value='${subway }'
-									onclick="subwayChange('이태원역')">이태원역</button></li>
-								<li><button class="dropdown-item" type="button" name="녹사평역" value='${subway }'
-									onclick="subwayChange('녹사평역')">녹사평역</button></li>
-								<li><button class="dropdown-item" type="button" name="삼각지역" value='${subway }'
-									onclick="subwayChange('삼각지역')">삼각지역</button></li>
-								<li><button class="dropdown-item" type="button" name="숙대입구역" value='${subway }'
-									onclick="subwayChange('숙대입구역')">숙대입구역</button></li>
-								<li><button class="dropdown-item" type="button" name="남영역" value='${subway }'
-									onclick="subwayChange('남영역')">남영역</button></li>
-								<li><button class="dropdown-item" type="button" name="효창공원앞역" value='${subway }'
-									onclick="subwayChange('효창공원앞역')">효창공원앞역</button></li>
-								<li><button class="dropdown-item" type="button" name="null" value='${subway }'
-									onclick="subwayChange('')">지역을 골라주세요!</button></li>
-							</ul>
-							
-						</div> 
-						<h2 class="fw-bolder" style="text-align:left;">
-       					 <br> <strong>반찬공유 글쓰기</strong></h2>
-							<!-- ckEditor -->
-						
+						<div class="m-4">
+							<input type="hidden" name="headerTag" id="headerTag">
+							<c:if test="${user.grp eq 1 }">
+							<div class="btn-group-sort" style="width: fit-content; display: inline-block; float: left">
+								<button type="button"
+									class="btn btn-secondary dropdown-toggle" id="sortDropdown"
+									data-bs-toggle="dropdown" aria-expanded="false">말머리 선택</button>
+								<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+									<li><button class="dropdown-item" type="button"
+										onclick="headerChange(0)">공유중</button></li>
+									<li><button class="dropdown-item" type="button"
+										onclick="headerChange(1)">공유완료</button></li>
+								</ul>
+							</div> 
+							</c:if>
+							<input type="hidden" name="subway" id="subway">
+							<c:if test="${user.grp eq 1 }">
+						    <div class="btn-group-sort" style="width: fit-content; display: inline-block; float: right;">
+								<button type="button"
+									class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
+									data-bs-toggle="dropdown" aria-expanded="false">위치를 골라주세요</button>
+								<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
+									<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
+										onclick="subwayChange('용산역')">용산역</button></li>
+									<li><button class="dropdown-item" type="button" name="신용산역" value='${subway }'
+										onclick="subwayChange('신용산역')">신용산역</button></li>
+									<li><button class="dropdown-item" type="button" name="이촌역" value='${subway }'
+										onclick="subwayChange('이촌역')">이촌역</button></li>
+									<li><button class="dropdown-item" type="button" name="서빙고역" value='${subway }'
+										onclick="subwayChange('서빙고역')">서빙고역</button></li>
+									<li><button class="dropdown-item" type="button" name="한남역" value='${subway }'
+										onclick="subwayChange('한남역')">한남역</button></li>
+									<li><button class="dropdown-item" type="button" name="한강진역" value='${subway }'
+										onclick="subwayChange('한강진역')">한강진역</button></li>
+									<li><button class="dropdown-item" type="button" name="이태원역" value='${subway }'
+										onclick="subwayChange('이태원역')">이태원역</button></li>
+									<li><button class="dropdown-item" type="button" name="녹사평역" value='${subway }'
+										onclick="subwayChange('녹사평역')">녹사평역</button></li>
+									<li><button class="dropdown-item" type="button" name="삼각지역" value='${subway }'
+										onclick="subwayChange('삼각지역')">삼각지역</button></li>
+									<li><button class="dropdown-item" type="button" name="숙대입구역" value='${subway }'
+										onclick="subwayChange('숙대입구역')">숙대입구역</button></li>
+									<li><button class="dropdown-item" type="button" name="남영역" value='${subway }'
+										onclick="subwayChange('남영역')">남영역</button></li>
+									<li><button class="dropdown-item" type="button" name="효창공원앞역" value='${subway }'
+										onclick="subwayChange('효창공원앞역')">효창공원앞역</button></li>
+									<li><button class="dropdown-item" type="button" name="null" value='${subway }'
+										onclick="subwayChange('')">지역을 골라주세요!</button></li>
+								</ul>
+							</div> 
+							</c:if>
+						</div>
+						<!-- ckEditor -->
 						<div class="writeform">
-							<input name="title" id="title" style="display: inline-block;width:100%;" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
+							<input name="title" id="title" style="display: inline-block; width:100%;" size="100%" value='${title }' placeholder="제목을 입력해주세요!" required="required">
 							<textarea id="editor" name="content" placeholder="내용을 입력해주세요!"></textarea>
 							<span></span>
 						    <div id="classic">
@@ -218,7 +221,8 @@ h4>strong {
 				<div class="col text-center">
 					<!-- <input type="reset" value="다시쓰기" /> -->
 					<button class="btn border bd-secondary" onclick="cancleboard()">취소</button>
-					<input type="submit" name="writepost" class="btn border bd-secondary" value="등록" onclick="registerboard()" />
+					<input type="button" name="writepost" class="btn border bd-secondary" 
+					value="등록" onclick="registerboard()"/>
 				</div>
 	         </div>
 	         </div>
@@ -268,15 +272,35 @@ h4>strong {
 		}
 		
     	function registerboard() {
-    		 alert("반찬 및 식재료를 공유 시 발생되는 법적인 문제는 개인에게 달려있습니다. 개발진들은 이를 책임지지 않습니다.")
-    		 
+    		if(${user.grp eq 1}){
+    			if($('#headerTag').val() == null || $('#headerTag').val() == ""){
+    				alert('말머리를 선택해 주세요.');
+    				return false;
+    			}
+    			if($('#subway').val() == null || $('#subway').val() == ""){
+    				alert('공유할 위치를 선택해 주세요.');
+    				return false;
+    			}
+    			if($('#title').val() == ""){
+    				alert('제목을 입력해 주세요.');
+    				return false;
+    			}
+    			
+    			alert("반찬 및 식재료를 공유 시 발생되는 법적인 문제는 개인에게 달려있습니다. 개발진들은 이를 책임지지 않습니다.")	
+    		} else {
+    			$('#headerTag').val(2);
+    			$('#subway').val("관리실");
+    		}
+    		$('#shform').submit();
     	}
     	
    	 	function cancleboard() {
    	 		if(confirm('게시글 작성을 취소하시겠습니까?')) {
-   	 			console.log('delete info')
+   	 			console.log('delete info');
+   	 			window.location.href="/share/board/listform";
    	 		} else {
    	 			console.log('go back to writeform')
+   	 			return false;
    	 		}
    	 	}	
  

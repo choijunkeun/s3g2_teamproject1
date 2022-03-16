@@ -35,6 +35,20 @@ height : 300px !important;
 	max-width:200px;
 	max-height:200px;
 }
+.img-item {
+	width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(1.0);
+    transition: all 0.3s ease-in-out;
+}
+.img-item:hover{
+	transform:scale(1.1);
+}
+.img-container {
+	max-width:auto;
+	height:auto;
+}
 
 </style>
 </head>
@@ -45,24 +59,29 @@ height : 300px !important;
 	<!--1. BEST 혼밥자랑 게시판 구현 부분. 1위(이달의혼밥) 크게 출력, 2,3위 작게 두개로 출력  -->
 	<div class="row justify-content-center">
 		<!--row-vh d-flex flex-row justify-content-center : row 방향으로 가로 배열할 때, 중앙 정렬   -->
-		<div class="col mt-5">
+		<div class="col-7 mt-5">
 			<!-- col mt-5 : margin top 5 -->
 			<div class="card p-4">
 				<!--card padding 4  -->
-				<h5 class="fw-bolder">이달의혼밥</h5>
+				<h5 class="fw-bolder">이 달의 혼밥</h5>
 				<!--fw-bolder : font weight bolder  -->
 				<div class="text-center"></div>
-				<div class="card-body">
+				<div class="card-body"><!-- <div> -->
 					<!--card body : box를 만들어 준다  -->
-					<table>
+					<table style="width: inherit">
 						<!-- <div class="border mycard" > -->
 						<tr>
 							<td title="${bestbragList[0].title }">
 								<a href="brag/viewdetail/${bestbragList[0].articleNo }">
 									${bestbragList[0].title } <br>
-									<img src="${bestbragList[0].content}" name="brag_content" 
+									<div class="img-container img-fluid mx-auto d-block position-relative overflow-hidden" style="vertical-align:middle; object-fit:cover; width: inherit">
+					                    <img class="img-item" src="${bestbragList[0].content}" 
+					                    	name="brag_content">
+					                </div>
+									
+									<%-- <img src="${bestbragList[0].content}" name="brag_content" 
 									width="500px" height="700px"
-									class="card-img-top" /></a>
+									class="card-img-top" /></a> --%>
 							</td>
 						</tr>
 						</table>
@@ -71,7 +90,7 @@ height : 300px !important;
 		</div>
 
 
-		<div class="col mt-5">
+		<div class="col-5 mt-5">
 			<div class="card p-4">
 				<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
 				<div class="card-body">
@@ -81,16 +100,24 @@ height : 300px !important;
 							<td title="${bestbragList[1].title }">
 								<a href="brag/viewdetail/${bestbragList[1].articleNo }">
 									${bestbragList[1].title } <br>
-									<img src="${bestbragList[1].content}" name="brag_content"  width="450px" height="300px"
-									class="card-img-top"/></a>
+									<div class="img-container img-fluid mx-auto d-block position-relative overflow-hidden" style="vertical-align:middle; object-fit:cover; width: inherit">
+					                    <img class="img-item" src="${bestbragList[1].content}" 
+					                    	name="brag_content">
+					                </div>
+									<%-- <img src="${bestbragList[1].content}" name="brag_content"  width="450px" height="300px"
+									class="card-img-top"/> --%></a>
 							</td>
 						</tr>
 						<tr>
 							<td title="${bestbragList[2].title }">
 							<a href="brag/viewdetail/${bestbragList[2].articleNo }">
 									${bestbragList[2].title } <br> 
-									<img src="${bestbragList[2].content}" name="brag_content" width="450px" height="300px"
-									class="card-img-top" />
+									<div class="img-container img-fluid mx-auto d-block position-relative overflow-hidden" style="vertical-align:middle; object-fit:cover; width: inherit">
+					                    <img class="img-item" src="${bestbragList[2].content}" 
+					                    	name="brag_content">
+					                </div>
+									<%-- <img src="${bestbragList[2].content}" name="brag_content" width="450px" height="300px"
+									class="card-img-top" /> --%>
 							</a></td>
 						</tr>
 					</table>

@@ -1,11 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>일인분 : 혼밥 정보가 필요할 땐, 일인분</title>
+<style>
+	.mainShortcut>a {
+		max-width: auto;
+		display: inline-block;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+
+	}
+/*배너 이미지 사이즈 조절 코드 크롬에서만 됨  */	
+	.banner{ 
+  object-fit: cover;
+  width: 100%; height: 100%;
+}
+</style>
 </head>
 <body>
 	<!-- <div class="container mb-2">
@@ -41,34 +57,34 @@
 		data-bs-ride="carousel" style="max-width: 100%; height: 300px;">
 		<div class="carousel-inner">
 			<div class="carousel-item active">
-				<img
-					src="https://dummyimage.com/1200x300/777/ff99ff.jpg&text=explain"
-					class="d-block w-100" alt="...">
+				<img src="${path}/banner/1.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 			<div class="carousel-item">
-				<img
-					src="https://dummyimage.com/1200x300/555/99ffff.jpg&text=explain"
-					class="d-block w-100" alt="...">
+				<img src="${path}/banner/banner1.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 			<div class="carousel-item">
-				<img
-					src="https://dummyimage.com/1200x300/999/ffff99.jpg&text=explain"
-					class="d-block w-100" alt="...">
+				<img src="${path}/banner/banner2.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
+			</div>
+			<div class="carousel-item">
+				<img src="${path}/banner/banner3.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
+			</div>
+			<div class="carousel-item">
+				<img src="${path}/banner/banner4.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 		</div>
 	</div>
 	<!-- https://getbootstrap.com/docs/5.1/components/carousel/ -->
 
-
+<br><br><br><br><br><br><br>
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">반찬공유 최신글 제목</h5>
+					<div class="text-center mainShortcut">
+						<h5 class="fw-bolder">반찬공유 최신글</h5>
 						<c:forEach var="i" begin="0" end="2">
 							<a title="${shareList[i].title }"
-								href="share/board/viewform/${shareList[i].articleNo }">${shareList[i].title }</a>
+								href="/share/board/viewform/${shareList[i].articleNo }">${shareList[i].title }</a>
 							<br>
 						</c:forEach>
 					</div>
@@ -85,8 +101,8 @@
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">혼밥자랑</h5>
+					<div class="text-center mainShortcut">
+						<h5 class="fw-bolder">혼밥자랑 최신글</h5>
 						<c:forEach var="i" begin="0" end="2">
 							<a title="${bragList[i].title }"
 								href="brag/viewdetail/${bragList[i].articleNo }">${bragList[i].title }</a>
@@ -106,15 +122,20 @@
 		<div class="col mt-5">
 			<div class="card">
 				<div class="card-body p-4">
-					<div class="text-center">
-						<h5 class="fw-bolder">커뮤니티 최신글 제목</h5>
-						커뮤니티 최신글 내용
+					<div class="text-center mainShortcut">
+						<h5 class="fw-bolder">커뮤니티 최신글</h5>
+						<c:forEach var="i" begin="0" end="2">
+							<a title="${commList[i].title }"
+								href="/comm/viewform/${commList[i].articleNo }">${commList[i].title }</a>
+							
+							<br>
+						</c:forEach>
 					</div>
 				</div>
 				<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 					<div>
 						<!-- + 클릭 시 상세보기로 이동 -->
-						<a class="btn btn-outline-dark mt-auto" href="#">+</a>
+						<a class="btn btn-outline-dark mt-auto" href="/comm/listform">+</a>
 					</div>
 				</div>
 			</div>
