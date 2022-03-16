@@ -64,10 +64,13 @@
 			<div class="container pb-3 bg-light" class="outer">
 				<h5 class="fw-bolder" style="margin-left: 0%;">혼밥자랑</h5>
 				<!-- Controller의 @PostMapping breagwrite 이어주는 코드 -->
-				<form action="./bragwrite" method="post" name="bragform" id="bwForm">
+				<form action="/brag/bragmodify" method="post" name="bragform" id="bwForm">
 					<div>
 						<!-- 수정요. session값 받아오는 코드. session, user와 함께 수정요.  -->
-						<input type="hidden" id="idx" name="idx" value=${user.idx }>
+						<input type="hidden" id="articleNo" name="articleNo" value="${bboard.articleNo }">
+						<input type="hidden" id="idx" name="idx" value="${bboard.idx }">
+						<input type="hidden" id="readCount" name="readCount" value="${bboard.readCount }">
+						<input type="hidden" id="date" name="date" value="${bboard.date }">
 						<div class="container p-2 ">
 							<div class="col text-center ">
 								<!--1. 문파선택  -->

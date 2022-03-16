@@ -384,9 +384,10 @@ public class BragController {
 	public ModelAndView bragmodify(@ModelAttribute BragBoard bragboard) {
 		ModelAndView mav = new ModelAndView();
 		try {
+			bragboard.setContent(bragboard.getContent().trim());
 			bragService.modifyBragBoard(bragboard);
 			mav.addObject("articleNo", bragboard.getArticleNo());
-			mav.setViewName("redirect:/brag/viewDetail");
+			mav.setViewName("redirect:/brag/viewdetail/" + bragboard.getArticleNo());
 		} catch (Exception e) {
 			e.printStackTrace();
 			mav.addObject("err", e.getMessage());

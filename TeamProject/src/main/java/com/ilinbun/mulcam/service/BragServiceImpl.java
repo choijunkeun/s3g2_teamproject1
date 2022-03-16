@@ -163,7 +163,7 @@ public class BragServiceImpl implements BragService {
 	//글수정
 	@Override
 	public void modifyBragBoard(BragBoard bragboard) throws Exception {
-		// TODO Auto-generated method stub
+		bragDAO.updateBragBoard(bragboard);
 	}
 	//글수정(modifyForm) 시 하나의 글 정보를 select하는 쿼리문	
 	@Override

@@ -42,6 +42,7 @@ public class BragBoard { // 자랑
 		this.readCount = readCount;
 		this.content = content;
 	}
+	public BragBoard() {}
 
 	public int getArticleNo() {
 		return articleNo;
