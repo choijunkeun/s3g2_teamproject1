@@ -61,7 +61,7 @@ h4>strong {
 	color: #ff3f3f;
 }
 
-.btn-primary {
+.btn-follow {
 	border-color: #ff3f3f !important;
 	color: #ffffff;
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -101,7 +101,7 @@ display: inline-block;
 					<span class="badge bg-danger rounded-pill m-2">Lv. ${userInfo.honbabLevel }</span>
 				</a>
 				<c:if test="${not empty user && !(userinfo.idx eq user.idx) }">
-				<button class="btn btn-primary text-white align-self-center" style="height: fit-content;" 
+				<button class="btn btn-follow text-white align-self-center" style="height: fit-content;" 
 					id="follow${userInfo.idx}" onclick="togglefollow(${userInfo.idx});">${didIFollowed>0? "언팔로우": "팔로우"}</button>
 				</c:if>
 				<!-- <a href="#" class="btn btn-primary text-white align-self-center" style="height: fit-content;">팔로우</a> -->

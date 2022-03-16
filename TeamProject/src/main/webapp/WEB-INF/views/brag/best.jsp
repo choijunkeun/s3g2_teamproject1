@@ -28,6 +28,14 @@ td {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+.btn-follow {
+	border-color: #ff3f3f !important;
+	color: #ffffff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #ff3f3f !important;
+	border-color: #ff3f3f !important;
+}
+
 </style>
 <link rel="stylesheet" href="/css/brag.css">
 </head>
@@ -44,16 +52,75 @@ td {
 	<div class="row justify-content-center">
 		<div class="col-sm-6">
 			<div class="card p-4 h-100">
-				<h5 class="fw-bolder">이 달의 혼밥</h5>
-				<div class="card-body">
-					<a href="./viewdetail/${bestbragList[0].articleNo }">
-						${bestbragList[0].title } 
-						<div class="img-container  mx-auto d-block position-relative overflow-hidden" 
-							style="vertical-align:middle; object-fit:cover; max-width: 600px; width: inherit;">
-							<img class="img-item" src="${bestbragList[0].content}" name="brag_content" />
+					<h2 class="fw-bolder">이 달의 혼밥</h2>
+					<div class="card-body">
+						<div class="card border-right">
+							<div class="card-header justify-content-between">
+								<div class="row mb-2">
+									<div class="col-sm-3">
+										<button type="button" class="btn btn-secondary">${bestbragList[0].moonpa ? "사먹파" : "해먹파"}</button>
+									</div>
+								</div>
+								
+								<div class="row mb-2">
+									<div class="col-sm-5">
+										<a href="/userInfo/${writerInfo.idx }">
+											<img
+												style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;"
+												src='/profile/${writerInfo.profileImg }'>
+											<div class="border pb-2 pt-1 mx-1 rounded" style="display:inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+													${writerInfo.nickname }님</div>
+											<span
+												class="badge bg-danger rounded-pill m-2">Lv.
+													${writerInfo.honbabLevel }</span>
+										</a>
+									</div>
+									<div class="col-sm-3">
+									</div>
+									<div class="col-sm-4">
+										<c:if test="${!(empty user) && !(writerInfo.idx  eq user.idx) }">
+											<button class="btn btn-follow text-white align-self-center"
+													style="height: fit-content;" id="writerInfofollow${userInfo.idx}"
+													onclick="togglefollow(`${writerInfo.idx}`);">${didIFollowed>0? "언팔로우": "팔로우"}</button>
+										</c:if>
+											<!-- <a href="#" class="btn btn-primary text-white align-self-center" style="height: fit-content;">팔로우</a> -->
+									</div>
+								</div>
+								
+								<div class="row">
+									<i class="fa fa-map-marker m-2" aria-hidden="true">&nbsp;${bestbragList[0].location }</i>
+
+									<a class="mw-100"
+										href="/brag/viewdetail/${bestbragList[0].articleNo }"> <br>
+										<div
+											class="img-container  mx-auto d-block position-relative overflow-hidden"
+											style="vertical-align: middle; object-fit: cover; max-width: 600px; width: inherit;">
+											<img class="img-item " src="${bestbragList[0].content}"
+													name="brag_content"> ${bestbragList[0].title }
+										</div>
+									</a>
+								</div>
+									
+								<div class="row">
+									<div class='col-sm-3'>
+										<button class="btn-sm border-0 bg-transparent text-danger mx-2"
+											id="likebtn${bboard.articleNo }"
+											onclick="toggleLikes(${bboard.articleNo})">
+										<i class="fa fa-lg ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
+											aria-hidden="true">${likes }</i>
+										</button>
+									</div>
+									<div class='col-sm-6'>
+									</div>
+									<div class='col-sm-3'>
+										<i class="fa fa-commenting fa-lg mx-2" aria-hidden="true">${countComment }</i>
+									</div>
+										
+								<!-- 좋아요 border-danger rounded-pill bg-white  -->
+							</div>
+							</div>
 						</div>
-					</a>
-				</div>
+					</div>
 			</div>
 		</div>
 

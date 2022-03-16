@@ -64,12 +64,29 @@ public class BragController {
 
 	// main.jsp (BEST자랑 게시판 + 일반 자랑 게시판) 화면 출력. (수정요.beat1 쿼리가 BEST부분에만 먹게)
 	@GetMapping("")
-	public String Main(Model model) {
+	public String Main(Model model) {	
 		try {
 			List<BragBoard> bestbragList = bragService.bragBest();
 			List<BragBoard> bragList=bragService.getBragboardList(1, 8); //첫번째 페이지에서 가져오는 의미
 			model.addAttribute("bragList", bragList); //담아야 가져옴
 			model.addAttribute("bestbragList", bestbragList);
+			int bestArticleNo = bestbragList.get(0).getArticleNo();
+			int likes = bragService.queryArticleLikes(bestArticleNo);
+			
+			int writerIdx = bestbragList.get(0).getIdx();
+			User writer = userService.getUserinfo(writerIdx);
+			model.addAttribute("writerInfo", writer);
+			
+			User user = (User) session.getAttribute("user");
+			model.addAttribute("user", user);
+			if(user != null) {
+				System.out.println("유저 정보 인식");
+				int didILiked = bragService.queryIfILikeThis(bestArticleNo, user.getIdx());
+				System.out.println("이전에 누른 적 있음 : " +didILiked);
+				model.addAttribute("didILiked", didILiked);  //좋아요 유지
+				model.addAttribute("didIFollowed", userService.didIFollowed(bestArticleNo, user.getIdx()));
+				model.addAttribute("likes", likes);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,14 +103,7 @@ public class BragController {
 			int howManyBrag = 24;
 			try {
 				List<BragBoard> bragList=bragService.getBragboardList(page, howManyBrag);
-//				for(BragBoard brag : bragList) {
-//					Document doc=Jsoup.parse(brag.getContent());
-//					System.out.println(doc.toString());
-//					Element img= doc.selectFirst("img");
-//					String src = img.attr("src");
-//					//System.out.println("img src = " + src);
-//					brag.setContent(src);
-//				}
+				
 				pageInfo=bragService.getPageInfo(pageInfo);
 				mav.addObject("pageInfo", pageInfo);
 				mav.addObject("bragList", bragList);
@@ -112,6 +122,23 @@ public class BragController {
 			try {
 				List<BragBoard> bestbragList = bragService.bragBest();
 				model.addAttribute("bestbragList", bestbragList);
+				int bestArticleNo = bestbragList.get(0).getArticleNo();
+				int likes = bragService.queryArticleLikes(bestArticleNo);
+				
+				int writerIdx = bestbragList.get(0).getIdx();
+				User writer = userService.getUserinfo(writerIdx);
+				model.addAttribute("writerInfo", writer);
+				
+				User user = (User) session.getAttribute("user");
+				model.addAttribute("user", user);
+				if(user != null) {
+					System.out.println("유저 정보 인식");
+					int didILiked = bragService.queryIfILikeThis(bestArticleNo, user.getIdx());
+					System.out.println("이전에 누른 적 있음 : " +didILiked);
+					model.addAttribute("didILiked", didILiked);  //좋아요 유지
+					model.addAttribute("didIFollowed", userService.didIFollowed(bestArticleNo, user.getIdx()));
+					model.addAttribute("likes", likes);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
