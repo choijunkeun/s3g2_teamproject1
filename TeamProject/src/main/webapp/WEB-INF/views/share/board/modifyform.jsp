@@ -66,7 +66,7 @@ h5 {
 			    <div class="btn-group-sort float-end" style="width: fit-content; display: inline-block; float: right;">
 					<button type="button"
 						class="btn btn-secondary dropdown-toggle" id="sortDropdownSub"
-						data-bs-toggle="dropdown" aria-expanded="false">${shboard.subway }</button>
+						data-bs-toggle="dropdown" aria-expanded="false">${not empty shboard.subway? shboard.subway:null  }</button>
 					<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 						<li><button class="dropdown-item" type="button" name="용산역" value='${subway }'
 							onclick="subwayChange('용산역')">용산역</button></li>
@@ -100,7 +100,7 @@ h5 {
 			</div>
 
 			<form action="./modifyform" method="post" enctype="multipart/form-data" name="modifyform" >
-				<input type="hidden" name="subway" id="subway">
+				<input type="hidden" name="subway" id="subway" value='${shboard.subway}'>
 				<div>
 					<input type="hidden" id="articleNo" name ="articleNo" value="${shboard.articleNo}">
 					<div class="container p-2 ">
