@@ -497,7 +497,7 @@
 								type: "POST",
 								url: "/follow/",
 								cache: false,
-								data: { "idx": ${ userinfo.idx }},
+								data: { "idx": idx },
 						async: false,
 							success: function(data) {
 								result = JSON.parse(data);
