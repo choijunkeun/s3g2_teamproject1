@@ -167,13 +167,22 @@
 							</div>
 						</div>
 					</div>
+					<!-- 수정, 삭제, 말머리 변경 버튼 -->
 					<div class="row">
 						<div class="col" style="text-align: center;">
 							<c:if test="${user.idx == shboard.idx || user.grp == 2}">
 								<c:if test="${user.idx == shboard.idx }">
-									<button class="btn border-dark" onclick="javascript:window.location.href='/share/board/modifyform?articleNo=${shboard.articleNo }'">수정</button>
+									<form id="headerChange" action="/share/board/header" method="post" style="display: inline-block;">
+										<input type="hidden" name="headerTag" id="headerTag" value=${shboard.headerTag}>
+										<input type="hidden" name="articleNo" value=${shboard.articleNo}>
+										<button class="btn border-dark" style="display: inline-block;"
+											onclick="headerChange(${shboard.articleNo},${shboard.headerTag});">말머리 수정</button>
+									</form>
+									<button class="btn border-dark" style="display: inline-block;"
+										onclick="javascript:window.location.href='/share/board/modifyform?articleNo=${shboard.articleNo }'">수정</button>
 								</c:if>
-								<button class="btn border-dark" onclick="deleteWrite(${shboard.articleNo});">삭제</button>
+								<button class="btn border-dark" style="display: inline-block;"
+									onclick="javascript:window.location.href='/share/board/deleteform?articleNo=${shboard.articleNo }'">삭제</button>
 							</c:if>
 						</div>
 					</div>
@@ -340,14 +349,14 @@
 			</div>
 		</form>		
 		</c:if> --%>
-		<c:if test="${user.idx eq shboard.idx}">
+		<%-- <c:if test="${user.idx eq shboard.idx}">
 		<form id="headerChange" action="/share/board/header" method="post">
 		<input type="hidden" name="headerTag" id="headerTag" value=${shboard.headerTag}>
 		<input type="hidden" name="articleNo" value=${shboard.articleNo}>
 		
 		<button class="btn border-dark" onclick="headerChange(${shboard.articleNo},${shboard.headerTag});">말머리 수정</button>
 		</form>		
-		</c:if> 
+		</c:if>  --%>
 		
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
