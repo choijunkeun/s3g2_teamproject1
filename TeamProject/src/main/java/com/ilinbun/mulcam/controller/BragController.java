@@ -131,11 +131,12 @@ public class BragController {
 				@RequestParam String location,
 				@RequestParam int idx,
 				Model model) {
-
+			if(location.substring(0,1).equals(",")) location = location.substring(1);
 			int articleNo=0; //모르겠다
 			try {
 				User userInfo = (User) session.getAttribute("user");
-				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);			
+				BragBoard bragboard = new BragBoard(idx, Boolean.parseBoolean(moonpa), title, location, 0, content);
+				System.out.println(location);
 				Document doc=Jsoup.parse(bragboard.getContent());
 				System.out.println("doc.body :" + doc.body());
 				Elements bodyChildNodes = doc.body().children();
@@ -329,11 +330,12 @@ public class BragController {
 
 	// 글수정 (내 글일경우가능)
 	@PostMapping(value = "/editWrite")
-	public ModelAndView editWrite(@RequestParam(value = "articleNo") int articleNo , @RequestParam(value = "idx") int idx) {
+	public ModelAndView editWrite(@RequestParam(value = "articleNo") int articleNo, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView();
 		try {
-			BragBoard bragboard = bragService.getBragBoard(articleNo);
-			if(bragboard.getIdx() != idx) throw new Exception("로그인한 사람과 글 작성자가 다릅니다");
+			HttpSession session = request.getSession();
+			BragBoard bragboard = bragService.getArticleNo(articleNo);
+			if(bragboard.getIdx() != ((User)session.getAttribute("user")).getIdx()) throw new Exception("로그인한 사람과 글 작성자가 다릅니다");
 			
 			mav.addObject("bboard", bragboard);
 			mav.setViewName("brag/modifyForm");

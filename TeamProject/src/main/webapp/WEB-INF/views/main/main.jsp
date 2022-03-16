@@ -24,37 +24,7 @@
 </style>
 </head>
 <body>
-	<!-- <div class="container mb-2">
-		<form class="row" method="post" action="/search">
-			<div class="col-4 text-center">
-				클릭 시 팝오버 설명
-				<a class="btn-outline-dark" style="margin: 0 auto;">혼밥 레벨이란?</a> <br> -->
-
-	<!-- 레벨 선택 -->
-	<!-- 클릭 시 색상 변경 -->
-	<!-- <div id="level" class="btn-group flex-wrap justify-content-center">
-					<div class="w-100"></div>
-					<input type="radio" name="level-group" class="btn-check" id="lv1" value="1">
-					<label class="btn btn-outline-danger btn-sm" for="lv1">레벨 1</label>
-					<input type="radio" name="level-group" class="btn-check" id="lv2" value="2"> 
-					<label class="btn btn-outline-danger btn-sm" for="lv2">레벨 2</label>
-					<input type="radio" name="level-group" class="btn-check" id="lv3" value="3"> 
-					<label class="btn btn-outline-danger btn-sm" for="lv3">레벨 3</label>
-					<input type="radio" name="level-group" class="btn-check" id="lv4" value="4">
-					<label class="btn btn-outline-danger btn-sm" for="lv4">레벨 4</label>
-					<input type="radio" name="level-group" class="btn-check" id="lv5" value="5"> 
-					<label class="btn btn-outline-danger btn-sm" for="lv5">레벨 5</label>
-				</div>
-			</div>
-			<div class="input-group col">
-				<input class="form-control" id="keyword" type="text" placeholder="검색어를 입력하세요">
-				<input type="submit" class="btn btn-danger" type="button" value="검색">
-			</div>
-		</form>
-	</div> -->
-
-	<div id="carouselExampleSlidesOnly" class="carousel slide"
-		data-bs-ride="carousel" style="max-width: 100%; height: 300px;">
+	<div id="carousel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="3000" style="max-width: 100%;">
 		<div class="carousel-inner">
 			<div class="carousel-item active">
 				<img src="${path}/banner/1.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
@@ -72,10 +42,17 @@
 				<img src="${path}/banner/banner4.svg" class="banner" type="image / svg + xml" codebase="http://www.adobe.com / svg / viewer / install " />
 			</div>
 		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
 	</div>
 	<!-- https://getbootstrap.com/docs/5.1/components/carousel/ -->
 
-<br><br><br><br><br><br><br>
 	<div class="row justify-content-center">
 		<div class="col mt-5">
 			<div class="card">

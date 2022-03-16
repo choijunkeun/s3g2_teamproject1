@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -248,7 +249,6 @@ public class ShareController {
 			shareboard=shareService.getShareboard(articleNo); //내가쓴글, 남이쓴글 확인
 			User userinfo = shareService.selectUserDetail(shareboard.getIdx());
 			int likes = shareService.queryArticleLikes(articleNo);
-			
 			HttpSession session = request.getSession();
 			User user = (User) session.getAttribute("user");
 			if(user != null) {

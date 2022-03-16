@@ -67,48 +67,46 @@
 					<div>
 						<div class="row p-2 ">
 							<div class="col text-center ">
-								<!-- <div class="d-flex flex-wrap" > 자동조절 안되서 지움 (종현)-->
-												<!--1. 문파선택  -->
-												<div class="d-flex" style="flex-wrap: nowrap;">
-													<input type="hidden" name="moonpa" id="moonpa">
-													<div class="btn-group-sort" style="width: fit-content;">
-														<button type="button"
-															class="btn btn-secondary dropdown-toggle"
-															id="sortDropdown" data-bs-toggle="dropdown"
-															aria-expanded="false">문파선택</button>
-														<ul class="dropdown-menu text-center"
-															aria-labelledby="sortDropdown">
-															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('true')" >사먹파</button></li>
-															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('false')" >해먹파</button></li>
-														</ul>
-													</div>
-													<!--2. 위치 선택 (문파 기반) -->
-													<div class="input-group" id="cookingDiv" style="max-width: auto; flex-shrink: 1; display: none;">
-														<input type="text" class="form-control"
-															name="location" placeholder="위치를 직접 입력해 보세요!" aria-label="위치">
-														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-													</div>
-													
-													<div class="input-group" id="locationDiv" style="max-width: auto; flex-shrink: 1; display: none;">
-														<input type="hidden" id="locationId">
-														<input type="text" class="form-control" id="location" maxlength="40"
-															name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
-														<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-													</div>
-												</div> 
-												<!--3. 제목  -->
-												<div class="input-group">
-													<input type="text" name="title" id="title" class="form-control" maxlength="40"
-														placeholder="제목을 입력해주세요!" required="required">
-												</div>
-												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
-												<div >
-													<textarea id="editor" name="content"
-														placeholder="내용을 입력해주세요!"></textarea>
-												</div>
-								<!-- </div> 자동조절 안되서 지움 (종현)-->
+								<!--1. 문파선택  -->
+								<div class="d-flex" style="flex-wrap: nowrap;">
+									<input type="hidden" name="moonpa" id="moonpa">
+									<div class="btn-group-sort" style="width: fit-content;">
+										<button type="button"
+											class="btn btn-secondary dropdown-toggle"
+											id="sortDropdown" data-bs-toggle="dropdown"
+											aria-expanded="false">문파선택</button>
+										<ul class="dropdown-menu text-center"
+											aria-labelledby="sortDropdown">
+											<li><button class="dropdown-item" type="button"
+													onclick="moonpaChange('true')" >사먹파</button></li>
+											<li><button class="dropdown-item" type="button"
+													onclick="moonpaChange('false')" >해먹파</button></li>
+										</ul>
+									</div>
+									<!--2. 위치 선택 (문파 기반) -->
+									<div class="input-group" id="cookingDiv" style="max-width: auto; flex-shrink: 1; display: none;">
+										<input type="text" class="form-control"
+											name="location" placeholder="위치를 직접 입력해 보세요!" aria-label="위치">
+										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+									</div>
+									
+									<div class="input-group" id="locationDiv" style="max-width: auto; flex-shrink: 1; display: none;">
+										<input type="hidden" id="locationId">
+										<input type="text" class="form-control" id="location" maxlength="40"
+											name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
+										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+									</div>
+								</div> 
+								<!--3. 제목  -->
+								<div class="input-group">
+									<input type="text" name="title" id="title" class="form-control" maxlength="40"
+										placeholder="제목을 입력해주세요!" required="required">
+								</div>
+								<!-- 4. ckEditor 입력 : content(사진, 내용) -->
+								<div >
+									<textarea id="editor" name="content"
+										placeholder="내용을 입력해주세요!"></textarea>
+								</div>
 							</div>
 
 							<!-- 5. 취소, 전송 버튼 -->
@@ -116,7 +114,7 @@
 								<div class="col text-center">
 									<!-- 수정요. 취소버튼 누르면 원래 있던 목록 화면으로 돌아가기  -->
 									<button type="button" class="btn border bd-secondary"
-										id="writeFormCancel" name="write_cancel">취소</button>
+										id="writeFormCancel" name="write_cancel" onclick="javascript:window.location.href='./';">취소</button>
 									<input type="submit" class="btn border bd-secondary"
 										id="writeFormSubmit" name="write_post" value="전송" />
 								</div>

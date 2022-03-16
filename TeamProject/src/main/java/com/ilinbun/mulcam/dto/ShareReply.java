@@ -1,15 +1,16 @@
 package com.ilinbun.mulcam.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class ShareReply {
 	int commentNo, articleNo, idx;
-	Date date;
+	Timestamp date;
 	String comment;
 	boolean blind;
 	int refer, lev, seq;
 	
-	public ShareReply(int commentNo, int articleNo, int idx, Date date, String comment, boolean blind, int refer,
+	public ShareReply(int commentNo, int articleNo, int idx, Timestamp date, String comment, boolean blind, int refer,
 			int lev, int seq) {
 		super();
 		this.commentNo = commentNo;
@@ -80,11 +81,11 @@ public class ShareReply {
 		this.idx = idx;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 
