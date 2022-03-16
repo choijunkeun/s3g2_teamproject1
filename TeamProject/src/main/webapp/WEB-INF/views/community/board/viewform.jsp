@@ -112,7 +112,7 @@ display: inline-block;
 		<div class="card-body">
 			<div class="row mb-2">
 				<div class="col-sm-4 d-flex align-self-center">
-					<a href="../../userInfo/${cboard.idx}"> <img
+					<a href="/userInfo/${cboard.idx}"> <img
 						style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;"
 						src='/profile/${user.profileImg }'>
 						<div class="border pb-2 pt-1 mx-1 rounded"
@@ -226,7 +226,7 @@ display: inline-block;
 										</c:choose>
 									</div>
 										<div class="text-center px-2 style="width: fit-content;">
-											<a href="../../userInfo/${commentUserList[status.index].idx}">
+											<a href="/userInfo/${commentUserList[status.index].idx}">
 											<img style="border-radius: 50px; width: 30px; height: 30px;"
 												src="/profile/${commentUserList[status.index].profileImg}" >
 											<p class="m-0">${commentUserList[status.index].nickname }</p></a>

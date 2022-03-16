@@ -41,12 +41,9 @@ td {
 </head>
 <body>
 	<!-- 1. 글쓰기 버튼 -->
-	<div class="row d-flex justify-content-between">
-		<h2 class="fw-bolder align-self-start w-auto"><a href="./"><i class="px-3 fa fa-angle-left"></i></a></h2>
-		<h2 class="align-self-center w-auto"><a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a></h2>
-		<button class="btn btn-outline-secondary align-self-end d-inline" id="bragMake"
-			name="bragMake" type="button"
-			style="float: right; width: 80px; height: 40px;">글쓰기</button>
+	<div class="row d-flex align-items-center">
+		<h2 class="fw-bolder float-start w-auto"><a href="./"><i class="px-3 fa fa-angle-left"></i></a></h2>
+		<h2 class="float-center w-auto"><a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a></h2>
 	</div>
 	<!-- <a></a> BEST게시판 이동 링크 -->
 	<div class="row justify-content-center">
@@ -63,25 +60,20 @@ td {
 								</div>
 								
 								<div class="row mb-2">
-									<div class="col-sm-5">
+									<div class="col-sm-8">
 										<a href="/userInfo/${writerInfo.idx }">
-											<img
-												style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;"
+											<img style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;"
 												src='/profile/${writerInfo.profileImg }'>
 											<div class="border pb-2 pt-1 mx-1 rounded" style="display:inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-													${writerInfo.nickname }님</div>
-											<span
-												class="badge bg-danger rounded-pill m-2">Lv.
-													${writerInfo.honbabLevel }</span>
+												${writerInfo.nickname }님</div>
+											<span class="badge bg-danger rounded-pill m-2">Lv. ${writerInfo.honbabLevel }</span>
 										</a>
-									</div>
-									<div class="col-sm-3">
 									</div>
 									<div class="col-sm-4">
 										<c:if test="${!(empty user) && !(writerInfo.idx  eq user.idx) }">
-											<button class="btn btn-follow text-white align-self-center"
-													style="height: fit-content;" id="writerInfofollow${userInfo.idx}"
-													onclick="togglefollow(`${writerInfo.idx}`);">${didIFollowed>0? "언팔로우": "팔로우"}</button>
+											<button class="btn btn-follow text-white float-end"
+												style="height: fit-content;" id="writerInfofollow${writerInfo.idx}"
+												onclick="togglefollow(`${writerInfo.idx}`);">${didIFollowed>0? "언팔로우": "팔로우"}</button>
 										</c:if>
 											<!-- <a href="#" class="btn btn-primary text-white align-self-center" style="height: fit-content;">팔로우</a> -->
 									</div>
@@ -92,28 +84,25 @@ td {
 
 									<a class="mw-100"
 										href="/brag/viewdetail/${bestbragList[0].articleNo }"> <br>
-										<div
-											class="img-container  mx-auto d-block position-relative overflow-hidden"
+										<div class="img-container  mx-auto d-block position-relative overflow-hidden"
 											style="vertical-align: middle; object-fit: cover; max-width: 600px; width: inherit;">
-											<img class="img-item " src="${bestbragList[0].content}"
-													name="brag_content"> ${bestbragList[0].title }
+											<img class="img-item" src="${bestbragList[0].content}" name="brag_content">
 										</div>
+										${bestbragList[0].title }
 									</a>
 								</div>
 									
 								<div class="row">
-									<div class='col-sm-3'>
-										<button class="btn-sm border-0 bg-transparent text-danger mx-2"
-											id="likebtn${bboard.articleNo }"
-											onclick="toggleLikes(${bboard.articleNo})">
-										<i class="fa fa-lg ${didILiked>0 ? 'fa-heart' : 'fa-heart-o' }"
+									<div class='col-sm-6'>
+										<button class="btn-sm border-0 bg-transparent text-danger"
+											id="likebtn${bestbragList[0].articleNo }"
+											onclick="toggleLikes(${bestbragList[0].articleNo})">
+										<i class="fa fa-lg ${didILiked>0 ? 'fa-heart':'fa-heart-o'}"
 											aria-hidden="true">${likes }</i>
 										</button>
 									</div>
 									<div class='col-sm-6'>
-									</div>
-									<div class='col-sm-3'>
-										<i class="fa fa-commenting fa-lg mx-2" aria-hidden="true">${countComment }</i>
+										<i class="fa fa-commenting fa-lg mx-2 float-end" aria-hidden="true">${countComment }</i>
 									</div>
 										
 								<!-- 좋아요 border-danger rounded-pill bg-white  -->
@@ -123,11 +112,13 @@ td {
 					</div>
 			</div>
 		</div>
-
-
 		<div class="col-sm-6">
 			<!-- <a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a> -->
-			
+			<div class="row justify-content-end">
+				<button class="btn btn-outline-secondary d-inline" id="bragMake"
+					name="bragMake" type="button"
+					style="float: right; width: 80px; height: 40px;">글쓰기</button>
+			</div>
 			<div class="card-body">
 				<div class="text-center">
 					<c:forEach var="bboard" begin="1" end="6" items="${bestbragList}" varStatus="status">
@@ -147,9 +138,9 @@ td {
 						<c:choose>
 							<c:when test="${status.index mod 2 == 0}">
 								</div>
-				</c:when>
-				</c:choose>
-				</c:forEach>
+							</c:when>
+						</c:choose>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
@@ -201,6 +192,62 @@ td {
 			
 
 		});
+	</script>
+	<script>
+	function togglefollow(idx){
+		if(${empty user}){
+			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+			return false;
+		} else {
+			$.ajax({
+				type:"POST",
+				url:"/follow/",
+				cache: false,
+				data:{"idx": idx},
+				async:false,
+				success: function(data){
+					result = JSON.parse(data);
+					if(result.didIFollowed >0){ // 팔로우를 한 적이 없는 경우
+						$('#writerInfofollow' + idx).text('언팔로우');
+						
+					} else if(result.didIFollowed <=0){ // 팔로우를 이미 한 경우
+						$('#writerInfofollow' + idx).text('팔로우');
+					}
+				},
+				error:function(data){
+					alert('팔로잉을 처리하는 동안 문제가 있었습니다. 나중에 다시 시도해주세요.');
+				}
+			})
+		}
+	}
+	function toggleLikes(articleNo){
+		if(${empty user}){
+			alert("로그인을 하셔야 사용하실 수 있는 기능입니다.");
+			return false;
+		} else {
+			$.ajax({
+				type:"POST",
+				url:"/brag/likes/",
+				cache: false,
+				data:{"articleNo": articleNo, "idx":${not empty user.idx? user.idx:"0"}},
+				async:false,
+				success: function(data){
+					result = JSON.parse(data);
+					$('#likebtn' + articleNo).children('i').text(result.currentLikes);
+					if(result.processed >0){
+						$('#likebtn' + articleNo).children('i').removeClass('fa-heart-o');
+						$('#likebtn' + articleNo).children('i').addClass('fa-heart');
+					} else if(result.processed <0){
+						$('#likebtn' + articleNo).children('i').removeClass('fa-heart');
+						$('#likebtn' + articleNo).children('i').addClass('fa-heart-o');
+					}
+				},
+				error:function(data){
+					$('#likebtn' + articleNo).children('i').text('좋아요');
+				}
+			})
+		}
+	}
 	</script>
 </body>
 </html>

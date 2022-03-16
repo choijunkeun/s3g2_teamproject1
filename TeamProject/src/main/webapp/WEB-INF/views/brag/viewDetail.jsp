@@ -96,11 +96,11 @@ display: inline-block;
 				<a href="/userInfo/${userInfo.idx }">
 					<img style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;" src='/profile/${userInfo.profileImg }'>
 					<div class="border pb-2 pt-1 mx-1 rounded" style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-						${userInfo.nickname }님
+						${userInfo.nickname} 님
 					</div>
 					<span class="badge bg-danger rounded-pill m-2">Lv. ${userInfo.honbabLevel }</span>
 				</a>
-				<c:if test="${not empty user && !(userinfo.idx eq user.idx) }">
+				<c:if test="${not empty user && !(userInfo.idx eq user.idx) }">
 				<button class="btn btn-follow text-white align-self-center" style="height: fit-content;" 
 					id="follow${userInfo.idx}" onclick="togglefollow(${userInfo.idx});">${didIFollowed>0? "언팔로우": "팔로우"}</button>
 				</c:if>
@@ -256,7 +256,7 @@ display: inline-block;
 
 <!-- 이전 목록 다음 -->
 				
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col" style="text-align: left;">
 			<button type="button" class="btn btn-default">이전</button>
 		</div>
@@ -267,7 +267,7 @@ display: inline-block;
 		<div class='col' style="text-align: right;">
 			<button type="button" class="btn btn-default">다음</button>
 		</div>
-	</div>
+	</div> -->
 	
 
 

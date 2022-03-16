@@ -327,7 +327,7 @@ $(function() {
 						obj = '팔로잉이 없습니다.';
 					} else{
 						for(let i = 0; i<f.length; i++){
-							obj = '<li class="list-group-item">';
+							obj += '<li class="list-group-item">';
 							obj += '<a href="/userInfo/' + f[i].idx + '"><img src="/profile/'+ f[i].profileImg + '" width="30px" height="30px">&nbsp;'
 								+ '<span>' + f[i].nickname + '</span></a></li>';
 						}

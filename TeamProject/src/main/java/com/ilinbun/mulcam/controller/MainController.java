@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -139,7 +140,7 @@ public class MainController {
 		if(!profileImgName.equals("")){
 			System.out.println("프로필 이미지가 Null이 아니면");
 			String path = servletContext.getRealPath("/profile/");
-			String filename = profileImg.getOriginalFilename();
+			String filename = UUID.randomUUID().toString();
 			File destFile = new File(path + filename);
 			System.out.println(profileImg.isEmpty());
 			System.out.println(destFile);
@@ -268,7 +269,7 @@ public class MainController {
 					profileImgName="DEFAULT.png";
 				} else {
 					String path = servletContext.getRealPath("/profile/");
-					String filename = profileImg.getOriginalFilename();
+					String filename = UUID.randomUUID().toString();
 					File destFile = new File(path + filename);
 					System.out.println(profileImg.isEmpty());
 					System.out.println(destFile);

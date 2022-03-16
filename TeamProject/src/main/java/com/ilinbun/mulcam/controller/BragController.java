@@ -72,6 +72,7 @@ public class BragController {
 			model.addAttribute("bestbragList", bestbragList);
 			int bestArticleNo = bestbragList.get(0).getArticleNo();
 			int likes = bragService.queryArticleLikes(bestArticleNo);
+			model.addAttribute("likes", likes);
 			
 			int writerIdx = bestbragList.get(0).getIdx();
 			User writer = userService.getUserinfo(writerIdx);
@@ -79,13 +80,14 @@ public class BragController {
 			
 			User user = (User) session.getAttribute("user");
 			model.addAttribute("user", user);
+			model.addAttribute("countComment", bragService.countComment(bestArticleNo));
 			if(user != null) {
 				System.out.println("유저 정보 인식");
 				int didILiked = bragService.queryIfILikeThis(bestArticleNo, user.getIdx());
 				System.out.println("이전에 누른 적 있음 : " +didILiked);
 				model.addAttribute("didILiked", didILiked);  //좋아요 유지
-				model.addAttribute("didIFollowed", userService.didIFollowed(bestArticleNo, user.getIdx()));
-				model.addAttribute("likes", likes);
+				model.addAttribute("didIFollowed", userService.didIFollowed(writerIdx, user.getIdx()));
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,6 +126,8 @@ public class BragController {
 				model.addAttribute("bestbragList", bestbragList);
 				int bestArticleNo = bestbragList.get(0).getArticleNo();
 				int likes = bragService.queryArticleLikes(bestArticleNo);
+				model.addAttribute("likes", likes);
+				model.addAttribute("countComment", bragService.countComment(bestArticleNo));
 				
 				int writerIdx = bestbragList.get(0).getIdx();
 				User writer = userService.getUserinfo(writerIdx);
@@ -136,8 +140,7 @@ public class BragController {
 					int didILiked = bragService.queryIfILikeThis(bestArticleNo, user.getIdx());
 					System.out.println("이전에 누른 적 있음 : " +didILiked);
 					model.addAttribute("didILiked", didILiked);  //좋아요 유지
-					model.addAttribute("didIFollowed", userService.didIFollowed(bestArticleNo, user.getIdx()));
-					model.addAttribute("likes", likes);
+					model.addAttribute("didIFollowed", userService.didIFollowed(writerIdx, user.getIdx()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
