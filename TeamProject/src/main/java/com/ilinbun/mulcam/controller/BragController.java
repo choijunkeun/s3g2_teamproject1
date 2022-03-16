@@ -386,7 +386,7 @@ public class BragController {
 		try {
 			bragboard.setContent(bragboard.getContent().trim());
 			bragService.modifyBragBoard(bragboard);
-			mav.addObject("articleNo", bragboard.getArticleNo());
+			
 			mav.setViewName("redirect:/brag/viewdetail/" + bragboard.getArticleNo());
 		} catch (Exception e) {
 			e.printStackTrace();
