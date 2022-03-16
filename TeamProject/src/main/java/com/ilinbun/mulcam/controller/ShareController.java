@@ -477,7 +477,13 @@ public class ShareController {
 			try {
 				System.out.println("headerTag test : "+headerTag);
 				System.out.println("articleNo test : "+articleNo);
-				
+				if(headerTag == 0) {
+					headerTag++;
+					System.out.println("headerTag change : "+headerTag);
+				} else if(headerTag == 1) {
+					headerTag--;
+					System.out.println("headerTag change : "+headerTag);
+				} 
 				shareService.changeHeader(articleNo, headerTag);
 			} catch(Exception e) {
 				e.printStackTrace();
