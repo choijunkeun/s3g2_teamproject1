@@ -140,7 +140,7 @@ public class MainController {
 		if(!profileImgName.equals("")){
 			System.out.println("프로필 이미지가 Null이 아니면");
 			String path = servletContext.getRealPath("/profile/");
-			String filename = UUID.randomUUID().toString();
+			String filename = UUID.randomUUID().toString() + "." + profileImg.getOriginalFilename().substring(profileImg.getOriginalFilename().lastIndexOf('.')+1);
 			File destFile = new File(path + filename);
 			System.out.println(profileImg.isEmpty());
 			System.out.println(destFile);
@@ -148,6 +148,7 @@ public class MainController {
 			JSONObject json = new JSONObject();
 			
 			profileImg.transferTo(destFile);
+			profileImgName = filename;
 			writer = response.getWriter();
 			response.setContentType("text/html;charset=utf-8");
 			response.setCharacterEncoding("utf-8");
@@ -269,7 +270,7 @@ public class MainController {
 					profileImgName="DEFAULT.png";
 				} else {
 					String path = servletContext.getRealPath("/profile/");
-					String filename = UUID.randomUUID().toString();
+					String filename = UUID.randomUUID().toString() + "." + profileImg.getOriginalFilename().substring(profileImg.getOriginalFilename().lastIndexOf('.')+1);
 					File destFile = new File(path + filename);
 					System.out.println(profileImg.isEmpty());
 					System.out.println(destFile);
@@ -277,6 +278,7 @@ public class MainController {
 					JSONObject json = new JSONObject();
 					
 					profileImg.transferTo(destFile);
+					profileImgName = filename;
 					writer = response.getWriter();
 					response.setContentType("text/html;charset=utf-8");
 					response.setCharacterEncoding("utf-8");
