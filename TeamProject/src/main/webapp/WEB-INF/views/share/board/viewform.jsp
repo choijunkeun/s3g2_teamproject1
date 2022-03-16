@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 		<!DOCTYPE html>
 		<html>
@@ -146,7 +147,7 @@
 							<strong>공유 장소 : 🚉 ${shboard.subway }</strong>
 						</div>
 						<div class="col-sm-4 d-flex justify-content-end text-end align-self-center">
-							조회수 : ${shboard.readCount } | 작성일 : ${shboard.date }</div>
+							조회수 : ${shboard.readCount } | 작성일 : <fmt:formatDate value="${shboard.date }" type="date" pattern="yyyy-MM-dd HH:mm"/></div>
 					</div>
 					<hr>
 					<!-- 게시글 본문 -->
@@ -239,8 +240,7 @@
 													</a>
 												</div>
 												<div class="px-2 flex-grow-1">
-													<p style="width: 500px" id="comm${reply.commentNo}">${reply.comment
-														}</p>
+													<p style="width: 500px" id="comm${reply.commentNo}">${reply.comment }</p>
 													<input type="hidden" style="width: 500px"
 														id="comment${reply.commentNo}"
 														value="${reply.comment }"></input>
@@ -248,7 +248,7 @@
 											</div>
 											<div>
 												<div class="px-2 float-end">
-													<p class="m-0 float-right">${reply.date }</p>
+													<p class="m-0 float-right"><fmt:formatDate value="${reply.date }" type="date" pattern="yyyy-MM-dd HH:mm"/></p>
 												</div>
 												<div class="px-2">
 													<c:if test="${user!=null}">

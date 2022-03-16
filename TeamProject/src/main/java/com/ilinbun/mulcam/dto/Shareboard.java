@@ -1,6 +1,7 @@
 package com.ilinbun.mulcam.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Shareboard {
 	int articleNo;
@@ -9,7 +10,8 @@ public class Shareboard {
 	String title;
 	String content;
 	
-	Date date;
+	/* Date date; */
+	Timestamp date;
 	int headerTag;
 	int readCount;
 	
@@ -26,7 +28,7 @@ public class Shareboard {
 		this.headerTag = headerTag;
 	}
 	
-	public Shareboard(int articleNo, int idx, String subway, String title, String content, Date date, int headerTag, int readCount) {
+	public Shareboard(int articleNo, int idx, String subway, String title, String content, Timestamp date, int headerTag, int readCount) {
 		super();
 		this.articleNo = articleNo;
 		this.idx = idx;
@@ -78,11 +80,11 @@ public class Shareboard {
 		this.content = content;
 	}
 
-	public Date getDate() {
+	public Timestamp getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(Timestamp date) {
 		this.date = date;
 	}
 

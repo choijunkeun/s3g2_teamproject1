@@ -126,7 +126,7 @@ table {
 									</div>  --%>
 								</td>
 								<td>작성자</td>
-								<td>날짜</td>
+								<td>날짜/시간</td>
 								<td>조회수</td>
 							</tr>
 					<c:forEach var="shboard" items="${shareList }">
