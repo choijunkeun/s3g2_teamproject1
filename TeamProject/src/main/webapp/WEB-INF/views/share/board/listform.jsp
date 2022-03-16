@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.*"%>
-<%@ page import="java.text.SimpleDateFormat"%>
+<%-- <%@ page import="java.text.SimpleDateFormat"%> --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -105,7 +106,10 @@ table {
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.nickname }</a>
 								</td>
 								<td>
-									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.date }</a>
+									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">
+										<fmt:parseDate value="${shboard.date }" type="date" pattern="yyyy-MM-dd'T'HH:mm" var="formatDate"/>
+										<fmt:formatDate value="${formatDate }" type="date" pattern="yyyy-MM-dd HH:mm"/>
+									</a>
 								</td>
 								<td>
 									<a href="./viewform/${shboard.articleNo }?page=${pageInfo.page}">${shboard.readCount }</a>

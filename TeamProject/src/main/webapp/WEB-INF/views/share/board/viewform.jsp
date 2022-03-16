@@ -382,12 +382,12 @@
 							let comment = $('#comment' + commentNo).val()
 							$.ajax({
 								type: "POST",
-								url: "/brag/editReply",
+								url: "/share/editReply",
 								cache: false,
 								data: { "commentNo": commentNo, "articleNo": articleNo, "comment": comment },
 								async: false,
 								complete: function () {
-									window.location.href = "/brag/viewdetail/" + articleNo;
+									window.location.href = "/share/board/viewform/" + articleNo;
 								}
 							})
 						}
