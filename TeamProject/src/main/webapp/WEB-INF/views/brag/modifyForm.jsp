@@ -9,13 +9,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- ckEditor code -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script
-	src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
 
-
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
 <title>게시글 수정</title>
 
 <style>
@@ -74,53 +70,28 @@
 						<input type="hidden" id="idx" name="idx" value=${user.idx }>
 						<div class="container p-2 ">
 							<div class="col text-center ">
-								<div class="d-flex flex-wrap">
-									<table>
-										<tr>
-											<td>
-												<!--1. 문파선택  -->
-												<div>
-													<input type="hidden" name="moonpa" id="moonpa" value="${bboard.moonpa }">
-													<div class="btn-group-sort" style="width: fit-content;">
-														<button type="button"
-															class="btn btn-secondary dropdown-toggle"
-															id="sortDropdown" data-bs-toggle="dropdown"
-															aria-expanded="false">${bboard.moonpa? '사먹파':'해먹파' }</button>
-														<ul class="dropdown-menu text-center"
-															aria-labelledby="sortDropdown">
-															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('true')">사먹파</button></li>
-															<li><button class="dropdown-item" type="button"
-																	onclick="moonpaChange('false')">해먹파</button></li>
-														</ul>
-													</div>
-												</div> <!--2. 위치 선택 (문파 기반) -->
-												<div class="input-group" style="flex-shrink: 0;">
-													<input type="text" class="form-control" id="location"
-														name="location" placeholder="위치를 검색해 보세요!" aria-label="위치">
-													<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
-												</div>
-											</td>
-										</tr>
-										<tr> 
-											<td>
-												<!--3. 제목  -->
-												<div>
-													<input name="title" id="title" size="55%"
-														placeholder="제목을 입력해주세요!" required="required" value="${bboard.title }">
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<!-- 4. ckEditor 입력 : content(사진, 내용) -->
-												<div>
-													<textarea id="editor" name="content"
-														placeholder="내용을 입력해주세요!" >${bboard.content }</textarea>
-												</div>
-											</td>
-										</tr>
-									</table>
+								<!--1. 문파선택  -->
+								
+								<div class="d-flex flex-nowrap input-group">
+									<span class="input-group-text bg-secondary text-white">${bboard.moonpa? '사먹파':'해먹파' }</span>
+									<input type="hidden" name="moonpa" id="moonpa" value="${bboard.moonpa }">
+									<!--2. 위치 선택 (문파 기반) -->
+									<!-- <div class="input-group" style="max-width: auto; flex-shrink: 1;"> -->
+										<input type="text" class="form-control" id="location" maxlength="40" value="${bboard.location}"
+											name="location" placeholder="위치를 ${bboard.moonpa? '검색해 보':'입력해 주'}세요!" aria-label="위치">
+										<!-- 검색하기 버튼 아니고, 위치 DB에 있으면 자동으로 뜨고 그걸 선택하면 들어가게  -->
+									<!-- </div> -->
+								</div> 
+								<!--3. 제목  -->
+								<div class="input-group">
+									<input type="text" name="title" id="title" class="form-control" maxlength="40"
+										placeholder="제목을 입력해주세요!" required="required" value="${bboard.title }">
+								</div>
+
+								<!-- 4. ckEditor 입력 : content(사진, 내용) -->
+								<div>
+									<textarea id="editor" name="content"
+										placeholder="내용을 입력해주세요!"></textarea>
 								</div>
 							</div>
 
@@ -129,7 +100,7 @@
 								<div class="col text-center">
 									<!-- 수정요. 취소버튼 누르면 원래 있던 목록 화면으로 돌아가기  -->
 									<button type="button" class="btn border bd-secondary"
-										id="writeFormCancel" name="write_cancel">취소</button>
+										id="writeFormCancel" name="write_cancel" onclick="javascript:window.location.href='/brag/viewdetail/${bboard.articleNo}'">취소</button>
 									<input type="submit" class="btn border bd-secondary"
 										id="writeFormSubmit" name="write_post" value="전송" />
 								</div>
@@ -150,21 +121,9 @@
 
 
 	<!-- JavaScript -->
-	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 	<script>
-	/*1-1. 문파선택 : dropbox에서 선택 시 그 문파이름으로 고정되게 하는 코드  */
-		function moonpaChange(arg) {
-			document.getElementById('moonpa').value=arg; 
-			
-			if(arg == 'true'){
-				document.getElementById('sortDropdown').innerText='사먹파';
-				/* document.getElementById('location'). */
-			}
-			else{
-				document.getElementById('sortDropdown').innerText='해먹파';
-			}
-		}
 
 /* 4-1. ekEditor -내용(content)부분 : img 저장폴더경로 지정 코드 */	
 	$(function(){
@@ -175,14 +134,13 @@
         		}
         	}).then(editor=> {
         		//window.editor=editor;
-        		editor.setData('${content}');
+        		editor.setData('${bboard.content}');
         	})
         	.catch((error) => {
         		console.error(error);
         	});
 		});
 	
-	$('#lv${bboard.moonpa}').prop('checked', true);
 	
 /* 	$('#fileChange').click(function(){
 		$('#file').prop('disabled', !$('#file').prop('disabled'));
@@ -241,5 +199,47 @@
 	});
 	 */
 </script>
+
+<c:if test="${bboard.moonpa}">
+<script>
+	$("#location").autocomplete({
+		source: function(request, response){
+			$.ajax({
+				type:"GET",
+				url:"/search/q?keyword=" + encodeURI($('#location').val()),
+				async: false,
+				success:function(data){
+					var result = JSON.parse(data);
+					var list = result["documents"];
+					console.log(list);
+					
+					response(
+						$.map(list, function(item){
+							return {
+								label: item.place_name + "(" + item.address_name + ")",
+								value: item.place_name,
+								'data-id': item.id
+							};
+						})
+					);
+				},
+				error:function(){
+					console.log("error");
+					return false;
+				}
+			})
+		},
+		focus : function(event, ui) { // 방향키로 자동완성단어 선택 가능하게 만들어줌	
+			return false;
+		}, 
+		select: function(event, ui){
+			$('#locationId').val(${ui.item['data-id']});
+		},
+		minLength:1,
+		delay:500,
+		autoFocus: true
+	});
+</script>
+</c:if>
 </body>
 </html>

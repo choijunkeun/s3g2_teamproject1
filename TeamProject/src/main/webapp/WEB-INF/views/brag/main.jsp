@@ -51,7 +51,7 @@ height : 300px !important;
 						<!-- <div class="border mycard" > -->
 						<tr>
 							<td title="${bestbragList[0].title }">
-								<a class="mw-100" href="brag/viewdetail/${bestbragList[0].articleNo }" >
+								<a class="mw-100" href="/brag/viewdetail/${bestbragList[0].articleNo }" >
 									${bestbragList[0].title } <br>
 									<div class="img-container  mx-auto d-block position-relative overflow-hidden" 
 										style="vertical-align:middle; object-fit:cover; max-width: 600px; width: inherit;">
@@ -79,7 +79,7 @@ height : 300px !important;
 						<!-- <div class="border mycard" > -->
 						<tr>
 							<td title="${bestbragList[1].title }">
-								<a class="mw-100" href="brag/viewdetail/${bestbragList[1].articleNo }">
+								<a class="mw-100" href="/brag/viewdetail/${bestbragList[1].articleNo }">
 									${bestbragList[1].title } <br>
 									<div class="img-container   mx-auto d-block position-relative overflow-hidden" style="vertical-align:middle; object-fit:cover; width: inherit">
 					                    <img class="img-item " src="${bestbragList[1].content}" 
@@ -91,7 +91,7 @@ height : 300px !important;
 						</tr>
 						<tr>
 							<td title="${bestbragList[2].title }">
-							<a href="brag/viewdetail/${bestbragList[2].articleNo }">
+							<a href="/brag/viewdetail/${bestbragList[2].articleNo }">
 									${bestbragList[2].title } <br> 
 									<div class="img-container  mx-auto d-block position-relative overflow-hidden" style="vertical-align:middle; object-fit:cover; width: inherit">
 					                    <img class="img-item " src="${bestbragList[2].content}" 
