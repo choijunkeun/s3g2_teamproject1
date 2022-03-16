@@ -103,7 +103,7 @@
 	<div class="card" style="padding:30px">
 	
 	<div align="center">
-	<img id="profileImg_view" style="border-radius: 200px; width: 150px; height: 150px;"	src="/profile/${user.profileImg }">
+	<img id="profileImg_view" style="border-radius: 200px; width: 150px; height: 150px;" src="/profile/${user.profileImg }">
 	</div>
 	
 	<input type="hidden" name="imgChange" id="imgChange" value=0>
@@ -132,7 +132,7 @@
 		<div align="center" style="font-size:20px">혼밥레벨설정</div>
 		
 		<div style="margin:10px 50px"class="btn-group btn-group-sm" aria-label="Basic checkbox toggle button group">
-			<input type="radio" class="btn-check " name="honbabLevel" id="lv1" value="1" checked>
+			<input type="radio" class="btn-check " name="honbabLevel" id="lv1" value="1">
 			<label class="btn btn-outline-danger" for="lv1">Lv.1</label>
 			<input type="radio" class="btn-check" name="honbabLevel" id="lv2" value="2">
 			<label class="btn btn-outline-danger" for="lv2">Lv.2</label>
@@ -156,7 +156,22 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 
-
+//사용자 혼밥레벨 불러오기
+window.onload=function() {
+	var level = 0;
+	level = ${user.honbabLevel};
+	if(level==1) {
+		$("input:radio[id='lv1']").prop("checked", true);
+	} else if(level==2) {
+		$("input:radio[id='lv2']").prop("checked", true);
+	}else if(level==3) {
+		$("input:radio[id='lv3']").prop("checked", true);
+	}else if(level==4) {
+		$("input:radio[id='lv4']").prop("checked", true);
+	} else{
+		$("input:radio[id='lv5']").prop("checked", true);
+	}
+}
 
 //닉네임 체크
 $('#nickname').focusout(function(){
@@ -226,8 +241,6 @@ $("#cancelImg").click(function(event) {
 
 });
 
-
-
 $("#defaultImg").click(function(event) {
 	  var $input = $(".inp-img");
 	  $("#imgChange").val(2);
@@ -237,6 +250,7 @@ $("#defaultImg").click(function(event) {
 	  document.getElementById("default_image").style.display="block"; */
 	     $('#profileImg_view').attr("src", "/profile/DEFAULT.png");  
 });
+
 </script>
 
 
