@@ -205,10 +205,7 @@ hr {
 }
 
 .card {
-	position : absolute;
-	top : 50%;
-	left : 50%;
-	transform: translate(-50%, -50%);
+	position : absolute;	
 	z-index: 1;
 	width : 600px;
 }
@@ -258,7 +255,6 @@ hr {
 
 
 
-
 </style>
 
 <title>일인분</title>
@@ -268,7 +264,7 @@ hr {
 <body>
 <div class="container">
 	<form action="/join" method="POST" enctype="multipart/form-data">
-		<div class="title-top card">
+		<div class="card">
 			<div class="title">
 				<div align="center">
 					<h1 class="display-4 fw-bolder">

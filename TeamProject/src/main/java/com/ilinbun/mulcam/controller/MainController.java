@@ -238,7 +238,7 @@ public class MainController {
 	
 	// 정보수정
 	@PostMapping("/infoUpdate")
-	public String infoUpdate(@RequestParam(required = false)MultipartFile profileImg, String email, int imgChange, String nickname, int honbabLevel, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String infoUpdate(MultipartFile profileImg, String email, int imgChange, String nickname, int honbabLevel, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String msg = "";
 		System.out.println("infoUpdate() join");
 		User user = (User)session.getAttribute("user");
