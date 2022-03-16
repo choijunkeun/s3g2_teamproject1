@@ -140,7 +140,7 @@ public class ShareController {
 						String newSrc =src.substring(src.indexOf("share/fileview/")+("share/fileview/").length());
 						e.attr("src", "/shareupload/"+newSrc);
 					}
-					result += e.toString();
+					result += e.toString().trim();
 				}
 				
 //				if (doc.hasAttr("img")) {

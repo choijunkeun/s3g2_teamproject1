@@ -172,12 +172,15 @@ public class BragController {
 				Elements bodyChildNodes = doc.body().children();
 				String result ="";
 				for(Element e : bodyChildNodes) {
-					if(e.tagName().equals("img")) {
-						String src = e.attr("src");
-						String newSrc = src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
-						e.attr("src", "/bragupload/"+newSrc);
+					if(e.tagName().equals("figure")) {
+						e = e.child(0);
+						if(e.tagName().equals("img")) {
+							String src = e.attr("src");
+							String newSrc = src.substring(src.indexOf("brag/fileview/")+("brag/fileview/").length());
+							e.attr("src", "/bragupload/"+newSrc);
+						}
 					}
-					result += e.toString();
+					result += e.toString().trim();
 				}
 //				Elements img= doc.select("img");
 //				System.out.println("img 여기확인 소:"+ img);

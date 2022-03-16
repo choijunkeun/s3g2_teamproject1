@@ -114,7 +114,7 @@ display: inline-block;
 				<div class="col-sm-4 d-flex align-self-center">
 					<a href="/userInfo/${cboard.idx}"> <img
 						style="border-radius: 50px; width: 40px; height: 40px; margin: 0 auto;"
-						src='/profile/${user.profileImg }'>
+						src='/profile/${cboard.profileImg }'>
 						<div class="border pb-2 pt-1 mx-1 rounded"
 							style="display: inline; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
 							${nickname}님</div>
