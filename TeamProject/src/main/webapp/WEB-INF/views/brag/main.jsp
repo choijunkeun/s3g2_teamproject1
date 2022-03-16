@@ -73,7 +73,7 @@ height : 300px !important;
 
 		<div class="col-5 mt-0">
 			<div class="card p-4">
-				<a href="/brag/best"><h5 class="fw-bolder">BEST</h5></a>
+				<a href="/brag/best"><h3 class="fw-bolder">BEST</h3></a>
 				<div class="card-body">
 					<table class="w-100">
 						<!-- <div class="border mycard" > -->
@@ -112,7 +112,7 @@ height : 300px !important;
 		<div class="col mt-5">
 			<div class="card p-4">
 				<div class="text-center">
-					<a href="/brag/brag"><h5 class="fw-bolder">혼밥자랑</h5></a>
+					<a href="/brag/brag"><h3 class="fw-bolder">혼밥자랑</h3></a>
 				</div>
 				<div class="card-body">
 					<c:forEach var="bboard" items="${bragList}" varStatus="status">
