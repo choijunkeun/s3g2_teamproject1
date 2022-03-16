@@ -79,8 +79,14 @@ public class UserServiceImpl implements UserService {
 		return msg;
 	}
 	
+	@Override
+	public User UpdateUser(String email) throws Exception {
+		User user = userDAO.login(email);
+		return user;
+	}
 	
-// 로그인
+	
+	// 로그인
 	@Override
 	public User loginUser(String email, String password) throws Exception {
 		User user = userDAO.login(email);
@@ -113,14 +119,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel)
+	public void updateInfo(String email, String nickname, String profileImgName, int honbabLevel)
 			throws Exception {
 		String profileImg = profileImgName;
 		System.out.println("updateInfo ServiceImpl");
 		User user = new User();
 		user.setEmail(email);
 		user.setNickname(nickname);
-		user.setPassword(password);
 		user.setProfileImg(profileImg);
 		user.setHonbabLevel(honbabLevel);
 		userDAO.updateInfo(user);
@@ -182,4 +187,6 @@ public class UserServiceImpl implements UserService {
 	public List<User> getFollowerList(int idx) throws Exception{
 		return userDAO.getFollowerList(idx);
 	}
+
+	
 }

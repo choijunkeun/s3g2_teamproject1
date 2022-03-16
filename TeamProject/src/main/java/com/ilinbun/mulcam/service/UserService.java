@@ -21,10 +21,12 @@ public interface UserService {
 	String emailCheck(String email) throws Exception;
 
 	String getUserNick(int idx) throws Exception;
+	
+	User UpdateUser(String email) throws Exception;
 
 		
 	//회원정보수정
-	void updateInfo(String email, String nickname, String password, String profileImgName, int honbabLevel) throws Exception;
+	void updateInfo(String email, String nickname, String profileImgName, int honbabLevel) throws Exception;
 
 	// 회원 삭제
 	void userDelete(User user) throws Exception;
