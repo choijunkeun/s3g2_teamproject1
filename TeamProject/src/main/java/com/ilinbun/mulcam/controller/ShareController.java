@@ -41,6 +41,7 @@ import com.ilinbun.mulcam.dto.ShareReply;
 import com.ilinbun.mulcam.dto.Shareboard;
 import com.ilinbun.mulcam.dto.User;
 import com.ilinbun.mulcam.service.ShareService;
+import com.ilinbun.mulcam.service.UserService;
 
 @Controller
 @RequestMapping("/share") // localhost://8090/share~
@@ -51,6 +52,9 @@ public class ShareController {
 	
 	@Autowired
 	ShareService shareService;
+	
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	ServletContext servletContext;
@@ -87,12 +91,7 @@ public class ShareController {
 //				share.setContent(src);
 //			}
 			List<Map<String, Object>> shareList=shareService.getShareboardListMap(page);
-			for(Map<String, Object> share : shareList) {
-				Document doc=Jsoup.parse((String)share.get("content"));
-				Elements img = doc.select("img");
-				String src = img.attr("src");
-				share.replace("content", src);
-			}
+			
 			pageInfo=shareService.getPageInfo(pageInfo);
 			// mav.addObject("userInfo", userInfo); //same as above
 			mav.addObject("pageInfo", pageInfo);
@@ -257,6 +256,7 @@ public class ShareController {
 				int didILiked = shareService.queryIfILikeThis(articleNo, user.getIdx());
 				System.out.println("이전에 누른 적 있음 : "+didILiked);
 				mav.addObject("didILiked", didILiked);
+				mav.addObject("didIFollowed",userService.didIFollowed(shareboard.getIdx(), user.getIdx()));
 			}
 			
 			mav.addObject("likes",likes);
@@ -272,12 +272,12 @@ public class ShareController {
 			mav.addObject("imgSrc", src); //mav에 넣기
 			mav.setViewName("share/board/viewform"); //경로이름 설정
 			
-			Integer countComment = shareService.countComment();
+			Integer countComment = shareService.countComment(articleNo);
 			mav.addObject("countComment", countComment);
 			
 			//댓글 보기
 			//프사, 아이디, : 내용, 작성일, (내가 쓴 댓글 시) 수정/삭제 버튼
-			pageInfo=shareService.getCommentPageInfo(pageInfo);
+			pageInfo=shareService.getCommentPageInfo(pageInfo, articleNo);
 			System.out.println("댓글 받아오기 시작");
 			List<ShareReply> commentList = shareService.boardReplyList(articleNo, pageInfo.getStartPage());
 			System.out.println(commentList.size() + "개 받음");

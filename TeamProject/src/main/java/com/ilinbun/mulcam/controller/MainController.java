@@ -72,9 +72,11 @@ public class MainController {
 			List<BragBoard> bestbragList = bragService.bragBest();
 			List<BragBoard> bragList=bragService.getBragboardList(1, 8); //첫번째 페이지에서 가져오는 의미
 			List<Shareboard> shareList = shareService.getShareboardList(1);
+			List<CommBoard> commList = commService.getCommBoardNormalList(1);
 			model.addAttribute("shareList", shareList);
 			model.addAttribute("bragList", bragList);
 			model.addAttribute("bestbragList", bestbragList);
+			model.addAttribute("commList", commList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

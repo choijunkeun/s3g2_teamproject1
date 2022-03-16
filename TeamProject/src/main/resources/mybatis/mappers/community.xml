@@ -7,12 +7,13 @@
 
 <!-- 글쓰기 시 : 현재 articleNo가 어디까지(Max)인지 알려주는 쿼리문 -->
    <select id="selectMaxArticleNo" resultType="integer">
-      <!--autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자. PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다. -->
-      <!--null일 경우 값을 가져오기 위해서(null로) 래퍼클래스인 integer로 반환한다. -->
+      <!-- autoIncrement를 대신할 sql문 처리하는 함수라고 생각하자. PK가 최대값을 반환하여 다음 글쓰기의 번호를 해당 함수의 리턴값에 +1 하면 된다.
+      null일 경우 값을 가져오기 위해서(null로) 래퍼클래스인 integer로 반환한다. -->
       <![CDATA[
          select max(articleNo) from comm_board
       ]]>
    </select>
+   
       <!-- 글쓰기, 글목록 -->
    <insert id="insertCommBoard" parameterType="CommBoard">
        <![CDATA[
@@ -37,19 +38,33 @@
    
    
    <!-- 글목록 : 게시판 글 목록에 15개 출력 쿼리문 -->
-   <select id="selectCommBoardList" resultType="CommBoard"
+   <!-- <select id="selectCommBoardList" resultType="CommBoard"
       parameterType="int">
-      <!-- SELECT * from comm_board order by field(idx, idx in (select idx from user where grp = 2 )) desc
+      SELECT * from comm_board order by field(idx, idx in (select idx from user where grp = 2 )) desc
        	union all
-       	select * from comm_board where articleNo between #{startrow} and #{startrow}+14 -->
+       	select * from comm_board where articleNo between #{startrow} and #{startrow}+14
        <![CDATA[
        	SELECT * from comm_board order by case when idx in (select idx from user where grp = 2 ) then 0 else 1 end, date desc limit #{startrow}, 15
        ]]>
-   </select>  <!--  select * from comm_board where articleNo order by desc between #{startrow} and #{startrow}+14 -->
+   </select>   select * from comm_board where articleNo order by desc between #{startrow} and #{startrow}+14 -->
    <!-- 글목록 : 전체게시물 조회하기 -->
-   <select id="selectCommBoardCount" resultType="int">
+	<select id="selectCommBoardList" resultType="CommBoard" parameterType="int">
+		<![CDATA[
+			select * 
+				from (select @rownum:=@rownum+1 rnum, tot.*
+					from (select * from comm_board where idx in (select idx from user where grp = 1) order by date desc) tot,   
+						(select @rownum:=0) temp) sub
+			where rnum between #{startrow} and #{startrow}+14
+		]]>
+	</select>
+	<!-- <select id="selectCommBoardCount" resultType="int">
        <![CDATA[
           select count(*) from comm_board
+       ]]>
+   </select> -->
+   <select id="selectCommBoardCount" resultType="int">
+       <![CDATA[
+          select count(*) from comm_board where idx in (select idx from user where grp = 1)
        ]]>
    </select>
    
@@ -76,12 +91,12 @@
    
    
  <!--        [커뮤니티 공지사항] 글 맨위로 뜨게 (종현)
-   	List<CommBoard> commNotice() throws Exception;
-   <select id="bragBest" resultType="CommBoard">
+   	List<CommBoard> commNotice() throws Exception; -->
+   <select id="commNotice" resultType="CommBoard">
 		<![CDATA[
-			SELECT * FROM comm_board order by readCount desc LIMIT 3
+			SELECT * FROM comm_board where idx in (select idx from user where grp = 2) order by articleNo desc LIMIT 3
 		]]>
-	</select> -->
+	</select>
    
    <!-- @@@@@@@좋아요@@@@@@@@@@ -->
 	<select id="queryArticleLikes" resultType="integer" parameterType="int">
