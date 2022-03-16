@@ -249,23 +249,22 @@
 			<div class="btn-group-sort" style="width: fit-content;">
 				<input type="hidden" id="searchOption" name="searchOption" value="1">
 				<button type="button" class="btn btn-secondary dropdown-toggle"
-					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">분류별
-					검색</button>
+					id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">종합 평점 순</button>
 				<ul class="dropdown-menu text-center" aria-labelledby="sortDropdown">
 					<li><button class="dropdown-item" type="button"
-							onclick="document.getElementById('searchOption').value=1;">종합
+							onclick="document.getElementById('searchOption').value=1; document.getElementById('sortDropdown').innerText='종합 평점 순';">종합
 							평점 순</button></li>
 					<li><button class="dropdown-item" type="button"
-							onclick="document.getElementById('searchOption').value=2;">가격
+							onclick="document.getElementById('searchOption').value=2; document.getElementById('sortDropdown').innerText='가격 평점 순';">가격
 							순</button></li>
 					<li><button class="dropdown-item" type="button"
-							onclick="document.getElementById('searchOption').value=3;">맛
+							onclick="document.getElementById('searchOption').value=3; document.getElementById('sortDropdown').innerText='맛 평점 순';">맛
 							평점 순</button></li>
 					<li><button class="dropdown-item" type="button"
-							onclick="document.getElementById('searchOption').value=4;">서비스
+							onclick="document.getElementById('searchOption').value=4; document.getElementById('sortDropdown').innerText='서비스 평점 순';">서비스
 							평점 순</button></li>
 					<li><button class="dropdown-item" type="button"
-							onclick="document.getElementById('searchOption').value=5;">인테리어
+							onclick="document.getElementById('searchOption').value=5; document.getElementById('sortDropdown').innerText='인테리어 평점 순';">인테리어
 							평점 순</button></li>
 				</ul>
 			</div>
@@ -286,6 +285,7 @@
 			<div id="pagination"></div>
 		</div>
 	</div>
+	<footer class="p-4 m-4">&nbsp;</footer>
 
 	<script>
 		function setHonbabLv(data){

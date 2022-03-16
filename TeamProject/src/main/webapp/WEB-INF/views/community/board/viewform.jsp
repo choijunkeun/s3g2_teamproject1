@@ -102,7 +102,9 @@ display: inline-block;
 
 	<div class="card justify-content-center text-center border-right">
 		<div class="card-header d-flex justify-content-between">
-		<button type="button" class="btn btn-secondary" style="display: flex;">제목</button>
+			<button type="button" class="btn btn-secondary align-self-center flex-shrink-0" style="width: max-content; height: fit-content; display: flex;">
+				${userinfo.grp eq 1? '일반' : userinfo.grp eq 2? '공지' : 'Null'}
+			</button>
 			<h2 class="card-title fw-bolder">${cboard.title }</h2>
 			<a href="/comm/listform" class="my-auto"><i class="fa fa-times-circle fa-2x"
 							aria-hidden="true"></i></a>

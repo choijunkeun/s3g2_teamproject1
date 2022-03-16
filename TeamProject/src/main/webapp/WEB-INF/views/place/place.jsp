@@ -146,7 +146,7 @@
 											<span class="badge bg-danger rounded-pill">Lv. ${pr.honbabLv }</span>&nbsp;
 											<span title="가격 평점 : ${pr.priceRate }, 맛 평점 : ${pr.tasteRate }, 서비스 평점 : ${pr.serviceRate }, 인테리어 평점 : ${pr.interiorRate }">
 												<i class="bi bi-star-fill"></i> 종합평점 : <fmt:formatNumber value="${(pr.serviceRate + pr.interiorRate + pr.priceRate + pr.tasteRate)/4 }" pattern=".00"/>&nbsp;</span>
-											<span style="font-size: 0.9rem;"><i class="bi bi-pencil-square"></i> ${pr.writeTime }</span>
+											<span style="font-size: 0.9rem;"><i class="bi bi-clock"></i> ${pr.writeTime }</span>
 										</div>
 									</div>
 									

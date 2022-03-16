@@ -488,8 +488,7 @@ public class ShareController {
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
-//			return "redirect:/share/board/viewform/"+articleNo;
-			return "redirect:/share/board/listform";
+			return "redirect:/share/board/viewform/"+articleNo;
 		}
 	
 	

@@ -257,8 +257,15 @@ display: inline-block;
 <!-- 이전 목록 다음 -->
 				
 	<div class="row">
+		<div class="col" style="text-align: left;">
+			<button type="button" class="btn btn-default">이전</button>
+		</div>
 		<div class='col' style="text-align: center;">
-			<button type="button" id="btnList" class="btn btn-default">목록</button>
+			<button type="button" class="btn btn-default">목록</button>
+		</div>
+
+		<div class='col' style="text-align: right;">
+			<button type="button" class="btn btn-default">다음</button>
 		</div>
 	</div>
 	

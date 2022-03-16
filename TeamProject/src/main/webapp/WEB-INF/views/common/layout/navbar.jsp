@@ -48,8 +48,9 @@ a:link, a:visited, a:hover, a:active {
 			window.location.pathname.split("/")[1] != "userInfo") {
 			//document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('btn-dark');
 			//document.getElementById(window.location.pathname.split("/")[1]+'-nav').classList.add('text-white');
-			// document.getElementById(window.location.pathname.split("/")[1] + '-nav').classList.add('font-weight-bold');
-			// document.getElementById(window.location.pathname.split("/")[1] + '-nav').classList.add('text-white');
+			/* document.getElementById(window.location.pathname.split("/")[1] + '-nav').classList.add('font-weight-bold');
+			document.getElementById(window.location.pathname.split("/")[1] + '-nav').classList.add('text-white'); */
+			$('#'+ window.location.pathname.split("/")[1] + '-nav' ).addClass("font-weight-bold text-white");
 		}
 	</script>
 </body>
