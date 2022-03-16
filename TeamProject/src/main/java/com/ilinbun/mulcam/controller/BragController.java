@@ -369,7 +369,7 @@ public class BragController {
 			HttpSession session = request.getSession();
 			BragBoard bragboard = bragService.getArticleNo(articleNo);
 			if(bragboard.getIdx() != ((User)session.getAttribute("user")).getIdx()) throw new Exception("로그인한 사람과 글 작성자가 다릅니다");
-			
+			bragboard.setContent(bragboard.getContent().trim());
 			mav.addObject("bboard", bragboard);
 			mav.setViewName("brag/modifyForm");
 		} catch (Exception e) {

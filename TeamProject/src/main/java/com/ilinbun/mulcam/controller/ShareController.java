@@ -313,7 +313,7 @@ public class ShareController {
 			try {
 				Shareboard shareboard = shareService.getShareboard(articleNo);
 				if(shareboard.getIdx() != idx) throw new Exception("로그인한 사람과 글 작성자가 다릅니다");
-				
+				shareboard.setContent(shareboard.getContent().trim());
 				mav.addObject("shboard", shareboard);
 				mav.setViewName("share/board/modifyform");
 			} catch (Exception e) {

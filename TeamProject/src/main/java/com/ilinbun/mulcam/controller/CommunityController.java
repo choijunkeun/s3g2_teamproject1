@@ -226,7 +226,7 @@ public class CommunityController {
 		try {
 			commboard = commService.getCommBoard(articleNo); // 게시글 상세정보 // 내가쓴글, 남이쓴글 확인
 			User writerInfo = commService.selectUserDetail(commboard.getIdx()); //작성자 정보 가져오기
-			
+			mav.addObject("userinfo", writerInfo);
 			int likes = commService.queryArticleLikes(articleNo); // 좋아요 수
 			
 			HttpSession session = request.getSession();
@@ -305,6 +305,7 @@ public class CommunityController {
 		ModelAndView mav = new ModelAndView();
 		try {
 			CommBoard commboard = commService.getArticleNo(articleNo);
+			commboard.setContent(commboard.getContent().trim());
 			mav.addObject("article", commboard);
 			mav.setViewName("community/board/modifyform");
 		} catch (Exception e) {
