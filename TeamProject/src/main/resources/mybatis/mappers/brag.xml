@@ -58,7 +58,11 @@
 	<!-- 글목록 : BEST : 조회수 순으로 1위~~~~~5(이달의혼밥) 출력.좋아요 순인데 나중에 바꾸기 -->
 	<select id="bragBest" resultType="Bragboard">
 		<![CDATA[
-			SELECT * FROM honbab order by readCount desc LIMIT 30
+			select honbab.*
+			from honbab left outer join (select articleNo, count(idx) countidx from honbablikes group by articleNo) h
+			on honbab.articleNo = h.articleNo
+			order by countidx desc
+			LIMIT 30
 		]]>
 	</select>
 	
