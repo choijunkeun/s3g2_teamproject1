@@ -7,7 +7,7 @@
 	<!-- 글보기:articlNo 가지고 게시글 조회 -->
 	<select id="selectShareboard" resultType="Shareboard" parameterType="int">
 		<![CDATA[
-			SELECT * FROM shareboard where articleNo=#{articleNo}
+			SELECT * FROM shareBOARD where articleNo=#{articleNo}
 		]]>
 	</select>
 	<!-- 글쓰기, 글목록 -->

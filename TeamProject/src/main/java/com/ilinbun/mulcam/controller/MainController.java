@@ -139,7 +139,8 @@ public class MainController {
 		//프로필 이미지 첨부가 있다면
 		if(!profileImgName.equals("")){
 			System.out.println("프로필 이미지가 Null이 아니면");
-			String path = servletContext.getRealPath("/profile/");
+//			String path = servletContext.getRealPath("/profile/");
+			String path = "/profile/";
 			String filename = UUID.randomUUID().toString() + "." + profileImg.getOriginalFilename().substring(profileImg.getOriginalFilename().lastIndexOf('.')+1);
 			File destFile = new File(path + filename);
 			System.out.println(profileImg.isEmpty());
@@ -269,7 +270,8 @@ public class MainController {
 				} else if (imgChange==2){
 					profileImgName="DEFAULT.png";
 				} else {
-					String path = servletContext.getRealPath("/profile/");
+					//String path = servletContext.getRealPath("/profile/");
+					String path = "/profile/";
 					String filename = UUID.randomUUID().toString() + "." + profileImg.getOriginalFilename().substring(profileImg.getOriginalFilename().lastIndexOf('.')+1);
 					File destFile = new File(path + filename);
 					System.out.println(profileImg.isEmpty());
@@ -314,7 +316,8 @@ public class MainController {
 	
 	@GetMapping("/profile/{filename}")
 	public void fileview(@PathVariable String filename, HttpServletRequest request, HttpServletResponse response) {
-		String path = servletContext.getRealPath("/profile/");
+//		String path = servletContext.getRealPath("/profile/");
+		String path = "/profile/";
 		File file = new File(path + filename);
 		String sfilename = null;
 		FileInputStream fis = null;

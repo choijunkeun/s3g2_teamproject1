@@ -65,7 +65,7 @@
 <!--idx가지고 화면에 출력할 email, nickname, hblv가져오기-->
 	<select id="selectUserDetail" resultType="User" parameterType="int">
     	<![CDATA[
-			select idx, email, nickname, honbabLevel, profileImg, grp from User where idx=#{idx} 
+			select idx, email, nickname, honbabLevel, profileImg, grp from user where idx=#{idx} 
     	]]>
 	</select>
 

@@ -157,7 +157,8 @@ public class CommunityController {
 	@PostMapping("/upload")
 	public void fileupload(@RequestParam(value = "upload") MultipartFile file, HttpServletRequest request,
 			HttpServletResponse resp) {
-		String path = servletContext.getRealPath("/commupload/");
+//		String path = servletContext.getRealPath("/commupload/");
+		String path = "/commupload/";
 		String filename = UUID.randomUUID().toString() + "."
 				+ file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
 		File destFile = new File(path + filename);
@@ -183,7 +184,8 @@ public class CommunityController {
 
 	@GetMapping(value = "/fileview/{filename}")
 	public void fileview(@PathVariable String filename, HttpServletRequest request, HttpServletResponse response) {
-		String path = servletContext.getRealPath("/commupload/");
+		//String path = servletContext.getRealPath("/commupload/");
+		String path = "/commupload/";
 		File file = new File(path + filename);
 		String sfilename = null;
 		FileInputStream fis = null;

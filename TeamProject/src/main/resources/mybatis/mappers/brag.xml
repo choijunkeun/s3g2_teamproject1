@@ -59,7 +59,7 @@
 	<select id="bragBest" resultType="Bragboard">
 		<![CDATA[
 			select honbab.*
-			from honbab left outer join (select articleNo, count(idx) countidx from honbablikes group by articleNo) h
+			from honbab left outer join (select articleNo, count(idx) countidx from honbabLikes group by articleNo) h
 			on honbab.articleNo = h.articleNo
 			order by countidx desc
 			LIMIT 30

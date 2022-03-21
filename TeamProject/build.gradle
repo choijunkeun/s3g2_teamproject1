@@ -60,3 +60,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+bootWar {
+	archiveName("team2.war")
+}

@@ -288,7 +288,8 @@ public class PlaceController {
 				);
 			if(file != null) { // 파일 첨부시 파일 업로드
 				System.out.println("파일 업로드 시도");
-				String path=servletContext.getRealPath("/revimgupload/");
+				//String path=servletContext.getRealPath("/revimgupload/");
+				String path="/revimgupload/";
 				System.out.println(path);
 				
 				// 이미지 파일의 이름을 바꿔봅시다
@@ -384,7 +385,8 @@ public class PlaceController {
 			boolean fileChange=Boolean.parseBoolean(param.get("fileChange"));
 			if(fileChange && file != null) { // 파일 첨부시 파일 업로드
 				System.out.println("파일 업로드 시도");
-				String path=servletContext.getRealPath("/revimgupload/");
+//				String path=servletContext.getRealPath("/revimgupload/");
+				String path = "/revimgupload/";
 				System.out.println(path);
 				
 				// 이미지 파일의 이름을 바꿔봅시다
@@ -485,7 +487,8 @@ public class PlaceController {
 	
 	@GetMapping("/img/{filename}")
 	public void fileview(@PathVariable String filename, HttpServletRequest request, HttpServletResponse response) {
-		String path = servletContext.getRealPath("/revimgupload/");
+//		String path = servletContext.getRealPath("/revimgupload/");
+		String path = "/revimgupload/";
 		File file = new File(path + filename);
 		String sfilename = null;
 		FileInputStream fis = null;

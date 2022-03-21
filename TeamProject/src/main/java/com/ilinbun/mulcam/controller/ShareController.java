@@ -177,7 +177,8 @@ public class ShareController {
 	@PostMapping("/upload")
 	public void fileupload(@RequestParam(value = "upload") MultipartFile file, HttpServletRequest request,
 			HttpServletResponse resp) {
-		String path = servletContext.getRealPath("/shareupload/");
+//		String path = servletContext.getRealPath("/shareupload/");
+		String path = "/shareupload/";
 		String filename = UUID.randomUUID().toString() + "." + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.')+1);
 		File destFile = new File(path + filename);
 		PrintWriter writer = null;
@@ -201,7 +202,8 @@ public class ShareController {
 
 	@GetMapping(value = "/fileview/{filename}")
 	public void fileview(@PathVariable String filename, HttpServletRequest request, HttpServletResponse response) {
-		String path = servletContext.getRealPath("/shareupload/");
+//		String path = servletContext.getRealPath("/shareupload/");
+		String path = "/shareupload/";
 		File file = new File(path + filename);
 		String sfilename = null;
 		FileInputStream fis = null;
